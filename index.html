@@ -126,12 +126,13 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 
 <!-- HEADER -->
 <div class="p-4 flex justify-between items-center border-b border-gray-800 bg-[#0b0e14] sticky top-0 z-40">
-<div onclick="handleLogoClick()" class="flex items-center space-x-2 cursor-pointer active:opacity-80" title="Click 3 times for Admin Panel">
+<div onclick="handleLogoClick()" class="flex items-center space-x-2 cursor-pointer active:opacity-80">
 <div class="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center font-bold text-black shadow-lg shadow-emerald-500/30">A</div>
 <span class="text-xl font-bold tracking-wider text-emerald-400">AZEL</span>
 </div>
 <div class="flex space-x-3 text-gray-400 text-lg relative items-center">
-<button onclick="openAdminPinModal()" class="bg-amber-500/20 text-amber-400 border border-amber-500/40 px-2 py-1 rounded-lg text-[10px] font-bold flex items-center gap-1">
+<!-- ADMIN DUGME SE PRIKAZUJE SAMO ZA 'tajkun' -->
+<button id="admin-header-btn" onclick="openAdminPinModal()" class="bg-amber-500/20 text-amber-400 border border-amber-500/40 px-2 py-1 rounded-lg text-[10px] font-bold hidden items-center gap-1">
     <i class="fas fa-shield-halved"></i> Admin
 </button>
 <button onclick="openHelpModal()" class="relative">
@@ -497,8 +498,6 @@ let allRegisteredUsers = [];
 let supportChats = [];
 let withdrawRequests = [];
 const ADMIN_PIN = "3112";
-let logoClickCount = 0;
-let logoClickTimer = null;
 
 const MAIN_ADMIN_USER = {
     id: 119216,
@@ -626,6 +625,15 @@ function handleUserRegister() {
 function showMainApp() {
     document.getElementById('auth-screen').style.display = 'none';
     document.getElementById('main-app-wrapper').style.display = 'block';
+    
+    // PROVERA DA LI JE LOGOVAN ISKLJUČIVO 'tajkun'
+    const adminBtn = document.getElementById('admin-header-btn');
+    if (currentUser && currentUser.username.toLowerCase() === 'tajkun') {
+        adminBtn.style.display = 'flex';
+    } else {
+        adminBtn.style.display = 'none';
+    }
+
     updateAppUI();
 }
 
@@ -661,7 +669,6 @@ function switchTab(tabId) {
     if(tabId === 'tab-wallet') renderAssetsData();
 }
 
-// 🟢 JEDNOKRATNA LICENCA ($5)
 function buyUserLicense() {
     if(currentUser.isLicensePaid) { alert('License is already paid!'); return; }
     currentUser.isLicensePaid = true;
@@ -670,7 +677,6 @@ function buyUserLicense() {
     alert('License successfully paid ($5)! You can now activate bots.');
 }
 
-// 🟢 PROVERA MREŽNIH USLOVA (L1, L2, L3) ZA BOTOVE 3, 4, 5, 6
 function getNetworkCounts(username) {
     allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
     let l1Members = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === username.toLowerCase());
@@ -822,21 +828,21 @@ function updateAppUI() {
     checkBotUnlocks();
 }
 
-// 🟢 ADMIN PANEL LOGIKA (FIXED)
+// 🟢 ADMIN PROVERA: SAMO 'tajkun' MOŽE OTVORITI
 function handleLogoClick() {
-    logoClickCount++;
-    if(logoClickTimer) clearTimeout(logoClickTimer);
-    logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 2000);
-    if(logoClickCount >= 3) {
-        logoClickCount = 0;
-        openAdminPinModal();
-    }
+    if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') return;
+    openAdminPinModal();
 }
 
-function openAdminPinModal() { document.getElementById('modal-admin-pin').style.display = 'flex'; }
+function openAdminPinModal() {
+    if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') return;
+    document.getElementById('modal-admin-pin').style.display = 'flex';
+}
+
 function closeAdminPinModal() { document.getElementById('modal-admin-pin').style.display = 'none'; document.getElementById('admin-pin-input').value = ''; }
 
 function verifyAdminPin() {
+    if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') return;
     const pin = document.getElementById('admin-pin-input').value.trim();
     if(pin === ADMIN_PIN) {
         closeAdminPinModal();
@@ -848,6 +854,7 @@ function verifyAdminPin() {
 }
 
 function openAdminPanel() {
+    if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') return;
     renderAdminWithdrawList();
     renderAdminSupportList();
     switchAdminTab('withdraw');
