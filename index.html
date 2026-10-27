@@ -600,8 +600,8 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <script>
 let currentUser = null;
 let allRegisteredUsers = [];
-let supportChats = [];
-let withdrawRequests = [];
+let supportChatsMap = {};
+let withdrawRequestsMap = {};
 const ADMIN_PIN = "3112";
 
 const MAIN_ADMIN_USER = {
@@ -782,7 +782,7 @@ window.addEventListener('firebase-ready', function() {
 
     onValue(ref(db, 'supportChats'), (snapshot) => {
         const data = snapshot.val();
-        supportChats = data ? Object.values(data) : [];
+        supportChatsMap = data || {};
         updateBadges();
         if(document.getElementById('modal-help').style.display === 'flex') renderUserChatHistory();
         if(document.getElementById('modal-admin-panel').style.display === 'flex') renderAdminSupportList();
@@ -790,7 +790,7 @@ window.addEventListener('firebase-ready', function() {
 
     onValue(ref(db, 'withdrawRequests'), (snapshot) => {
         const data = snapshot.val();
-        withdrawRequests = data ? Object.values(data) : [];
+        withdrawRequestsMap = data || {};
         updateBadges();
         if(document.getElementById('modal-admin-panel').style.display === 'flex') renderAdminWithdrawList();
     });
@@ -1142,12 +1142,14 @@ function switchAdminTab(tab) {
 
 function renderAdminWithdrawList() {
     const listContainer = document.getElementById('admin-list-withdraw');
-    if(!withdrawRequests || withdrawRequests.length === 0) {
+    const keys = Object.keys(withdrawRequestsMap);
+    if(keys.length === 0) {
         listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">No active withdrawal requests.</p>';
         return;
     }
     let html = '';
-    withdrawRequests.forEach((req, idx) => {
+    keys.forEach(key => {
+        let req = withdrawRequestsMap[key];
         html += `
             <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-2">
                 <div class="flex justify-between items-center font-bold">
@@ -1158,7 +1160,7 @@ function renderAdminWithdrawList() {
                 <div class="flex justify-between items-center pt-1">
                     <span class="text-amber-400 text-[10px]">Status: ${req.status}</span>
                     ${req.status === 'pending' ? `
-                        <button onclick="approveWithdraw(${idx})" class="bg-emerald-500 text-black px-3 py-1 rounded font-bold text-[10px]">Approve</button>
+                        <button onclick="approveWithdraw('${key}')" class="bg-emerald-500 text-black px-3 py-1 rounded font-bold text-[10px]">Approve</button>
                     ` : `<span class="text-emerald-500 font-bold text-[10px]">Approved ✓</span>`}
                 </div>
             </div>
@@ -1169,12 +1171,14 @@ function renderAdminWithdrawList() {
 
 function renderAdminSupportList() {
     const listContainer = document.getElementById('admin-list-support');
-    if(!supportChats || supportChats.length === 0) {
+    const keys = Object.keys(supportChatsMap);
+    if(keys.length === 0) {
         listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">No support chats.</p>';
         return;
     }
     let html = '';
-    supportChats.forEach((chat, cIdx) => {
+    keys.forEach(key => {
+        let chat = supportChatsMap[key];
         html += `
             <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-2">
                 <div class="font-bold text-emerald-400 flex justify-between">
@@ -1184,14 +1188,14 @@ function renderAdminSupportList() {
                 <div class="space-y-1 bg-black/40 p-2 rounded-lg text-[11px] max-h-32 overflow-y-auto">
         `;
         if(chat.messages) {
-            chat.messages.forEach(m => {
+            Object.values(chat.messages).forEach(m => {
                 html += `<div><span class="font-bold text-${m.sender === 'user' ? 'white' : 'amber-400'}">${m.sender}:</span> ${m.text}</div>`;
             });
         }
         html += `</div>
                 <div class="flex gap-2">
-                    <input type="text" id="admin-reply-${cIdx}" placeholder="Reply..." class="flex-1 bg-black border border-emerald-500/30 p-1.5 rounded text-white text-xs">
-                    <button onclick="sendAdminReply(${cIdx})" class="bg-emerald-500 text-black px-3 py-1 rounded font-bold text-xs">Send</button>
+                    <input type="text" id="admin-reply-${key}" placeholder="Reply..." class="flex-1 bg-black border border-emerald-500/30 p-1.5 rounded text-white text-xs">
+                    <button onclick="sendAdminReply('${key}')" class="bg-emerald-500 text-black px-3 py-1 rounded font-bold text-xs">Send</button>
                 </div>
             </div>
         `;
@@ -1199,42 +1203,39 @@ function renderAdminSupportList() {
     listContainer.innerHTML = html;
 }
 
-function sendAdminReply(chatIndex) {
-    const input = document.getElementById(`admin-reply-${chatIndex}`);
+function sendAdminReply(chatKey) {
+    const input = document.getElementById(`admin-reply-${chatKey}`);
     const txt = input.value.trim();
     if(!txt) return;
-    if(!supportChats[chatIndex].messages) supportChats[chatIndex].messages = [];
-    supportChats[chatIndex].messages.push({ sender: 'admin', text: txt, time: new Date().toLocaleTimeString() });
-    supportChats[chatIndex].unreadByAdmin = false;
-    supportChats[chatIndex].unreadByUser = true;
+
+    if(!supportChatsMap[chatKey].messages) supportChatsMap[chatKey].messages = {};
+    let msgKey = 'msg_' + Date.now();
+    supportChatsMap[chatKey].messages[msgKey] = { sender: 'admin', text: txt, time: new Date().toLocaleTimeString() };
+    supportChatsMap[chatKey].unreadByAdmin = false;
+    supportChatsMap[chatKey].unreadByUser = true;
 
     if(window.firebaseReady && window.FB_DB) {
-        window.FB_SET(window.FB_REF(window.FB_DB, 'supportChats/' + chatIndex), supportChats[chatIndex]).then(() => {
+        window.FB_SET(window.FB_REF(window.FB_DB, 'supportChats/' + chatKey), supportChatsMap[chatKey]).then(() => {
             input.value = '';
             renderAdminSupportList();
             updateBadges();
         });
-    } else {
-        alert('Database not ready.');
     }
 }
 
-function approveWithdraw(index) {
-    withdrawRequests[index].status = 'approved';
+function approveWithdraw(reqKey) {
     if(window.firebaseReady && window.FB_DB) {
-        window.FB_SET(window.FB_REF(window.FB_DB, 'withdrawRequests'), withdrawRequests).then(() => {
+        window.FB_SET(window.FB_REF(window.FB_DB, 'withdrawRequests/' + reqKey + '/status'), 'approved').then(() => {
             alert('Withdrawal approved!');
             renderAdminWithdrawList();
             updateBadges();
         });
-    } else {
-        alert('Database not ready.');
     }
 }
 
 function updateBadges() {
-    let unreadSupportCount = supportChats.filter(c => c.unreadByAdmin).length;
-    let pendingWithdrawCount = withdrawRequests.filter(w => w.status === 'pending').length;
+    let unreadSupportCount = Object.values(supportChatsMap).filter(c => c.unreadByAdmin).length;
+    let pendingWithdrawCount = Object.values(withdrawRequestsMap).filter(w => w.status === 'pending').length;
     let totalAdminNotifs = unreadSupportCount + pendingWithdrawCount;
 
     // Admin Badges
@@ -1258,7 +1259,8 @@ function updateBadges() {
 
     // User Badges
     if (currentUser) {
-        let userChat = supportChats.find(c => c.username && c.username.toLowerCase() === currentUser.username.toLowerCase());
+        let safeName = currentUser.username.replace(/[^a-zA-Z0-9]/g, '_');
+        let userChat = supportChatsMap[safeName];
         let userUnread = (userChat && userChat.unreadByUser) ? 1 : 0;
         
         const helpBadge = document.getElementById('help-badge');
@@ -1277,11 +1279,11 @@ function openHelpModal() {
     document.getElementById('modal-help').style.display = 'flex'; 
     renderUserChatHistory();
     if(currentUser) {
-        let chatIdx = supportChats.findIndex(c => c.username && c.username.toLowerCase() === currentUser.username.toLowerCase());
-        if(chatIdx !== -1 && supportChats[chatIdx].unreadByUser) {
-            supportChats[chatIdx].unreadByUser = false;
+        let safeName = currentUser.username.replace(/[^a-zA-Z0-9]/g, '_');
+        if(supportChatsMap[safeName] && supportChatsMap[safeName].unreadByUser) {
+            supportChatsMap[safeName].unreadByUser = false;
             if(window.firebaseReady && window.FB_DB) {
-                window.FB_SET(window.FB_REF(window.FB_DB, 'supportChats/' + chatIdx), supportChats[chatIdx]);
+                window.FB_SET(window.FB_REF(window.FB_DB, 'supportChats/' + safeName), supportChatsMap[safeName]);
             }
         }
     }
@@ -1310,11 +1312,9 @@ function submitWithdrawRequest() {
         status: 'pending' 
     };
     
-    withdrawRequests.push(req);
-    
-    // Provera da li je baza spremna, ako jeste šalje u Firebase, ako nije čuva u lokalnoj memoriji privremeno
     if(window.firebaseReady && window.FB_DB) {
-        window.FB_SET(window.FB_REF(window.FB_DB, 'withdrawRequests'), withdrawRequests).then(() => {
+        const newRef = window.FB_PUSH(window.FB_REF(window.FB_DB, 'withdrawRequests'));
+        window.FB_SET(newRef, req).then(() => {
             alert('Withdrawal request submitted successfully!');
             document.getElementById('withdraw-amount').value = '';
             document.getElementById('withdraw-address').value = '';
@@ -1324,62 +1324,57 @@ function submitWithdrawRequest() {
             alert('Error submitting request: ' + err.message);
         });
     } else {
-        alert('Withdrawal request saved locally!');
-        document.getElementById('withdraw-amount').value = '';
-        document.getElementById('withdraw-address').value = '';
-        closeWithdrawModal();
-        updateBadges();
+        alert('Database not ready. Try again in a moment.');
     }
 }
 
 function submitHelpMessage() {
     const msg = document.getElementById('help-message-input').value.trim();
-    if(!msg) return;
-    let chatIdx = supportChats.findIndex(c => c.username && c.username.toLowerCase() === currentUser.username.toLowerCase());
-    
-    if(chatIdx === -1) {
-        supportChats.push({ 
-            id: Date.now(), 
-            username: currentUser.username, 
-            userId: currentUser.id, 
-            unreadByAdmin: true, 
+    if(!msg || !currentUser) return;
+
+    let safeName = currentUser.username.replace(/[^a-zA-Z0-9]/g, '_');
+    let chatRefPath = 'supportChats/' + safeName;
+
+    if(!supportChatsMap[safeName]) {
+        supportChatsMap[safeName] = {
+            id: Date.now(),
+            username: currentUser.username,
+            userId: currentUser.id,
+            unreadByAdmin: true,
             unreadByUser: false,
-            messages: [{sender: 'user', text: msg, time: new Date().toLocaleTimeString()}] 
-        });
-        chatIdx = supportChats.length - 1;
-    } else {
-        if(!supportChats[chatIdx].messages) supportChats[chatIdx].messages = [];
-        supportChats[chatIdx].messages.push({sender: 'user', text: msg, time: new Date().toLocaleTimeString()});
-        supportChats[chatIdx].unreadByAdmin = true;
+            messages: {}
+        };
     }
 
+    if(!supportChatsMap[safeName].messages) supportChatsMap[safeName].messages = {};
+    let msgKey = 'msg_' + Date.now();
+    supportChatsMap[safeName].messages[msgKey] = { sender: 'user', text: msg, time: new Date().toLocaleTimeString() };
+    supportChatsMap[safeName].unreadByAdmin = true;
+
     if(window.firebaseReady && window.FB_DB) {
-        window.FB_SET(window.FB_REF(window.FB_DB, 'supportChats/' + chatIdx), supportChats[chatIdx]).then(() => {
+        window.FB_SET(window.FB_REF(window.FB_DB, chatRefPath), supportChatsMap[safeName]).then(() => {
             document.getElementById('help-message-input').value = '';
             renderUserChatHistory();
             updateBadges();
         }).catch(err => {
             alert('Error sending message: ' + err.message);
         });
-    } else {
-        document.getElementById('help-message-input').value = '';
-        renderUserChatHistory();
-        updateBadges();
     }
 }
 
 function renderUserChatHistory() {
     const box = document.getElementById('user-chat-history');
     if(!currentUser) return;
-    let chat = supportChats.find(c => c.username && c.username.toLowerCase() === currentUser.username.toLowerCase());
+    let safeName = currentUser.username.replace(/[^a-zA-Z0-9]/g, '_');
+    let chat = supportChatsMap[safeName];
     
-    if(!chat || !chat.messages || chat.messages.length === 0) {
+    if(!chat || !chat.messages || Object.keys(chat.messages).length === 0) {
         box.innerHTML = '<p class="text-gray-500 text-center py-2">No messages yet. Send a message to start support chat!</p>';
         return;
     }
 
     let html = '';
-    chat.messages.forEach(m => {
+    Object.values(chat.messages).forEach(m => {
         let isMe = m.sender === 'user';
         html += `
             <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} my-1">
