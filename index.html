@@ -13,26 +13,24 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
-<!-- FIREBASE SDK v9 / v10 UVEZENI SKRIPTI -->
+<!-- FIREBASE SDK v10 SA TVOJIM PRAVIM PODACIMA -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getDatabase, ref, set, get, onValue, push, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-  // Tvoja Firebase konfiguracija (zamenite sa svojim podacima ako je potrebno)
   const firebaseConfig = {
-    apiKey: "AIzaSyD-AZEL-DEMO-KEY-REPLACE-IF-NEEDED",
-    authDomain: "azel-app-db.firebaseapp.com",
-    databaseURL: "https://azel-app-db-default-rtdb.firebaseio.com",
-    projectId: "azel-app-db",
-    storageBucket: "azel-app-db.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "1:123456789:web:abcdef"
+    apiKey: "AIzaSyAPfXCQryjXKNil5__N85Lnim46Tv-jDjQ",
+    authDomain: "azel-app-9c065.firebaseapp.com",
+    databaseURL: "https://azel-app-9c065-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "azel-app-9c065",
+    storageBucket: "azel-app-9c065.appspot.com",
+    messagingSenderId: "739286488852",
+    appId: "1:739286488852:web:c2d5f2830086abcebe5861"
   };
 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  // Globalno izlažemo Firebase funkcije za našu aplikaciju
   window.FB_DB = db;
   window.FB_REF = ref;
   window.FB_SET = set;
@@ -42,7 +40,6 @@
   window.FB_UPDATE = update;
   window.firebaseReady = true;
   
-  // Pokrećemo inicijalnu sinhronizaciju baze
   window.dispatchEvent(new Event('firebase-ready'));
 </script>
 
@@ -608,13 +605,11 @@ window.addEventListener('DOMContentLoaded', function() {
     changeLanguage('en');
 });
 
-// SLUSANJE FIREBASE BAZE U REALNOM VREMENU
 window.addEventListener('firebase-ready', function() {
     const db = window.FB_DB;
     const ref = window.FB_REF;
     const onValue = window.FB_ON_VALUE;
 
-    // Sinhronizacija Support Chatova sa Firebase-a
     onValue(ref(db, 'supportChats'), (snapshot) => {
         const data = snapshot.val();
         if (data) {
@@ -638,7 +633,6 @@ window.addEventListener('firebase-ready', function() {
         if(document.getElementById('modal-admin-panel').style.display === 'flex') renderAdminSupportList();
     });
 
-    // Sinhronizacija Isplata sa Firebase-a
     onValue(ref(db, 'withdrawRequests'), (snapshot) => {
         const data = snapshot.val();
         if (data) {
@@ -705,7 +699,6 @@ function saveNewEmail() {
     alert('Email updated successfully to: ' + email);
 }
 
-// HELP CENTER & CHAT SA PODRŠKOM PREKO FIREBASE-a
 function openHelpModal() {
     renderUserChatHistory();
     if(currentUser && window.firebaseReady) {
@@ -777,7 +770,6 @@ function submitHelpMessage() {
         supportChats[chatIndex].unreadByAdmin = true;
     }
 
-    // Čuvanje direktno na Firebase bazu
     if(window.firebaseReady) {
         window.FB_SET(window.FB_REF(window.FB_DB, 'supportChats/' + chatIndex), supportChats[chatIndex]).then(() => {
             document.getElementById('help-message-input').value = '';
@@ -906,7 +898,6 @@ function switchTab(tabId) {
     window.scrollTo(0, 0);
 }
 
-// TAJNI ADMIN PANEL NA 3 KLIKA LOGOA (PIN: 3112)
 function handleLogoClick() {
     const loggedUser = sessionStorage.getItem('azel_current_username') || (currentUser ? currentUser.username : '');
     if (!loggedUser || loggedUser.toLowerCase() !== 'tajkun') return; 
@@ -957,7 +948,6 @@ function switchAdminTab(tab) {
         btnW.className = "flex-1 py-1.5 rounded-lg text-gray-400 transition relative";
         listS.style.display = 'block'; listW.style.display = 'none';
 
-        // Označavamo sve kao pročitano u bazi
         if(window.firebaseReady) {
             supportChats.forEach((c, idx) => {
                 c.unreadByAdmin = false;
