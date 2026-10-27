@@ -26,9 +26,69 @@ background: linear-gradient(135deg, #10b981 0%, #059669 50%, #064e3b 100%);
 border: 1px solid rgba(16, 185, 129, 0.4);
 box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 }
+/* Auth Screen Styling */
+#auth-screen { display: flex; position: fixed; inset: 0; background: #0b0e14; z-index: 100; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
+#main-app-wrapper { display: none; }
 </style>
 </head>
 <body class="pb-24">
+
+<!-- LOGIN / REGISTRATION SCREEN (Prikazuje se pre ulaska u aplikaciju) -->
+<div id="auth-screen">
+    <div class="emerald-card p-6 rounded-3xl w-full max-w-sm space-y-5 bg-[#0b0e14] border border-emerald-500/40 shadow-2xl">
+        <div class="text-center space-y-1">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center font-bold text-black text-xl mx-auto shadow-lg shadow-emerald-500/30 mb-2">A</div>
+            <h1 class="text-2xl font-bold text-emerald-400">AZEL</h1>
+            <p class="text-xs text-gray-400">Blockchain Insurance & Trading Platform</p>
+        </div>
+
+        <div class="flex bg-gray-900 p-1 rounded-xl border border-gray-800">
+            <button id="tab-login-btn" onclick="switchAuthTab('login')" class="flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-500 text-black transition">Prijava</button>
+            <button id="tab-reg-btn" onclick="switchAuthTab('register')" class="flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 transition">Registracija</button>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <div id="form-login" class="space-y-3 text-xs">
+            <div>
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Email ili Korisničko ime</label>
+                <input type="text" id="login-username" placeholder="Unesite username..." class="w-full bg-gray-900 border border-emerald-500/30 p-3 rounded-xl text-white focus:outline-none focus:border-emerald-400">
+            </div>
+            <div>
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Lozinka</label>
+                <input type="password" id="login-password" placeholder="Unesite lozinku..." class="w-full bg-gray-900 border border-emerald-500/30 p-3 rounded-xl text-white focus:outline-none focus:border-emerald-400">
+            </div>
+            <button onclick="handleUserLogin()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-xs shadow-lg shadow-emerald-500/20 active:scale-95 transition mt-2">
+                Prijavi se
+            </button>
+        </div>
+
+        <!-- REGISTER FORM -->
+        <div id="form-register" class="space-y-3 text-xs" style="display: none;">
+            <div>
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Korisničko ime</label>
+                <input type="text" id="reg-username-input" placeholder="Izaberite username..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
+            </div>
+            <div>
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Pozivni kod</label>
+                <input type="text" id="reg-input-code" readonly class="w-full bg-gray-950 border border-emerald-500/40 p-2.5 rounded-xl text-emerald-300 font-mono font-bold">
+            </div>
+            <div>
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Lozinka</label>
+                <input type="password" id="reg-pass-input" placeholder="Kreirajte lozinku..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
+            </div>
+            <div>
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Potvrdite lozinku</label>
+                <input type="password" id="reg-confirm-input" placeholder="Potvrdite lozinku..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
+            </div>
+            <button onclick="handleUserRegister()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-xs shadow-lg shadow-emerald-500/20 active:scale-95 transition mt-2">
+                Registruj se
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- GLAVNI WRAPPER APLIKACIJE (Prikazuje se tek nakon uspesne prijave) -->
+<div id="main-app-wrapper">
 
 <!-- HEADER -->
 <div class="p-4 flex justify-between items-center border-b border-gray-800 bg-[#0b0e14] sticky top-0 z-40">
@@ -46,7 +106,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <!-- 1. POČETNA / INSURANCE STRANICA -->
 <div id="page-home" class="page-content active p-4 space-y-4">
     <div class="flex justify-center mb-2">
-        <button class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-sm shadow-lg shadow-emerald-500/25 transition" data-i18n="trading_platform_btn">
+        <button onclick="switchTab('tab-trade')" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-sm shadow-lg shadow-emerald-500/25 transition" data-i18n="trading_platform_btn">
             Trading platform
         </button>
     </div>
@@ -105,7 +165,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         </button>
     </div>
 
-    <!-- Dugme za Invite Friends otvara modal sa QR kodom -->
     <div class="grid grid-cols-1 gap-3">
         <div class="emerald-card p-4 rounded-2xl flex justify-between items-center cursor-pointer hover:bg-gray-800 transition" onclick="openInviteModal()">
             <div>
@@ -152,10 +211,10 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     <div class="flex items-center justify-between">
         <div class="flex items-center space-x-3">
             <div class="w-14 h-14 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center">
-                <span class="text-2xl font-bold text-emerald-400">A</span>
+                <span id="profile-initial" class="text-2xl font-bold text-emerald-400">A</span>
             </div>
             <div>
-                <h2 class="text-xl font-bold text-white flex items-center gap-1">tajkun</h2>
+                <h2 id="profile-username-display" class="text-xl font-bold text-white flex items-center gap-1">tajkun</h2>
                 <p class="text-xs text-gray-400">ID: <span id="profile-id-display">...</span></p>
                 <div class="inline-flex items-center gap-1 bg-emerald-950/40 border border-emerald-500/20 rounded-full px-2 py-0.5 text-[10px] text-emerald-400 mt-1">
                     <span id="profile-code-display">Invitation code: ...</span>
@@ -177,12 +236,12 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             <span id="current-lang-text" class="text-[10px] text-gray-400">EN ></span>
         </div>
     </div>
-    <button onclick="alert('You have been logged out')" class="w-full emerald-card py-3 rounded-2xl text-center text-red-500 font-bold text-xs hover:bg-red-950/20 transition">
+    <button onclick="handleUserLogout()" class="w-full emerald-card py-3 rounded-2xl text-center text-red-500 font-bold text-xs hover:bg-red-950/20 transition">
         <span data-i18n="logout">Log Out</span>
     </button>
 </div>
 
-<!-- MODAL ZA "INVITE FRIENDS" (QR KOD I LINK) -->
+<!-- MODAL ZA "INVITE FRIENDS" -->
 <div id="modal-invite" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50 overflow-y-auto">
     <div class="emerald-card p-5 rounded-3xl w-full max-w-sm space-y-4 bg-[#0b0e14] border border-emerald-500/40 my-auto relative">
         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
@@ -211,47 +270,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 
         <button onclick="copyMyInviteLink()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-xs shadow-lg shadow-emerald-500/20 active:scale-95 transition flex items-center justify-center gap-2">
             <i class="far fa-copy"></i> <span data-i18n="copy_link_btn">Copy invitation link</span>
-        </button>
-    </div>
-</div>
-
-<!-- MODAL ZA REGISTRACIJU -->
-<div id="modal-register" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50 overflow-y-auto">
-    <div class="emerald-card p-5 rounded-3xl w-full max-w-sm space-y-4 bg-[#0b0e14] border border-emerald-500/40 my-auto">
-        <div class="flex justify-between items-center border-b border-gray-800 pb-3">
-            <div>
-                <h3 class="text-base font-bold text-white flex items-center gap-1.5"><span class="text-emerald-400">Hello</span> 👋</h3>
-                <p class="text-[11px] text-gray-400" data-i18n="reg_welcome">Welcome to AZEL Blockchain Insurance</p>
-            </div>
-            <button onclick="closeRegisterModal()" class="text-gray-400 hover:text-white text-base"><i class="fas fa-times"></i></button>
-        </div>
-
-        <div class="space-y-3 text-xs">
-            <div>
-                <label class="text-[10px] text-emerald-400 font-bold mb-1 block" data-i18n="reg_phone">Phone Number</label>
-                <div class="flex gap-2">
-                    <select class="bg-gray-900 border border-emerald-500/30 rounded-xl px-2.5 py-2 text-white font-bold text-xs focus:outline-none">
-                        <option>+381</option><option>+387</option><option>+389</option><option>+386</option><option>+44</option><option>+1</option>
-                    </select>
-                    <input type="tel" placeholder="Enter your phone number" class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
-                </div>
-            </div>
-            <div>
-                <label class="text-[10px] text-emerald-400 font-bold mb-1 block" data-i18n="reg_code">Invitation code</label>
-                <input type="text" id="reg-input-code" readonly class="w-full bg-gray-950 border border-emerald-500/40 p-2.5 rounded-xl text-emerald-300 font-mono font-bold">
-            </div>
-            <div>
-                <label class="text-[10px] text-emerald-400 font-bold mb-1 block" data-i18n="reg_pass">Password</label>
-                <input type="password" placeholder="Enter your password" class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
-            </div>
-            <div>
-                <label class="text-[10px] text-emerald-400 font-bold mb-1 block" data-i18n="reg_confirm">Confirm password</label>
-                <input type="password" placeholder="Please confirm the login password" class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
-            </div>
-        </div>
-
-        <button onclick="submitRegistration()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-xs shadow-lg shadow-emerald-500/20 active:scale-95 transition" data-i18n="reg_btn">
-            Register
         </button>
     </div>
 </div>
@@ -367,6 +385,8 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </button>
 </div>
 
+</div> <!-- KRAJ MAIN APP WRAPPER-A -->
+
 <script>
 let currentBalance = 12450.80;
 let selectedNetwork = 'trc20';
@@ -386,63 +406,280 @@ if (!currentUser) {
 
     currentUser = {
         id: randomId,
+        username: "tajkun",
         code: randomCode,
         link: cleanBaseUrl + '?inviteCode=' + randomCode
     };
     localStorage.setItem('azel_user_data', JSON.stringify(currentUser));
 }
 
+// Provera da li je korisnik već prijavljen u ovoj sesiji
 window.addEventListener('DOMContentLoaded', function() {
+    const isLogged = sessionStorage.getItem('azel_logged_in');
+    if (isLogged === 'true') {
+        showMainApp();
+    }
+
     const urlParams = new URLSearchParams(window.location.search);
     const refCode = urlParams.get('inviteCode') || urlParams.get('ref');
     if (refCode) {
         document.getElementById('reg-input-code').value = refCode;
-        openRegisterModal();
+        switchAuthTab('register');
     } else {
         document.getElementById('reg-input-code').value = currentUser.code;
     }
 
     document.getElementById('profile-id-display').innerText = currentUser.id;
+    document.getElementById('profile-username-display').innerText = currentUser.username || "tajkun";
     document.getElementById('profile-code-display').innerText = "Invitation code: " + currentUser.code;
     document.getElementById('modal-code-display').innerText = currentUser.code;
     document.getElementById('modal-link-display').innerText = currentUser.link;
-    
     document.getElementById('invite-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=${encodeURIComponent(currentUser.link)}`;
     
     changeLanguage('en');
 });
 
-function openInviteModal() {
-    document.getElementById('modal-invite').style.display = 'flex';
-}
-function closeInviteModal() {
-    document.getElementById('modal-invite').style.display = 'none';
+// AUTH LOGIKA
+function switchAuthTab(tab) {
+    const isLogin = tab === 'login';
+    document.getElementById('form-login').style.display = isLogin ? 'block' : 'none';
+    document.getElementById('form-register').style.display = isLogin ? 'none' : 'block';
+    
+    document.getElementById('tab-login-btn').className = isLogin ? 'flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-500 text-black transition' : 'flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 transition';
+    document.getElementById('tab-reg-btn').className = !isLogin ? 'flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-500 text-black transition' : 'flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 transition';
 }
 
-function copyMyInviteLink() {
-    navigator.clipboard.writeText(currentUser.link).then(() => {
-        alert('Vaš jedinstveni pozivni link je uspešno kopiran:\n' + currentUser.link);
-    }).catch(() => {
-        alert('Pozivni link: ' + currentUser.link);
+function handleUserLogin() {
+    const user = document.getElementById('login-username').value.trim();
+    const pass = document.getElementById('login-password').value.trim();
+    if(!user || !pass) {
+        alert('Molimo unesite korisničko ime i lozinku!');
+        return;
+    }
+    sessionStorage.setItem('azel_logged_in', 'true');
+    showMainApp();
+}
+
+function handleUserRegister() {
+    const user = document.getElementById('reg-username-input').value.trim();
+    const pass = document.getElementById('reg-pass-input').value.trim();
+    const confirmPass = document.getElementById('reg-confirm-input').value.trim();
+
+    if(!user || !pass) {
+        alert('Molimo popunite sva obavezna polja!');
+        return;
+    }
+    if(pass !== confirmPass) {
+        alert('Lozinke se ne podudaraju!');
+        return;
+    }
+
+    currentUser.username = user;
+    localStorage.setItem('azel_user_data', JSON.stringify(currentUser));
+    document.getElementById('profile-username-display').innerText = user;
+
+    alert('Uspešno ste se registrovali i prijavili!');
+    sessionStorage.setItem('azel_logged_in', 'true');
+    showMainApp();
+}
+
+function showMainApp() {
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('main-app-wrapper').style.display = 'block';
+}
+
+function handleUserLogout() {
+    sessionStorage.removeItem('azel_logged_in');
+    document.getElementById('main-app-wrapper').style.display = 'none';
+    document.getElementById('auth-screen').style.display = 'flex';
+}
+
+// NAVIGACIJA KROZ TABOVE U APLIKACIJI
+function switchTab(tabId) {
+    document.querySelectorAll('.page-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.fixed.bottom-0 button').forEach(el => el.classList.remove('text-emerald-400'));
+    document.querySelectorAll('.fixed.bottom-0 button').forEach(el => el.classList.add('text-gray-400'));
+
+    let targetPage = '';
+    if (tabId === 'tab-home' || tabId === 'page-home') { targetPage = 'page-home'; tabId = 'tab-home'; }
+    else if (tabId === 'tab-trade' || tabId === 'page-trade') { targetPage = 'page-trade'; tabId = 'tab-trade'; }
+    else if (tabId === 'tab-wallet' || tabId === 'page-wallet') { targetPage = 'page-wallet'; tabId = 'tab-wallet'; }
+    else if (tabId === 'tab-profile' || tabId === 'page-profile') { targetPage = 'page-profile'; tabId = 'tab-profile'; }
+
+    document.getElementById(targetPage).classList.add('active');
+    const btn = document.getElementById(tabId);
+    if(btn) {
+        btn.classList.remove('text-gray-400');
+        btn.classList.add('text-emerald-400');
+    }
+    window.scrollTo(0, 0);
+}
+
+// LOGO KLIK (TAJNI ADMIN PANEL NA 5 KLIKOVA)
+function handleLogoClick() {
+    logoClickCount++;
+    if(logoClickTimer) clearTimeout(logoClickTimer);
+    logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 2000);
+
+    if(logoClickCount >= 5) {
+        logoClickCount = 0;
+        document.getElementById('modal-admin-pin').style.display = 'flex';
+    }
+}
+
+function closeAdminPinModal() {
+    document.getElementById('modal-admin-pin').style.display = 'none';
+    document.getElementById('admin-pin-input').value = '';
+}
+
+function verifyAdminPin() {
+    const pin = document.getElementById('admin-pin-input').value;
+    if(pin === ADMIN_PIN) {
+        closeAdminPinModal();
+        openAdminPanel();
+    } else {
+        alert('Pogrešan PIN!');
+        document.getElementById('admin-pin-input').value = '';
+    }
+}
+
+function openAdminPanel() {
+    renderAdminWithdrawList();
+    document.getElementById('modal-admin-panel').style.display = 'flex';
+}
+function closeAdminPanel() {
+    document.getElementById('modal-admin-panel').style.display = 'none';
+}
+
+function renderAdminWithdrawList() {
+    const listContainer = document.getElementById('admin-withdraw-list');
+    if(withdrawRequests.length === 0) {
+        listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">Nema aktivnih zahteva za isplatu.</p>';
+        return;
+    }
+    let html = '';
+    withdrawRequests.forEach((req, idx) => {
+        html += `
+            <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-2">
+                <div class="flex justify-between items-center font-bold">
+                    <span class="text-white">Korisnik: ${req.user}</span>
+                    <span class="text-emerald-400">${req.amount} USDT</span>
+                </div>
+                <div class="text-[10px] text-gray-400 font-mono truncate">Adresa: ${req.address}</div>
+                <div class="flex justify-between items-center pt-1">
+                    <span class="text-amber-400 text-[10px]">Preostalo: ${req.hoursLeft}h</span>
+                    ${req.status === 'pending' ? `
+                        <div class="flex gap-2">
+                            <button onclick="approveWithdraw(${idx})" class="bg-emerald-500 text-black px-3 py-1 rounded font-bold text-[10px]">Odobri</button>
+                            <button onclick="rejectWithdraw(${idx})" class="bg-red-500 text-white px-3 py-1 rounded font-bold text-[10px]">Odbij</button>
+                        </div>
+                    ` : `<span class="text-emerald-500 font-bold text-[10px]">Odobreno ✓</span>`}
+                </div>
+            </div>
+        `;
+    });
+    listContainer.innerHTML = html;
+}
+
+function approveWithdraw(index) {
+    withdrawRequests[index].status = 'approved';
+    alert('Zahtev uspešno odobren!');
+    renderAdminWithdrawList();
+}
+function rejectWithdraw(index) {
+    withdrawRequests.splice(index, 1);
+    alert('Zahtev odbijen i obrisan.');
+    renderAdminWithdrawList();
+}
+
+// MODALI ZA UPLATU I ISPLATU
+function openDepositModal() { document.getElementById('modal-deposit').style.display = 'flex'; }
+function closeDepositModal() { document.getElementById('modal-deposit').style.display = 'none'; }
+
+function selectNetwork(net) {
+    selectedNetwork = net;
+    const trcBtn = document.getElementById('net-trc20');
+    const bepBtn = document.getElementById('net-bep20');
+    const addrText = document.getElementById('deposit-address-text');
+    const netName = document.getElementById('network-name-text');
+    const qrImg = document.getElementById('deposit-qr');
+
+    if(net === 'trc20') {
+        trcBtn.className = "py-2 px-3 rounded-xl border border-emerald-500 bg-emerald-950/40 text-emerald-400 font-bold text-xs flex items-center justify-center gap-1";
+        bepBtn.className = "py-2 px-3 rounded-xl border border-gray-800 bg-gray-900 text-gray-400 font-bold text-xs flex items-center justify-center gap-1";
+        addrText.innerText = walletAddresses.trc20;
+        netName.innerText = "TRC-20";
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=${walletAddresses.trc20}`;
+    } else {
+        bepBtn.className = "py-2 px-3 rounded-xl border border-emerald-500 bg-emerald-950/40 text-emerald-400 font-bold text-xs flex items-center justify-center gap-1";
+        trcBtn.className = "py-2 px-3 rounded-xl border border-gray-800 bg-gray-900 text-gray-400 font-bold text-xs flex items-center justify-center gap-1";
+        addrText.innerText = walletAddresses.bep20;
+        netName.innerText = "BEP-20";
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=${walletAddresses.bep20}`;
+    }
+}
+
+function copyAddress() {
+    const addr = walletAddresses[selectedNetwork];
+    navigator.clipboard.writeText(addr).then(() => {
+        alert('Kripto adresa uspešno kopirana!');
     });
 }
 
+function openWithdrawModal() { document.getElementById('modal-withdraw').style.display = 'flex'; }
+function closeWithdrawModal() { document.getElementById('modal-withdraw').style.display = 'none'; }
+
+function submitWithdrawRequest() {
+    const amount = parseFloat(document.getElementById('withdraw-amount').value);
+    const address = document.getElementById('withdraw-address').value.trim();
+
+    if(!amount || amount < 50) {
+        alert('Minimalni iznos za isplatu je 50 USDT.');
+        return;
+    }
+    if(!address) {
+        alert('Unesite kripto adresu za isplatu.');
+        return;
+    }
+    if(amount > currentBalance) {
+        alert('Nemate dovoljno sredstava na računu.');
+        return;
+    }
+
+    currentBalance -= amount;
+    document.querySelectorAll('.wallet-usdt').forEach(el => el.innerText = currentBalance.toLocaleString('en-US', {minimumFractionDigits: 2}));
+
+    withdrawRequests.push({
+        id: Math.floor(100 + Math.random() * 900),
+        user: (currentUser.username || "tajkun") + " (" + currentUser.id + ")",
+        amount: amount,
+        address: address,
+        hoursLeft: 72,
+        status: 'pending'
+    });
+
+    alert('Uspešno ste podneli zahtev za isplatu! Sredstva stižu u roku od 72 sata.');
+    closeWithdrawModal();
+    document.getElementById('withdraw-amount').value = '';
+    document.getElementById('withdraw-address').value = '';
+}
+
+function openInviteModal() { document.getElementById('modal-invite').style.display = 'flex'; }
+function closeInviteModal() { document.getElementById('modal-invite').style.display = 'none'; }
+
+function copyMyInviteLink() {
+    navigator.clipboard.writeText(currentUser.link).then(() => {
+        alert('Pozivni link uspešno kopiran!');
+    });
+}
 function copyMyInviteCode() {
     navigator.clipboard.writeText(currentUser.code).then(() => {
         alert('Pozivni kod kopiran: ' + currentUser.code);
     });
 }
 
-function openRegisterModal() {
-    document.getElementById('modal-register').style.display = 'flex';
-}
-function closeRegisterModal() {
-    document.getElementById('modal-register').style.display = 'none';
-}
-function submitRegistration() {
-    alert('Uspešno ste se registrovali na AZEL platformu!');
-    closeRegisterModal();
-}
+function openLanguageModal() { document.getElementById('modal-lang').style.display = 'flex'; }
+function closeLangModal() { document.getElementById('modal-lang').style.display = 'none'; }
 
 const translations = {
 en: {
@@ -456,8 +693,7 @@ invite_link_title: "Invitation link", copy_link_btn: "Copy invitation link",
 switch_lang: "Switch Language", logout: "Log Out", trade_title: "Market / Trading", select_option: "Select option:",
 buy_btc: "Buy BTC", sell_btc: "Sell BTC", my_wallets: "My Wallets", vip_channel: "VIP Channel VIP0", upgrade_now: "Upgrade",
 deposit_title: "USDT Deposit", select_network: "Select Network:", deposit_address_label: "Deposit Address", copy_btn: "Copy",
-withdraw_title: "Withdrawal Request", reg_welcome: "Welcome to AZEL Blockchain Insurance", reg_phone: "Phone Number",
-reg_code: "Invitation code", reg_pass: "Password", reg_confirm: "Confirm password", reg_btn: "Register"
+withdraw_title: "Withdrawal Request"
 },
 sr: {
 nav_home: "Osiguranje", nav_trade: "Trgovanje", nav_wallet: "Novčanik", nav_profile: "Profil",
@@ -470,8 +706,7 @@ invite_link_title: "Pozivni link", copy_link_btn: "Kopiraj pozivni link",
 switch_lang: "Promeni Jezik", logout: "Odjavi se", trade_title: "Trgovanje", select_option: "Izaberite opciju:",
 buy_btc: "Kupi BTC", sell_btc: "Prodaj BTC", my_wallets: "Moji Novčanici", vip_channel: "VIP Kanal VIP0", upgrade_now: "Nadogradi",
 deposit_title: "USDT Uplata", select_network: "Izaberite Mrežu:", deposit_address_label: "Adresa za slanje", copy_btn: "Kopiraj",
-withdraw_title: "Zahtev za Isplatu", reg_welcome: "Dobrodošli u AZEL Blockchain Osiguranje", reg_phone: "Broj telefona",
-reg_code: "Pozivni kod", reg_pass: "Lozinka", reg_confirm: "Potvrdite lozinku", reg_btn: "Registruj se"
+withdraw_title: "Zahtev za Isplatu"
 },
 sl: {
 nav_home: "Zavarovanje", nav_trade: "Trg", nav_wallet: "Denarnica", nav_profile: "Profil",
@@ -484,193 +719,18 @@ invite_link_title: "Povezava za vabilo", copy_link_btn: "Kopiraj povezavo",
 switch_lang: "Spremeni jezik", logout: "Odjava", trade_title: "Trgovanje", select_option: "Izberite možnost:",
 buy_btc: "Kupi BTC", sell_btc: "Prodaj BTC", my_wallets: "Moje denarnice", vip_channel: "VIP Kanal VIP0", upgrade_now: "Nadgradi",
 deposit_title: "USDT Polog", select_network: "Izberite omrežje:", deposit_address_label: "Naslov za polog", copy_btn: "Kopiraj",
-withdraw_title: "Zahteva za izplačilo", reg_welcome: "Dobrodošli v AZEL Blockchain zavarovanju", reg_phone: "Telefonska številka",
-reg_code: "Koda povabila", reg_pass: "Geslo", reg_confirm: "Potrdi geslo", reg_btn: "Registracija"
-},
-mk: {
-nav_home: "Осигурување", nav_trade: "Тргување", nav_wallet: "Парилник", nav_profile: "Профил",
-trading_platform_btn: "Платформа за тргување", white_paper: "Бела книга", official_website: "Официјална веб-страница",
-recharge: "Уплата", withdraw: "Исплата", teaching_classroom: "Училница",
-invitation_pack: "Пакет покани", download: "Преземи", community_perspective: "Заедница",
-invite_friends: "Покани пријатели", invite_banner_title: "Заедно да го пренесеме AZEL во светот, секој да почувствува радост и награда",
-invitation_code_label: "Поканен код", click_copy_code: "Кликнете за копирање на кодот",
-invite_link_title: "Линк за покана", copy_link_btn: "Копирај линк за покана",
-switch_lang: "Промени јазик", logout: "Одјава", trade_title: "Тргување", select_option: "Изберете опција:",
-buy_btc: "Купи BTC", sell_btc: "Продај BTC", my_wallets: "Мои паричници", vip_channel: "VIP Канал VIP0", upgrade_now: "Ажурирај",
-deposit_title: "USDT Уплата", select_network: "Изберете мрежа:", deposit_address_label: "Адреса за уплата", copy_btn: "Копирај",
-withdraw_title: "Барање за исплата", reg_welcome: "Добредојдовте во AZEL Blockchain Осигурување", reg_phone: "Телефонски број",
-reg_code: "Поканен код", reg_pass: "Лозинка", reg_confirm: "Потврди лозинка", reg_btn: "Регистрирај се"
-},
-es: {
-nav_home: "Seguro", nav_trade: "Mercado", nav_wallet: "Activos", nav_profile: "Perfil",
-trading_platform_btn: "Plataforma de trading", white_paper: "Libro Blanco", official_website: "Sitio web oficial",
-recharge: "Recargar", withdraw: "Retiro", teaching_classroom: "Aula",
-invitation_pack: "Paquete de invitación", download: "Descargar", community_perspective: "Comunidad",
-invite_friends: "Invitar amigos", invite_banner_title: "Llevuemos AZEL al mundo juntos, para que todos sientan alegría y recompensa",
-invitation_code_label: "Código de invitación", click_copy_code: "Haga clic para copiar el código",
-invite_link_title: "Enlace de invitación", copy_link_btn: "Copiar enlace",
-switch_lang: "Cambiar Idioma", logout: "Cerrar Sesión", trade_title: "Mercado / Trading", select_option: "Seleccione opción:",
-buy_btc: "Comprar BTC", sell_btc: "Vender BTC", my_wallets: "Mis Billeteras", vip_channel: "Canal VIP0", upgrade_now: "Actualizar",
-deposit_title: "Depósito USDT", select_network: "Seleccionar Red:", deposit_address_label: "Dirección de Depósito", copy_btn: "Copiar",
-withdraw_title: "Solicitud de Retiro", reg_welcome: "Bienvenido a AZEL Blockchain Insurance", reg_phone: "Número de teléfono",
-reg_code: "Código de invitación", reg_pass: "Contraseña", reg_confirm: "Confirmar contraseña", reg_btn: "Registrarse"
-},
-ru: {
-nav_home: "Страхование", nav_trade: "Рынок", nav_wallet: "Активы", nav_profile: "Профиль",
-trading_platform_btn: "Торговая платформа", white_paper: "Белая книга", official_website: "Официальный сайт",
-recharge: "Пополнить", withdraw: "Вывод", teaching_classroom: "Класс",
-invitation_pack: "Пакет приглашений", download: "Скачать", community_perspective: "Сообщество",
-invite_friends: "Пригласить друзей", invite_banner_title: "Давайте передадим AZEL миру вместе, чтобы каждый почувствовал радость и награду",
-invitation_code_label: "Код приглашения", click_copy_code: "Нажмите, чтобы скопировать код",
-invite_link_title: "Реферальная ссылка", copy_link_btn: "Копировать ссылку",
-switch_lang: "Сменить язык", logout: "Выйти", trade_title: "Рынок / Торговля", select_option: "Выберите опцию:",
-buy_btc: "Купить BTC", sell_btc: "Продать BTC", my_wallets: "Мои кошельки", vip_channel: "VIP Канал VIP0", upgrade_now: "Обновить",
-deposit_title: "Депозит USDT", select_network: "Выберите сеть:", deposit_address_label: "Адрес депозита", copy_btn: "Копировать",
-withdraw_title: "Запрос на вывод", reg_welcome: "Добро пожаловать в AZEL Blockchain Insurance", reg_phone: "Номер телефона",
-reg_code: "Код приглашения", reg_pass: "Пароль", reg_confirm: "Подтвердите пароль", reg_btn: "Регистрация"
-},
-el: {
-nav_home: "Ασφάλιση", nav_trade: "Αγορά", nav_wallet: "Περιουσιακά", nav_profile: "Προφίλ",
-trading_platform_btn: "Πλατφόρμα συναλλαγών", white_paper: "Λευκή Βίβλος", official_website: "Επίσημη ιστοσελίδα",
-recharge: "Κατάθεση", withdraw: "Ανάληψη", teaching_classroom: "Τάξη",
-invitation_pack: "Πακέτο πρόσκλησης", download: "Λήψη", community_perspective: "Κοινότητα",
-invite_friends: "Προσκαλέστε φίλους", invite_banner_title: "Ας περάσουμε το AZEL στον κόσμο μαζί, για να νιώσουν όλοι χαρά και αμοιβή",
-invitation_code_label: "Κωδικός πρόσκλησης", click_copy_code: "Κάντε κλικ για αντιγραφή κωδικού",
-invite_link_title: "Σύνδεσμος πρόσκλησης", copy_link_btn: "Αντιγραφή συνδέσμου",
-switch_lang: "Αλλαγή γλώσσας", logout: "Αποσύνδεση", trade_title: "Αγορά / Συναλλαγές", select_option: "Επιλέξτε επιλογή:",
-buy_btc: "Αγορά BTC", sell_btc: "Πώληση BTC", my_wallets: "Τα πορτοφόλια μου", vip_channel: "VIP Κανάλι VIP0", upgrade_now: "Αναβάθμιση",
-deposit_title: "Κατάθεση USDT", select_network: "Επιλογή Δικτύου:", deposit_address_label: "Διεύθυνση Κατάθεσης", copy_btn: "Αντιγραφή",
-withdraw_title: "Αίτημα Ανάληψης", reg_welcome: "Καλώς ήρθατε στο AZEL Blockchain Insurance", reg_phone: "Αριθμός τηλεφώνου",
-reg_code: "Κωδικός πρόσκλησης", reg_pass: "Κωδικός πρόσβασης", reg_confirm: "Επιβεβαίωση κωδικού", reg_btn: "Εγγραφή"
-},
-it: {
-nav_home: "Assicurazione", nav_trade: "Mercato", nav_wallet: "Asset", nav_profile: "Profilo",
-trading_platform_btn: "Piattaforma di trading", white_paper: "White Paper", official_website: "Sito ufficiale",
-recharge: "Ricarica", withdraw: "Prelievo", teaching_classroom: "Aula",
-invitation_pack: "Pacchetto invito", download: "Download", community_perspective: "Community",
-invite_friends: "Invita amici", invite_banner_title: "Portiamo AZEL nel mondo insieme, affinché tutti provino gioia e ricompensa",
-invitation_code_label: "Codice invito", click_copy_code: "Clicca per copiare il codice invito",
-invite_link_title: "Link di invito", copy_link_btn: "Copia link di invito",
-switch_lang: "Cambia Lingua", logout: "Esci", trade_title: "Mercato / Trading", select_option: "Seleziona opzione:",
-buy_btc: "Compra BTC", sell_btc: "Vendi BTC", my_wallets: "I Miei Wallet", vip_channel: "Canale VIP0", upgrade_now: "Aggiorna",
-deposit_title: "Deposito USDT", select_network: "Seleziona Rete:", deposit_address_label: "Indirizzo di Deposito", copy_btn: "Copia",
-withdraw_title: "Richiesta di Prelievo", reg_welcome: "Benvenuto in AZEL Blockchain Insurance", reg_phone: "Numero di telefono",
-reg_code: "Codice invito", reg_pass: "Password", reg_confirm: "Conferma password", reg_btn: "Registrati"
+withdraw_title: "Zahteva za izplačilo"
 }
 };
 
-function handleLogoClick() {
-    logoClickCount++;
-    clearTimeout(logoClickTimer);
-    if (logoClickCount === 3) {
-        logoClickCount = 0;
-        document.getElementById('admin-pin-input').value = '';
-        document.getElementById('modal-admin-pin').style.display = 'flex';
-    } else {
-        logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 1000);
-    }
-}
-function closeAdminPinModal() { document.getElementById('modal-admin-pin').style.display = 'none'; }
-function closeAdminPanel() { document.getElementById('modal-admin-panel').style.display = 'none'; }
-
-function verifyAdminPin() {
-    const inputPin = document.getElementById('admin-pin-input').value;
-    if (inputPin === ADMIN_PIN) {
-        closeAdminPinModal();
-        renderAdminRequests();
-        document.getElementById('modal-admin-panel').style.display = 'flex';
-    } else {
-        alert('Pogrešan Admin PIN!');
-    }
-}
-
-function renderAdminRequests() {
-    const container = document.getElementById('admin-withdraw-list');
-    if (withdrawRequests.length === 0) {
-        container.innerHTML = `<div class="text-center text-gray-500 py-6">Nema aktivnih zahteva za isplatu.</div>`;
-        return;
-    }
-    container.innerHTML = withdrawRequests.map(req => `
-        <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 space-y-2">
-            <div class="flex justify-between items-center font-bold">
-                <span class="text-white">${req.user}</span>
-                <span class="text-emerald-400">$${req.amount.toFixed(2)} USDT</span>
-            </div>
-            <div class="bg-gray-900 p-2 rounded text-[10px] font-mono text-gray-300 break-all flex justify-between items-center gap-1">
-                <span>${req.address}</span>
-                <button onclick="navigator.clipboard.writeText('${req.address}'); alert('Adresa kopirana!');" class="bg-gray-800 px-2 py-1 rounded text-emerald-400 font-sans font-bold text-[9px]">Copy</button>
-            </div>
-            <div class="flex justify-between items-center text-[10px]">
-                <span class="text-amber-400"><i class="fas fa-hourglass-half"></i> Preostalo: ${req.hoursLeft}h</span>
-                <button onclick="confirmAdminWithdraw(${req.id})" class="bg-emerald-500 hover:bg-emerald-400 text-black px-3 py-1 rounded-lg font-bold">Odobri</button>
-            </div>
-        </div>
-    `).join('');
-}
-
-function confirmAdminWithdraw(id) {
-    withdrawRequests = withdrawRequests.filter(req => req.id !== id);
-    alert('Isplata je uspešno odobrena!');
-    renderAdminRequests();
-}
-
-function openWithdrawModal() { document.getElementById('modal-withdraw').style.display = 'flex'; }
-function closeWithdrawModal() { document.getElementById('modal-withdraw').style.display = 'none'; }
-function submitWithdrawRequest() {
-    const amount = parseFloat(document.getElementById('withdraw-amount').value);
-    const address = document.getElementById('withdraw-address').value.trim();
-    if (isNaN(amount) || amount < 50) { alert('Min. 50 USDT!'); return; }
-    if (address.length < 10) { alert('Unesite ispravnu adresu!'); return; }
-    
-    withdrawRequests.push({
-        id: Date.now(),
-        user: "Korisnik (ID: " + currentUser.id + ")",
-        amount: amount,
-        address: address,
-        hoursLeft: 72,
-        status: "pending"
-    });
-    alert('Zahtev za isplatu je poslat!');
-    closeWithdrawModal();
-}
-
-function openDepositModal() { document.getElementById('modal-deposit').style.display = 'flex'; }
-function closeDepositModal() { document.getElementById('modal-deposit').style.display = 'none'; }
-function selectNetwork(net) {
-    selectedNetwork = net;
-    document.getElementById('net-trc20').className = net === 'trc20' ? "py-2 px-3 rounded-xl border border-emerald-500 bg-emerald-950/40 text-emerald-400 font-bold text-xs flex items-center justify-center gap-1" : "py-2 px-3 rounded-xl border border-gray-800 bg-gray-900 text-gray-400 font-bold text-xs flex items-center justify-center gap-1";
-    document.getElementById('net-bep20').className = net === 'bep20' ? "py-2 px-3 rounded-xl border border-emerald-500 bg-emerald-950/40 text-emerald-400 font-bold text-xs flex items-center justify-center gap-1" : "py-2 px-3 rounded-xl border border-gray-800 bg-gray-900 text-gray-400 font-bold text-xs flex items-center justify-center gap-1";
-    document.getElementById('network-name-text').innerText = net.toUpperCase();
-    document.getElementById('deposit-address-text').innerText = walletAddresses[net];
-}
-function copyAddress() { navigator.clipboard.writeText(walletAddresses[selectedNetwork]); alert('Adresa kopirana!'); }
-
-function switchTab(tabId) {
-    document.querySelectorAll('.page-content').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.fixed.bottom-0 button').forEach(el => { el.classList.remove('text-emerald-400'); el.classList.add('text-gray-400'); });
-    
-    const selectedBtn = document.getElementById(tabId);
-    if(selectedBtn) {
-        selectedBtn.classList.remove('text-gray-400');
-        selectedBtn.classList.add('text-emerald-400');
-    }
-    
-    if (tabId === 'tab-home') document.getElementById('page-home').classList.add('active');
-    if (tabId === 'tab-trade') document.getElementById('page-trade').classList.add('active');
-    if (tabId === 'tab-wallet') document.getElementById('page-wallet').classList.add('active');
-    if (tabId === 'tab-profile') document.getElementById('page-profile').classList.add('active');
-}
-
-function openLanguageModal() { document.getElementById('modal-lang').style.display = 'flex'; }
-function closeLangModal() { document.getElementById('modal-lang').style.display = 'none'; }
-
-function changeLanguage(langKey) {
-    const langData = translations[langKey] || translations['en'];
+function changeLanguage(lang) {
+    const t = translations[lang] || translations['en'];
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (langData[key]) el.innerText = langData[key];
+        if(t[key]) el.innerText = t[key];
     });
-    document.getElementById('current-lang-text').innerText = langKey.toUpperCase() + ' >';
+    const langNames = { en: 'EN >', sr: 'SR >', sl: 'SL >', mk: 'MK >', es: 'ES >', ru: 'RU >', el: 'EL >', it: 'IT >' };
+    document.getElementById('current-lang-text').innerText = langNames[lang] || 'EN >';
     closeLangModal();
 }
 </script>
