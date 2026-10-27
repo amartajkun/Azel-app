@@ -131,9 +131,10 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <span class="text-xl font-bold tracking-wider text-emerald-400">AZEL</span>
 </div>
 <div class="flex space-x-3 text-gray-400 text-lg relative items-center">
-<!-- ADMIN DUGME SAMO ZA 'tajkun' -->
-<button id="admin-header-btn" onclick="openAdminPinModal()" class="bg-amber-500/20 text-amber-400 border border-amber-500/40 px-2.5 py-1 rounded-lg text-[10px] font-bold hidden items-center gap-1">
+<!-- ADMIN DUGME SAMO ZA 'tajkun' SA NOTIFIKACIJSKIM BEDŽOM -->
+<button id="admin-header-btn" onclick="openAdminPinModal()" class="bg-amber-500/20 text-amber-400 border border-amber-500/40 px-2.5 py-1 rounded-lg text-[10px] font-bold hidden items-center gap-1 relative">
     <i class="fas fa-shield-halved"></i> Admin
+    <span id="admin-header-badge" class="bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.2 rounded-full hidden">0</span>
 </button>
 <button onclick="openHelpModal()" class="relative">
     <i class="fas fa-headset text-emerald-400"></i>
@@ -426,7 +427,9 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2"><i class="fas fa-headset"></i> Support Chat</h3>
             <button onclick="closeHelpModal()" class="text-gray-400 hover:text-white text-sm"><i class="fas fa-times"></i></button>
         </div>
-        <div id="user-chat-history" class="space-y-2 max-h-48 overflow-y-auto pr-1 text-xs bg-gray-950 p-3 rounded-xl border border-gray-800"></div>
+        <div id="user-chat-history" class="space-y-2 max-h-48 overflow-y-auto pr-1 text-xs bg-gray-950 p-3 rounded-xl border border-gray-800">
+            <p class="text-gray-500 text-center">No messages yet. Send a message to start support chat!</p>
+        </div>
         <textarea id="help-message-input" rows="3" placeholder="Type your message to support..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none text-xs"></textarea>
         <button onclick="submitHelpMessage()" class="w-full bg-emerald-500 text-black py-2.5 rounded-xl text-xs font-bold shadow-lg">Send Message</button>
     </div>
@@ -498,7 +501,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
                 <input type="text" id="withdraw-address" placeholder="Enter address..." class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white font-mono text-[11px]">
             </div>
         </div>
-        <button onclick="submitWithdrawRequest()" class="w-full bg-emerald-500 text-black py-2.5 rounded-xl text-xs font-bold">Confirm Withdrawal</button>
+        <button onclick="submitWithdrawRequest()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black py-2.5 rounded-xl text-xs font-bold active:scale-95 transition">Confirm Withdrawal</button>
     </div>
 </div>
 
@@ -595,7 +598,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 </div>
 
 <script>
-let currentBalance = 12450.80;
 let currentUser = null;
 let allRegisteredUsers = [];
 let supportChats = [];
@@ -844,7 +846,7 @@ function handleUserRegister() {
         isLicensePaid: false,
         referrer: inviteCode || null,
         activeBots: [],
-        balance: 0.00
+        balance: 1000.00
     };
 
     allRegisteredUsers.push(currentUser);
@@ -1015,7 +1017,7 @@ function renderAssetsData() {
         currentUser.activeBots.forEach(b => { if(b.status === 'ACTIVE') frozenTotal += b.price; });
     }
     document.getElementById('wallet-frozen-display').innerText = frozenTotal.toLocaleString('en-US', {minimumFractionDigits: 2});
-    document.getElementById('wallet-balance-display').innerText = (currentUser.balance || 12450.80).toLocaleString('en-US', {minimumFractionDigits: 2});
+    document.getElementById('wallet-balance-display').innerText = (currentUser.balance !== undefined ? currentUser.balance : 12450.80).toLocaleString('en-US', {minimumFractionDigits: 2});
 
     const container = document.getElementById('active-bots-container');
     if(!currentUser.activeBots || currentUser.activeBots.length === 0) {
@@ -1061,6 +1063,7 @@ function updateAppUI() {
         document.getElementById('buy-license-btn').className = "bg-emerald-950 text-emerald-400 px-4 py-2 rounded-xl text-xs font-bold border border-emerald-500/40 cursor-default";
     }
     checkBotUnlocks();
+    updateBadges();
 }
 
 function openChangeEmailModal() { document.getElementById('modal-change-email').style.display = 'flex'; }
@@ -1174,8 +1177,11 @@ function renderAdminSupportList() {
     supportChats.forEach((chat, cIdx) => {
         html += `
             <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-2">
-                <div class="font-bold text-emerald-400">User: ${chat.username} (${chat.userId})</div>
-                <div class="space-y-1 bg-black/40 p-2 rounded-lg text-[11px] max-h-24 overflow-y-auto">
+                <div class="font-bold text-emerald-400 flex justify-between">
+                    <span>User: ${chat.username} (${chat.userId})</span>
+                    ${chat.unreadByAdmin ? '<span class="bg-red-500 text-white text-[9px] px-1.5 py-0.5 rounded">NEW</span>' : ''}
+                </div>
+                <div class="space-y-1 bg-black/40 p-2 rounded-lg text-[11px] max-h-32 overflow-y-auto">
         `;
         if(chat.messages) {
             chat.messages.forEach(m => {
@@ -1199,13 +1205,14 @@ function sendAdminReply(chatIndex) {
     if(!txt) return;
     if(!supportChats[chatIndex].messages) supportChats[chatIndex].messages = [];
     supportChats[chatIndex].messages.push({ sender: 'admin', text: txt, time: new Date().toLocaleTimeString() });
+    supportChats[chatIndex].unreadByAdmin = false;
     supportChats[chatIndex].unreadByUser = true;
 
     if(window.firebaseReady) {
         window.FB_SET(window.FB_REF(window.FB_DB, 'supportChats/' + chatIndex), supportChats[chatIndex]).then(() => {
             input.value = '';
             renderAdminSupportList();
-            alert('Reply sent!');
+            updateBadges();
         });
     }
 }
@@ -1213,28 +1220,69 @@ function sendAdminReply(chatIndex) {
 function approveWithdraw(index) {
     withdrawRequests[index].status = 'approved';
     if(window.firebaseReady) {
-        window.FB_SET(window.FB_REF(window.FB_DB, 'withdrawRequests/' + index), withdrawRequests[index]).then(() => {
+        window.FB_SET(window.FB_REF(window.FB_DB, 'withdrawRequests'), withdrawRequests).then(() => {
             alert('Withdrawal approved!');
             renderAdminWithdrawList();
+            updateBadges();
         });
     }
 }
 
 function updateBadges() {
-    let unreadCount = supportChats.filter(c => c.unreadByAdmin).length;
-    const badge = document.getElementById('help-badge');
-    const helpProfileBadge = document.getElementById('help-profile-badge');
-    if(unreadCount > 0) { 
-        if(badge) { badge.innerText = unreadCount; badge.classList.remove('hidden'); }
-        if(helpProfileBadge) { helpProfileBadge.innerText = unreadCount; helpProfileBadge.classList.remove('hidden'); }
-    } else { 
-        if(badge) badge.classList.add('hidden'); 
-        if(helpProfileBadge) helpProfileBadge.classList.add('hidden'); 
+    let unreadSupportCount = supportChats.filter(c => c.unreadByAdmin).length;
+    let pendingWithdrawCount = withdrawRequests.filter(w => w.status === 'pending').length;
+    let totalAdminNotifs = unreadSupportCount + pendingWithdrawCount;
+
+    // Admin Badges
+    const adminHeaderBadge = document.getElementById('admin-header-badge');
+    if(adminHeaderBadge) {
+        if(totalAdminNotifs > 0) { adminHeaderBadge.innerText = totalAdminNotifs; adminHeaderBadge.classList.remove('hidden'); }
+        else { adminHeaderBadge.classList.add('hidden'); }
+    }
+
+    const badgeW = document.getElementById('admin-badge-w');
+    if(badgeW) {
+        if(pendingWithdrawCount > 0) { badgeW.innerText = pendingWithdrawCount; badgeW.classList.remove('hidden'); }
+        else { badgeW.classList.add('hidden'); }
+    }
+
+    const badgeS = document.getElementById('admin-badge-s');
+    if(badgeS) {
+        if(unreadSupportCount > 0) { badgeS.innerText = unreadSupportCount; badgeS.classList.remove('hidden'); }
+        else { badgeS.classList.add('hidden'); }
+    }
+
+    // User Badges
+    if (currentUser) {
+        let userChat = supportChats.find(c => c.username && c.username.toLowerCase() === currentUser.username.toLowerCase());
+        let userUnread = (userChat && userChat.unreadByUser) ? 1 : 0;
+        
+        const helpBadge = document.getElementById('help-badge');
+        const helpProfileBadge = document.getElementById('help-profile-badge');
+        if(userUnread > 0) {
+            if(helpBadge) { helpBadge.innerText = userUnread; helpBadge.classList.remove('hidden'); }
+            if(helpProfileBadge) { helpProfileBadge.innerText = userUnread; helpProfileBadge.classList.remove('hidden'); }
+        } else {
+            if(helpBadge) helpBadge.classList.add('hidden');
+            if(helpProfileBadge) helpProfileBadge.classList.add('hidden');
+        }
     }
 }
 
-function openHelpModal() { document.getElementById('modal-help').style.display = 'flex'; }
-function closeHelpModal() { document.getElementById('modal-help').style.display = 'none'; }
+function openHelpModal() { 
+    document.getElementById('modal-help').style.display = 'flex'; 
+    renderUserChatHistory();
+    if(currentUser) {
+        let chatIdx = supportChats.findIndex(c => c.username && c.username.toLowerCase() === currentUser.username.toLowerCase());
+        if(chatIdx !== -1 && supportChats[chatIdx].unreadByUser) {
+            supportChats[chatIdx].unreadByUser = false;
+            if(window.firebaseReady) {
+                window.FB_SET(window.FB_REF(window.FB_DB, 'supportChats/' + chatIdx), supportChats[chatIdx]);
+            }
+        }
+    }
+}
+function closeHelpModal() { document.getElementById('modal-help').style.display = 'none'; updateBadges(); }
 function openDepositModal() { document.getElementById('modal-deposit').style.display = 'flex'; }
 function closeDepositModal() { document.getElementById('modal-deposit').style.display = 'none'; }
 function openWithdrawModal() { document.getElementById('modal-withdraw').style.display = 'flex'; }
@@ -1243,43 +1291,93 @@ function openInviteModal() { document.getElementById('modal-invite').style.displ
 function closeInviteModal() { document.getElementById('modal-invite').style.display = 'none'; }
 
 function submitWithdrawRequest() {
-    const amount = parseFloat(document.getElementById('withdraw-amount').value);
+    const amountVal = document.getElementById('withdraw-amount').value;
     const address = document.getElementById('withdraw-address').value.trim();
+    const amount = parseFloat(amountVal);
+
     if(!amount || amount < 50) { alert('Minimum withdrawal amount is 50 USDT.'); return; }
     if(!address) { alert('Please enter address.'); return; }
 
-    let req = { id: Date.now(), user: currentUser.username + " (" + currentUser.id + ")", amount: amount, address: address, status: 'pending' };
+    let req = { 
+        id: Date.now(), 
+        user: currentUser.username + " (" + currentUser.id + ")", 
+        amount: amount, 
+        address: address, 
+        status: 'pending' 
+    };
+    
     withdrawRequests.push(req);
     if(window.firebaseReady) {
         window.FB_SET(window.FB_REF(window.FB_DB, 'withdrawRequests'), withdrawRequests).then(() => {
             alert('Withdrawal request submitted!');
+            document.getElementById('withdraw-amount').value = '';
+            document.getElementById('withdraw-address').value = '';
             closeWithdrawModal();
+            updateBadges();
+        }).catch(err => {
+            alert('Error submitting request: ' + err.message);
         });
+    } else {
+        alert('Database connection error. Try again in a moment.');
     }
 }
 
 function submitHelpMessage() {
     const msg = document.getElementById('help-message-input').value.trim();
     if(!msg) return;
-    let chatIdx = supportChats.findIndex(c => c.username.toLowerCase() === currentUser.username.toLowerCase());
+    let chatIdx = supportChats.findIndex(c => c.username && c.username.toLowerCase() === currentUser.username.toLowerCase());
+    
     if(chatIdx === -1) {
-        supportChats.push({ id: Date.now(), username: currentUser.username, userId: currentUser.id, unreadByAdmin: true, messages: [{sender: 'user', text: msg, time: new Date().toLocaleTimeString()}] });
+        supportChats.push({ 
+            id: Date.now(), 
+            username: currentUser.username, 
+            userId: currentUser.id, 
+            unreadByAdmin: true, 
+            unreadByUser: false,
+            messages: [{sender: 'user', text: msg, time: new Date().toLocaleTimeString()}] 
+        });
         chatIdx = supportChats.length - 1;
     } else {
         if(!supportChats[chatIdx].messages) supportChats[chatIdx].messages = [];
         supportChats[chatIdx].messages.push({sender: 'user', text: msg, time: new Date().toLocaleTimeString()});
         supportChats[chatIdx].unreadByAdmin = true;
     }
+
     if(window.firebaseReady) {
         window.FB_SET(window.FB_REF(window.FB_DB, 'supportChats/' + chatIdx), supportChats[chatIdx]).then(() => {
-            alert('Support message sent!');
             document.getElementById('help-message-input').value = '';
-            closeHelpModal();
+            renderUserChatHistory();
+            updateBadges();
         });
     }
 }
 
-function renderUserChatHistory() {}
+function renderUserChatHistory() {
+    const box = document.getElementById('user-chat-history');
+    if(!currentUser) return;
+    let chat = supportChats.find(c => c.username && c.username.toLowerCase() === currentUser.username.toLowerCase());
+    
+    if(!chat || !chat.messages || chat.messages.length === 0) {
+        box.innerHTML = '<p class="text-gray-500 text-center py-2">No messages yet. Send a message to start support chat!</p>';
+        return;
+    }
+
+    let html = '';
+    chat.messages.forEach(m => {
+        let isMe = m.sender === 'user';
+        html += `
+            <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} my-1">
+                <div class="max-w-[85%] p-2 rounded-xl text-xs ${isMe ? 'bg-emerald-600 text-white' : 'bg-gray-800 text-gray-200 border border-gray-700'}">
+                    <div class="font-bold text-[9px] text-gray-300 mb-0.5">${isMe ? 'You' : 'Support Admin'}</div>
+                    <div>${m.text}</div>
+                </div>
+                <span class="text-[8px] text-gray-500 px-1 mt-0.5">${m.time || ''}</span>
+            </div>
+        `;
+    });
+    box.innerHTML = html;
+    box.scrollTop = box.scrollHeight;
+}
 </script>
 </body>
 </html>
