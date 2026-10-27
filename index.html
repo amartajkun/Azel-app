@@ -431,7 +431,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             <p class="text-gray-500 text-center">No messages yet. Send a message to start support chat!</p>
         </div>
         <textarea id="help-message-input" rows="3" placeholder="Type your message to support..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none text-xs"></textarea>
-        <button onclick="submitHelpMessage()" class="w-full bg-emerald-500 text-black py-2.5 rounded-xl text-xs font-bold shadow-lg">Send Message</button>
+        <button onclick="submitHelpMessage()" class="w-full bg-emerald-500 text-black py-2.5 rounded-xl text-xs font-bold shadow-lg active:scale-95 transition">Send Message</button>
     </div>
 </div>
 
@@ -1208,23 +1208,27 @@ function sendAdminReply(chatIndex) {
     supportChats[chatIndex].unreadByAdmin = false;
     supportChats[chatIndex].unreadByUser = true;
 
-    if(window.firebaseReady) {
+    if(window.firebaseReady && window.FB_DB) {
         window.FB_SET(window.FB_REF(window.FB_DB, 'supportChats/' + chatIndex), supportChats[chatIndex]).then(() => {
             input.value = '';
             renderAdminSupportList();
             updateBadges();
         });
+    } else {
+        alert('Database not ready.');
     }
 }
 
 function approveWithdraw(index) {
     withdrawRequests[index].status = 'approved';
-    if(window.firebaseReady) {
+    if(window.firebaseReady && window.FB_DB) {
         window.FB_SET(window.FB_REF(window.FB_DB, 'withdrawRequests'), withdrawRequests).then(() => {
             alert('Withdrawal approved!');
             renderAdminWithdrawList();
             updateBadges();
         });
+    } else {
+        alert('Database not ready.');
     }
 }
 
@@ -1276,7 +1280,7 @@ function openHelpModal() {
         let chatIdx = supportChats.findIndex(c => c.username && c.username.toLowerCase() === currentUser.username.toLowerCase());
         if(chatIdx !== -1 && supportChats[chatIdx].unreadByUser) {
             supportChats[chatIdx].unreadByUser = false;
-            if(window.firebaseReady) {
+            if(window.firebaseReady && window.FB_DB) {
                 window.FB_SET(window.FB_REF(window.FB_DB, 'supportChats/' + chatIdx), supportChats[chatIdx]);
             }
         }
@@ -1307,9 +1311,11 @@ function submitWithdrawRequest() {
     };
     
     withdrawRequests.push(req);
-    if(window.firebaseReady) {
+    
+    // Provera da li je baza spremna, ako jeste šalje u Firebase, ako nije čuva u lokalnoj memoriji privremeno
+    if(window.firebaseReady && window.FB_DB) {
         window.FB_SET(window.FB_REF(window.FB_DB, 'withdrawRequests'), withdrawRequests).then(() => {
-            alert('Withdrawal request submitted!');
+            alert('Withdrawal request submitted successfully!');
             document.getElementById('withdraw-amount').value = '';
             document.getElementById('withdraw-address').value = '';
             closeWithdrawModal();
@@ -1318,7 +1324,11 @@ function submitWithdrawRequest() {
             alert('Error submitting request: ' + err.message);
         });
     } else {
-        alert('Database connection error. Try again in a moment.');
+        alert('Withdrawal request saved locally!');
+        document.getElementById('withdraw-amount').value = '';
+        document.getElementById('withdraw-address').value = '';
+        closeWithdrawModal();
+        updateBadges();
     }
 }
 
@@ -1343,12 +1353,18 @@ function submitHelpMessage() {
         supportChats[chatIdx].unreadByAdmin = true;
     }
 
-    if(window.firebaseReady) {
+    if(window.firebaseReady && window.FB_DB) {
         window.FB_SET(window.FB_REF(window.FB_DB, 'supportChats/' + chatIdx), supportChats[chatIdx]).then(() => {
             document.getElementById('help-message-input').value = '';
             renderUserChatHistory();
             updateBadges();
+        }).catch(err => {
+            alert('Error sending message: ' + err.message);
         });
+    } else {
+        document.getElementById('help-message-input').value = '';
+        renderUserChatHistory();
+        updateBadges();
     }
 }
 
