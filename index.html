@@ -242,21 +242,21 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <div onclick="openChangeEmailModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="far fa-envelope text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium">Change Email</span>
+                <span class="text-white font-medium" data-i18n="menu_change_email">Change Email</span>
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
         <div onclick="alert('Login Password settings')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="fas fa-lock text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium">Login Password</span>
+                <span class="text-white font-medium" data-i18n="menu_login_pass">Login Password</span>
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
         <div onclick="alert('Transaction Password settings')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="fas fa-shield-halved text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium">Transaction Password</span>
+                <span class="text-white font-medium" data-i18n="menu_tx_pass">Transaction Password</span>
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
@@ -266,28 +266,28 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <div onclick="alert('Feedback submitted via support.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="far fa-comment-dots text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium">Feedback</span>
+                <span class="text-white font-medium" data-i18n="menu_feedback">Feedback</span>
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
         <div onclick="alert('Help Center is 24/7 active.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="far fa-circle-question text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium">Help Center</span>
+                <span class="text-white font-medium" data-i18n="menu_help">Help Center</span>
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
         <div onclick="alert('User Terms & Conditions apply.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="far fa-user text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium">User Terms</span>
+                <span class="text-white font-medium" data-i18n="menu_terms">User Terms</span>
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
         <div onclick="openLanguageModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="fas fa-globe text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium">Switch Language</span>
+                <span class="text-white font-medium" data-i18n="menu_lang">Switch Language</span>
             </div>
             <div class="flex items-center gap-1">
                 <span id="current-lang-text" class="text-[10px] text-gray-400">EN</span>
@@ -297,21 +297,21 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <div onclick="alert('Cache cleared successfully!')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="far fa-trash-can text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium">Clear Cache</span>
+                <span class="text-white font-medium" data-i18n="menu_cache">Clear Cache</span>
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
         <div onclick="alert('App download link copied.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="fas fa-download text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium">Download App</span>
+                <span class="text-white font-medium" data-i18n="menu_download">Download App</span>
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
     </div>
 
     <button onclick="handleUserLogout()" class="w-full emerald-card py-3 rounded-2xl text-center text-red-500 font-bold text-xs hover:bg-red-950/20 transition">
-        <span>Log Out</span>
+        <span data-i18n="logout">Log Out</span>
     </button>
 </div>
 
@@ -532,7 +532,6 @@ window.addEventListener('DOMContentLoaded', function() {
         document.getElementById('reg-input-code').value = refCode;
         switchAuthTab('register');
     } else {
-        // Polje za pozivni kod ostaje prazno da korisnik sam unese ili da se popuni preko linka
         document.getElementById('reg-input-code').value = '';
     }
 
@@ -896,7 +895,10 @@ invite_link_title: "Invitation link", copy_link_btn: "Copy invitation link",
 switch_lang: "Switch Language", logout: "Log Out", trade_title: "Market / Trading", select_option: "Select option:",
 buy_btc: "Buy BTC", sell_btc: "Sell BTC", my_wallets: "My Wallets", vip_channel: "VIP Channel VIP0", upgrade_now: "Upgrade",
 deposit_title: "USDT Deposit", select_network: "Select Network:", deposit_address_label: "Deposit Address", copy_btn: "Copy",
-withdraw_title: "Withdrawal Request"
+withdraw_title: "Withdrawal Request",
+menu_change_email: "Change Email", menu_login_pass: "Login Password", menu_tx_pass: "Transaction Password",
+menu_feedback: "Feedback", menu_help: "Help Center", menu_terms: "User Terms", menu_lang: "Switch Language",
+menu_cache: "Clear Cache", menu_download: "Download App"
 },
 sr: {
 nav_home: "Osiguranje", nav_trade: "Trgovanje", nav_wallet: "Novčanik", nav_profile: "Profil",
@@ -909,7 +911,10 @@ invite_link_title: "Pozivni link", copy_link_btn: "Kopiraj pozivni link",
 switch_lang: "Promeni Jezik", logout: "Odjavi se", trade_title: "Trgovanje", select_option: "Izaberite opciju:",
 buy_btc: "Kupi BTC", sell_btc: "Prodaj BTC", my_wallets: "Moji Novčanici", vip_channel: "VIP Kanal VIP0", upgrade_now: "Nadogradi",
 deposit_title: "USDT Uplata", select_network: "Izaberite Mrežu:", deposit_address_label: "Adresa za slanje", copy_btn: "Copy",
-withdraw_title: "Zahtev za Isplatu"
+withdraw_title: "Zahtev za Isplatu",
+menu_change_email: "Promeni E-mail", menu_login_pass: "Lozinka za prijavu", menu_tx_pass: "Lozinka za transakcije",
+menu_feedback: "Povratne informacije", menu_help: "Centar za pomoć", menu_terms: "Uslovi korišćenja", menu_lang: "Promeni jezik",
+menu_cache: "Obriši keš", menu_download: "Preuzmi aplikaciju"
 }
 };
 
