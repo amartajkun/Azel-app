@@ -13,7 +13,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
-<!-- FIREBASE SDK v10 SA TVOJIM PRAVIM PODACIMA -->
+<!-- FIREBASE SDK v10 -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getDatabase, ref, set, get, onValue, push, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -69,7 +69,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <div class="text-center space-y-1">
             <div class="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center font-bold text-black text-xl mx-auto shadow-lg shadow-emerald-500/30 mb-2">A</div>
             <h1 class="text-2xl font-bold text-emerald-400">AZEL</h1>
-            <p class="text-xs text-gray-400">Blockchain Insurance & Trading Platform</p>
+            <p class="text-xs text-gray-400">Bot Investment & Network Platform</p>
         </div>
 
         <div class="flex bg-gray-900 p-1 rounded-xl border border-gray-800">
@@ -99,11 +99,11 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
                 <input type="text" id="reg-username-input" placeholder="Choose username..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
             </div>
             <div>
-                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Email Address (Required)</label>
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Email Address</label>
                 <input type="email" id="reg-email-input" placeholder="Enter your email..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
             </div>
             <div>
-                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Invitation Code (Required)</label>
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Invitation Code (Optional)</label>
                 <input type="text" id="reg-input-code" placeholder="Enter invitation code..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white font-mono font-bold focus:outline-none focus:border-emerald-400">
             </div>
             <div>
@@ -136,113 +136,181 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     <span id="help-badge" class="absolute -top-1 -right-2 bg-red-500 text-white text-[9px] font-bold px-1 rounded-full hidden">0</span>
 </button>
 <button onclick="openLanguageModal()"><i class="fas fa-globe text-emerald-400"></i></button>
-<button onclick="alert('No new notifications.')"><i class="fas fa-bell"></i></button>
 </div>
 </div>
 
-<!-- 1. POČETNA / INSURANCE STRANICA -->
+<!-- 1. POČETNA / HOME STRANICA -->
 <div id="page-home" class="page-content active p-4 space-y-4">
     <div class="flex justify-center mb-2">
-        <button onclick="switchTab('tab-trade')" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-sm shadow-lg shadow-emerald-500/25 transition" data-i18n="trading_platform_btn">
-            Trading platform
+        <button onclick="switchTab('tab-market')" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-sm shadow-lg shadow-emerald-500/25 transition">
+            Go to Bot Market & License
         </button>
     </div>
 
     <div class="gradient-banner p-4 rounded-2xl relative overflow-hidden space-y-2 text-white">
         <div class="flex justify-between items-start">
             <div class="space-y-1">
-                <h2 class="text-xs font-extrabold text-emerald-300 tracking-wider">PEACE OF MIND, GUARANTEED</h2>
-                <h3 class="text-sm font-bold text-white">AZEL BLOCKCHAIN INSURANCE</h3>
+                <h2 class="text-xs font-extrabold text-emerald-300 tracking-wider">STABLE BOT PLATFORM</h2>
+                <h3 class="text-sm font-bold text-white">AZEL 60-DAY CYCLES</h3>
             </div>
             <div class="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center shrink-0 ml-2">
-                <i class="fas fa-shield-alt text-emerald-300"></i>
+                <i class="fas fa-robot text-emerald-300"></i>
             </div>
         </div>
         <p class="text-[11px] text-gray-200 leading-relaxed">
-            In today's digital era, trust is the most valuable asset. AZEL Blockchain Insurance offers you an entirely new experience.
+            Activate your once-in-a-lifetime $5 license, build your network across L1, L2, L3, and deploy trading bots for 60-day profitable cycles.
         </p>
     </div>
 
-    <div class="grid grid-cols-4 gap-2 text-center">
-        <button onclick="alert('White Paper coming soon.')" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
-            <i class="fas fa-file-alt text-emerald-400 text-lg"></i>
-            <span class="text-[10px] text-gray-300" data-i18n="white_paper">White Paper</span>
-        </button>
-        <button onclick="alert('Official website is active.')" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
-            <i class="fas fa-globe text-emerald-400 text-lg"></i>
-            <span class="text-[10px] text-gray-300" data-i18n="official_website">Official website</span>
-        </button>
+    <div class="grid grid-cols-3 gap-2 text-center">
         <button onclick="openDepositModal()" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
             <i class="fas fa-qrcode text-emerald-400 text-lg"></i>
-            <span class="text-[10px] text-gray-300" data-i18n="recharge">Recharge</span>
+            <span class="text-[10px] text-gray-300">Recharge</span>
         </button>
         <button onclick="openWithdrawModal()" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
             <i class="fas fa-arrow-up-from-bracket text-emerald-400 text-lg"></i>
-            <span class="text-[10px] text-gray-300" data-i18n="withdraw">Withdrawal</span>
-        </button>
-    </div>
-
-    <div class="grid grid-cols-4 gap-2 text-center">
-        <button onclick="alert('Teaching classroom.')" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
-            <i class="fas fa-book-open text-emerald-400 text-lg"></i>
-            <span class="text-[10px] text-gray-300" data-i18n="teaching_classroom">Classroom</span>
+            <span class="text-[10px] text-gray-300">Withdrawal</span>
         </button>
         <button onclick="openInviteModal()" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
             <i class="fas fa-gift text-emerald-400 text-lg"></i>
-            <span class="text-[10px] text-gray-300" data-i18n="invitation_pack">Invitation Pack</span>
-        </button>
-        <button onclick="alert('Downloading...')" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
-            <i class="fas fa-download text-emerald-400 text-lg"></i>
-            <span class="text-[10px] text-gray-300" data-i18n="download">Download</span>
-        </button>
-        <button onclick="alert('Community open.')" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
-            <i class="fas fa-users text-emerald-400 text-lg"></i>
-            <span class="text-[10px] text-gray-300" data-i18n="community_perspective">Community</span>
+            <span class="text-[10px] text-gray-300">Invite Friends</span>
         </button>
     </div>
+</div>
 
-    <div class="grid grid-cols-1 gap-3">
-        <div class="emerald-card p-4 rounded-2xl flex justify-between items-center cursor-pointer hover:bg-gray-800 transition" onclick="openInviteModal()">
-            <div>
-                <h4 class="text-sm font-bold text-white" data-i18n="invite_friends">Invite Friends</h4>
-                <p class="text-[11px] text-gray-400" data-i18n="invite_sub">Share AZEL Insurance Bonus</p>
-            </div>
-            <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400"><i class="fas fa-arrow-right"></i></div>
+<!-- 2. MARKET / BOT PAKETI I LICENCA -->
+<div id="page-market" class="page-content p-4 space-y-4">
+    <h2 class="text-lg font-bold text-emerald-400 mb-1">Bot Market & License</h2>
+    <p class="text-xs text-gray-400 mb-3">Pay $5 license once, then activate your bot packages.</p>
+
+    <!-- LICENCA KARTICA -->
+    <div id="license-card-box" class="emerald-card p-4 rounded-2xl flex justify-between items-center bg-emerald-950/20 border-emerald-500/40">
+        <div>
+            <h3 class="text-sm font-bold text-white">Lifetime User License</h3>
+            <p class="text-[11px] text-gray-400">Required once for platform access. Fee: <span class="text-emerald-400 font-bold">$5.00</span></p>
         </div>
-        <div class="emerald-card p-4 rounded-2xl flex justify-between items-center cursor-pointer hover:bg-gray-800 transition" onclick="switchTab('tab-wallet')">
-            <div>
-                <h4 class="text-sm font-bold text-white" data-i18n="task_center">Task Center</h4>
-                <p class="text-[11px] text-gray-400" data-i18n="task_sub">Participate and get rewards</p>
+        <button id="buy-license-btn" onclick="buyUserLicense()" class="bg-emerald-500 text-black px-4 py-2 rounded-xl text-xs font-bold shadow-lg">Pay $5</button>
+    </div>
+
+    <!-- BOT LISTA -->
+    <div class="space-y-3" id="bots-market-container">
+        <!-- Bot 1 -->
+        <div class="emerald-card p-4 rounded-2xl space-y-2">
+            <div class="flex justify-between items-center">
+                <span class="text-sm font-bold text-white">Bot 1 ($100)</span>
+                <span class="text-xs text-emerald-400 font-bold">50% Profit (60 Days)</span>
             </div>
-            <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400"><i class="fas fa-arrow-right"></i></div>
+            <p class="text-[11px] text-gray-400">Daily Earning: <span class="text-white font-bold">$2.50 / day</span> | Total: $150</p>
+            <div class="text-[10px] text-emerald-400 font-bold">Status: Unlocked (Free)</div>
+            <button onclick="buyBot(1, 100, 2.50)" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2 rounded-xl text-xs">Activate Bot 1</button>
+        </div>
+
+        <!-- Bot 2 -->
+        <div class="emerald-card p-4 rounded-2xl space-y-2">
+            <div class="flex justify-between items-center">
+                <span class="text-sm font-bold text-white">Bot 2 ($200)</span>
+                <span class="text-xs text-emerald-400 font-bold">50% Profit (60 Days)</span>
+            </div>
+            <p class="text-[11px] text-gray-400">Daily Earning: <span class="text-white font-bold">$5.00 / day</span> | Total: $300</p>
+            <div class="text-[10px] text-emerald-400 font-bold">Status: Unlocked (Free)</div>
+            <button onclick="buyBot(2, 200, 5.00)" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2 rounded-xl text-xs">Activate Bot 2</button>
+        </div>
+
+        <!-- Bot 3 -->
+        <div class="emerald-card p-4 rounded-2xl space-y-2" id="bot-card-3">
+            <div class="flex justify-between items-center">
+                <span class="text-sm font-bold text-white">Bot 3 ($500)</span>
+                <span class="text-xs text-emerald-400 font-bold">50% Profit (60 Days)</span>
+            </div>
+            <p class="text-[11px] text-gray-400">Daily Earning: <span class="text-white font-bold">$12.50 / day</span> | Total: $750</p>
+            <div id="bot-status-3" class="text-[10px] text-amber-400 font-bold">Requirement: 5 active members in L1</div>
+            <button id="bot-btn-3" onclick="buyBot(3, 500, 12.50)" class="w-full bg-gray-800 text-gray-400 font-bold py-2 rounded-xl text-xs cursor-not-allowed" disabled>Locked</button>
+        </div>
+
+        <!-- Bot 4 -->
+        <div class="emerald-card p-4 rounded-2xl space-y-2" id="bot-card-4">
+            <div class="flex justify-between items-center">
+                <span class="text-sm font-bold text-white">Bot 4 ($1,000)</span>
+                <span class="text-xs text-emerald-400 font-bold">50% Profit (60 Days)</span>
+            </div>
+            <p class="text-[11px] text-gray-400">Daily Earning: <span class="text-white font-bold">$25.00 / day</span> | Total: $1,500</p>
+            <div id="bot-status-4" class="text-[10px] text-amber-400 font-bold">Requirement: 10 in L1 + 5 in L2</div>
+            <button id="bot-btn-4" onclick="buyBot(4, 1000, 25.00)" class="w-full bg-gray-800 text-gray-400 font-bold py-2 rounded-xl text-xs cursor-not-allowed" disabled>Locked</button>
+        </div>
+
+        <!-- Bot 5 -->
+        <div class="emerald-card p-4 rounded-2xl space-y-2" id="bot-card-5">
+            <div class="flex justify-between items-center">
+                <span class="text-sm font-bold text-white">Bot 5 ($2,500)</span>
+                <span class="text-xs text-emerald-400 font-bold">50% Profit (60 Days)</span>
+            </div>
+            <p class="text-[11px] text-gray-400">Daily Earning: <span class="text-white font-bold">$62.50 / day</span> | Total: $3,750</p>
+            <div id="bot-status-5" class="text-[10px] text-amber-400 font-bold">Requirement: 20 in L1 + 15 in L2 + 5 in L3</div>
+            <button id="bot-btn-5" onclick="buyBot(5, 2500, 62.50)" class="w-full bg-gray-800 text-gray-400 font-bold py-2 rounded-xl text-xs cursor-not-allowed" disabled>Locked</button>
+        </div>
+
+        <!-- Bot 6 -->
+        <div class="emerald-card p-4 rounded-2xl space-y-2" id="bot-card-6">
+            <div class="flex justify-between items-center">
+                <span class="text-sm font-bold text-white">Bot 6 ($5,000)</span>
+                <span class="text-xs text-emerald-400 font-bold">50% Profit (60 Days)</span>
+            </div>
+            <p class="text-[11px] text-gray-400">Daily Earning: <span class="text-white font-bold">$125.00 / day</span> | Total: $7,500</p>
+            <div id="bot-status-6" class="text-[10px] text-amber-400 font-bold">Requirement: 50 in L1 + 30 in L2 + 20 in L3</div>
+            <button id="bot-btn-6" onclick="buyBot(6, 5000, 125.00)" class="w-full bg-gray-800 text-gray-400 font-bold py-2 rounded-xl text-xs cursor-not-allowed" disabled>Locked</button>
         </div>
     </div>
 </div>
 
-<!-- 2. TRGOVANJE -->
-<div id="page-trade" class="page-content p-4 space-y-4">
-    <h2 class="text-lg font-bold text-emerald-400 mb-2" data-i18n="trade_title">Market / Trading</h2>
-    <div class="emerald-card p-4 rounded-2xl text-center space-y-3">
-        <p class="text-xs text-gray-400" data-i18n="select_option">Select option:</p>
-        <div class="flex justify-center space-x-2">
-            <button class="bg-emerald-500 text-black px-4 py-2 rounded-lg font-bold text-xs" data-i18n="buy_btc">Buy BTC</button>
-            <button class="bg-red-500 text-white px-4 py-2 rounded-lg font-bold text-xs" data-i18n="sell_btc">Sell BTC</button>
+<!-- 3. TEAM / MREŽA (L1, L2, L3) -->
+<div id="page-team" class="page-content p-4 space-y-4">
+    <h2 class="text-lg font-bold text-emerald-400 mb-1">My Network Team</h2>
+    <p class="text-xs text-gray-400 mb-3">Track your referrals across 3 levels to unlock higher bot packages.</p>
+
+    <div class="grid grid-cols-3 gap-2 text-center">
+        <div class="emerald-card p-3 rounded-xl">
+            <div class="text-[10px] text-gray-400">Line 1 (L1)</div>
+            <div id="count-l1" class="text-lg font-bold text-emerald-400">0</div>
+        </div>
+        <div class="emerald-card p-3 rounded-xl">
+            <div class="text-[10px] text-gray-400">Line 2 (L2)</div>
+            <div id="count-l2" class="text-lg font-bold text-emerald-400">0</div>
+        </div>
+        <div class="emerald-card p-3 rounded-xl">
+            <div class="text-[10px] text-gray-400">Line 3 (L3)</div>
+            <div id="count-l3" class="text-lg font-bold text-emerald-400">0</div>
         </div>
     </div>
-</div>
 
-<!-- 3. NOVČANIK -->
-<div id="page-wallet" class="page-content p-4 space-y-4">
-    <h2 class="text-lg font-bold text-emerald-400 mb-2" data-i18n="my_wallets">My Wallets</h2>
     <div class="emerald-card p-4 rounded-2xl space-y-3">
-        <div class="flex justify-between items-center">
-            <span class="text-sm font-bold text-white">USDT (Tether)</span>
-            <span class="text-sm text-emerald-400 font-bold">$<span class="wallet-usdt">12,450.80</span></span>
+        <h3 class="text-xs font-bold text-white border-b border-gray-800 pb-2">Direct Referrals (L1 Members)</h3>
+        <div id="team-l1-list" class="space-y-2 text-xs">
+            <p class="text-gray-500 text-center py-2">No direct referrals yet.</p>
         </div>
     </div>
 </div>
 
-<!-- 4. PROFIL -->
+<!-- 4. ASSETS / NOVČANIK -->
+<div id="page-wallet" class="page-content p-4 space-y-4">
+    <h2 class="text-lg font-bold text-emerald-400 mb-2">Assets & Capital</h2>
+    <div class="emerald-card p-4 rounded-2xl space-y-3">
+        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
+            <span class="text-sm font-bold text-white">Available Balance</span>
+            <span class="text-sm text-emerald-400 font-bold">$<span id="wallet-balance-display">12450.80</span></span>
+        </div>
+        <div class="flex justify-between items-center">
+            <span class="text-xs text-gray-400">Frozen Capital (Active Bots)</span>
+            <span class="text-xs text-amber-400 font-bold">$<span id="wallet-frozen-display">0.00</span></span>
+        </div>
+    </div>
+
+    <h3 class="text-sm font-bold text-white pt-2">Active Bot Investments (60 Days)</h3>
+    <div id="active-bots-container" class="space-y-3">
+        <p class="text-xs text-gray-500 text-center py-4">No active bot investments right now.</p>
+    </div>
+</div>
+
+<!-- 5. PROFIL -->
 <div id="page-profile" class="page-content p-4 space-y-4">
     <div class="flex items-center justify-between">
         <div class="flex items-center space-x-3">
@@ -264,268 +332,115 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <i class="fas fa-star text-emerald-400 text-lg"></i>
     </div>
 
-    <div class="emerald-card p-3 rounded-xl flex justify-between items-center">
-        <div class="flex items-center space-x-2">
-            <i class="fas fa-crown text-emerald-400 text-sm"></i>
-            <span class="text-[11px] text-gray-300" data-i18n="vip_channel">VIP Channel VIP0</span>
-        </div>
-        <button class="bg-emerald-400 text-black px-3 py-1 rounded-full text-[10px] font-bold" data-i18n="upgrade_now">Upgrade</button>
-    </div>
-
     <div class="emerald-card rounded-2xl divide-y divide-gray-800/60 text-xs">
         <div onclick="openChangeEmailModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="far fa-envelope text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium" data-i18n="menu_change_email">Change Email</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
-        </div>
-        <div onclick="alert('Login Password settings')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
-            <div class="flex items-center space-x-3">
-                <i class="fas fa-lock text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium" data-i18n="menu_login_pass">Login Password</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
-        </div>
-        <div onclick="alert('Transaction Password settings')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
-            <div class="flex items-center space-x-3">
-                <i class="fas fa-shield-halved text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium" data-i18n="menu_tx_pass">Transaction Password</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
-        </div>
-    </div>
-
-    <div class="emerald-card rounded-2xl divide-y divide-gray-800/60 text-xs">
-        <div onclick="alert('Feedback submitted via support.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
-            <div class="flex items-center space-x-3">
-                <i class="far fa-comment-dots text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium" data-i18n="menu_feedback">Feedback</span>
+                <span class="text-white font-medium">Change Email</span>
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
         <div onclick="openHelpModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="far fa-circle-question text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium" data-i18n="menu_help">Help Center</span>
+                <span class="text-white font-medium">Support & Help</span>
             </div>
             <div class="flex items-center gap-1">
                 <span id="help-profile-badge" class="bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.2 rounded-full hidden">0</span>
                 <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
             </div>
         </div>
-        <div onclick="alert('User Terms & Conditions apply.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
-            <div class="flex items-center space-x-3">
-                <i class="far fa-user text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium" data-i18n="menu_terms">User Terms</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
-        </div>
         <div onclick="openLanguageModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="fas fa-globe text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium" data-i18n="menu_lang">Switch Language</span>
+                <span class="text-white font-medium">Switch Language</span>
             </div>
             <div class="flex items-center gap-1">
                 <span id="current-lang-text" class="text-[10px] text-gray-400">EN</span>
                 <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
             </div>
         </div>
-        <div onclick="alert('Cache cleared successfully!')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
-            <div class="flex items-center space-x-3">
-                <i class="far fa-trash-can text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium" data-i18n="menu_cache">Clear Cache</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
-        </div>
-        <div onclick="alert('App download link copied.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
-            <div class="flex items-center space-x-3">
-                <i class="fas fa-download text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium" data-i18n="menu_download">Download App</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
-        </div>
     </div>
 
     <button onclick="handleUserLogout()" class="w-full emerald-card py-3 rounded-2xl text-center text-red-500 font-bold text-xs hover:bg-red-950/20 transition">
-        <span data-i18n="logout">Log Out</span>
+        <span>Log Out</span>
     </button>
 </div>
 
-<!-- MODAL ZA HELP CENTER / CHAT SA PODRŠKOM -->
+<!-- MODAL ZA HELP / SUPPORT -->
 <div id="modal-help" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
     <div class="emerald-card p-5 rounded-2xl w-full max-w-sm space-y-4 bg-[#0b0e14] border border-emerald-500/30">
         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
-            <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
-                <i class="fas fa-headset"></i> Support Chat
-            </h3>
+            <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2"><i class="fas fa-headset"></i> Support Chat</h3>
             <button onclick="closeHelpModal()" class="text-gray-400 hover:text-white text-sm"><i class="fas fa-times"></i></button>
         </div>
-        
         <div id="user-chat-history" class="space-y-2 max-h-48 overflow-y-auto pr-1 text-xs bg-gray-950 p-3 rounded-xl border border-gray-800"></div>
-
-        <div class="space-y-2 text-xs">
-            <textarea id="help-message-input" rows="3" placeholder="Type your message to support..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400 text-xs"></textarea>
-        </div>
-        <div class="flex space-x-2 pt-1">
-            <button onclick="closeHelpModal()" class="w-1/2 bg-gray-800 text-gray-300 py-2.5 rounded-xl text-xs font-bold">Close</button>
-            <button onclick="submitHelpMessage()" class="w-1/2 bg-emerald-500 text-black py-2.5 rounded-xl text-xs font-bold shadow-lg shadow-emerald-500/20">Send</button>
-        </div>
+        <textarea id="help-message-input" rows="3" placeholder="Type your message to support..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none text-xs"></textarea>
+        <button onclick="submitHelpMessage()" class="w-full bg-emerald-500 text-black py-2.5 rounded-xl text-xs font-bold shadow-lg">Send Message</button>
     </div>
 </div>
 
-<!-- MODAL ZA PROFILNU SLIKU -->
-<div id="modal-avatar" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
-    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-4 bg-[#0b0e14] border border-emerald-500/30">
-        <h3 class="text-sm font-bold text-emerald-400">Set Profile Picture</h3>
-        <p class="text-[11px] text-gray-400">Enter direct image URL:</p>
-        <input type="text" id="avatar-url-input" placeholder="https://example.com/image.jpg" class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white text-xs">
-        <div class="flex space-x-2">
-            <button onclick="closeAvatarModal()" class="w-1/2 bg-gray-800 text-gray-300 py-2 rounded-lg text-xs font-bold">Cancel</button>
-            <button onclick="saveAvatarUrl()" class="w-1/2 bg-emerald-500 text-black py-2 rounded-lg text-xs font-bold">Save</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL ZA PROMENU EMAIL-a -->
-<div id="modal-change-email" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
-    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-4 bg-[#0b0e14] border border-emerald-500/30">
-        <h3 class="text-sm font-bold text-emerald-400">Change Email Address</h3>
-        <input type="email" id="new-email-input" placeholder="Enter new email..." class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white text-xs">
-        <div class="flex space-x-2">
-            <button onclick="closeChangeEmailModal()" class="w-1/2 bg-gray-800 text-gray-300 py-2 rounded-lg text-xs font-bold">Cancel</button>
-            <button onclick="saveNewEmail()" class="w-1/2 bg-emerald-500 text-black py-2 rounded-lg text-xs font-bold">Update</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL ZA "INVITE FRIENDS" -->
-<div id="modal-invite" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50 overflow-y-auto">
-    <div class="emerald-card p-5 rounded-3xl w-full max-w-sm space-y-4 bg-[#0b0e14] border border-emerald-500/40 my-auto relative">
-        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
-            <h3 class="text-sm font-bold text-emerald-400" data-i18n="invite_friends">Invite Friends</h3>
-            <button onclick="closeInviteModal()" class="text-gray-400 hover:text-white text-base"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="invite-gradient-card p-4 rounded-2xl text-white space-y-3 text-center">
-            <p class="text-[11px] font-bold text-emerald-100" data-i18n="invite_banner_title">Let's pass AZEL to the world together</p>
-            <div class="bg-white p-2.5 rounded-xl inline-block shadow-md">
-                <img id="invite-qr-img" src="" alt="QR" class="w-28 h-28 rounded-lg">
-            </div>
-            <div onclick="copyMyInviteCode()" class="bg-black/30 p-2.5 rounded-xl border border-white/10 flex justify-between items-center cursor-pointer active:scale-95 transition">
-                <span class="text-[11px] text-emerald-200" data-i18n="invitation_code_label">Invitation code</span>
-                <span id="modal-code-display" class="font-mono font-bold text-white text-xs bg-emerald-500/30 px-2 py-0.5 rounded">...</span>
-            </div>
-        </div>
-        <div class="space-y-1.5 text-xs">
-            <label class="text-[10px] text-gray-400 block font-bold" data-i18n="invite_link_title">Invitation link</label>
-            <div class="bg-gray-900 p-2.5 rounded-xl border border-gray-800 text-[10px] font-mono text-emerald-300 truncate" id="modal-link-display">Loading...</div>
-        </div>
-        <button onclick="copyMyInviteLink()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-xs shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
-            <i class="far fa-copy"></i> <span data-i18n="copy_link_btn">Copy invitation link</span>
-        </button>
-    </div>
-</div>
-
-<!-- MODAL ZA UPLATU -->
+<!-- MODAL ZA UPLATU (DEPOSIT) -->
 <div id="modal-deposit" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
     <div class="emerald-card p-5 rounded-2xl w-full max-w-sm space-y-4 bg-[#0b0e14] border border-emerald-500/30">
         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
-            <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2" data-i18n="deposit_title"><i class="fas fa-wallet"></i> USDT Deposit</h3>
+            <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2"><i class="fas fa-wallet"></i> USDT Deposit</h3>
             <button onclick="closeDepositModal()" class="text-gray-400 hover:text-white text-sm"><i class="fas fa-times"></i></button>
         </div>
-        <div>
-            <label class="text-[11px] text-gray-400 mb-1 block" data-i18n="select_network">Select Network:</label>
-            <div class="grid grid-cols-2 gap-2">
-                <button id="net-trc20" onclick="selectNetwork('trc20')" class="py-2 px-3 rounded-xl border border-emerald-500 bg-emerald-950/40 text-emerald-400 font-bold text-xs flex items-center justify-center gap-1"><span>TRC-20</span></button>
-                <button id="net-bep20" onclick="selectNetwork('bep20')" class="py-2 px-3 rounded-xl border border-gray-800 bg-gray-900 text-gray-400 font-bold text-xs flex items-center justify-center gap-1"><span>BEP-20</span></button>
-            </div>
-        </div>
         <div class="bg-gray-950/80 p-3 rounded-xl border border-gray-800 text-center space-y-2">
-            <div class="flex justify-center"><img id="deposit-qr" src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk" alt="QR" class="w-28 h-28 border-2 border-emerald-500/40 rounded-lg p-1 bg-white"></div>
-            <div class="text-[10px] text-gray-400"><span id="network-name-text" class="text-emerald-400 font-bold">TRC-20</span></div>
+            <div class="flex justify-center"><img src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk" alt="QR" class="w-28 h-28 border-2 border-emerald-500/40 rounded-lg p-1 bg-white"></div>
+            <div class="text-[10px] text-emerald-400 font-bold">TRC-20 Address</div>
             <div class="flex items-center justify-between bg-gray-900 p-2 rounded-lg border border-gray-800">
-                <span id="deposit-address-text" class="text-[10px] font-mono text-emerald-300 truncate mr-2">TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk</span>
-                <button onclick="copyAddress()" class="bg-emerald-500 text-black px-2 py-1 rounded text-[10px] font-bold shrink-0" data-i18n="copy_btn">Copy</button>
+                <span class="text-[10px] font-mono text-emerald-300 truncate mr-2">TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk</span>
+                <button onclick="navigator.clipboard.writeText('TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk').then(()=>alert('Copied!'))" class="bg-emerald-500 text-black px-2 py-1 rounded text-[10px] font-bold">Copy</button>
             </div>
         </div>
         <button onclick="closeDepositModal()" class="w-full bg-emerald-500 text-black font-bold py-2.5 rounded-xl text-xs">Close</button>
     </div>
 </div>
 
-<!-- MODAL ZA ISPLATU -->
+<!-- MODAL ZA ISPLATU (WITHDRAW) -->
 <div id="modal-withdraw" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
     <div class="emerald-card p-5 rounded-2xl w-full max-w-sm space-y-4 bg-[#0b0e14] border border-emerald-500/30">
         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
-            <h3 class="text-sm font-bold text-emerald-400"><span data-i18n="withdraw_title">Withdrawal Request</span></h3>
+            <h3 class="text-sm font-bold text-emerald-400">Withdrawal Request</h3>
             <button onclick="closeWithdrawModal()" class="text-gray-400 hover:text-white text-sm"><i class="fas fa-times"></i></button>
         </div>
         <div class="space-y-3 text-xs">
             <div>
-                <label class="text-[10px] text-gray-400 mb-1 block">Withdrawal amount (USDT):</label>
+                <label class="text-[10px] text-gray-400 mb-1 block">Amount (USDT):</label>
                 <input type="number" id="withdraw-amount" placeholder="Min. 50 USDT" class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white">
             </div>
             <div>
                 <label class="text-[10px] text-gray-400 mb-1 block">Crypto Address:</label>
-                <input type="text" id="withdraw-address" placeholder="Enter address" class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white font-mono text-[11px]">
+                <input type="text" id="withdraw-address" placeholder="Enter address..." class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white font-mono text-[11px]">
             </div>
         </div>
         <button onclick="submitWithdrawRequest()" class="w-full bg-emerald-500 text-black py-2.5 rounded-xl text-xs font-bold">Confirm Withdrawal</button>
     </div>
 </div>
 
-<!-- MODAL ZA JEZIK -->
-<div id="modal-lang" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4 z-50">
-    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-2 bg-[#0b0e14] max-h-[80vh] overflow-y-auto">
-        <h3 class="text-base font-bold text-emerald-400 mb-2">Select Language</h3>
+<!-- MODAL ZA POZIVNICE (INVITE) -->
+<div id="modal-invite" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50 overflow-y-auto">
+    <div class="emerald-card p-5 rounded-3xl w-full max-w-sm space-y-4 bg-[#0b0e14] border border-emerald-500/40 my-auto relative">
+        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
+            <h3 class="text-sm font-bold text-emerald-400">Invite Friends & Build Network</h3>
+            <button onclick="closeInviteModal()" class="text-gray-400 hover:text-white text-base"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="invite-gradient-card p-4 rounded-2xl text-white space-y-3 text-center">
+            <p class="text-[11px] font-bold text-emerald-100">Grow your L1, L2, L3 lines to unlock Bot 3, 4, 5 & 6!</p>
+            <div onclick="navigator.clipboard.writeText(currentUser ? currentUser.code : '').then(()=>alert('Code copied!'))" class="bg-black/30 p-2.5 rounded-xl border border-white/10 flex justify-between items-center cursor-pointer">
+                <span class="text-[11px] text-emerald-200">Invitation code</span>
+                <span id="modal-code-display" class="font-mono font-bold text-white text-xs bg-emerald-500/30 px-2 py-0.5 rounded">...</span>
+            </div>
+        </div>
         <div class="space-y-1.5 text-xs">
-            <button onclick="changeLanguage('en')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>English</span> <span>🇬🇧</span></button>
-            <button onclick="changeLanguage('sr')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Srpski / Hrvatski</span> <span>🇷🇸</span></button>
-            <button onclick="changeLanguage('sl')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Slovenski</span> <span>🇸🇮</span></button>
-            <button onclick="changeLanguage('mk')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Македонски</span> <span>🇲🇰</span></button>
-            <button onclick="changeLanguage('es')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Español</span> <span>🇪🇸</span></button>
-            <button onclick="changeLanguage('ru')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Русский</span> <span>🇷🇺</span></button>
-            <button onclick="changeLanguage('el')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Ελληνικά</span> <span>🇬🇷</span></button>
-            <button onclick="changeLanguage('it')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Italiano</span> <span>🇮🇹</span></button>
+            <label class="text-[10px] text-gray-400 block font-bold">Invitation Link</label>
+            <div class="bg-gray-900 p-2.5 rounded-xl border border-gray-800 text-[10px] font-mono text-emerald-300 truncate" id="modal-link-display">Loading...</div>
         </div>
-        <button onclick="closeLangModal()" class="w-full bg-gray-800 text-gray-300 py-2 rounded-lg text-xs font-bold mt-3">Close</button>
-    </div>
-</div>
-
-<!-- TAJNI ADMIN PIN MODAL -->
-<div id="modal-admin-pin" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
-    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-4 bg-[#0b0e14] border border-amber-500/30 text-center">
-        <h3 class="text-sm font-bold text-amber-400">Admin Access</h3>
-        <input type="password" id="admin-pin-input" maxlength="4" placeholder="****" class="w-full bg-gray-900 border border-amber-500/50 p-2.5 rounded-xl text-center text-white text-lg tracking-widest focus:outline-none">
-        <div class="flex space-x-2">
-            <button onclick="closeAdminPinModal()" class="w-1/2 bg-gray-800 text-gray-300 py-2 rounded-lg text-xs font-bold">Cancel</button>
-            <button onclick="verifyAdminPin()" class="w-1/2 bg-amber-500 text-black py-2 rounded-lg text-xs font-bold">Confirm</button>
-        </div>
-    </div>
-</div>
-
-<!-- TAJNI ADMIN PANEL MODAL -->
-<div id="modal-admin-panel" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
-    <div class="emerald-card p-5 rounded-2xl w-full max-w-md space-y-4 bg-[#0b0e14] border border-emerald-500/50 max-h-[85vh] flex flex-col">
-        <div class="flex justify-between items-center border-b border-gray-800 pb-3 shrink-0">
-            <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
-                <i class="fas fa-tasks"></i> Admin Panel (Firebase Realtime)
-            </h3>
-            <button onclick="closeAdminPanel()" class="text-gray-400 hover:text-white text-sm"><i class="fas fa-times"></i></button>
-        </div>
-        
-        <div class="flex bg-gray-900 p-1 rounded-xl border border-gray-800 shrink-0 text-xs font-bold">
-            <button id="admin-tab-withdraw" onclick="switchAdminTab('withdraw')" class="flex-1 py-1.5 rounded-lg bg-emerald-500 text-black transition relative">
-                Withdrawals <span id="admin-badge-w" class="bg-red-500 text-white px-1.5 py-0.2 rounded-full text-[9px] ml-1 hidden">0</span>
-            </button>
-            <button id="admin-tab-support" onclick="switchAdminTab('support')" class="flex-1 py-1.5 rounded-lg text-gray-400 transition relative">
-                Support <span id="admin-badge-s" class="bg-red-500 text-white px-1.5 py-0.2 rounded-full text-[9px] ml-1 hidden">0</span>
-            </button>
-        </div>
-
-        <div id="admin-list-withdraw" class="space-y-3 overflow-y-auto pr-1 grow text-xs"></div>
-        <div id="admin-list-support" class="space-y-3 overflow-y-auto pr-1 grow text-xs" style="display: none;"></div>
-
-        <button onclick="closeAdminPanel()" class="w-full bg-gray-800 text-gray-300 py-2.5 rounded-xl text-xs font-bold shrink-0 mt-2">Close Panel</button>
+        <button onclick="navigator.clipboard.writeText(currentUser ? currentUser.link : '').then(()=>alert('Link copied!'))" class="w-full bg-emerald-500 text-black font-bold py-3 rounded-xl text-xs shadow-lg flex items-center justify-center gap-2">
+            <i class="far fa-copy"></i> Copy invitation link
+        </button>
     </div>
 </div>
 
@@ -533,19 +448,23 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <div class="fixed bottom-0 left-0 right-0 bg-[#0b0e14] border-t border-gray-800 flex justify-around p-3 text-[10px] text-gray-400 z-40">
     <button id="tab-home" onclick="switchTab('tab-home')" class="flex flex-col items-center text-emerald-400">
         <i class="fas fa-house text-base"></i>
-        <span data-i18n="nav_home">Insurance</span>
+        <span>Home</span>
     </button>
-    <button id="tab-trade" onclick="switchTab('tab-trade')" class="flex flex-col items-center">
-        <i class="fas fa-chart-line text-base"></i>
-        <span data-i18n="nav_trade">Market</span>
+    <button id="tab-market" onclick="switchTab('tab-market')" class="flex flex-col items-center">
+        <i class="fas fa-robot text-base"></i>
+        <span>Market</span>
+    </button>
+    <button id="tab-team" onclick="switchTab('tab-team')" class="flex flex-col items-center">
+        <i class="fas fa-users text-base"></i>
+        <span>Team</span>
     </button>
     <button id="tab-wallet" onclick="switchTab('tab-wallet')" class="flex flex-col items-center">
         <i class="fas fa-wallet text-base"></i>
-        <span data-i18n="nav_wallet">Assets</span>
+        <span>Assets</span>
     </button>
     <button id="tab-profile" onclick="switchTab('tab-profile')" class="flex flex-col items-center">
         <i class="fas fa-user text-base"></i>
-        <span data-i18n="nav_profile">Profile</span>
+        <span>Profile</span>
     </button>
 </div>
 
@@ -553,15 +472,10 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 
 <script>
 let currentBalance = 12450.80;
-let selectedNetwork = 'trc20';
-const ADMIN_PIN = "3112";
-let logoClickCount = 0;
-let logoClickTimer = null;
-
-let withdrawRequests = [];
+let currentUser = null;
+let allRegisteredUsers = [];
 let supportChats = [];
-
-const walletAddresses = { trc20: "TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk", bep20: "0xb8574070f05f0863be358dd60f88e7ccc78af512" };
+let withdrawRequests = [];
 
 const MAIN_ADMIN_USER = {
     id: 119216,
@@ -569,23 +483,25 @@ const MAIN_ADMIN_USER = {
     email: "tajkun@azel.com",
     code: "AZEL-TAJKUN",
     link: window.location.href.split('?')[0].split('#')[0] + '?inviteCode=AZEL-TAJKUN',
-    avatar: ""
+    avatar: "",
+    isLicensePaid: true,
+    referrer: null,
+    activeBots: [],
+    balance: 12450.80
 };
 
-let currentUser = null;
-
 window.addEventListener('DOMContentLoaded', function() {
-    let allUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
-    if (!allUsers.some(u => u.username.toLowerCase() === 'tajkun')) {
-        allUsers.push(MAIN_ADMIN_USER);
-        localStorage.setItem('azel_registered_users', JSON.stringify(allUsers));
+    allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
+    if (!allRegisteredUsers.some(u => u.username.toLowerCase() === 'tajkun')) {
+        allRegisteredUsers.push(MAIN_ADMIN_USER);
+        localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
     }
 
     const isLogged = sessionStorage.getItem('azel_logged_in');
     const loggedUsername = sessionStorage.getItem('azel_current_username');
 
     if (isLogged === 'true' && loggedUsername) {
-        currentUser = allUsers.find(u => u.username.toLowerCase() === loggedUsername.toLowerCase()) || MAIN_ADMIN_USER;
+        currentUser = allRegisteredUsers.find(u => u.username.toLowerCase() === loggedUsername.toLowerCase()) || MAIN_ADMIN_USER;
         showMainApp();
     } else {
         document.getElementById('auth-screen').style.display = 'flex';
@@ -597,12 +513,7 @@ window.addEventListener('DOMContentLoaded', function() {
     if (refCode) {
         document.getElementById('reg-input-code').value = refCode;
         switchAuthTab('register');
-    } else {
-        document.getElementById('reg-input-code').value = '';
     }
-
-    updateProfileUI();
-    changeLanguage('en');
 });
 
 window.addEventListener('firebase-ready', function() {
@@ -612,207 +523,10 @@ window.addEventListener('firebase-ready', function() {
 
     onValue(ref(db, 'supportChats'), (snapshot) => {
         const data = snapshot.val();
-        if (data) {
-            supportChats = Object.values(data);
-        } else {
-            supportChats = [
-                {
-                    id: 1,
-                    username: "tajkun",
-                    userId: "119216",
-                    unreadByAdmin: true,
-                    unreadByUser: false,
-                    messages: [
-                        { sender: 'user', text: 'Hello, I need help with my deposit verification.', time: '2026-03-30 14:20' }
-                    ]
-                }
-            ];
-        }
-        updateBadges();
+        supportChats = data ? Object.values(data) : [];
         if(document.getElementById('modal-help').style.display === 'flex') renderUserChatHistory();
-        if(document.getElementById('modal-admin-panel').style.display === 'flex') renderAdminSupportList();
-    });
-
-    onValue(ref(db, 'withdrawRequests'), (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-            withdrawRequests = Object.values(data);
-        } else {
-            withdrawRequests = [
-                { id: 101, user: "tajkun (119216)", amount: 50.00, address: "TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk", hoursLeft: 71, status: "pending" }
-            ];
-        }
-        updateBadges();
-        if(document.getElementById('modal-admin-panel').style.display === 'flex') renderAdminWithdrawList();
     });
 });
-
-function updateProfileUI() {
-    if (!currentUser) currentUser = MAIN_ADMIN_USER;
-
-    document.getElementById('profile-id-display').innerText = currentUser.id || 119216;
-    document.getElementById('profile-username-display').innerText = currentUser.username || "tajkun";
-    document.getElementById('profile-code-display').innerText = "Invitation code: " + (currentUser.code || "AZEL-TAJKUN");
-    document.getElementById('modal-code-display').innerText = currentUser.code || "AZEL-TAJKUN";
-    document.getElementById('modal-link-display').innerText = currentUser.link || MAIN_ADMIN_USER.link;
-    document.getElementById('invite-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=${encodeURIComponent(currentUser.link || MAIN_ADMIN_USER.link)}`;
-
-    const avatarImg = document.getElementById('profile-avatar-img');
-    const initialSpan = document.getElementById('profile-initial');
-    if(currentUser.avatar && currentUser.avatar.trim() !== '') {
-        avatarImg.src = currentUser.avatar;
-        avatarImg.classList.remove('hidden');
-        initialSpan.classList.add('hidden');
-    } else {
-        avatarImg.classList.add('hidden');
-        initialSpan.classList.remove('hidden');
-        initialSpan.innerText = (currentUser.username ? currentUser.username.charAt(0).toUpperCase() : 'A');
-    }
-}
-
-function openAvatarModal() {
-    document.getElementById('modal-avatar').style.display = 'flex';
-    document.getElementById('avatar-url-input').value = currentUser.avatar || '';
-}
-function closeAvatarModal() { document.getElementById('modal-avatar').style.display = 'none'; }
-function saveAvatarUrl() {
-    const url = document.getElementById('avatar-url-input').value.trim();
-    currentUser.avatar = url;
-    let allUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
-    allUsers = allUsers.map(u => u.username.toLowerCase() === currentUser.username.toLowerCase() ? currentUser : u);
-    localStorage.setItem('azel_registered_users', JSON.stringify(allUsers));
-    updateProfileUI();
-    closeAvatarModal();
-    alert('Profile picture updated successfully!');
-}
-
-function openChangeEmailModal() { document.getElementById('modal-change-email').style.display = 'flex'; }
-function closeChangeEmailModal() { document.getElementById('modal-change-email').style.display = 'none'; }
-function saveNewEmail() {
-    const email = document.getElementById('new-email-input').value.trim();
-    if(!email) { alert('Please enter a valid email.'); return; }
-    currentUser.email = email;
-    let allUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
-    allUsers = allUsers.map(u => u.username.toLowerCase() === currentUser.username.toLowerCase() ? currentUser : u);
-    localStorage.setItem('azel_registered_users', JSON.stringify(allUsers));
-    closeChangeEmailModal();
-    alert('Email updated successfully to: ' + email);
-}
-
-function openHelpModal() {
-    renderUserChatHistory();
-    if(currentUser && window.firebaseReady) {
-        let chatIndex = supportChats.findIndex(c => c.username.toLowerCase() === currentUser.username.toLowerCase());
-        if(chatIndex !== -1) {
-            supportChats[chatIndex].unreadByUser = false;
-            window.FB_SET(window.FB_REF(window.FB_DB, 'supportChats/' + chatIndex), supportChats[chatIndex]);
-        }
-    }
-    updateBadges();
-    document.getElementById('modal-help').style.display = 'flex';
-}
-function closeHelpModal() {
-    document.getElementById('modal-help').style.display = 'none';
-    document.getElementById('help-message-input').value = '';
-}
-
-function renderUserChatHistory() {
-    const historyContainer = document.getElementById('user-chat-history');
-    if(!currentUser) return;
-
-    let chat = supportChats.find(c => c.username.toLowerCase() === currentUser.username.toLowerCase());
-    if(!chat || !chat.messages || chat.messages.length === 0) {
-        historyContainer.innerHTML = '<p class="text-gray-500 text-center py-2 text-[11px]">No messages yet. Send a message to support!</p>';
-        return;
-    }
-
-    let html = '';
-    chat.messages.forEach(m => {
-        if(m.sender === 'user') {
-            html += `<div class="bg-gray-900 p-2.5 rounded-xl border border-gray-800 text-right space-y-1">
-                <div class="text-[9px] text-emerald-400 font-bold">You (${m.time})</div>
-                <div class="text-white text-xs">${m.text}</div>
-            </div>`;
-        } else {
-            html += `<div class="bg-emerald-950/40 p-2.5 rounded-xl border border-emerald-500/30 text-left space-y-1">
-                <div class="text-[9px] text-amber-400 font-bold">Support Admin (${m.time})</div>
-                <div class="text-white text-xs">${m.text}</div>
-            </div>`;
-        }
-    });
-    historyContainer.innerHTML = html;
-    historyContainer.scrollTop = historyContainer.scrollHeight;
-}
-
-function submitHelpMessage() {
-    const msg = document.getElementById('help-message-input').value.trim();
-    if(!msg) { alert('Please type your message.'); return; }
-
-    const now = new Date();
-    const timeStr = now.toISOString().slice(0, 10) + ' ' + now.toTimeString().slice(0, 5);
-
-    let chatIndex = supportChats.findIndex(c => c.username.toLowerCase() === currentUser.username.toLowerCase());
-    
-    if(chatIndex === -1) {
-        let newChat = {
-            id: Date.now(),
-            username: currentUser.username,
-            userId: currentUser.id,
-            unreadByAdmin: true,
-            unreadByUser: false,
-            messages: [{ sender: 'user', text: msg, time: timeStr }]
-        };
-        supportChats.push(newChat);
-        chatIndex = supportChats.length - 1;
-    } else {
-        if(!supportChats[chatIndex].messages) supportChats[chatIndex].messages = [];
-        supportChats[chatIndex].messages.push({ sender: 'user', text: msg, time: timeStr });
-        supportChats[chatIndex].unreadByAdmin = true;
-    }
-
-    if(window.firebaseReady) {
-        window.FB_SET(window.FB_REF(window.FB_DB, 'supportChats/' + chatIndex), supportChats[chatIndex]).then(() => {
-            document.getElementById('help-message-input').value = '';
-            renderUserChatHistory();
-            updateBadges();
-            alert('Message sent to support successfully!');
-        });
-    }
-}
-
-function updateBadges() {
-    let unreadSupportCount = supportChats.filter(c => c.unreadByAdmin).length;
-    let pendingWithdrawCount = withdrawRequests.filter(w => w.status === 'pending').length;
-
-    const adminBadgeW = document.getElementById('admin-badge-w');
-    const adminBadgeS = document.getElementById('admin-badge-s');
-
-    if(pendingWithdrawCount > 0) {
-        adminBadgeW.innerText = pendingWithdrawCount;
-        adminBadgeW.classList.remove('hidden');
-    } else { adminBadgeW.classList.add('hidden'); }
-
-    if(unreadSupportCount > 0) {
-        adminBadgeS.innerText = unreadSupportCount;
-        adminBadgeS.classList.remove('hidden');
-    } else { adminBadgeS.classList.add('hidden'); }
-
-    if(currentUser) {
-        let userChat = supportChats.find(c => c.username.toLowerCase() === currentUser.username.toLowerCase());
-        const helpBadge = document.getElementById('help-badge');
-        const helpProfileBadge = document.getElementById('help-profile-badge');
-
-        if(userChat && userChat.unreadByUser) {
-            helpBadge.innerText = "!";
-            helpBadge.classList.remove('hidden');
-            helpProfileBadge.innerText = "New reply";
-            helpProfileBadge.classList.remove('hidden');
-        } else {
-            helpBadge.classList.add('hidden');
-            helpProfileBadge.classList.add('hidden');
-        }
-    }
-}
 
 function switchAuthTab(tab) {
     const isLogin = tab === 'login';
@@ -827,15 +541,13 @@ function handleUserLogin() {
     const pass = document.getElementById('login-password').value.trim();
     if(!user || !pass) { alert('Please enter username and password!'); return; }
 
-    let allUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
-    let foundUser = allUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
+    allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
+    let foundUser = allRegisteredUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
     if (!foundUser) { alert('Account does not exist! Please register first.'); return; }
 
     currentUser = foundUser;
     sessionStorage.setItem('azel_logged_in', 'true');
     sessionStorage.setItem('azel_current_username', currentUser.username);
-    updateProfileUI();
-    updateBadges();
     showMainApp();
 }
 
@@ -846,32 +558,43 @@ function handleUserRegister() {
     const pass = document.getElementById('reg-pass-input').value.trim();
     const confirmPass = document.getElementById('reg-confirm-input').value.trim();
 
-    if(!user || !email || !inviteCode || !pass) { alert('Please fill in all required fields!'); return; }
+    if(!user || !email || !pass) { alert('Please fill in all required fields!'); return; }
     if(pass !== confirmPass) { alert('Passwords do not match!'); return; }
 
-    let allUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
-    if (allUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { alert('Username already exists!'); return; }
+    allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
+    if (allRegisteredUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { alert('Username already exists!'); return; }
 
     let randomId = Math.floor(100000 + Math.random() * 900000); 
     let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
     let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
 
-    currentUser = { id: randomId, username: user, email: email, code: randomCode, link: cleanBaseUrl + '?inviteCode=' + randomCode, avatar: "" };
-    allUsers.push(currentUser);
-    localStorage.setItem('azel_registered_users', JSON.stringify(allUsers));
+    currentUser = {
+        id: randomId,
+        username: user,
+        email: email,
+        code: randomCode,
+        link: cleanBaseUrl + '?inviteCode=' + randomCode,
+        avatar: "",
+        isLicensePaid: false,
+        referrer: inviteCode || null,
+        activeBots: [],
+        balance: 0.00
+    };
+
+    allRegisteredUsers.push(currentUser);
+    localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
     
     sessionStorage.setItem('azel_logged_in', 'true');
     sessionStorage.setItem('azel_current_username', user);
 
-    updateProfileUI();
-    updateBadges();
-    alert('Successfully registered and logged in!');
+    alert('Successfully registered! Pay your $5 license to start.');
     showMainApp();
 }
 
 function showMainApp() {
     document.getElementById('auth-screen').style.display = 'none';
     document.getElementById('main-app-wrapper').style.display = 'block';
+    updateAppUI();
 }
 
 function handleUserLogout() {
@@ -883,268 +606,255 @@ function handleUserLogout() {
 
 function switchTab(tabId) {
     document.querySelectorAll('.page-content').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.fixed.bottom-0 button').forEach(el => el.classList.remove('text-emerald-400'));
-    document.querySelectorAll('.fixed.bottom-0 button').forEach(el => el.classList.add('text-gray-400'));
+    document.querySelectorAll('.fixed.bottom-0 button').forEach(el => {
+        el.classList.remove('text-emerald-400');
+        el.classList.add('text-gray-400');
+    });
 
-    let targetPage = '';
-    if (tabId === 'tab-home' || tabId === 'page-home') { targetPage = 'page-home'; tabId = 'tab-home'; }
-    else if (tabId === 'tab-trade' || tabId === 'page-trade') { targetPage = 'page-trade'; tabId = 'tab-trade'; }
-    else if (tabId === 'tab-wallet' || tabId === 'page-wallet') { targetPage = 'page-wallet'; tabId = 'tab-wallet'; }
-    else if (tabId === 'tab-profile' || tabId === 'page-profile') { targetPage = 'page-profile'; tabId = 'tab-profile'; }
+    let targetPage = 'page-home';
+    if (tabId === 'tab-market') targetPage = 'page-market';
+    else if (tabId === 'tab-team') targetPage = 'page-team';
+    else if (tabId === 'tab-wallet') targetPage = 'page-wallet';
+    else if (tabId === 'tab-profile') targetPage = 'page-profile';
 
     document.getElementById(targetPage).classList.add('active');
     const btn = document.getElementById(tabId);
-    if(btn) { btn.classList.remove('text-gray-400'); btn.classList.add('text-emerald-400'); }
+    if(btn) {
+        btn.classList.remove('text-gray-400');
+        btn.classList.add('text-emerald-400');
+    }
     window.scrollTo(0, 0);
+    if(tabId === 'tab-team') renderTeamData();
+    if(tabId === 'tab-market') checkBotUnlocks();
+    if(tabId === 'tab-wallet') renderAssetsData();
 }
 
-function handleLogoClick() {
-    const loggedUser = sessionStorage.getItem('azel_current_username') || (currentUser ? currentUser.username : '');
-    if (!loggedUser || loggedUser.toLowerCase() !== 'tajkun') return; 
+// 🟢 JEDNOKRATNA LICENCA ($5)
+function buyUserLicense() {
+    if(currentUser.isLicensePaid) { alert('License is already paid!'); return; }
+    currentUser.isLicensePaid = true;
+    saveCurrentUserToStorage();
+    updateAppUI();
+    alert('License successfully paid ($5)! You can now activate bots.');
+}
 
-    logoClickCount++;
-    if(logoClickTimer) clearTimeout(logoClickTimer);
-    logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 2000);
+// 🟢 PROVERA MREŽNIH USLOVA (L1, L2, L3) ZA BOTOVE 3, 4, 5, 6
+function getNetworkCounts(username) {
+    allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
+    
+    // L1: Direktan upliv
+    let l1Members = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === username.toLowerCase());
+    let l1Count = l1Members.length;
 
-    if(logoClickCount >= 3) {
-        logoClickCount = 0;
-        document.getElementById('modal-admin-pin').style.display = 'flex';
+    // L2: Članovi koje su doveli članovi iz L1
+    let l2Count = 0;
+    let l2Usernames = [];
+    l1Members.forEach(l1 => {
+        let l2s = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === l1.username.toLowerCase());
+        l2Count += l2s.length;
+        l2s.forEach(l2 => l2Usernames.push(l2.username));
+    });
+
+    // L3: Članovi u trećoj dubini
+    let l3Count = 0;
+    l2Usernames.forEach(l2Name => {
+        let l3s = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === l2Name.toLowerCase());
+        l3Count += l3s.length;
+    });
+
+    return { l1Count, l2Count, l3Count, l1Members };
+}
+
+function checkBotUnlocks() {
+    if(!currentUser.isLicensePaid) {
+        document.getElementById('license-card-box').style.borderColor = '#10b981';
+        // Zaključaj sve bot dugmiće ako licenca nije plaćena
+        for(let i=3; i<=6; i++) {
+            document.getElementById(`bot-btn-${i}`).disabled = true;
+            document.getElementById(`bot-btn-${i}`).className = "w-full bg-gray-800 text-gray-400 font-bold py-2 rounded-xl text-xs cursor-not-allowed";
+        }
+        return;
     }
-}
 
-function closeAdminPinModal() {
-    document.getElementById('modal-admin-pin').style.display = 'none';
-    document.getElementById('admin-pin-input').value = '';
-}
+    let net = getNetworkCounts(currentUser.username);
 
-function verifyAdminPin() {
-    const pin = document.getElementById('admin-pin-input').value;
-    if(pin === ADMIN_PIN) {
-        closeAdminPinModal();
-        openAdminPanel();
-    } else { alert('Incorrect PIN!'); document.getElementById('admin-pin-input').value = ''; }
-}
-
-function openAdminPanel() {
-    renderAdminWithdrawList();
-    renderAdminSupportList();
-    switchAdminTab('withdraw');
-    document.getElementById('modal-admin-panel').style.display = 'flex';
-}
-function closeAdminPanel() { document.getElementById('modal-admin-panel').style.display = 'none'; updateBadges(); }
-
-function switchAdminTab(tab) {
-    const btnW = document.getElementById('admin-tab-withdraw');
-    const btnS = document.getElementById('admin-tab-support');
-    const listW = document.getElementById('admin-list-withdraw');
-    const listS = document.getElementById('admin-list-support');
-
-    if(tab === 'withdraw') {
-        btnW.className = "flex-1 py-1.5 rounded-lg bg-emerald-500 text-black transition relative";
-        btnS.className = "flex-1 py-1.5 rounded-lg text-gray-400 transition relative";
-        listW.style.display = 'block'; listS.style.display = 'none';
+    // Bot 3 uslov: 5 u L1
+    if(net.l1Count >= 5) {
+        unlockBotUI(3);
     } else {
-        btnS.className = "flex-1 py-1.5 rounded-lg bg-emerald-500 text-black transition relative";
-        btnW.className = "flex-1 py-1.5 rounded-lg text-gray-400 transition relative";
-        listS.style.display = 'block'; listW.style.display = 'none';
+        lockBotUI(3, `Need ${net.l1Count}/5 in L1`);
+    }
 
-        if(window.firebaseReady) {
-            supportChats.forEach((c, idx) => {
-                c.unreadByAdmin = false;
-                window.FB_SET(window.FB_REF(window.FB_DB, 'supportChats/' + idx), c);
-            });
-        }
+    // Bot 4 uslov: 10 u L1 + 5 u L2
+    if(net.l1Count >= 10 && net.l2Count >= 5) {
+        unlockBotUI(4);
+    } else {
+        lockBotUI(4, `Need 10 L1 (${net.l1Count}) & 5 L2 (${net.l2Count})`);
+    }
+
+    // Bot 5 uslov: 20 u L1 + 15 u L2 + 5 u L3
+    if(net.l1Count >= 20 && net.l2Count >= 15 && net.l3Count >= 5) {
+        unlockBotUI(5);
+    } else {
+        lockBotUI(5, `Need 20 L1, 15 L2, 5 L3`);
+    }
+
+    // Bot 6 uslov: 50 u L1 + 30 u L2 + 20 u L3
+    if(net.l1Count >= 50 && net.l2Count >= 30 && net.l3Count >= 20) {
+        unlockBotUI(6);
+    } else {
+        lockBotUI(6, `Need 50 L1, 30 L2, 20 L3`);
     }
 }
 
-function renderAdminWithdrawList() {
-    const listContainer = document.getElementById('admin-list-withdraw');
-    if(!withdrawRequests || withdrawRequests.length === 0) {
-        listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">No active withdrawal requests.</p>';
+function unlockBotUI(level) {
+    const btn = document.getElementById(`bot-btn-${level}`);
+    const status = document.getElementById(`bot-status-${level}`);
+    btn.disabled = false;
+    btn.className = "w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2 rounded-xl text-xs";
+    btn.innerText = `Activate Bot ${level}`;
+    status.innerText = "Status: Unlocked ✓";
+    status.className = "text-[10px] text-emerald-400 font-bold";
+}
+
+function lockBotUI(level, reqText) {
+    const btn = document.getElementById(`bot-btn-${level}`);
+    const status = document.getElementById(`bot-status-${level}`);
+    btn.disabled = true;
+    btn.className = "w-full bg-gray-800 text-gray-400 font-bold py-2 rounded-xl text-xs cursor-not-allowed";
+    btn.innerText = "Locked";
+    status.innerText = `Requirement: ${reqText}`;
+    status.className = "text-[10px] text-amber-400 font-bold";
+}
+
+// 🟢 KUPOVINA BOTA
+function buyBot(level, price, dailyEarning) {
+    if(!currentUser.isLicensePaid) { alert('You must pay the $5 license first!'); return; }
+
+    let startDate = new Date().toISOString();
+    let endDate = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(); // 60 dana
+
+    if(!currentUser.activeBots) currentUser.activeBots = [];
+    currentUser.activeBots.push({
+        level: level,
+        price: price,
+        dailyEarning: dailyEarning,
+        startDate: startDate,
+        endDate: endDate,
+        status: 'ACTIVE'
+    });
+
+    saveCurrentUserToStorage();
+    alert(`Bot ${level} ($${price}) successfully activated for 60 days! Capital is frozen and daily earnings started.`);
+    renderAssetsData();
+    switchTab('tab-wallet');
+}
+
+function renderTeamData() {
+    let net = getNetworkCounts(currentUser.username);
+    document.getElementById('count-l1').innerText = net.l1Count;
+    document.getElementById('count-l2').innerText = net.l2Count;
+    document.getElementById('count-l3').innerText = net.l3Count;
+
+    const l1List = document.getElementById('team-l1-list');
+    if(net.l1Members.length === 0) {
+        l1List.innerHTML = '<p class="text-gray-500 text-center py-2">No direct referrals yet.</p>';
         return;
     }
     let html = '';
-    withdrawRequests.forEach((req, idx) => {
+    net.l1Members.forEach(m => {
+        html += `<div class="bg-gray-900 p-2.5 rounded-xl border border-gray-800 flex justify-between items-center">
+            <span class="text-white font-bold">${m.username}</span>
+            <span class="text-emerald-400 text-[10px]">ID: ${m.id}</span>
+        </div>`;
+    });
+    l1List.innerHTML = html;
+}
+
+function renderAssetsData() {
+    let frozenTotal = 0;
+    if(currentUser.activeBots) {
+        currentUser.activeBots.forEach(b => {
+            if(b.status === 'ACTIVE') frozenTotal += b.price;
+        });
+    }
+
+    document.getElementById('wallet-frozen-display').innerText = frozenTotal.toLocaleString('en-US', {minimumFractionDigits: 2});
+    document.getElementById('wallet-balance-display').innerText = (currentUser.balance || 12450.80).toLocaleString('en-US', {minimumFractionDigits: 2});
+
+    const container = document.getElementById('active-bots-container');
+    if(!currentUser.activeBots || currentUser.activeBots.length === 0) {
+        container.innerHTML = '<p class="text-xs text-gray-500 text-center py-4">No active bot investments right now.</p>';
+        return;
+    }
+
+    let html = '';
+    currentUser.activeBots.forEach((bot, idx) => {
         html += `
-            <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-2">
+            <div class="emerald-card p-4 rounded-2xl space-y-2 border border-emerald-500/30">
                 <div class="flex justify-between items-center font-bold">
-                    <span class="text-white">User: ${req.user}</span>
-                    <span class="text-emerald-400">${req.amount} USDT</span>
+                    <span class="text-white">Bot Level ${bot.level} ($${bot.price})</span>
+                    <span class="text-emerald-400 text-xs">+$${bot.dailyEarning}/day</span>
                 </div>
-                <div class="text-[10px] text-gray-400 font-mono truncate">Address: ${req.address}</div>
-                <div class="flex justify-between items-center pt-1">
-                    <span class="text-amber-400 text-[10px]">Time left: ${req.hoursLeft}h</span>
-                    ${req.status === 'pending' ? `
-                        <div class="flex gap-2">
-                            <button onclick="approveWithdraw(${idx})" class="bg-emerald-500 text-black px-3 py-1 rounded font-bold text-[10px]">Approve</button>
-                            <button onclick="rejectWithdraw(${idx})" class="bg-red-500 text-white px-3 py-1 rounded font-bold text-[10px]">Reject</button>
-                        </div>
-                    ` : `<span class="text-emerald-500 font-bold text-[10px]">Approved ✓</span>`}
+                <div class="text-[11px] text-gray-400 flex justify-between">
+                    <span>Frozen Capital: <strong class="text-white">$${bot.price}</strong></span>
+                    <span class="text-amber-400">60-Day Cycle Active</span>
                 </div>
             </div>
         `;
     });
-    listContainer.innerHTML = html;
+    container.innerHTML = html;
 }
 
-function renderAdminSupportList() {
-    const listContainer = document.getElementById('admin-list-support');
-    if(!supportChats || supportChats.length === 0) {
-        listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">No support chats.</p>';
-        return;
+function saveCurrentUserToStorage() {
+    allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
+    allRegisteredUsers = allRegisteredUsers.map(u => u.username.toLowerCase() === currentUser.username.toLowerCase() ? currentUser : u);
+    localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
+}
+
+function updateAppUI() {
+    if(!currentUser) currentUser = MAIN_ADMIN_USER;
+    document.getElementById('profile-id-display').innerText = currentUser.id;
+    document.getElementById('profile-username-display').innerText = currentUser.username;
+    document.getElementById('profile-code-display').innerText = "Invitation code: " + currentUser.code;
+    document.getElementById('modal-code-display').innerText = currentUser.code;
+    document.getElementById('modal-link-display').innerText = currentUser.link;
+
+    if(currentUser.isLicensePaid) {
+        document.getElementById('buy-license-btn').innerText = "Paid ✓";
+        document.getElementById('buy-license-btn').className = "bg-emerald-950 text-emerald-400 px-4 py-2 rounded-xl text-xs font-bold border border-emerald-500/40 cursor-default";
     }
-    let html = '';
-    supportChats.forEach((chat, cIdx) => {
-        let lastMsg = chat.messages && chat.messages.length > 0 ? chat.messages[chat.messages.length - 1] : { text: 'No messages', time: '' };
-        html += `
-            <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-2">
-                <div class="flex justify-between items-center font-bold border-b border-gray-800 pb-1.5">
-                    <span class="text-emerald-400">User: ${chat.username} (${chat.userId})</span>
-                    <span class="text-[9px] text-gray-500">${lastMsg.time}</span>
-                </div>
-                <div class="space-y-1.5 max-h-32 overflow-y-auto bg-black/40 p-2 rounded-lg border border-gray-800 text-[11px]">
-        `;
-        if(chat.messages) {
-            chat.messages.forEach(m => {
-                if(m.sender === 'user') {
-                    html += `<div class="text-white"><span class="text-emerald-400 font-bold">${chat.username}:</span> ${m.text}</div>`;
-                } else {
-                    html += `<div class="text-emerald-300"><span class="text-amber-400 font-bold">Admin:</span> ${m.text}</div>`;
-                }
-            });
-        }
-        html += `
-                </div>
-                <div class="flex gap-2 pt-1">
-                    <input type="text" id="admin-reply-input-${cIdx}" placeholder="Type reply..." class="flex-1 bg-black border border-emerald-500/30 p-2 rounded-lg text-white text-xs">
-                    <button onclick="sendAdminReply(${cIdx})" class="bg-emerald-500 text-black px-3 py-1.5 rounded-lg font-bold text-xs">Reply</button>
-                </div>
-            </div>
-        `;
-    });
-    listContainer.innerHTML = html;
+    checkBotUnlocks();
 }
 
-function sendAdminReply(chatIndex) {
-    const input = document.getElementById(`admin-reply-input-${chatIndex}`);
-    const replyText = input.value.trim();
-    if(!replyText) { alert('Please type a reply.'); return; }
-
-    const now = new Date();
-    const timeStr = now.toISOString().slice(0, 10) + ' ' + now.toTimeString().slice(0, 5);
-
-    if(!supportChats[chatIndex].messages) supportChats[chatIndex].messages = [];
-    supportChats[chatIndex].messages.push({ sender: 'admin', text: replyText, time: timeStr });
-    supportChats[chatIndex].unreadByUser = true;
-
-    if(window.firebaseReady) {
-        window.FB_SET(window.FB_REF(window.FB_DB, 'supportChats/' + chatIndex), supportChats[chatIndex]).then(() => {
-            input.value = '';
-            renderAdminSupportList();
-            alert('Reply sent successfully!');
-        });
-    }
-}
-
-function approveWithdraw(index) {
-    withdrawRequests[index].status = 'approved';
-    if(window.firebaseReady) {
-        window.FB_SET(window.FB_REF(window.FB_DB, 'withdrawRequests/' + index), withdrawRequests[index]).then(() => {
-            alert('Request approved!');
-            renderAdminWithdrawList();
-        });
-    }
-}
-function rejectWithdraw(index) {
-    withdrawRequests.splice(index, 1);
-    if(window.firebaseReady) {
-        window.FB_SET(window.FB_REF(window.FB_DB, 'withdrawRequests'), withdrawRequests).then(() => {
-            alert('Request rejected.');
-            renderAdminWithdrawList();
-        });
-    }
-}
-
+function openHelpModal() { document.getElementById('modal-help').style.display = 'flex'; }
+function closeHelpModal() { document.getElementById('modal-help').style.display = 'none'; }
 function openDepositModal() { document.getElementById('modal-deposit').style.display = 'flex'; }
 function closeDepositModal() { document.getElementById('modal-deposit').style.display = 'none'; }
-
-function selectNetwork(net) {
-    selectedNetwork = net;
-    const trcBtn = document.getElementById('net-trc20');
-    const bepBtn = document.getElementById('net-bep20');
-    const addrText = document.getElementById('deposit-address-text');
-    const netName = document.getElementById('network-name-text');
-    const qrImg = document.getElementById('deposit-qr');
-
-    if(net === 'trc20') {
-        trcBtn.className = "py-2 px-3 rounded-xl border border-emerald-500 bg-emerald-950/40 text-emerald-400 font-bold text-xs flex items-center justify-center gap-1";
-        bepBtn.className = "py-2 px-3 rounded-xl border border-gray-800 bg-gray-900 text-gray-400 font-bold text-xs flex items-center justify-center gap-1";
-        addrText.innerText = walletAddresses.trc20; netName.innerText = "TRC-20";
-        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=${walletAddresses.trc20}`;
-    } else {
-        bepBtn.className = "py-2 px-3 rounded-xl border border-emerald-500 bg-emerald-950/40 text-emerald-400 font-bold text-xs flex items-center justify-center gap-1";
-        trcBtn.className = "py-2 px-3 rounded-xl border border-gray-800 bg-gray-900 text-gray-400 font-bold text-xs flex items-center justify-center gap-1";
-        addrText.innerText = walletAddresses.bep20; netName.innerText = "BEP-20";
-        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=${walletAddresses.bep20}`;
-    }
-}
-
-function copyAddress() {
-    navigator.clipboard.writeText(walletAddresses[selectedNetwork]).then(() => alert('Crypto address copied!'));
-}
-
 function openWithdrawModal() { document.getElementById('modal-withdraw').style.display = 'flex'; }
 function closeWithdrawModal() { document.getElementById('modal-withdraw').style.display = 'none'; }
+function openInviteModal() { document.getElementById('modal-invite').style.display = 'flex'; }
+function closeInviteModal() { document.getElementById('modal-invite').style.display = 'none'; }
+function openLanguageModal() { alert('Language selection: English active.'); }
 
 function submitWithdrawRequest() {
     const amount = parseFloat(document.getElementById('withdraw-amount').value);
     const address = document.getElementById('withdraw-address').value.trim();
-
     if(!amount || amount < 50) { alert('Minimum withdrawal amount is 50 USDT.'); return; }
-    if(!address) { alert('Please enter crypto address.'); return; }
-    if(amount > currentBalance) { alert('Insufficient funds.'); return; }
-
-    currentBalance -= amount;
-    document.querySelectorAll('.wallet-usdt').forEach(el => el.innerText = currentBalance.toLocaleString('en-US', {minimumFractionDigits: 2}));
-
-    let newReq = {
-        id: Math.floor(100 + Math.random() * 900),
-        user: (currentUser ? currentUser.username : "tajkun") + " (" + (currentUser ? currentUser.id : "119216") + ")",
-        amount: amount, address: address, hoursLeft: 72, status: 'pending'
-    };
-
-    withdrawRequests.push(newReq);
-    if(window.firebaseReady) {
-        window.FB_SET(window.FB_REF(window.FB_DB, 'withdrawRequests'), withdrawRequests).then(() => {
-            alert('Withdrawal request submitted to Firebase database!');
-            closeWithdrawModal();
-            document.getElementById('withdraw-amount').value = '';
-            document.getElementById('withdraw-address').value = '';
-        });
-    }
+    if(!address) { alert('Please enter address.'); return; }
+    alert('Withdrawal request submitted successfully!');
+    closeWithdrawModal();
 }
 
-function openInviteModal() { document.getElementById('modal-invite').style.display = 'flex'; }
-function closeInviteModal() { document.getElementById('modal-invite').style.display = 'none'; }
-function copyMyInviteLink() { navigator.clipboard.writeText(currentUser ? currentUser.link : MAIN_ADMIN_USER.link).then(() => alert('Copied!')); }
-function copyMyInviteCode() { navigator.clipboard.writeText(currentUser ? currentUser.code : MAIN_ADMIN_USER.code).then(() => alert('Copied!')); }
-function openLanguageModal() { document.getElementById('modal-lang').style.display = 'flex'; }
-function closeLangModal() { document.getElementById('modal-lang').style.display = 'none'; }
-
-const translations = {
-en: { nav_home: "Insurance", nav_trade: "Market", nav_wallet: "Assets", nav_profile: "Profile", trading_platform_btn: "Trading platform", white_paper: "White Paper", official_website: "Official website", recharge: "Recharge", withdraw: "Withdrawal", teaching_classroom: "Classroom", invitation_pack: "Invitation Pack", download: "Download", community_perspective: "Community", invite_friends: "Invite Friends", invite_banner_title: "Let's pass AZEL to the world together", invitation_code_label: "Invitation code", click_copy_code: "Click to copy code", invite_link_title: "Invitation link", copy_link_btn: "Copy link", logout: "Log Out", trade_title: "Market / Trading", select_option: "Select option:", buy_btc: "Buy BTC", sell_btc: "Sell BTC", my_wallets: "My Wallets", vip_channel: "VIP Channel VIP0", upgrade_now: "Upgrade", deposit_title: "USDT Deposit", select_network: "Select Network:", copy_btn: "Copy", withdraw_title: "Withdrawal Request" },
-sr: { nav_home: "Osiguranje", nav_trade: "Trgovanje", nav_wallet: "Novčanik", nav_profile: "Profil", trading_platform_btn: "Platforma za trgovanje", white_paper: "Bela Knjiga", official_website: "Zvanični sajt", recharge: "Uplata", withdraw: "Isplata", teaching_classroom: "Učionica", invitation_pack: "Paket Pozivnica", download: "Preuzmi", community_perspective: "Zajednica", invite_friends: "Pozovi Prijatelje", invite_banner_title: "Hajde da prenesemo AZEL svetu", invitation_code_label: "Pozivni kod", click_copy_code: "Klikni za kopiranje", invite_link_title: "Pozivni link", copy_link_btn: "Kopiraj link", logout: "Odjavi se", trade_title: "Trgovanje", select_option: "Izaberite opciju:", buy_btc: "Kupi BTC", sell_btc: "Prodaj BTC", my_wallets: "Moji Novčanici", vip_channel: "VIP Kanal VIP0", upgrade_now: "Nadogradi", deposit_title: "USDT Uplata", select_network: "Izaberite Mrežu:", copy_btn: "Copy", withdraw_title: "Zahtev za Isplatu" }
-};
-
-function changeLanguage(lang) {
-    const t = translations[lang] || translations['en'];
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if(t[key]) el.innerText = t[key];
-    });
-    document.getElementById('current-lang-text').innerText = lang.toUpperCase();
-    closeLangModal();
+function submitHelpMessage() {
+    const msg = document.getElementById('help-message-input').value.trim();
+    if(!msg) { alert('Please enter message.'); return; }
+    alert('Message sent to support!');
+    document.getElementById('help-message-input').value = '';
+    closeHelpModal();
 }
+
+function renderUserChatHistory() {}
 </script>
 </body>
 </html>
