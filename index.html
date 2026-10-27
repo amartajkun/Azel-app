@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>AZEL App</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AZEL">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0b0e14">
+<link rel="apple-touch-icon" href="https://img.icons8.com/color/180/emerald.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+body { background-color: #0b0e14; color: #e6edf3; font-family: -apple-system, sans-serif; user-select: none; }
+.emerald-card { background: #161c2d; border: 1px solid rgba(255, 255, 255, 0.05); }
+.page-content { display: none; }
+.page-content.active { display: block; }
+.gradient-banner {
+background: linear-gradient(135deg, #10b981 0%, #064e3b 40%, #161c2d 100%);
+border: 1px solid rgba(16, 185, 129, 0.2);
+}
+.invite-gradient-card {
+background: linear-gradient(135deg, #10b981 0%, #059669 50%, #064e3b 100%);
+border: 1px solid rgba(16, 185, 129, 0.4);
+box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
+}
+</style>
+</head>
+<body class="pb-24">
+
+<!-- HEADER -->
+<div class="p-4 flex justify-between items-center border-b border-gray-800 bg-[#0b0e14] sticky top-0 z-40">
+<div onclick="handleLogoClick()" class="flex items-center space-x-2 cursor-pointer active:opacity-80">
+<div class="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center font-bold text-black shadow-lg shadow-emerald-500/30">A</div>
+<span class="text-xl font-bold tracking-wider text-emerald-400">AZEL</span>
+</div>
+<div class="flex space-x-4 text-gray-400 text-lg">
+<button onclick="alert('Support is available 24/7.')"><i class="fas fa-headset text-emerald-400"></i></button>
+<button onclick="openLanguageModal()"><i class="fas fa-globe text-emerald-400"></i></button>
+<button onclick="alert('No new notifications.')"><i class="fas fa-bell"></i></button>
+</div>
+</div>
+
+<!-- 1. POČETNA / INSURANCE STRANICA -->
+<div id="page-home" class="page-content active p-4 space-y-4">
+    <div class="flex justify-center mb-2">
+        <button class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-sm shadow-lg shadow-emerald-500/25 transition" data-i18n="trading_platform_btn">
+            Trading platform
+        </button>
+    </div>
+
+    <!-- Zeleni Baner -->
+    <div class="gradient-banner p-4 rounded-2xl relative overflow-hidden space-y-2 text-white">
+        <div class="flex justify-between items-start">
+            <div class="space-y-1">
+                <h2 class="text-xs font-extrabold text-emerald-300 tracking-wider">PEACE OF MIND, GUARANTEED</h2>
+                <h3 class="text-sm font-bold text-white">AZEL BLOCKCHAIN INSURANCE</h3>
+            </div>
+            <div class="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center shrink-0 ml-2">
+                <i class="fas fa-shield-alt text-emerald-300"></i>
+            </div>
+        </div>
+        <p class="text-[11px] text-gray-200 leading-relaxed">
+            In today's digital era, trust is the most valuable asset. AZEL Blockchain Insurance offers you an entirely new experience.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-4 gap-2 text-center">
+        <button onclick="alert('White Paper coming soon.')" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
+            <i class="fas fa-file-alt text-emerald-400 text-lg"></i>
+            <span class="text-[10px] text-gray-300" data-i18n="white_paper">White Paper</span>
+        </button>
+        <button onclick="alert('Official website is active.')" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
+            <i class="fas fa-globe text-emerald-400 text-lg"></i>
+            <span class="text-[10px] text-gray-300" data-i18n="official_website">Official website</span>
+        </button>
+        <button onclick="openDepositModal()" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
+            <i class="fas fa-qrcode text-emerald-400 text-lg"></i>
+            <span class="text-[10px] text-gray-300" data-i18n="recharge">Recharge</span>
+        </button>
+        <button onclick="openWithdrawModal()" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
+            <i class="fas fa-arrow-up-from-bracket text-emerald-400 text-lg"></i>
+            <span class="text-[10px] text-gray-300" data-i18n="withdraw">Withdrawal</span>
+        </button>
+    </div>
+
+    <div class="grid grid-cols-4 gap-2 text-center">
+        <button onclick="alert('Teaching classroom.')" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
+            <i class="fas fa-book-open text-emerald-400 text-lg"></i>
+            <span class="text-[10px] text-gray-300" data-i18n="teaching_classroom">Classroom</span>
+        </button>
+        <button onclick="openInviteModal()" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
+            <i class="fas fa-gift text-emerald-400 text-lg"></i>
+            <span class="text-[10px] text-gray-300" data-i18n="invitation_pack">Invitation Pack</span>
+        </button>
+        <button onclick="alert('Downloading...')" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
+            <i class="fas fa-download text-emerald-400 text-lg"></i>
+            <span class="text-[10px] text-gray-300" data-i18n="download">Download</span>
+        </button>
+        <button onclick="alert('Community open.')" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
+            <i class="fas fa-users text-emerald-400 text-lg"></i>
+            <span class="text-[10px] text-gray-300" data-i18n="community_perspective">Community</span>
+        </button>
+    </div>
+
+    <!-- Dugme za Invite Friends otvara modal sa QR kodom -->
+    <div class="grid grid-cols-1 gap-3">
+        <div class="emerald-card p-4 rounded-2xl flex justify-between items-center cursor-pointer hover:bg-gray-800 transition" onclick="openInviteModal()">
+            <div>
+                <h4 class="text-sm font-bold text-white" data-i18n="invite_friends">Invite Friends</h4>
+                <p class="text-[11px] text-gray-400" data-i18n="invite_sub">Share AZEL Insurance Bonus</p>
+            </div>
+            <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400"><i class="fas fa-arrow-right"></i></div>
+        </div>
+        <div class="emerald-card p-4 rounded-2xl flex justify-between items-center cursor-pointer hover:bg-gray-800 transition" onclick="switchTab('tab-wallet')">
+            <div>
+                <h4 class="text-sm font-bold text-white" data-i18n="task_center">Task Center</h4>
+                <p class="text-[11px] text-gray-400" data-i18n="task_sub">Participate and get rewards</p>
+            </div>
+            <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400"><i class="fas fa-arrow-right"></i></div>
+        </div>
+    </div>
+</div>
+
+<!-- 2. TRGOVANJE -->
+<div id="page-trade" class="page-content p-4 space-y-4">
+    <h2 class="text-lg font-bold text-emerald-400 mb-2" data-i18n="trade_title">Market / Trading</h2>
+    <div class="emerald-card p-4 rounded-2xl text-center space-y-3">
+        <p class="text-xs text-gray-400" data-i18n="select_option">Select option:</p>
+        <div class="flex justify-center space-x-2">
+            <button class="bg-emerald-500 text-black px-4 py-2 rounded-lg font-bold text-xs" data-i18n="buy_btc">Buy BTC</button>
+            <button class="bg-red-500 text-white px-4 py-2 rounded-lg font-bold text-xs" data-i18n="sell_btc">Sell BTC</button>
+        </div>
+    </div>
+</div>
+
+<!-- 3. NOVČANIK -->
+<div id="page-wallet" class="page-content p-4 space-y-4">
+    <h2 class="text-lg font-bold text-emerald-400 mb-2" data-i18n="my_wallets">My Wallets</h2>
+    <div class="emerald-card p-4 rounded-2xl space-y-3">
+        <div class="flex justify-between items-center">
+            <span class="text-sm font-bold text-white">USDT (Tether)</span>
+            <span class="text-sm text-emerald-400 font-bold">$<span class="wallet-usdt">12,450.80</span></span>
+        </div>
+    </div>
+</div>
+
+<!-- 4. PROFIL -->
+<div id="page-profile" class="page-content p-4 space-y-4">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-14 h-14 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center">
+                <span class="text-2xl font-bold text-emerald-400">A</span>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-white flex items-center gap-1">tajkun</h2>
+                <p class="text-xs text-gray-400">ID: <span id="profile-id-display">...</span></p>
+                <div class="inline-flex items-center gap-1 bg-emerald-950/40 border border-emerald-500/20 rounded-full px-2 py-0.5 text-[10px] text-emerald-400 mt-1">
+                    <span id="profile-code-display">Invitation code: ...</span>
+                </div>
+            </div>
+        </div>
+        <i class="fas fa-star text-emerald-400 text-lg"></i>
+    </div>
+    <div class="emerald-card p-3 rounded-xl flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+            <i class="fas fa-crown text-emerald-400 text-sm"></i>
+            <span class="text-[11px] text-gray-300" data-i18n="vip_channel">VIP Channel VIP0</span>
+        </div>
+        <button class="bg-emerald-400 text-black px-3 py-1 rounded-full text-[10px] font-bold" data-i18n="upgrade_now">Upgrade</button>
+    </div>
+    <div class="emerald-card rounded-2xl divide-y divide-gray-800/60 text-xs">
+        <div onclick="openLanguageModal()" class="p-3 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20">
+            <div class="flex items-center space-x-3"><i class="fas fa-globe text-emerald-400 text-sm"></i><span data-i18n="switch_lang" class="font-bold text-emerald-400">Switch Language</span></div>
+            <span id="current-lang-text" class="text-[10px] text-gray-400">EN ></span>
+        </div>
+    </div>
+    <button onclick="alert('You have been logged out')" class="w-full emerald-card py-3 rounded-2xl text-center text-red-500 font-bold text-xs hover:bg-red-950/20 transition">
+        <span data-i18n="logout">Log Out</span>
+    </button>
+</div>
+
+<!-- MODAL ZA "INVITE FRIENDS" (QR KOD I LINK) -->
+<div id="modal-invite" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50 overflow-y-auto">
+    <div class="emerald-card p-5 rounded-3xl w-full max-w-sm space-y-4 bg-[#0b0e14] border border-emerald-500/40 my-auto relative">
+        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
+            <h3 class="text-sm font-bold text-emerald-400" data-i18n="invite_friends">Invite Friends</h3>
+            <button onclick="closeInviteModal()" class="text-gray-400 hover:text-white text-base"><i class="fas fa-times"></i></button>
+        </div>
+
+        <div class="invite-gradient-card p-4 rounded-2xl text-white space-y-3 text-center">
+            <p class="text-[11px] font-bold text-emerald-100" data-i18n="invite_banner_title">Let's pass AZEL to the world together, so everyone feels joy and reward</p>
+            <div class="bg-white p-2.5 rounded-xl inline-block shadow-md">
+                <img id="invite-qr-img" src="" alt="QR" class="w-28 h-28 rounded-lg">
+            </div>
+            <div onclick="copyMyInviteCode()" class="bg-black/30 p-2.5 rounded-xl border border-white/10 flex justify-between items-center cursor-pointer active:scale-95 transition">
+                <span class="text-[11px] text-emerald-200" data-i18n="invitation_code_label">Invitation code</span>
+                <span id="modal-code-display" class="font-mono font-bold text-white text-xs bg-emerald-500/30 px-2 py-0.5 rounded">...</span>
+            </div>
+            <p class="text-[9px] text-emerald-200" data-i18n="click_copy_code">Click to copy the invitation code</p>
+        </div>
+
+        <div class="space-y-1.5 text-xs">
+            <label class="text-[10px] text-gray-400 block font-bold" data-i18n="invite_link_title">Invitation link</label>
+            <div class="bg-gray-900 p-2.5 rounded-xl border border-gray-800 text-[10px] font-mono text-emerald-300 truncate" id="modal-link-display">
+                Loading...
+            </div>
+        </div>
+
+        <button onclick="copyMyInviteLink()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-xs shadow-lg shadow-emerald-500/20 active:scale-95 transition flex items-center justify-center gap-2">
+            <i class="far fa-copy"></i> <span data-i18n="copy_link_btn">Copy invitation link</span>
+        </button>
+    </div>
+</div>
+
+<!-- MODAL ZA REGISTRACIJU -->
+<div id="modal-register" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50 overflow-y-auto">
+    <div class="emerald-card p-5 rounded-3xl w-full max-w-sm space-y-4 bg-[#0b0e14] border border-emerald-500/40 my-auto">
+        <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+            <div>
+                <h3 class="text-base font-bold text-white flex items-center gap-1.5"><span class="text-emerald-400">Hello</span> 👋</h3>
+                <p class="text-[11px] text-gray-400" data-i18n="reg_welcome">Welcome to AZEL Blockchain Insurance</p>
+            </div>
+            <button onclick="closeRegisterModal()" class="text-gray-400 hover:text-white text-base"><i class="fas fa-times"></i></button>
+        </div>
+
+        <div class="space-y-3 text-xs">
+            <div>
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block" data-i18n="reg_phone">Phone Number</label>
+                <div class="flex gap-2">
+                    <select class="bg-gray-900 border border-emerald-500/30 rounded-xl px-2.5 py-2 text-white font-bold text-xs focus:outline-none">
+                        <option>+381</option><option>+387</option><option>+389</option><option>+386</option><option>+44</option><option>+1</option>
+                    </select>
+                    <input type="tel" placeholder="Enter your phone number" class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
+                </div>
+            </div>
+            <div>
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block" data-i18n="reg_code">Invitation code</label>
+                <input type="text" id="reg-input-code" readonly class="w-full bg-gray-950 border border-emerald-500/40 p-2.5 rounded-xl text-emerald-300 font-mono font-bold">
+            </div>
+            <div>
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block" data-i18n="reg_pass">Password</label>
+                <input type="password" placeholder="Enter your password" class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
+            </div>
+            <div>
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block" data-i18n="reg_confirm">Confirm password</label>
+                <input type="password" placeholder="Please confirm the login password" class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
+            </div>
+        </div>
+
+        <button onclick="submitRegistration()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-xs shadow-lg shadow-emerald-500/20 active:scale-95 transition" data-i18n="reg_btn">
+            Register
+        </button>
+    </div>
+</div>
+
+<!-- MODAL ZA UPLATU -->
+<div id="modal-deposit" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-sm space-y-4 bg-[#0b0e14] border border-emerald-500/30">
+        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
+            <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2" data-i18n="deposit_title"><i class="fas fa-wallet"></i> USDT Deposit</h3>
+            <button onclick="closeDepositModal()" class="text-gray-400 hover:text-white text-sm"><i class="fas fa-times"></i></button>
+        </div>
+        <div>
+            <label class="text-[11px] text-gray-400 mb-1 block" data-i18n="select_network">Select Network:</label>
+            <div class="grid grid-cols-2 gap-2">
+                <button id="net-trc20" onclick="selectNetwork('trc20')" class="py-2 px-3 rounded-xl border border-emerald-500 bg-emerald-950/40 text-emerald-400 font-bold text-xs flex items-center justify-center gap-1"><span>TRC-20</span></button>
+                <button id="net-bep20" onclick="selectNetwork('bep20')" class="py-2 px-3 rounded-xl border border-gray-800 bg-gray-900 text-gray-400 font-bold text-xs flex items-center justify-center gap-1"><span>BEP-20</span></button>
+            </div>
+        </div>
+        <div class="bg-gray-950/80 p-3 rounded-xl border border-gray-800 text-center space-y-2">
+            <div class="flex justify-center"><img id="deposit-qr" src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk" alt="QR" class="w-28 h-28 border-2 border-emerald-500/40 rounded-lg p-1 bg-white"></div>
+            <div class="text-[10px] text-gray-400"><span id="network-name-text" class="text-emerald-400 font-bold">TRC-20</span></div>
+            <div class="flex items-center justify-between bg-gray-900 p-2 rounded-lg border border-gray-800">
+                <span id="deposit-address-text" class="text-[10px] font-mono text-emerald-300 truncate mr-2">TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk</span>
+                <button onclick="copyAddress()" class="bg-emerald-500 text-black px-2 py-1 rounded text-[10px] font-bold shrink-0" data-i18n="copy_btn">Copy</button>
+            </div>
+        </div>
+        <button onclick="closeDepositModal()" class="w-full bg-emerald-500 text-black font-bold py-2.5 rounded-xl text-xs">Close</button>
+    </div>
+</div>
+
+<!-- MODAL ZA ISPLATU -->
+<div id="modal-withdraw" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-sm space-y-4 bg-[#0b0e14] border border-emerald-500/30">
+        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
+            <h3 class="text-sm font-bold text-emerald-400"><span data-i18n="withdraw_title">Withdrawal Request</span></h3>
+            <button onclick="closeWithdrawModal()" class="text-gray-400 hover:text-white text-sm"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="space-y-3 text-xs">
+            <div>
+                <label class="text-[10px] text-gray-400 mb-1 block">Withdrawal amount (USDT):</label>
+                <input type="number" id="withdraw-amount" placeholder="Min. 50 USDT" class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white">
+            </div>
+            <div>
+                <label class="text-[10px] text-gray-400 mb-1 block">Crypto Address:</label>
+                <input type="text" id="withdraw-address" placeholder="Enter address" class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white font-mono text-[11px]">
+            </div>
+        </div>
+        <button onclick="submitWithdrawRequest()" class="w-full bg-emerald-500 text-black py-2.5 rounded-xl text-xs font-bold">Confirm Withdrawal</button>
+    </div>
+</div>
+
+<!-- MODAL ZA JEZIK -->
+<div id="modal-lang" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4 z-50">
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-2 bg-[#0b0e14] max-h-[80vh] overflow-y-auto">
+        <h3 class="text-base font-bold text-emerald-400 mb-2">Select Language</h3>
+        <div class="space-y-1.5 text-xs">
+            <button onclick="changeLanguage('en')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>English</span> <span>🇬🇧</span></button>
+            <button onclick="changeLanguage('sr')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Srpski / Hrvatski</span> <span>🇷🇸</span></button>
+            <button onclick="changeLanguage('sl')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Slovenski</span> <span>🇸🇮</span></button>
+            <button onclick="changeLanguage('mk')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Македонски</span> <span>🇲🇰</span></button>
+            <button onclick="changeLanguage('es')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Español</span> <span>🇪🇸</span></button>
+            <button onclick="changeLanguage('ru')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Русский</span> <span>🇷🇺</span></button>
+            <button onclick="changeLanguage('el')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Ελληνικά</span> <span>🇬🇷</span></button>
+            <button onclick="changeLanguage('it')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Italiano</span> <span>🇮🇹</span></button>
+        </div>
+        <button onclick="closeLangModal()" class="w-full bg-gray-800 text-gray-300 py-2 rounded-lg text-xs font-bold mt-3">Close</button>
+    </div>
+</div>
+
+<!-- TAJNI ADMIN PIN MODAL (PIN: 3112) -->
+<div id="modal-admin-pin" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-4 bg-[#0b0e14] border border-amber-500/30 text-center">
+        <h3 class="text-sm font-bold text-amber-400">Admin Access (PIN: 3112)</h3>
+        <input type="password" id="admin-pin-input" maxlength="4" placeholder="****" class="w-full bg-gray-900 border border-amber-500/50 p-2.5 rounded-xl text-center text-white text-lg tracking-widest focus:outline-none">
+        <div class="flex space-x-2">
+            <button onclick="closeAdminPinModal()" class="w-1/2 bg-gray-800 text-gray-300 py-2 rounded-lg text-xs font-bold">Cancel</button>
+            <button onclick="verifyAdminPin()" class="w-1/2 bg-amber-500 text-black py-2 rounded-lg text-xs font-bold">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<!-- TAJNI ADMIN PANEL MODAL -->
+<div id="modal-admin-panel" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-md space-y-4 bg-[#0b0e14] border border-emerald-500/50 max-h-[85vh] flex flex-col">
+        <div class="flex justify-between items-center border-b border-gray-800 pb-3 shrink-0">
+            <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
+                <i class="fas fa-tasks"></i> Admin Panel - Zahtevi za Isplatu
+            </h3>
+            <button onclick="closeAdminPanel()" class="text-gray-400 hover:text-white text-sm"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="admin-withdraw-list" class="space-y-3 overflow-y-auto pr-1 grow text-xs"></div>
+        <button onclick="closeAdminPanel()" class="w-full bg-gray-800 text-gray-300 py-2.5 rounded-xl text-xs font-bold shrink-0 mt-2">Zatvori Panel</button>
+    </div>
+</div>
+
+<!-- DONJA NAVIGACIJA -->
+<div class="fixed bottom-0 left-0 right-0 bg-[#0b0e14] border-t border-gray-800 flex justify-around p-3 text-[10px] text-gray-400 z-40">
+    <button id="tab-home" onclick="switchTab('tab-home')" class="flex flex-col items-center text-emerald-400">
+        <i class="fas fa-house text-base"></i>
+        <span data-i18n="nav_home">Insurance</span>
+    </button>
+    <button id="tab-trade" onclick="switchTab('tab-trade')" class="flex flex-col items-center">
+        <i class="fas fa-chart-line text-base"></i>
+        <span data-i18n="nav_trade">Market</span>
+    </button>
+    <button id="tab-wallet" onclick="switchTab('tab-wallet')" class="flex flex-col items-center">
+        <i class="fas fa-wallet text-base"></i>
+        <span data-i18n="nav_wallet">Assets</span>
+    </button>
+    <button id="tab-profile" onclick="switchTab('tab-profile')" class="flex flex-col items-center">
+        <i class="fas fa-user text-base"></i>
+        <span data-i18n="nav_profile">Profile</span>
+    </button>
+</div>
+
+<script>
+let currentBalance = 12450.80;
+let selectedNetwork = 'trc20';
+const ADMIN_PIN = "3112";
+let logoClickCount = 0;
+let logoClickTimer = null;
+let withdrawRequests = [
+    { id: 101, user: "tajkun (119216)", amount: 50.00, address: "TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk", hoursLeft: 71, status: "pending" }
+];
+const walletAddresses = { trc20: "TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk", bep20: "0xb8574070f05f0863be358dd60f88e7ccc78af512" };
+
+let currentUser = JSON.parse(localStorage.getItem('azel_user_data'));
+if (!currentUser) {
+    let randomId = Math.floor(100000 + Math.random() * 900000); 
+    let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
+    let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
+
+    currentUser = {
+        id: randomId,
+        code: randomCode,
+        link: cleanBaseUrl + '?inviteCode=' + randomCode
+    };
+    localStorage.setItem('azel_user_data', JSON.stringify(currentUser));
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const refCode = urlParams.get('inviteCode') || urlParams.get('ref');
+    if (refCode) {
+        document.getElementById('reg-input-code').value = refCode;
+        openRegisterModal();
+    } else {
+        document.getElementById('reg-input-code').value = currentUser.code;
+    }
+
+    document.getElementById('profile-id-display').innerText = currentUser.id;
+    document.getElementById('profile-code-display').innerText = "Invitation code: " + currentUser.code;
+    document.getElementById('modal-code-display').innerText = currentUser.code;
+    document.getElementById('modal-link-display').innerText = currentUser.link;
+    
+    document.getElementById('invite-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=${encodeURIComponent(currentUser.link)}`;
+    
+    changeLanguage('en');
+});
+
+function openInviteModal() {
+    document.getElementById('modal-invite').style.display = 'flex';
+}
+function closeInviteModal() {
+    document.getElementById('modal-invite').style.display = 'none';
+}
+
+function copyMyInviteLink() {
+    navigator.clipboard.writeText(currentUser.link).then(() => {
+        alert('Vaš jedinstveni pozivni link je uspešno kopiran:\n' + currentUser.link);
+    }).catch(() => {
+        alert('Pozivni link: ' + currentUser.link);
+    });
+}
+
+function copyMyInviteCode() {
+    navigator.clipboard.writeText(currentUser.code).then(() => {
+        alert('Pozivni kod kopiran: ' + currentUser.code);
+    });
+}
+
+function openRegisterModal() {
+    document.getElementById('modal-register').style.display = 'flex';
+}
+function closeRegisterModal() {
+    document.getElementById('modal-register').style.display = 'none';
+}
+function submitRegistration() {
+    alert('Uspešno ste se registrovali na AZEL platformu!');
+    closeRegisterModal();
+}
+
+const translations = {
+en: {
+nav_home: "Insurance", nav_trade: "Market", nav_wallet: "Assets", nav_profile: "Profile",
+trading_platform_btn: "Trading platform", white_paper: "White Paper", official_website: "Official website",
+recharge: "Recharge", withdraw: "Withdrawal", teaching_classroom: "Classroom",
+invitation_pack: "Invitation Pack", download: "Download", community_perspective: "Community",
+invite_friends: "Invite Friends", invite_banner_title: "Let's pass AZEL to the world together, so everyone feels joy and reward",
+invitation_code_label: "Invitation code", click_copy_code: "Click to copy the invitation code",
+invite_link_title: "Invitation link", copy_link_btn: "Copy invitation link",
+switch_lang: "Switch Language", logout: "Log Out", trade_title: "Market / Trading", select_option: "Select option:",
+buy_btc: "Buy BTC", sell_btc: "Sell BTC", my_wallets: "My Wallets", vip_channel: "VIP Channel VIP0", upgrade_now: "Upgrade",
+deposit_title: "USDT Deposit", select_network: "Select Network:", deposit_address_label: "Deposit Address", copy_btn: "Copy",
+withdraw_title: "Withdrawal Request", reg_welcome: "Welcome to AZEL Blockchain Insurance", reg_phone: "Phone Number",
+reg_code: "Invitation code", reg_pass: "Password", reg_confirm: "Confirm password", reg_btn: "Register"
+},
+sr: {
+nav_home: "Osiguranje", nav_trade: "Trgovanje", nav_wallet: "Novčanik", nav_profile: "Profil",
+trading_platform_btn: "Platforma za trgovanje", white_paper: "Bela Knjiga", official_website: "Zvanični sajt",
+recharge: "Uplata", withdraw: "Isplata", teaching_classroom: "Učionica",
+invitation_pack: "Paket Pozivnica", download: "Preuzmi", community_perspective: "Zajednica",
+invite_friends: "Pozovi Prijatelje", invite_banner_title: "Hajde da prenesemo AZEL svetu zajedno, da svako oseti radost i nagradu",
+invitation_code_label: "Pozivni kod", click_copy_code: "Kliknite da kopirate pozivni kod",
+invite_link_title: "Pozivni link", copy_link_btn: "Kopiraj pozivni link",
+switch_lang: "Promeni Jezik", logout: "Odjavi se", trade_title: "Trgovanje", select_option: "Izaberite opciju:",
+buy_btc: "Kupi BTC", sell_btc: "Prodaj BTC", my_wallets: "Moji Novčanici", vip_channel: "VIP Kanal VIP0", upgrade_now: "Nadogradi",
+deposit_title: "USDT Uplata", select_network: "Izaberite Mrežu:", deposit_address_label: "Adresa za slanje", copy_btn: "Kopiraj",
+withdraw_title: "Zahtev za Isplatu", reg_welcome: "Dobrodošli u AZEL Blockchain Osiguranje", reg_phone: "Broj telefona",
+reg_code: "Pozivni kod", reg_pass: "Lozinka", reg_confirm: "Potvrdite lozinku", reg_btn: "Registruj se"
+},
+sl: {
+nav_home: "Zavarovanje", nav_trade: "Trg", nav_wallet: "Denarnica", nav_profile: "Profil",
+trading_platform_btn: "Trgovalna platforma", white_paper: "Bela knjiga", official_website: "Uradna spletna stran",
+recharge: "Polog", withdraw: "Izplačilo", teaching_classroom: "Učilnica",
+invitation_pack: "Paket vabil", download: "Prenos", community_perspective: "Skupnost",
+invite_friends: "Povabi prijatelje", invite_banner_title: "Skupaj ponesimo AZEL v svet, da vsak začuti veselje in nagrado",
+invitation_code_label: "Koda povabila", click_copy_code: "Kliknite za kopiranje kode",
+invite_link_title: "Povezava za vabilo", copy_link_btn: "Kopiraj povezavo",
+switch_lang: "Spremeni jezik", logout: "Odjava", trade_title: "Trgovanje", select_option: "Izberite možnost:",
+buy_btc: "Kupi BTC", sell_btc: "Prodaj BTC", my_wallets: "Moje denarnice", vip_channel: "VIP Kanal VIP0", upgrade_now: "Nadgradi",
+deposit_title: "USDT Polog", select_network: "Izberite omrežje:", deposit_address_label: "Naslov za polog", copy_btn: "Kopiraj",
+withdraw_title: "Zahteva za izplačilo", reg_welcome: "Dobrodošli v AZEL Blockchain zavarovanju", reg_phone: "Telefonska številka",
+reg_code: "Koda povabila", reg_pass: "Geslo", reg_confirm: "Potrdi geslo", reg_btn: "Registracija"
+},
+mk: {
+nav_home: "Осигурување", nav_trade: "Тргување", nav_wallet: "Парилник", nav_profile: "Профил",
+trading_platform_btn: "Платформа за тргување", white_paper: "Бела книга", official_website: "Официјална веб-страница",
+recharge: "Уплата", withdraw: "Исплата", teaching_classroom: "Училница",
+invitation_pack: "Пакет покани", download: "Преземи", community_perspective: "Заедница",
+invite_friends: "Покани пријатели", invite_banner_title: "Заедно да го пренесеме AZEL во светот, секој да почувствува радост и награда",
+invitation_code_label: "Поканен код", click_copy_code: "Кликнете за копирање на кодот",
+invite_link_title: "Линк за покана", copy_link_btn: "Копирај линк за покана",
+switch_lang: "Промени јазик", logout: "Одјава", trade_title: "Тргување", select_option: "Изберете опција:",
+buy_btc: "Купи BTC", sell_btc: "Продај BTC", my_wallets: "Мои паричници", vip_channel: "VIP Канал VIP0", upgrade_now: "Ажурирај",
+deposit_title: "USDT Уплата", select_network: "Изберете мрежа:", deposit_address_label: "Адреса за уплата", copy_btn: "Копирај",
+withdraw_title: "Барање за исплата", reg_welcome: "Добредојдовте во AZEL Blockchain Осигурување", reg_phone: "Телефонски број",
+reg_code: "Поканен код", reg_pass: "Лозинка", reg_confirm: "Потврди лозинка", reg_btn: "Регистрирај се"
+},
+es: {
+nav_home: "Seguro", nav_trade: "Mercado", nav_wallet: "Activos", nav_profile: "Perfil",
+trading_platform_btn: "Plataforma de trading", white_paper: "Libro Blanco", official_website: "Sitio web oficial",
+recharge: "Recargar", withdraw: "Retiro", teaching_classroom: "Aula",
+invitation_pack: "Paquete de invitación", download: "Descargar", community_perspective: "Comunidad",
+invite_friends: "Invitar amigos", invite_banner_title: "Llevuemos AZEL al mundo juntos, para que todos sientan alegría y recompensa",
+invitation_code_label: "Código de invitación", click_copy_code: "Haga clic para copiar el código",
+invite_link_title: "Enlace de invitación", copy_link_btn: "Copiar enlace",
+switch_lang: "Cambiar Idioma", logout: "Cerrar Sesión", trade_title: "Mercado / Trading", select_option: "Seleccione opción:",
+buy_btc: "Comprar BTC", sell_btc: "Vender BTC", my_wallets: "Mis Billeteras", vip_channel: "Canal VIP0", upgrade_now: "Actualizar",
+deposit_title: "Depósito USDT", select_network: "Seleccionar Red:", deposit_address_label: "Dirección de Depósito", copy_btn: "Copiar",
+withdraw_title: "Solicitud de Retiro", reg_welcome: "Bienvenido a AZEL Blockchain Insurance", reg_phone: "Número de teléfono",
+reg_code: "Código de invitación", reg_pass: "Contraseña", reg_confirm: "Confirmar contraseña", reg_btn: "Registrarse"
+},
+ru: {
+nav_home: "Страхование", nav_trade: "Рынок", nav_wallet: "Активы", nav_profile: "Профиль",
+trading_platform_btn: "Торговая платформа", white_paper: "Белая книга", official_website: "Официальный сайт",
+recharge: "Пополнить", withdraw: "Вывод", teaching_classroom: "Класс",
+invitation_pack: "Пакет приглашений", download: "Скачать", community_perspective: "Сообщество",
+invite_friends: "Пригласить друзей", invite_banner_title: "Давайте передадим AZEL миру вместе, чтобы каждый почувствовал радость и награду",
+invitation_code_label: "Код приглашения", click_copy_code: "Нажмите, чтобы скопировать код",
+invite_link_title: "Реферальная ссылка", copy_link_btn: "Копировать ссылку",
+switch_lang: "Сменить язык", logout: "Выйти", trade_title: "Рынок / Торговля", select_option: "Выберите опцию:",
+buy_btc: "Купить BTC", sell_btc: "Продать BTC", my_wallets: "Мои кошельки", vip_channel: "VIP Канал VIP0", upgrade_now: "Обновить",
+deposit_title: "Депозит USDT", select_network: "Выберите сеть:", deposit_address_label: "Адрес депозита", copy_btn: "Копировать",
+withdraw_title: "Запрос на вывод", reg_welcome: "Добро пожаловать в AZEL Blockchain Insurance", reg_phone: "Номер телефона",
+reg_code: "Код приглашения", reg_pass: "Пароль", reg_confirm: "Подтвердите пароль", reg_btn: "Регистрация"
+},
+el: {
+nav_home: "Ασφάλιση", nav_trade: "Αγορά", nav_wallet: "Περιουσιακά", nav_profile: "Προφίλ",
+trading_platform_btn: "Πλατφόρμα συναλλαγών", white_paper: "Λευκή Βίβλος", official_website: "Επίσημη ιστοσελίδα",
+recharge: "Κατάθεση", withdraw: "Ανάληψη", teaching_classroom: "Τάξη",
+invitation_pack: "Πακέτο πρόσκλησης", download: "Λήψη", community_perspective: "Κοινότητα",
+invite_friends: "Προσκαλέστε φίλους", invite_banner_title: "Ας περάσουμε το AZEL στον κόσμο μαζί, για να νιώσουν όλοι χαρά και αμοιβή",
+invitation_code_label: "Κωδικός πρόσκλησης", click_copy_code: "Κάντε κλικ για αντιγραφή κωδικού",
+invite_link_title: "Σύνδεσμος πρόσκλησης", copy_link_btn: "Αντιγραφή συνδέσμου",
+switch_lang: "Αλλαγή γλώσσας", logout: "Αποσύνδεση", trade_title: "Αγορά / Συναλλαγές", select_option: "Επιλέξτε επιλογή:",
+buy_btc: "Αγορά BTC", sell_btc: "Πώληση BTC", my_wallets: "Τα πορτοφόλια μου", vip_channel: "VIP Κανάλι VIP0", upgrade_now: "Αναβάθμιση",
+deposit_title: "Κατάθεση USDT", select_network: "Επιλογή Δικτύου:", deposit_address_label: "Διεύθυνση Κατάθεσης", copy_btn: "Αντιγραφή",
+withdraw_title: "Αίτημα Ανάληψης", reg_welcome: "Καλώς ήρθατε στο AZEL Blockchain Insurance", reg_phone: "Αριθμός τηλεφώνου",
+reg_code: "Κωδικός πρόσκλησης", reg_pass: "Κωδικός πρόσβασης", reg_confirm: "Επιβεβαίωση κωδικού", reg_btn: "Εγγραφή"
+},
+it: {
+nav_home: "Assicurazione", nav_trade: "Mercato", nav_wallet: "Asset", nav_profile: "Profilo",
+trading_platform_btn: "Piattaforma di trading", white_paper: "White Paper", official_website: "Sito ufficiale",
+recharge: "Ricarica", withdraw: "Prelievo", teaching_classroom: "Aula",
+invitation_pack: "Pacchetto invito", download: "Download", community_perspective: "Community",
+invite_friends: "Invita amici", invite_banner_title: "Portiamo AZEL nel mondo insieme, affinché tutti provino gioia e ricompensa",
+invitation_code_label: "Codice invito", click_copy_code: "Clicca per copiare il codice invito",
+invite_link_title: "Link di invito", copy_link_btn: "Copia link di invito",
+switch_lang: "Cambia Lingua", logout: "Esci", trade_title: "Mercato / Trading", select_option: "Seleziona opzione:",
+buy_btc: "Compra BTC", sell_btc: "Vendi BTC", my_wallets: "I Miei Wallet", vip_channel: "Canale VIP0", upgrade_now: "Aggiorna",
+deposit_title: "Deposito USDT", select_network: "Seleziona Rete:", deposit_address_label: "Indirizzo di Deposito", copy_btn: "Copia",
+withdraw_title: "Richiesta di Prelievo", reg_welcome: "Benvenuto in AZEL Blockchain Insurance", reg_phone: "Numero di telefono",
+reg_code: "Codice invito", reg_pass: "Password", reg_confirm: "Conferma password", reg_btn: "Registrati"
+}
+};
+
+function handleLogoClick() {
+    logoClickCount++;
+    clearTimeout(logoClickTimer);
+    if (logoClickCount === 3) {
+        logoClickCount = 0;
+        document.getElementById('admin-pin-input').value = '';
+        document.getElementById('modal-admin-pin').style.display = 'flex';
+    } else {
+        logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 1000);
+    }
+}
+function closeAdminPinModal() { document.getElementById('modal-admin-pin').style.display = 'none'; }
+function closeAdminPanel() { document.getElementById('modal-admin-panel').style.display = 'none'; }
+
+function verifyAdminPin() {
+    const inputPin = document.getElementById('admin-pin-input').value;
+    if (inputPin === ADMIN_PIN) {
+        closeAdminPinModal();
+        renderAdminRequests();
+        document.getElementById('modal-admin-panel').style.display = 'flex';
+    } else {
+        alert('Pogrešan Admin PIN!');
+    }
+}
+
+function renderAdminRequests() {
+    const container = document.getElementById('admin-withdraw-list');
+    if (withdrawRequests.length === 0) {
+        container.innerHTML = `<div class="text-center text-gray-500 py-6">Nema aktivnih zahteva za isplatu.</div>`;
+        return;
+    }
+    container.innerHTML = withdrawRequests.map(req => `
+        <div class="bg-gray-950 p-3 rounded-xl border border-gray-800 space-y-2">
+            <div class="flex justify-between items-center font-bold">
+                <span class="text-white">${req.user}</span>
+                <span class="text-emerald-400">$${req.amount.toFixed(2)} USDT</span>
+            </div>
+            <div class="bg-gray-900 p-2 rounded text-[10px] font-mono text-gray-300 break-all flex justify-between items-center gap-1">
+                <span>${req.address}</span>
+                <button onclick="navigator.clipboard.writeText('${req.address}'); alert('Adresa kopirana!');" class="bg-gray-800 px-2 py-1 rounded text-emerald-400 font-sans font-bold text-[9px]">Copy</button>
+            </div>
+            <div class="flex justify-between items-center text-[10px]">
+                <span class="text-amber-400"><i class="fas fa-hourglass-half"></i> Preostalo: ${req.hoursLeft}h</span>
+                <button onclick="confirmAdminWithdraw(${req.id})" class="bg-emerald-500 hover:bg-emerald-400 text-black px-3 py-1 rounded-lg font-bold">Odobri</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function confirmAdminWithdraw(id) {
+    withdrawRequests = withdrawRequests.filter(req => req.id !== id);
+    alert('Isplata je uspešno odobrena!');
+    renderAdminRequests();
+}
+
+function openWithdrawModal() { document.getElementById('modal-withdraw').style.display = 'flex'; }
+function closeWithdrawModal() { document.getElementById('modal-withdraw').style.display = 'none'; }
+function submitWithdrawRequest() {
+    const amount = parseFloat(document.getElementById('withdraw-amount').value);
+    const address = document.getElementById('withdraw-address').value.trim();
+    if (isNaN(amount) || amount < 50) { alert('Min. 50 USDT!'); return; }
+    if (address.length < 10) { alert('Unesite ispravnu adresu!'); return; }
+    
+    withdrawRequests.push({
+        id: Date.now(),
+        user: "Korisnik (ID: " + currentUser.id + ")",
+        amount: amount,
+        address: address,
+        hoursLeft: 72,
+        status: "pending"
+    });
+    alert('Zahtev za isplatu je poslat!');
+    closeWithdrawModal();
+}
+
+function openDepositModal() { document.getElementById('modal-deposit').style.display = 'flex'; }
+function closeDepositModal() { document.getElementById('modal-deposit').style.display = 'none'; }
+function selectNetwork(net) {
+    selectedNetwork = net;
+    document.getElementById('net-trc20').className = net === 'trc20' ? "py-2 px-3 rounded-xl border border-emerald-500 bg-emerald-950/40 text-emerald-400 font-bold text-xs flex items-center justify-center gap-1" : "py-2 px-3 rounded-xl border border-gray-800 bg-gray-900 text-gray-400 font-bold text-xs flex items-center justify-center gap-1";
+    document.getElementById('net-bep20').className = net === 'bep20' ? "py-2 px-3 rounded-xl border border-emerald-500 bg-emerald-950/40 text-emerald-400 font-bold text-xs flex items-center justify-center gap-1" : "py-2 px-3 rounded-xl border border-gray-800 bg-gray-900 text-gray-400 font-bold text-xs flex items-center justify-center gap-1";
+    document.getElementById('network-name-text').innerText = net.toUpperCase();
+    document.getElementById('deposit-address-text').innerText = walletAddresses[net];
+}
+function copyAddress() { navigator.clipboard.writeText(walletAddresses[selectedNetwork]); alert('Adresa kopirana!'); }
+
+function switchTab(tabId) {
+    document.querySelectorAll('.page-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.fixed.bottom-0 button').forEach(el => { el.classList.remove('text-emerald-400'); el.classList.add('text-gray-400'); });
+    
+    const selectedBtn = document.getElementById(tabId);
+    if(selectedBtn) {
+        selectedBtn.classList.remove('text-gray-400');
+        selectedBtn.classList.add('text-emerald-400');
+    }
+    
+    if (tabId === 'tab-home') document.getElementById('page-home').classList.add('active');
+    if (tabId === 'tab-trade') document.getElementById('page-trade').classList.add('active');
+    if (tabId === 'tab-wallet') document.getElementById('page-wallet').classList.add('active');
+    if (tabId === 'tab-profile') document.getElementById('page-profile').classList.add('active');
+}
+
+function openLanguageModal() { document.getElementById('modal-lang').style.display = 'flex'; }
+function closeLangModal() { document.getElementById('modal-lang').style.display = 'none'; }
+
+function changeLanguage(langKey) {
+    const langData = translations[langKey] || translations['en'];
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (langData[key]) el.innerText = langData[key];
+    });
+    document.getElementById('current-lang-text').innerText = langKey.toUpperCase() + ' >';
+    closeLangModal();
+}
+</script>
+</body>
+</html>
