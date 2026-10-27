@@ -217,9 +217,9 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             </div>
             <div>
                 <h2 id="profile-username-display" class="text-xl font-bold text-white flex items-center gap-1">tajkun</h2>
-                <p class="text-xs text-gray-400">ID: <span id="profile-id-display">...</span></p>
+                <p class="text-xs text-gray-400">ID: <span id="profile-id-display">119216</span></p>
                 <div class="inline-flex items-center gap-1 bg-emerald-950/40 border border-emerald-500/20 rounded-full px-2 py-0.5 text-[10px] text-emerald-400 mt-1">
-                    <span id="profile-code-display">Invitation code: ...</span>
+                    <span id="profile-code-display">Invitation code: AZEL-TAJKUN</span>
                 </div>
             </div>
         </div>
@@ -258,7 +258,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             </div>
             <div onclick="copyMyInviteCode()" class="bg-black/30 p-2.5 rounded-xl border border-white/10 flex justify-between items-center cursor-pointer active:scale-95 transition">
                 <span class="text-[11px] text-emerald-200" data-i18n="invitation_code_label">Invitation code</span>
-                <span id="modal-code-display" class="font-mono font-bold text-white text-xs bg-emerald-500/30 px-2 py-0.5 rounded">...</span>
+                <span id="modal-code-display" class="font-mono font-bold text-white text-xs bg-emerald-500/30 px-2 py-0.5 rounded">AZEL-TAJKUN</span>
             </div>
             <p class="text-[9px] text-emerald-200" data-i18n="click_copy_code">Click to copy the invitation code</p>
         </div>
@@ -331,7 +331,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             <button onclick="changeLanguage('en')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>English</span> <span>🇬🇧</span></button>
             <button onclick="changeLanguage('sr')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Srpski / Hrvatski</span> <span>🇷🇸</span></button>
             <button onclick="changeLanguage('sl')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Slovenski</span> <span>🇸🇮</span></button>
-            <button onclick="changeLanguage('mk')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Македонски</span> <span>🇲🇰</span></button>
+            <button onclick="changeLanguage('mk')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Македонски</span> <span>🇲К</span></button>
             <button onclick="changeLanguage('es')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Español</span> <span>🇪🇸</span></button>
             <button onclick="changeLanguage('ru')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Русский</span> <span>🇷🇺</span></button>
             <button onclick="changeLanguage('el')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Ελληνικά</span> <span>🇬🇷</span></button>
@@ -400,24 +400,24 @@ let withdrawRequests = [
 ];
 const walletAddresses = { trc20: "TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk", bep20: "0xb8574070f05f0863be358dd60f88e7ccc78af512" };
 
-let currentUser = JSON.parse(localStorage.getItem('azel_user_data'));
-if (!currentUser) {
-    let randomId = Math.floor(100000 + Math.random() * 900000); 
-    let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
-    let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
+// GLAVNI FIKSNI NALOG ("tajkun")
+const MAIN_ADMIN_USER = {
+    id: 119216,
+    username: "tajkun",
+    code: "AZEL-TAJKUN",
+    link: window.location.href.split('?')[0].split('#')[0] + '?inviteCode=AZEL-TAJKUN'
+};
 
-    currentUser = {
-        id: randomId,
-        username: "tajkun",
-        code: randomCode,
-        link: cleanBaseUrl + '?inviteCode=' + randomCode
-    };
-    localStorage.setItem('azel_user_data', JSON.stringify(currentUser));
-}
+let currentUser = JSON.parse(localStorage.getItem('azel_user_data'));
 
 window.addEventListener('DOMContentLoaded', function() {
     const isLogged = sessionStorage.getItem('azel_logged_in');
+    const loggedUsername = sessionStorage.getItem('azel_current_username');
+
     if (isLogged === 'true') {
+        if (loggedUsername === 'tajkun') {
+            currentUser = MAIN_ADMIN_USER;
+        }
         showMainApp();
     }
 
@@ -427,18 +427,22 @@ window.addEventListener('DOMContentLoaded', function() {
         document.getElementById('reg-input-code').value = refCode;
         switchAuthTab('register');
     } else {
-        document.getElementById('reg-input-code').value = currentUser.code;
+        document.getElementById('reg-input-code').value = currentUser ? currentUser.code : MAIN_ADMIN_USER.code;
     }
 
+    updateProfileUI();
+    changeLanguage('en');
+});
+
+function updateProfileUI() {
+    if(!currentUser) currentUser = MAIN_ADMIN_USER;
     document.getElementById('profile-id-display').innerText = currentUser.id;
-    document.getElementById('profile-username-display').innerText = currentUser.username || "tajkun";
+    document.getElementById('profile-username-display').innerText = currentUser.username;
     document.getElementById('profile-code-display').innerText = "Invitation code: " + currentUser.code;
     document.getElementById('modal-code-display').innerText = currentUser.code;
     document.getElementById('modal-link-display').innerText = currentUser.link;
     document.getElementById('invite-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=${encodeURIComponent(currentUser.link)}`;
-    
-    changeLanguage('en');
-});
+}
 
 function switchAuthTab(tab) {
     const isLogin = tab === 'login';
@@ -457,18 +461,31 @@ function handleUserLogin() {
         return;
     }
     
-    // Provera za tvoj glavni admin nalog
     if (user.toLowerCase() === 'tajkun' || user.toLowerCase() === 'amartajkun') {
         user = 'tajkun';
+        currentUser = MAIN_ADMIN_USER;
+    } else {
+        // Običan korisnik
+        if (!currentUser || currentUser.username === 'tajkun') {
+            let randomId = Math.floor(100000 + Math.random() * 900000); 
+            let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
+            let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
+            currentUser = {
+                id: randomId,
+                username: user,
+                code: randomCode,
+                link: cleanBaseUrl + '?inviteCode=' + randomCode
+            };
+        } else {
+            currentUser.username = user;
+        }
     }
 
     sessionStorage.setItem('azel_logged_in', 'true');
     sessionStorage.setItem('azel_current_username', user);
-    
-    currentUser.username = user;
     localStorage.setItem('azel_user_data', JSON.stringify(currentUser));
-    document.getElementById('profile-username-display').innerText = user;
-
+    
+    updateProfileUI();
     showMainApp();
 }
 
@@ -487,13 +504,23 @@ function handleUserRegister() {
         return;
     }
 
-    currentUser.username = user;
-    localStorage.setItem('azel_user_data', JSON.stringify(currentUser));
-    document.getElementById('profile-username-display').innerText = user;
+    let randomId = Math.floor(100000 + Math.random() * 900000); 
+    let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
+    let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
 
-    alert('Successfully registered and logged in!');
+    currentUser = {
+        id: randomId,
+        username: user,
+        code: randomCode,
+        link: cleanBaseUrl + '?inviteCode=' + randomCode
+    };
+
+    localStorage.setItem('azel_user_data', JSON.stringify(currentUser));
     sessionStorage.setItem('azel_logged_in', 'true');
     sessionStorage.setItem('azel_current_username', user);
+
+    updateProfileUI();
+    alert('Successfully registered and logged in!');
     showMainApp();
 }
 
@@ -531,9 +558,8 @@ function switchTab(tabId) {
 
 // TAJNI ADMIN PANEL - SAMO I ISKLJUČIVO ZA "tajkun" (Na 3 klika)
 function handleLogoClick() {
-    const loggedUser = sessionStorage.getItem('azel_current_username') || currentUser.username;
+    const loggedUser = sessionStorage.getItem('azel_current_username') || (currentUser ? currentUser.username : '');
     
-    // Bilo koji drugi nalog (uključujući "ammar") neće moći otvoriti admin panel!
     if (loggedUser.toLowerCase() !== 'tajkun') {
         return; 
     }
@@ -542,7 +568,7 @@ function handleLogoClick() {
     if(logoClickTimer) clearTimeout(logoClickTimer);
     logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 2000);
 
-    if(logoClickCount >= 3) { // 3 klika
+    if(logoClickCount >= 3) {
         logoClickCount = 0;
         document.getElementById('modal-admin-pin').style.display = 'flex';
     }
@@ -671,7 +697,7 @@ function submitWithdrawRequest() {
 
     withdrawRequests.push({
         id: Math.floor(100 + Math.random() * 900),
-        user: (currentUser.username || "tajkun") + " (" + currentUser.id + ")",
+        user: (currentUser ? currentUser.username : "tajkun") + " (" + (currentUser ? currentUser.id : "119216") + ")",
         amount: amount,
         address: address,
         hoursLeft: 72,
@@ -688,13 +714,13 @@ function openInviteModal() { document.getElementById('modal-invite').style.displ
 function closeInviteModal() { document.getElementById('modal-invite').style.display = 'none'; }
 
 function copyMyInviteLink() {
-    navigator.clipboard.writeText(currentUser.link).then(() => {
+    navigator.clipboard.writeText(currentUser ? currentUser.link : MAIN_ADMIN_USER.link).then(() => {
         alert('Invitation link copied!');
     });
 }
 function copyMyInviteCode() {
-    navigator.clipboard.writeText(currentUser.code).then(() => {
-        alert('Invitation code copied: ' + currentUser.code);
+    navigator.clipboard.writeText(currentUser ? currentUser.code : MAIN_ADMIN_USER.code).then(() => {
+        alert('Invitation code copied: ' + (currentUser ? currentUser.code : MAIN_ADMIN_USER.code));
     });
 }
 
