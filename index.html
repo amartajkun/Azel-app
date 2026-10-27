@@ -131,7 +131,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <span class="text-xl font-bold tracking-wider text-emerald-400">AZEL</span>
 </div>
 <div class="flex space-x-3 text-gray-400 text-lg relative items-center">
-<!-- ADMIN DUGME SE PRIKAZUJE SAMO ZA 'tajkun' BEZ ISPISIVANJA PIN-a -->
+<!-- ADMIN DUGME SE PRIKAZUJE SAMO ZA 'tajkun' -->
 <button id="admin-header-btn" onclick="openAdminPinModal()" class="bg-amber-500/20 text-amber-400 border border-amber-500/40 px-2.5 py-1 rounded-lg text-[10px] font-bold hidden items-center gap-1">
     <i class="fas fa-shield-halved"></i> Admin
 </button>
@@ -331,11 +331,84 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <i class="fas fa-star text-emerald-400 text-lg"></i>
     </div>
 
+    <div class="emerald-card p-3 rounded-xl flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+            <i class="fas fa-crown text-emerald-400 text-sm"></i>
+            <span class="text-[11px] text-gray-300">VIP Channel VIP0</span>
+        </div>
+        <button class="bg-emerald-400 text-black px-3 py-1 rounded-full text-[10px] font-bold">Upgrade</button>
+    </div>
+
     <div class="emerald-card rounded-2xl divide-y divide-gray-800/60 text-xs">
+        <div onclick="openChangeEmailModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+            <div class="flex items-center space-x-3">
+                <i class="far fa-envelope text-emerald-400 text-sm w-4 text-center"></i>
+                <span class="text-white font-medium">Change Email</span>
+            </div>
+            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+        </div>
+        <div onclick="alert('Login Password settings')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-lock text-emerald-400 text-sm w-4 text-center"></i>
+                <span class="text-white font-medium">Login Password</span>
+            </div>
+            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+        </div>
+        <div onclick="alert('Transaction Password settings')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-shield-halved text-emerald-400 text-sm w-4 text-center"></i>
+                <span class="text-white font-medium">Transaction Password</span>
+            </div>
+            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+        </div>
+    </div>
+
+    <div class="emerald-card rounded-2xl divide-y divide-gray-800/60 text-xs">
+        <div onclick="alert('Feedback submitted via support.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+            <div class="flex items-center space-x-3">
+                <i class="far fa-comment-dots text-emerald-400 text-sm w-4 text-center"></i>
+                <span class="text-white font-medium">Feedback</span>
+            </div>
+            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+        </div>
         <div onclick="openHelpModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="far fa-circle-question text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium">Support & Help</span>
+                <span class="text-white font-medium">Help Center</span>
+            </div>
+            <div class="flex items-center gap-1">
+                <span id="help-profile-badge" class="bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.2 rounded-full hidden">0</span>
+                <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+            </div>
+        </div>
+        <div onclick="alert('User Terms & Conditions apply.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+            <div class="flex items-center space-x-3">
+                <i class="far fa-user text-emerald-400 text-sm w-4 text-center"></i>
+                <span class="text-white font-medium">User Terms</span>
+            </div>
+            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+        </div>
+        <div onclick="alert('Language: English')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-globe text-emerald-400 text-sm w-4 text-center"></i>
+                <span class="text-white font-medium">Switch Language</span>
+            </div>
+            <div class="flex items-center gap-1">
+                <span class="text-[10px] text-gray-400">EN</span>
+                <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+            </div>
+        </div>
+        <div onclick="alert('Cache cleared successfully!')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+            <div class="flex items-center space-x-3">
+                <i class="far fa-trash-can text-emerald-400 text-sm w-4 text-center"></i>
+                <span class="text-white font-medium">Clear Cache</span>
+            </div>
+            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+        </div>
+        <div onclick="alert('App download link copied.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-download text-emerald-400 text-sm w-4 text-center"></i>
+                <span class="text-white font-medium">Download App</span>
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
@@ -356,6 +429,18 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <div id="user-chat-history" class="space-y-2 max-h-48 overflow-y-auto pr-1 text-xs bg-gray-950 p-3 rounded-xl border border-gray-800"></div>
         <textarea id="help-message-input" rows="3" placeholder="Type your message to support..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none text-xs"></textarea>
         <button onclick="submitHelpMessage()" class="w-full bg-emerald-500 text-black py-2.5 rounded-xl text-xs font-bold shadow-lg">Send Message</button>
+    </div>
+</div>
+
+<!-- MODAL ZA PROMENU EMAIL-a -->
+<div id="modal-change-email" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-4 bg-[#0b0e14] border border-emerald-500/30">
+        <h3 class="text-sm font-bold text-emerald-400">Change Email Address</h3>
+        <input type="email" id="new-email-input" placeholder="Enter new email..." class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white text-xs">
+        <div class="flex space-x-2">
+            <button onclick="closeChangeEmailModal()" class="w-1/2 bg-gray-800 text-gray-300 py-2 rounded-lg text-xs font-bold">Cancel</button>
+            <button onclick="saveNewEmail()" class="w-1/2 bg-emerald-500 text-black py-2 rounded-lg text-xs font-bold">Update</button>
+        </div>
     </div>
 </div>
 
@@ -423,7 +508,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </div>
 </div>
 
-<!-- TAJNI ADMIN PIN MODAL (SAD BEZ ISPISIVANJA BROJA PIN-a U NASLOVU) -->
+<!-- TAJNI ADMIN PIN MODAL -->
 <div id="modal-admin-pin" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
     <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-4 bg-[#0b0e14] border border-amber-500/30 text-center">
         <h3 class="text-sm font-bold text-amber-400">Admin Security PIN</h3>
@@ -469,7 +554,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <div class="fixed bottom-0 left-0 right-0 bg-[#0b0e14] border-t border-gray-800 flex justify-around p-3 text-[10px] text-gray-400 z-40">
     <button id="tab-home" onclick="switchTab('tab-home')" class="flex flex-col items-center text-emerald-400">
         <i class="fas fa-house text-base"></i>
-        <span>Home</span>
+        <span>Insurance</span>
     </button>
     <button id="tab-market" onclick="switchTab('tab-market')" class="flex flex-col items-center">
         <i class="fas fa-robot text-base"></i>
@@ -626,7 +711,6 @@ function showMainApp() {
     document.getElementById('auth-screen').style.display = 'none';
     document.getElementById('main-app-wrapper').style.display = 'block';
     
-    // PRIKAZ DUGMETA SAMO ZA "tajkun"
     const adminBtn = document.getElementById('admin-header-btn');
     if (currentUser && currentUser.username.toLowerCase() === 'tajkun') {
         adminBtn.style.display = 'flex';
@@ -820,6 +904,7 @@ function updateAppUI() {
     document.getElementById('profile-code-display').innerText = "Invitation code: " + currentUser.code;
     document.getElementById('modal-code-display').innerText = currentUser.code;
     document.getElementById('modal-link-display').innerText = currentUser.link;
+    document.getElementById('profile-initial').innerText = currentUser.username.charAt(0).toUpperCase();
 
     if(currentUser.isLicensePaid) {
         document.getElementById('buy-license-btn').innerText = "Paid ✓";
@@ -828,7 +913,17 @@ function updateAppUI() {
     checkBotUnlocks();
 }
 
-// 🟢 OTVALJANJE ADMIN MODA ISKLJUČIVO ZA 'tajkun'
+function openChangeEmailModal() { document.getElementById('modal-change-email').style.display = 'flex'; }
+function closeChangeEmailModal() { document.getElementById('modal-change-email').style.display = 'none'; }
+function saveNewEmail() {
+    const email = document.getElementById('new-email-input').value.trim();
+    if(!email) { alert('Please enter a valid email.'); return; }
+    currentUser.email = email;
+    saveCurrentUserToStorage();
+    closeChangeEmailModal();
+    alert('Email updated successfully to: ' + email);
+}
+
 function handleLogoClick() {
     if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') return;
     openAdminPinModal();
@@ -965,7 +1060,14 @@ function approveWithdraw(index) {
 function updateBadges() {
     let unreadCount = supportChats.filter(c => c.unreadByAdmin).length;
     const badge = document.getElementById('help-badge');
-    if(unreadCount > 0) { badge.innerText = unreadCount; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
+    const helpProfileBadge = document.getElementById('help-profile-badge');
+    if(unreadCount > 0) { 
+        if(badge) { badge.innerText = unreadCount; badge.classList.remove('hidden'); }
+        if(helpProfileBadge) { helpProfileBadge.innerText = unreadCount; helpProfileBadge.classList.remove('hidden'); }
+    } else { 
+        if(badge) badge.classList.add('hidden'); 
+        if(helpProfileBadge) helpProfileBadge.classList.add('hidden'); 
+    }
 }
 
 function openHelpModal() { document.getElementById('modal-help').style.display = 'flex'; }
