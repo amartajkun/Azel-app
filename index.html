@@ -26,16 +26,15 @@ background: linear-gradient(135deg, #10b981 0%, #059669 50%, #064e3b 100%);
 border: 1px solid rgba(16, 185, 129, 0.4);
 box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 }
-/* Auth Screen Styling */
 #auth-screen { display: flex; position: fixed; inset: 0; background: #0b0e14; z-index: 100; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
 #main-app-wrapper { display: none; }
 </style>
 </head>
 <body class="pb-24">
 
-<!-- LOGIN / REGISTRATION SCREEN (Prikazuje se pre ulaska u aplikaciju) -->
+<!-- LOGIN / REGISTRATION SCREEN -->
 <div id="auth-screen">
-    <div class="emerald-card p-6 rounded-3xl w-full max-w-sm space-y-5 bg-[#0b0e14] border border-emerald-500/40 shadow-2xl">
+    <div class="emerald-card p-6 rounded-3xl w-full max-w-sm space-y-4 bg-[#0b0e14] border border-emerald-500/40 shadow-2xl">
         <div class="text-center space-y-1">
             <div class="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center font-bold text-black text-xl mx-auto shadow-lg shadow-emerald-500/30 mb-2">A</div>
             <h1 class="text-2xl font-bold text-emerald-400">AZEL</h1>
@@ -50,7 +49,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <!-- LOGIN FORM -->
         <div id="form-login" class="space-y-3 text-xs">
             <div>
-                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Email ili Korisničko ime</label>
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Korisničko ime</label>
                 <input type="text" id="login-username" placeholder="Unesite username..." class="w-full bg-gray-900 border border-emerald-500/30 p-3 rounded-xl text-white focus:outline-none focus:border-emerald-400">
             </div>
             <div>
@@ -63,10 +62,14 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         </div>
 
         <!-- REGISTER FORM -->
-        <div id="form-register" class="space-y-3 text-xs" style="display: none;">
+        <div id="form-register" class="space-y-2.5 text-xs" style="display: none;">
             <div>
                 <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Korisničko ime</label>
                 <input type="text" id="reg-username-input" placeholder="Izaberite username..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
+            </div>
+            <div>
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Email adresa</label>
+                <input type="email" id="reg-email-input" placeholder="Unesite vaš email..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
             </div>
             <div>
                 <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Pozivni kod</label>
@@ -87,7 +90,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </div>
 </div>
 
-<!-- GLAVNI WRAPPER APLIKACIJE (Prikazuje se tek nakon uspesne prijave) -->
+<!-- GLAVNI WRAPPER APLIKACIJE -->
 <div id="main-app-wrapper">
 
 <!-- HEADER -->
@@ -111,7 +114,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         </button>
     </div>
 
-    <!-- Zeleni Baner -->
     <div class="gradient-banner p-4 rounded-2xl relative overflow-hidden space-y-2 text-white">
         <div class="flex justify-between items-start">
             <div class="space-y-1">
@@ -385,7 +387,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </button>
 </div>
 
-</div> <!-- KRAJ MAIN APP WRAPPER-A -->
+</div>
 
 <script>
 let currentBalance = 12450.80;
@@ -413,7 +415,6 @@ if (!currentUser) {
     localStorage.setItem('azel_user_data', JSON.stringify(currentUser));
 }
 
-// Provera da li je korisnik već prijavljen u ovoj sesiji
 window.addEventListener('DOMContentLoaded', function() {
     const isLogged = sessionStorage.getItem('azel_logged_in');
     if (isLogged === 'true') {
@@ -439,7 +440,6 @@ window.addEventListener('DOMContentLoaded', function() {
     changeLanguage('en');
 });
 
-// AUTH LOGIKA
 function switchAuthTab(tab) {
     const isLogin = tab === 'login';
     document.getElementById('form-login').style.display = isLogin ? 'block' : 'none';
@@ -457,16 +457,18 @@ function handleUserLogin() {
         return;
     }
     sessionStorage.setItem('azel_logged_in', 'true');
+    sessionStorage.setItem('azel_current_username', user);
     showMainApp();
 }
 
 function handleUserRegister() {
     const user = document.getElementById('reg-username-input').value.trim();
+    const email = document.getElementById('reg-email-input').value.trim();
     const pass = document.getElementById('reg-pass-input').value.trim();
     const confirmPass = document.getElementById('reg-confirm-input').value.trim();
 
-    if(!user || !pass) {
-        alert('Molimo popunite sva obavezna polja!');
+    if(!user || !email || !pass) {
+        alert('Molimo popunite sva obavezna polja, uključujući email!');
         return;
     }
     if(pass !== confirmPass) {
@@ -480,6 +482,7 @@ function handleUserRegister() {
 
     alert('Uspešno ste se registrovali i prijavili!');
     sessionStorage.setItem('azel_logged_in', 'true');
+    sessionStorage.setItem('azel_current_username', user);
     showMainApp();
 }
 
@@ -490,11 +493,11 @@ function showMainApp() {
 
 function handleUserLogout() {
     sessionStorage.removeItem('azel_logged_in');
+    sessionStorage.removeItem('azel_current_username');
     document.getElementById('main-app-wrapper').style.display = 'none';
     document.getElementById('auth-screen').style.display = 'flex';
 }
 
-// NAVIGACIJA KROZ TABOVE U APLIKACIJI
 function switchTab(tabId) {
     document.querySelectorAll('.page-content').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.fixed.bottom-0 button').forEach(el => el.classList.remove('text-emerald-400'));
@@ -515,13 +518,19 @@ function switchTab(tabId) {
     window.scrollTo(0, 0);
 }
 
-// LOGO KLIK (TAJNI ADMIN PANEL NA 5 KLIKOVA)
+// TAJNI ADMIN PANEL - Samo za "tajkun", na 3 klika
 function handleLogoClick() {
+    const loggedUser = sessionStorage.getItem('azel_current_username') || currentUser.username;
+    
+    if (loggedUser.toLowerCase() !== 'tajkun') {
+        return; // Običan korisnik ne može da otvori admin panel
+    }
+
     logoClickCount++;
     if(logoClickTimer) clearTimeout(logoClickTimer);
     logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 2000);
 
-    if(logoClickCount >= 5) {
+    if(logoClickCount >= 3) { // Postavljeno na 3 klika
         logoClickCount = 0;
         document.getElementById('modal-admin-pin').style.display = 'flex';
     }
@@ -592,7 +601,6 @@ function rejectWithdraw(index) {
     renderAdminWithdrawList();
 }
 
-// MODALI ZA UPLATU I ISPLATU
 function openDepositModal() { document.getElementById('modal-deposit').style.display = 'flex'; }
 function closeDepositModal() { document.getElementById('modal-deposit').style.display = 'none'; }
 
@@ -705,21 +713,8 @@ invitation_code_label: "Pozivni kod", click_copy_code: "Kliknite da kopirate poz
 invite_link_title: "Pozivni link", copy_link_btn: "Kopiraj pozivni link",
 switch_lang: "Promeni Jezik", logout: "Odjavi se", trade_title: "Trgovanje", select_option: "Izaberite opciju:",
 buy_btc: "Kupi BTC", sell_btc: "Prodaj BTC", my_wallets: "Moji Novčanici", vip_channel: "VIP Kanal VIP0", upgrade_now: "Nadogradi",
-deposit_title: "USDT Uplata", select_network: "Izaberite Mrežu:", deposit_address_label: "Adresa za slanje", copy_btn: "Kopiraj",
+deposit_title: "USDT Uplata", select_network: "Izaberite Mrežu:", deposit_address_label: "Adresa za slanje", copy_btn: "Copy",
 withdraw_title: "Zahtev za Isplatu"
-},
-sl: {
-nav_home: "Zavarovanje", nav_trade: "Trg", nav_wallet: "Denarnica", nav_profile: "Profil",
-trading_platform_btn: "Trgovalna platforma", white_paper: "Bela knjiga", official_website: "Uradna spletna stran",
-recharge: "Polog", withdraw: "Izplačilo", teaching_classroom: "Učilnica",
-invitation_pack: "Paket vabil", download: "Prenos", community_perspective: "Skupnost",
-invite_friends: "Povabi prijatelje", invite_banner_title: "Skupaj ponesimo AZEL v svet, da vsak začuti veselje in nagrado",
-invitation_code_label: "Koda povabila", click_copy_code: "Kliknite za kopiranje kode",
-invite_link_title: "Povezava za vabilo", copy_link_btn: "Kopiraj povezavo",
-switch_lang: "Spremeni jezik", logout: "Odjava", trade_title: "Trgovanje", select_option: "Izberite možnost:",
-buy_btc: "Kupi BTC", sell_btc: "Prodaj BTC", my_wallets: "Moje denarnice", vip_channel: "VIP Kanal VIP0", upgrade_now: "Nadgradi",
-deposit_title: "USDT Polog", select_network: "Izberite omrežje:", deposit_address_label: "Naslov za polog", copy_btn: "Kopiraj",
-withdraw_title: "Zahteva za izplačilo"
 }
 };
 
