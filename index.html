@@ -72,8 +72,8 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
                 <input type="email" id="reg-email-input" placeholder="Enter your email..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
             </div>
             <div>
-                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Invitation Code</label>
-                <input type="text" id="reg-input-code" readonly class="w-full bg-gray-950 border border-emerald-500/40 p-2.5 rounded-xl text-emerald-300 font-mono font-bold">
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Invitation Code (Required)</label>
+                <input type="text" id="reg-input-code" placeholder="Enter invitation code..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white font-mono font-bold focus:outline-none focus:border-emerald-400">
             </div>
             <div>
                 <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Password</label>
@@ -355,7 +355,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             </div>
             <div onclick="copyMyInviteCode()" class="bg-black/30 p-2.5 rounded-xl border border-white/10 flex justify-between items-center cursor-pointer active:scale-95 transition">
                 <span class="text-[11px] text-emerald-200" data-i18n="invitation_code_label">Invitation code</span>
-                <span id="modal-code-display" class="font-mono font-bold text-white text-xs bg-emerald-500/30 px-2 py-0.5 rounded">AZEL-TAJKUN</span>
+                <span id="modal-code-display" class="font-mono font-bold text-white text-xs bg-emerald-500/30 px-2 py-0.5 rounded">...</span>
             </div>
             <p class="text-[9px] text-emerald-200" data-i18n="click_copy_code">Click to copy the invitation code</p>
         </div>
@@ -532,7 +532,8 @@ window.addEventListener('DOMContentLoaded', function() {
         document.getElementById('reg-input-code').value = refCode;
         switchAuthTab('register');
     } else {
-        document.getElementById('reg-input-code').value = MAIN_ADMIN_USER.code;
+        // Polje za pozivni kod ostaje prazno da korisnik sam unese ili da se popuni preko linka
+        document.getElementById('reg-input-code').value = '';
     }
 
     updateProfileUI();
@@ -637,11 +638,12 @@ function handleUserLogin() {
 function handleUserRegister() {
     const user = document.getElementById('reg-username-input').value.trim();
     const email = document.getElementById('reg-email-input').value.trim();
+    const inviteCode = document.getElementById('reg-input-code').value.trim();
     const pass = document.getElementById('reg-pass-input').value.trim();
     const confirmPass = document.getElementById('reg-confirm-input').value.trim();
 
-    if(!user || !email || !pass) {
-        alert('Please fill in all required fields, including email!');
+    if(!user || !email || !inviteCode || !pass) {
+        alert('Please fill in all required fields, including email and invitation code!');
         return;
     }
     if(pass !== confirmPass) {
