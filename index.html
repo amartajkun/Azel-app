@@ -131,7 +131,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <span class="text-xl font-bold tracking-wider text-emerald-400">AZEL</span>
 </div>
 <div class="flex space-x-3 text-gray-400 text-lg relative items-center">
-<!-- ADMIN DUGME SE PRIKAZUJE SAMO ZA 'tajkun' -->
+<!-- ADMIN DUGME SAMO ZA 'tajkun' -->
 <button id="admin-header-btn" onclick="openAdminPinModal()" class="bg-amber-500/20 text-amber-400 border border-amber-500/40 px-2.5 py-1 rounded-lg text-[10px] font-bold hidden items-center gap-1">
     <i class="fas fa-shield-halved"></i> Admin
 </button>
@@ -145,7 +145,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <!-- 1. POČETNA / HOME STRANICA -->
 <div id="page-home" class="page-content active p-4 space-y-4">
     <div class="flex justify-center mb-2">
-        <button onclick="switchTab('tab-market')" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-sm shadow-lg shadow-emerald-500/25 transition">
+        <button onclick="switchTab('tab-market')" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-sm shadow-lg shadow-emerald-500/25 transition" data-i18n="goToMarket">
             Go to Bot Market & License
         </button>
     </div>
@@ -153,14 +153,14 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     <div class="gradient-banner p-4 rounded-2xl relative overflow-hidden space-y-2 text-white">
         <div class="flex justify-between items-start">
             <div class="space-y-1">
-                <h2 class="text-xs font-extrabold text-emerald-300 tracking-wider">STABLE BOT PLATFORM</h2>
-                <h3 class="text-sm font-bold text-white">AZEL 60-DAY CYCLES</h3>
+                <h2 class="text-xs font-extrabold text-emerald-300 tracking-wider" data-i18n="bannerSub">STABLE BOT PLATFORM</h2>
+                <h3 class="text-sm font-bold text-white" data-i18n="bannerTitle">AZEL 60-DAY CYCLES</h3>
             </div>
             <div class="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center shrink-0 ml-2">
                 <i class="fas fa-robot text-emerald-300"></i>
             </div>
         </div>
-        <p class="text-[11px] text-gray-200 leading-relaxed">
+        <p class="text-[11px] text-gray-200 leading-relaxed" data-i18n="bannerDesc">
             Activate your once-in-a-lifetime $5 license, build your network across L1, L2, L3, and deploy trading bots for 60-day profitable cycles.
         </p>
     </div>
@@ -168,31 +168,31 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     <div class="grid grid-cols-3 gap-2 text-center">
         <button onclick="openDepositModal()" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
             <i class="fas fa-qrcode text-emerald-400 text-lg"></i>
-            <span class="text-[10px] text-gray-300">Recharge</span>
+            <span class="text-[10px] text-gray-300" data-i18n="recharge">Recharge</span>
         </button>
         <button onclick="openWithdrawModal()" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
             <i class="fas fa-arrow-up-from-bracket text-emerald-400 text-lg"></i>
-            <span class="text-[10px] text-gray-300">Withdrawal</span>
+            <span class="text-[10px] text-gray-300" data-i18n="withdraw">Withdrawal</span>
         </button>
         <button onclick="openInviteModal()" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
             <i class="fas fa-gift text-emerald-400 text-lg"></i>
-            <span class="text-[10px] text-gray-300">Invite Friends</span>
+            <span class="text-[10px] text-gray-300" data-i18n="inviteFriends">Invite Friends</span>
         </button>
     </div>
 </div>
 
 <!-- 2. MARKET / BOT PAKETI I LICENCA -->
 <div id="page-market" class="page-content p-4 space-y-4">
-    <h2 class="text-lg font-bold text-emerald-400 mb-1">Bot Market & License</h2>
-    <p class="text-xs text-gray-400 mb-3">Pay $5 license once, then activate your bot packages.</p>
+    <h2 class="text-lg font-bold text-emerald-400 mb-1" data-i18n="marketTitle">Bot Market & License</h2>
+    <p class="text-xs text-gray-400 mb-3" data-i18n="marketSub">Pay $5 license once, then activate your bot packages.</p>
 
     <!-- LICENCA KARTICA -->
     <div id="license-card-box" class="emerald-card p-4 rounded-2xl flex justify-between items-center bg-emerald-950/20 border-emerald-500/40">
         <div>
-            <h3 class="text-sm font-bold text-white">Lifetime User License</h3>
-            <p class="text-[11px] text-gray-400">Required once for platform access. Fee: <span class="text-emerald-400 font-bold">$5.00</span></p>
+            <h3 class="text-sm font-bold text-white" data-i18n="licenseTitle">Lifetime User License</h3>
+            <p class="text-[11px] text-gray-400"><span data-i18n="licenseDesc">Required once for platform access. Fee:</span> <span class="text-emerald-400 font-bold">$5.00</span></p>
         </div>
-        <button id="buy-license-btn" onclick="buyUserLicense()" class="bg-emerald-500 text-black px-4 py-2 rounded-xl text-xs font-bold shadow-lg">Pay $5</button>
+        <button id="buy-license-btn" onclick="buyUserLicense()" class="bg-emerald-500 text-black px-4 py-2 rounded-xl text-xs font-bold shadow-lg" data-i18n="payLicenseBtn">Pay $5</button>
     </div>
 
     <!-- BOT LISTA -->
@@ -201,115 +201,115 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <div class="emerald-card p-4 rounded-2xl space-y-2">
             <div class="flex justify-between items-center">
                 <span class="text-sm font-bold text-white">Bot 1 ($100)</span>
-                <span class="text-xs text-emerald-400 font-bold">50% Profit (60 Days)</span>
+                <span class="text-xs text-emerald-400 font-bold" data-i18n="profitLabel">50% Profit (60 Days)</span>
             </div>
-            <p class="text-[11px] text-gray-400">Daily Earning: <span class="text-white font-bold">$2.50 / day</span> | Total: $150</p>
-            <div class="text-[10px] text-emerald-400 font-bold">Status: Unlocked (Free)</div>
-            <button onclick="buyBot(1, 100, 2.50)" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2 rounded-xl text-xs">Activate Bot 1</button>
+            <p class="text-[11px] text-gray-400"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-white font-bold">$2.50 / day</span> | Total: $150</p>
+            <div class="text-[10px] text-emerald-400 font-bold" data-i18n="statusUnlocked">Status: Unlocked (Free)</div>
+            <button onclick="buyBot(1, 100, 2.50)" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2 rounded-xl text-xs" data-i18n="activateBot1">Activate Bot 1</button>
         </div>
 
         <!-- Bot 2 -->
         <div class="emerald-card p-4 rounded-2xl space-y-2">
             <div class="flex justify-between items-center">
                 <span class="text-sm font-bold text-white">Bot 2 ($200)</span>
-                <span class="text-xs text-emerald-400 font-bold">50% Profit (60 Days)</span>
+                <span class="text-xs text-emerald-400 font-bold" data-i18n="profitLabel">50% Profit (60 Days)</span>
             </div>
-            <p class="text-[11px] text-gray-400">Daily Earning: <span class="text-white font-bold">$5.00 / day</span> | Total: $300</p>
-            <div class="text-[10px] text-emerald-400 font-bold">Status: Unlocked (Free)</div>
-            <button onclick="buyBot(2, 200, 5.00)" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2 rounded-xl text-xs">Activate Bot 2</button>
+            <p class="text-[11px] text-gray-400"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-white font-bold">$5.00 / day</span> | Total: $300</p>
+            <div class="text-[10px] text-emerald-400 font-bold" data-i18n="statusUnlocked">Status: Unlocked (Free)</div>
+            <button onclick="buyBot(2, 200, 5.00)" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2 rounded-xl text-xs" data-i18n="activateBot2">Activate Bot 2</button>
         </div>
 
         <!-- Bot 3 -->
         <div class="emerald-card p-4 rounded-2xl space-y-2" id="bot-card-3">
             <div class="flex justify-between items-center">
                 <span class="text-sm font-bold text-white">Bot 3 ($500)</span>
-                <span class="text-xs text-emerald-400 font-bold">50% Profit (60 Days)</span>
+                <span class="text-xs text-emerald-400 font-bold" data-i18n="profitLabel">50% Profit (60 Days)</span>
             </div>
-            <p class="text-[11px] text-gray-400">Daily Earning: <span class="text-white font-bold">$12.50 / day</span> | Total: $750</p>
+            <p class="text-[11px] text-gray-400"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-white font-bold">$12.50 / day</span> | Total: $750</p>
             <div id="bot-status-3" class="text-[10px] text-amber-400 font-bold">Requirement: 5 active members in L1</div>
-            <button id="bot-btn-3" onclick="buyBot(3, 500, 12.50)" class="w-full bg-gray-800 text-gray-400 font-bold py-2 rounded-xl text-xs cursor-not-allowed" disabled>Locked</button>
+            <button id="bot-btn-3" onclick="buyBot(3, 500, 12.50)" class="w-full bg-gray-800 text-gray-400 font-bold py-2 rounded-xl text-xs cursor-not-allowed" disabled data-i18n="lockedBtn">Locked</button>
         </div>
 
         <!-- Bot 4 -->
         <div class="emerald-card p-4 rounded-2xl space-y-2" id="bot-card-4">
             <div class="flex justify-between items-center">
                 <span class="text-sm font-bold text-white">Bot 4 ($1,000)</span>
-                <span class="text-xs text-emerald-400 font-bold">50% Profit (60 Days)</span>
+                <span class="text-xs text-emerald-400 font-bold" data-i18n="profitLabel">50% Profit (60 Days)</span>
             </div>
-            <p class="text-[11px] text-gray-400">Daily Earning: <span class="text-white font-bold">$25.00 / day</span> | Total: $1,500</p>
+            <p class="text-[11px] text-gray-400"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-white font-bold">$25.00 / day</span> | Total: $1,500</p>
             <div id="bot-status-4" class="text-[10px] text-amber-400 font-bold">Requirement: 10 in L1 + 5 in L2</div>
-            <button id="bot-btn-4" onclick="buyBot(4, 1000, 25.00)" class="w-full bg-gray-800 text-gray-400 font-bold py-2 rounded-xl text-xs cursor-not-allowed" disabled>Locked</button>
+            <button id="bot-btn-4" onclick="buyBot(4, 1000, 25.00)" class="w-full bg-gray-800 text-gray-400 font-bold py-2 rounded-xl text-xs cursor-not-allowed" disabled data-i18n="lockedBtn">Locked</button>
         </div>
 
         <!-- Bot 5 -->
         <div class="emerald-card p-4 rounded-2xl space-y-2" id="bot-card-5">
             <div class="flex justify-between items-center">
                 <span class="text-sm font-bold text-white">Bot 5 ($2,500)</span>
-                <span class="text-xs text-emerald-400 font-bold">50% Profit (60 Days)</span>
+                <span class="text-xs text-emerald-400 font-bold" data-i18n="profitLabel">50% Profit (60 Days)</span>
             </div>
-            <p class="text-[11px] text-gray-400">Daily Earning: <span class="text-white font-bold">$62.50 / day</span> | Total: $3,750</p>
+            <p class="text-[11px] text-gray-400"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-white font-bold">$62.50 / day</span> | Total: $3,750</p>
             <div id="bot-status-5" class="text-[10px] text-amber-400 font-bold">Requirement: 20 in L1 + 15 in L2 + 5 in L3</div>
-            <button id="bot-btn-5" onclick="buyBot(5, 2500, 62.50)" class="w-full bg-gray-800 text-gray-400 font-bold py-2 rounded-xl text-xs cursor-not-allowed" disabled>Locked</button>
+            <button id="bot-btn-5" onclick="buyBot(5, 2500, 62.50)" class="w-full bg-gray-800 text-gray-400 font-bold py-2 rounded-xl text-xs cursor-not-allowed" disabled data-i18n="lockedBtn">Locked</button>
         </div>
 
         <!-- Bot 6 -->
         <div class="emerald-card p-4 rounded-2xl space-y-2" id="bot-card-6">
             <div class="flex justify-between items-center">
                 <span class="text-sm font-bold text-white">Bot 6 ($5,000)</span>
-                <span class="text-xs text-emerald-400 font-bold">50% Profit (60 Days)</span>
+                <span class="text-xs text-emerald-400 font-bold" data-i18n="profitLabel">50% Profit (60 Days)</span>
             </div>
-            <p class="text-[11px] text-gray-400">Daily Earning: <span class="text-white font-bold">$125.00 / day</span> | Total: $7,500</p>
+            <p class="text-[11px] text-gray-400"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-white font-bold">$125.00 / day</span> | Total: $7,500</p>
             <div id="bot-status-6" class="text-[10px] text-amber-400 font-bold">Requirement: 50 in L1 + 30 in L2 + 20 in L3</div>
-            <button id="bot-btn-6" onclick="buyBot(6, 5000, 125.00)" class="w-full bg-gray-800 text-gray-400 font-bold py-2 rounded-xl text-xs cursor-not-allowed" disabled>Locked</button>
+            <button id="bot-btn-6" onclick="buyBot(6, 5000, 125.00)" class="w-full bg-gray-800 text-gray-400 font-bold py-2 rounded-xl text-xs cursor-not-allowed" disabled data-i18n="lockedBtn">Locked</button>
         </div>
     </div>
 </div>
 
 <!-- 3. TEAM / MREŽA (L1, L2, L3) -->
 <div id="page-team" class="page-content p-4 space-y-4">
-    <h2 class="text-lg font-bold text-emerald-400 mb-1">My Network Team</h2>
-    <p class="text-xs text-gray-400 mb-3">Track your referrals across 3 levels to unlock higher bot packages.</p>
+    <h2 class="text-lg font-bold text-emerald-400 mb-1" data-i18n="teamTitle">My Network Team</h2>
+    <p class="text-xs text-gray-400 mb-3" data-i18n="teamSub">Track your referrals across 3 levels to unlock higher bot packages.</p>
 
     <div class="grid grid-cols-3 gap-2 text-center">
         <div class="emerald-card p-3 rounded-xl">
-            <div class="text-[10px] text-gray-400">Line 1 (L1)</div>
+            <div class="text-[10px] text-gray-400" data-i18n="line1">Line 1 (L1)</div>
             <div id="count-l1" class="text-lg font-bold text-emerald-400">0</div>
         </div>
         <div class="emerald-card p-3 rounded-xl">
-            <div class="text-[10px] text-gray-400">Line 2 (L2)</div>
+            <div class="text-[10px] text-gray-400" data-i18n="line2">Line 2 (L2)</div>
             <div id="count-l2" class="text-lg font-bold text-emerald-400">0</div>
         </div>
         <div class="emerald-card p-3 rounded-xl">
-            <div class="text-[10px] text-gray-400">Line 3 (L3)</div>
+            <div class="text-[10px] text-gray-400" data-i18n="line3">Line 3 (L3)</div>
             <div id="count-l3" class="text-lg font-bold text-emerald-400">0</div>
         </div>
     </div>
 
     <div class="emerald-card p-4 rounded-2xl space-y-3">
-        <h3 class="text-xs font-bold text-white border-b border-gray-800 pb-2">Direct Referrals (L1 Members)</h3>
+        <h3 class="text-xs font-bold text-white border-b border-gray-800 pb-2" data-i18n="directRef">Direct Referrals (L1 Members)</h3>
         <div id="team-l1-list" class="space-y-2 text-xs">
-            <p class="text-gray-500 text-center py-2">No direct referrals yet.</p>
+            <p class="text-gray-500 text-center py-2" data-i18n="noRef">No direct referrals yet.</p>
         </div>
     </div>
 </div>
 
 <!-- 4. ASSETS / NOVČANIK -->
 <div id="page-wallet" class="page-content p-4 space-y-4">
-    <h2 class="text-lg font-bold text-emerald-400 mb-2">Assets & Capital</h2>
+    <h2 class="text-lg font-bold text-emerald-400 mb-2" data-i18n="assetsTitle">Assets & Capital</h2>
     <div class="emerald-card p-4 rounded-2xl space-y-3">
         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
-            <span class="text-sm font-bold text-white">Available Balance</span>
+            <span class="text-sm font-bold text-white" data-i18n="availBalance">Available Balance</span>
             <span class="text-sm text-emerald-400 font-bold">$<span id="wallet-balance-display">12,450.80</span></span>
         </div>
         <div class="flex justify-between items-center">
-            <span class="text-xs text-gray-400">Frozen Capital (Active Bots)</span>
+            <span class="text-xs text-gray-400" data-i18n="frozenCap">Frozen Capital (Active Bots)</span>
             <span class="text-xs text-amber-400 font-bold">$<span id="wallet-frozen-display">0.00</span></span>
         </div>
     </div>
 
-    <h3 class="text-sm font-bold text-white pt-2">Active Bot Investments (60 Days)</h3>
+    <h3 class="text-sm font-bold text-white pt-2" data-i18n="activeBotsTitle">Active Bot Investments (60 Days)</h3>
     <div id="active-bots-container" class="space-y-3">
-        <p class="text-xs text-gray-500 text-center py-4">No active bot investments right now.</p>
+        <p class="text-xs text-gray-500 text-center py-4" data-i18n="noBots">No active bot investments right now.</p>
     </div>
 </div>
 
@@ -336,28 +336,28 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             <i class="fas fa-crown text-emerald-400 text-sm"></i>
             <span class="text-[11px] text-gray-300">VIP Channel VIP0</span>
         </div>
-        <button class="bg-emerald-400 text-black px-3 py-1 rounded-full text-[10px] font-bold">Upgrade</button>
+        <button class="bg-emerald-400 text-black px-3 py-1 rounded-full text-[10px] font-bold" data-i18n="upgradeBtn">Upgrade</button>
     </div>
 
     <div class="emerald-card rounded-2xl divide-y divide-gray-800/60 text-xs">
         <div onclick="openChangeEmailModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="far fa-envelope text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium">Change Email</span>
+                <span class="text-white font-medium" data-i18n="menuChangeEmail">Change Email</span>
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
         <div onclick="alert('Login Password settings')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="fas fa-lock text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium">Login Password</span>
+                <span class="text-white font-medium" data-i18n="menuLoginPass">Login Password</span>
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
         <div onclick="alert('Transaction Password settings')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="fas fa-shield-halved text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium">Transaction Password</span>
+                <span class="text-white font-medium" data-i18n="menuTxPass">Transaction Password</span>
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
@@ -367,14 +367,14 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <div onclick="alert('Feedback submitted via support.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="far fa-comment-dots text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium">Feedback</span>
+                <span class="text-white font-medium" data-i18n="menuFeedback">Feedback</span>
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
         <div onclick="openHelpModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="far fa-circle-question text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium">Help Center</span>
+                <span class="text-white font-medium" data-i18n="menuHelp">Help Center</span>
             </div>
             <div class="flex items-center gap-1">
                 <span id="help-profile-badge" class="bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.2 rounded-full hidden">0</span>
@@ -384,38 +384,38 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <div onclick="alert('User Terms & Conditions apply.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="far fa-user text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium">User Terms</span>
+                <span class="text-white font-medium" data-i18n="menuTerms">User Terms</span>
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
-        <div onclick="alert('Language: English')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+        <div onclick="openLanguageModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="fas fa-globe text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium">Switch Language</span>
+                <span class="text-white font-medium" data-i18n="menuLang">Switch Language</span>
             </div>
             <div class="flex items-center gap-1">
-                <span class="text-[10px] text-gray-400">EN</span>
+                <span id="current-lang-text" class="text-[10px] text-gray-400">EN</span>
                 <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
             </div>
         </div>
         <div onclick="alert('Cache cleared successfully!')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="far fa-trash-can text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium">Clear Cache</span>
+                <span class="text-white font-medium" data-i18n="menuCache">Clear Cache</span>
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
         <div onclick="alert('App download link copied.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="fas fa-download text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium">Download App</span>
+                <span class="text-white font-medium" data-i18n="menuDownload">Download App</span>
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
     </div>
 
     <button onclick="handleUserLogout()" class="w-full emerald-card py-3 rounded-2xl text-center text-red-500 font-bold text-xs hover:bg-red-950/20 transition">
-        <span>Log Out</span>
+        <span data-i18n="logout">Log Out</span>
     </button>
 </div>
 
@@ -441,6 +441,24 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             <button onclick="closeChangeEmailModal()" class="w-1/2 bg-gray-800 text-gray-300 py-2 rounded-lg text-xs font-bold">Cancel</button>
             <button onclick="saveNewEmail()" class="w-1/2 bg-emerald-500 text-black py-2 rounded-lg text-xs font-bold">Update</button>
         </div>
+    </div>
+</div>
+
+<!-- MODAL ZA JEZIK -->
+<div id="modal-lang" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4 z-50">
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-2 bg-[#0b0e14] max-h-[80vh] overflow-y-auto">
+        <h3 class="text-base font-bold text-emerald-400 mb-2">Select Language</h3>
+        <div class="space-y-1.5 text-xs">
+            <button onclick="changeLanguage('en')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>English</span> <span>🇬🇧</span></button>
+            <button onclick="changeLanguage('sr')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Srpski / Hrvatski</span> <span>🇷🇸</span></button>
+            <button onclick="changeLanguage('sl')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Slovenski</span> <span>🇸🇮</span></button>
+            <button onclick="changeLanguage('mk')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Македонски</span> <span>🇲🇰</span></button>
+            <button onclick="changeLanguage('es')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Español</span> <span>🇪🇸</span></button>
+            <button onclick="changeLanguage('ru')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Русский</span> <span>🇷🇺</span></button>
+            <button onclick="changeLanguage('el')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Ελληνικά</span> <span>🇬🇷</span></button>
+            <button onclick="changeLanguage('it')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Italiano</span> <span>🇮🇹</span></button>
+        </div>
+        <button onclick="closeLangModal()" class="w-full bg-gray-800 text-gray-300 py-2 rounded-lg text-xs font-bold mt-3">Close</button>
     </div>
 </div>
 
@@ -554,23 +572,23 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <div class="fixed bottom-0 left-0 right-0 bg-[#0b0e14] border-t border-gray-800 flex justify-around p-3 text-[10px] text-gray-400 z-40">
     <button id="tab-home" onclick="switchTab('tab-home')" class="flex flex-col items-center text-emerald-400">
         <i class="fas fa-house text-base"></i>
-        <span>Insurance</span>
+        <span data-i18n="navHome">Home</span>
     </button>
     <button id="tab-market" onclick="switchTab('tab-market')" class="flex flex-col items-center">
         <i class="fas fa-robot text-base"></i>
-        <span>Market</span>
+        <span data-i18n="navMarket">Market</span>
     </button>
     <button id="tab-team" onclick="switchTab('tab-team')" class="flex flex-col items-center">
         <i class="fas fa-users text-base"></i>
-        <span>Team</span>
+        <span data-i18n="navTeam">Team</span>
     </button>
     <button id="tab-wallet" onclick="switchTab('tab-wallet')" class="flex flex-col items-center">
         <i class="fas fa-wallet text-base"></i>
-        <span>Assets</span>
+        <span data-i18n="navAssets">Assets</span>
     </button>
     <button id="tab-profile" onclick="switchTab('tab-profile')" class="flex flex-col items-center">
         <i class="fas fa-user text-base"></i>
-        <span>Profile</span>
+        <span data-i18n="navProfile">Profile</span>
     </button>
 </div>
 
@@ -597,6 +615,137 @@ const MAIN_ADMIN_USER = {
     balance: 12450.80
 };
 
+const translations = {
+    en: {
+        navHome: "Home", navMarket: "Market", navTeam: "Team", navAssets: "Assets", navProfile: "Profile",
+        goToMarket: "Go to Bot Market & License", bannerSub: "STABLE BOT PLATFORM", bannerTitle: "AZEL 60-DAY CYCLES",
+        bannerDesc: "Activate your once-in-a-lifetime $5 license, build your network across L1, L2, L3, and deploy trading bots for 60-day profitable cycles.",
+        recharge: "Recharge", withdraw: "Withdrawal", inviteFriends: "Invite Friends",
+        marketTitle: "Bot Market & License", marketSub: "Pay $5 license once, then activate your bot packages.",
+        licenseTitle: "Lifetime User License", licenseDesc: "Required once for platform access. Fee:", payLicenseBtn: "Pay $5",
+        profitLabel: "50% Profit (60 Days)", dailyEarning: "Daily Earning:", statusUnlocked: "Status: Unlocked (Free)",
+        activateBot1: "Activate Bot 1", activateBot2: "Activate Bot 2", lockedBtn: "Locked",
+        teamTitle: "My Network Team", teamSub: "Track your referrals across 3 levels to unlock higher bot packages.",
+        line1: "Line 1 (L1)", line2: "Line 2 (L2)", line3: "Line 3 (L3)", directRef: "Direct Referrals (L1 Members)", noRef: "No direct referrals yet.",
+        assetsTitle: "Assets & Capital", availBalance: "Available Balance", frozenCap: "Frozen Capital (Active Bots)",
+        activeBotsTitle: "Active Bot Investments (60 Days)", noBots: "No active bot investments right now.",
+        upgradeBtn: "Upgrade", menuChangeEmail: "Change Email", menuLoginPass: "Login Password", menuTxPass: "Transaction Password",
+        menuFeedback: "Feedback", menuHelp: "Help Center", menuTerms: "User Terms", menuLang: "Switch Language", menuCache: "Clear Cache", menuDownload: "Download App", logout: "Log Out"
+    },
+    sr: {
+        navHome: "Početna", navMarket: "Tržište", navTeam: "Tim", navAssets: "Imovina", navProfile: "Profil",
+        goToMarket: "Idi na Tržište Botova i Licencu", bannerSub: "STABILNA BOT PLATFORMA", bannerTitle: "AZEL CIKLUSI OD 60 DANA",
+        bannerDesc: "Aktivirajte licencu od $5 jednom u životu, gradite mrežu kroz L1, L2, L3 i pokrenite botove za profitabilne cikluse od 60 dana.",
+        recharge: "Uplata", withdraw: "Isplata", inviteFriends: "Pozovi Prijatelje",
+        marketTitle: "Tržište Botova i Licenca", marketSub: "Platite $5 licencu jednom, pa aktivirajte bot pakete.",
+        licenseTitle: "Doživotna Korisnička Licenca", licenseDesc: "Obavezno jednom za pristup platformi. Naknada:", payLicenseBtn: "Plati $5",
+        profitLabel: "50% Profit (60 Dana)", dailyEarning: "Dnevna Zarada:", statusUnlocked: "Status: Otključano (Besplatno)",
+        activateBot1: "Aktiviraj Bota 1", activateBot2: "Aktiviraj Bota 2", lockedBtn: "Zaključano",
+        teamTitle: "Moj Mrežni Tim", teamSub: "Pratite preporuke kroz 3 nivoa da otključate više bot pakete.",
+        line1: "Linija 1 (L1)", line2: "Linija 2 (L2)", line3: "Linija 3 (L3)", directRef: "Direktni Preporučeni (L1 Članovi)", noRef: "Još uvek nema direktnih članova.",
+        assetsTitle: "Imovina i Kapital", availBalance: "Raspoloživi Balans", frozenCap: "Zaključani Kapital (Aktivni Botovi)",
+        activeBotsTitle: "Aktivne Investicije Botova (60 Dana)", noBots: "Trenutno nema aktivnih bot investicija.",
+        upgradeBtn: "Nadogradi", menuChangeEmail: "Promeni Email", menuLoginPass: "Lozinka za Prijavu", menuTxPass: "Lozinka za Transakcije",
+        menuFeedback: "Povratne Informacije", menuHelp: "Centar za Pomoć", menuTerms: "Uslovi Korišćenja", menuLang: "Promeni Jezik", menuCache: "Obriši Keš", menuDownload: "Preuzmi Aplikaciju", logout: "Odjavi se"
+    },
+    sl: {
+        navHome: "Domov", navMarket: "Trg", navTeam: "Ekipa", navAssets: "Sredstva", navProfile: "Profil",
+        goToMarket: "Pojdi na trg botov in licenco", bannerSub: "STABILNA PLATFORMA BOT", bannerTitle: "AZEL 60-DNEVNI CIKLI",
+        bannerDesc: "Aktivirajte enkratno $5 licenco, zgradite mrežo prek L1, L2, L3 in zaženite trgovalne bote.",
+        recharge: "Polog", withdraw: "Izplačilo", inviteFriends: "Povabi Prijatelje",
+        marketTitle: "Trg Botov in Licenca", marketSub: "Plačajte $5 licenco enkrat, nato aktivirajte pakete.",
+        licenseTitle: "Doživljenjska Uporabniška Licenca", licenseDesc: "Obvezno enkrat za dostop. Taksa:", payLicenseBtn: "Plačaj $5",
+        profitLabel: "50% Dobiček (60 Dni)", dailyEarning: "Dnevni Zasn.", statusUnlocked: "Status: Odklenjeno",
+        activateBot1: "Aktiviraj Bota 1", activateBot2: "Aktiviraj Bota 2", lockedBtn: "Zaklenjeno",
+        teamTitle: "Moja Mrežna Ekipa", teamSub: "Spremljajte napotitve prek 3 ravni.",
+        line1: "Linija 1 (L1)", line2: "Linija 2 (L2)", line3: "Linija 3 (L3)", directRef: "Neposredni Člani (L1)", noRef: "Ni neposrednih članov.",
+        assetsTitle: "Sredstva in Kapital", availBalance: "Razpoložljivo Stanje", frozenCap: "Zamrznjen Kapital",
+        activeBotsTitle: "Aktivne Naložbe Botov (60 Dni)", noBots: "Ni aktivnih naložb.",
+        upgradeBtn: "Nadgradi", menuChangeEmail: "Spremeni E-pošto", menuLoginPass: "Geslo za Prijavo", menuTxPass: "Geslo za Transakcije",
+        menuFeedback: "Povratne Informacije", menuHelp: "Pomoč", menuTerms: "Pogoji", menuLang: "Jezik", menuCache: "Počisti Predpomnilnik", menuDownload: "Prenesi Aplikacijo", logout: "Odjava"
+    },
+    mk: {
+        navHome: "Дома", navMarket: "Пазар", navTeam: "Тим", navAssets: "Средства", navProfile: "Профил",
+        goToMarket: "Одете на Пазар на Ботови", bannerSub: "СТАБИЛНА БОТ ПЛАТФОРМА", bannerTitle: "АЗЕЛ 60-ДНЕВНИ ЦИКЛУСИ",
+        bannerDesc: "Активирајте ја лиценцата од $5 еднаш, изградете мрежа преку L1, L2, L3.",
+        recharge: "Уплата", withdraw: "Исплата", inviteFriends: "Покани Пријатели",
+        marketTitle: "Пазар на Ботови и Лиценца", marketSub: "Платете ја лиценцата од $5 еднаш.",
+        licenseTitle: "Доживотна Корисничка Лиценца", licenseDesc: "Задолжително еднаш за пристап. Надоместок:", payLicenseBtn: "Плати $5",
+        profitLabel: "50% Профит (60 Дена)", dailyEarning: "Дневна Заработка:", statusUnlocked: "Статус: Отклучено",
+        activateBot1: "Активирај Бот 1", activateBot2: "Активирај Бот 2", lockedBtn: "Заклучено",
+        teamTitle: "Мој Мрежен Тим", teamSub: "Следете ги препораките низ 3 нивоа.",
+        line1: "Линија 1 (L1)", line2: "Линија 2 (L2)", line3: "Линија 3 (L3)", directRef: "Директни Реферали (L1)", noRef: "Нема директни реферали.",
+        assetsTitle: "Средства и Капитал", availBalance: "Расположив Салдо", frozenCap: "Замрзнат Капитал",
+        activeBotsTitle: "Активни Инвестиции на Ботови (60 Дена)", noBots: "Нема активни инвестиции.",
+        upgradeBtn: "Надгради", menuChangeEmail: "Промени Е-пошта", menuLoginPass: "Лозинка за Најава", menuTxPass: "Лозинка за Трансакции",
+        menuFeedback: "Повратни информации", menuHelp: "Центар за помош", menuTerms: "Услови", menuLang: "Промени Јазик", menuCache: "Исчисти Кеш", menuDownload: "Преземи Апликација", logout: "Одјави се"
+    },
+    es: {
+        navHome: "Inicio", navMarket: "Mercado", navTeam: "Equipo", navAssets: "Activos", navProfile: "Perfil",
+        goToMarket: "Ir al Mercado de Bots", bannerSub: "PLATAFORMA ESTABLE", bannerTitle: "CICLOS DE 60 DÍAS AZEL",
+        bannerDesc: "Activa tu licencia de $5 una vez, construye tu red y despliega bots.",
+        recharge: "Recargar", withdraw: "Retiro", inviteFriends: "Invitar Amigos",
+        marketTitle: "Mercado y Licencia", marketSub: "Paga la licencia de $5 una vez.",
+        licenseTitle: "Licencia de Usuario Vitalicia", licenseDesc: "Requerido una vez. Tarifa:", payLicenseBtn: "Pagar $5",
+        profitLabel: "50% Ganancia (60 Días)", dailyEarning: "Ganancia Diaria:", statusUnlocked: "Estado: Desbloqueado",
+        activateBot1: "Activar Bot 1", activateBot2: "Activar Bot 2", lockedBtn: "Bloqueado",
+        teamTitle: "Mi Equipo de Red", teamSub: "Rastrea tus referencias en 3 niveles.",
+        line1: "Línea 1 (L1)", line2: "Línea 2 (L2)", line3: "Línea 3 (L3)", directRef: "Referidos Directos", noRef: "Sin referidos directos.",
+        assetsTitle: "Activos y Capital", availBalance: "Saldo Disponible", frozenCap: "Capital Congelado",
+        activeBotsTitle: "Inversiones Activas (60 Días)", noBots: "No hay inversiones activas.",
+        upgradeBtn: "Actualizar", menuChangeEmail: "Cambiar Correo", menuLoginPass: "Contraseña", menuTxPass: "Contraseña Tx",
+        menuFeedback: "Comentarios", menuHelp: "Ayuda", menuTerms: "Términos", menuLang: "Idioma", menuCache: "Limpiar Caché", menuDownload: "Descargar App", logout: "Cerrar Sesión"
+    },
+    ru: {
+        navHome: "Главная", navMarket: "Рынок", navTeam: "Команда", navAssets: "Активы", navProfile: "Профиль",
+        goToMarket: "Перейти к рынку ботов", bannerSub: "СТАБИЛЬНАЯ ПЛАТФОРМА", bannerTitle: "ЦИКЛЫ AZEL 60 ДНЕЙ",
+        bannerDesc: "Активируйте лицензию за $5 один раз, стройте сеть по уровням L1, L2, L3.",
+        recharge: "Пополнить", withdraw: "Вывод", inviteFriends: "Пригласить",
+        marketTitle: "Рынок ботов и лицензия", marketSub: "Оплатите лицензию $5 один раз.",
+        licenseTitle: "Пожизненная лицензия", licenseDesc: "Требуется один раз. Стоимость:", payLicenseBtn: "Оплатить $5",
+        profitLabel: "50% Прибыль (60 Дней)", dailyEarning: "Доход в день:", statusUnlocked: "Статус: Разблокировано",
+        activateBot1: "Активировать Бот 1", activateBot2: "Активировать Бот 2", lockedBtn: "Заблокировано",
+        teamTitle: "Моя сетевая команда", teamSub: "Отслеживайте рефералов по 3 уровням.",
+        line1: "Линия 1 (L1)", line2: "Линия 2 (L2)", line3: "Линия 3 (L3)", directRef: "Прямые рефералы", noRef: "Нет прямых рефералов.",
+        assetsTitle: "Активы и капитал", availBalance: "Доступный баланс", frozenCap: "Замороженный капитал",
+        activeBotsTitle: "Активные инвестиции (60 Дней)", noBots: "Нет активных инвестиций.",
+        upgradeBtn: "Улучшить", menuChangeEmail: "Изменить Email", menuLoginPass: "Пароль входа", menuTxPass: "Пароль транзакций",
+        menuFeedback: "Отзывы", menuHelp: "Помощь", menuTerms: "Условия", menuLang: "Язык", menuCache: "Очистить кэш", menuDownload: "Скачать", logout: "Выйти"
+    },
+    el: {
+        navHome: "Αρχική", navMarket: "Αγορά", navTeam: "Ομάδα", navAssets: "Περιουσιακά", navProfile: "Профиль",
+        goToMarket: "Μετάβαση στην Αγορά Bot", bannerSub: "ΣΤΑΘΕΡΗ ΠΛΑΤΦΟΡΜΑ", bannerTitle: "ΚΥΚΛΟΙ 60 ΗΜΕΡΩΝ AZEL",
+        bannerDesc: "Ενεργοποιήστε την άδεια $5 μία φορά, χτίστε το δίκτυό σας.",
+        recharge: "Κατάθεση", withdraw: "Απόσυρση", inviteFriends: "Πρόσκληση",
+        marketTitle: "Αγορά Bot & Άδεια", marketSub: "Πληρώστε την άδεια $5 μία φορά.",
+        licenseTitle: "Άδεια Χρήστη", licenseDesc: "Απαιτείται μία φορά. Κόστος:", payLicenseBtn: "Πληρωμή $5",
+        profitLabel: "50% Κέρδος (60 Ημέρες)", dailyEarning: "Ημερήσιο Κέρδος:", statusUnlocked: "Κατάσταση: Ξεκλειδωμένο",
+        activateBot1: "Ενεργοποίηση Bot 1", activateBot2: "Ενεργοποίηση Bot 2", lockedBtn: "Κλειδωμένο",
+        teamTitle: "Η Ομάδα μου", teamSub: "Παρακολουθήστε τις παραπομπές σας.",
+        line1: "Γραμμή 1 (L1)", line2: "Γραμμή 2 (L2)", line3: "Γραμμή 3 (L3)", directRef: "Άμεσες Παραπομπές", noRef: "Δεν υπάρχουν παραπομπές.",
+        assetsTitle: "Κεφάλαιο", availBalance: "Διαθέσιμο Υπόλοιπο", frozenCap: "Δεσμευμένο Κεφάλαιο",
+        activeBotsTitle: "Επενδύσεις Bot (60 Ημέρες)", noBots: "Δεν υπάρχουν ενεργές επενδύσεις.",
+        upgradeBtn: "Αναβάθμιση", menuChangeEmail: "Αλλαγή Email", menuLoginPass: "Κωδικός Σύνδεσης", menuTxPass: "Κωδικός Συναλλαγών",
+        menuFeedback: "Ανάδρομη Πληροφορία", menuHelp: "Βοήθεια", menuTerms: "Όροι", menuLang: "Γλώσσα", menuCache: "Καθαρισμός Cache", menuDownload: "Λήψη App", logout: "Αποσύνδεση"
+    },
+    it: {
+        navHome: "Home", navMarket: "Mercato", navTeam: "Team", navAssets: "Asset", navProfile: "Profilo",
+        goToMarket: "Vai al Mercato Bot", bannerSub: "PIATTAFORMA STABILE", bannerTitle: "CICLI AZEL DI 60 GIORNI",
+        bannerDesc: "Attiva la tua licenza di $5 una volta, costruisci la tua rete.",
+        recharge: "Ricarica", withdraw: "Prelievo", inviteFriends: "Invita Amici",
+        marketTitle: "Mercato Bot e Licenza", marketSub: "Paga la licenza di $5 una volta sola.",
+        licenseTitle: "Licenza Utente", licenseDesc: "Richiesta una volta. Costo:", payLicenseBtn: "Paga $5",
+        profitLabel: "50% Profitto (60 Giorni)", dailyEarning: "Guadagno Giornaliero:", statusUnlocked: "Stato: Sbloccato",
+        activateBot1: "Attiva Bot 1", activateBot2: "Attiva Bot 2", lockedBtn: "Bloccato",
+        teamTitle: "Il mio Team", teamSub: "Traccia i tuoi referral su 3 livelli.",
+        line1: "Linea 1 (L1)", line2: "Linea 2 (L2)", line3: "Linea 3 (L3)", directRef: "Referral Diretti", noRef: "Nessun referral diretto.",
+        assetsTitle: "Asset e Capitale", availBalance: "Saldo Disponibile", frozenCap: "Capitale Bloccato",
+        activeBotsTitle: "Investimenti Bot Attivi (60 Giorni)", noBots: "Nessun investimento attivo.",
+        upgradeBtn: "Aggiorna", menuChangeEmail: "Cambia Email", menuLoginPass: "Password Login", menuTxPass: "Password Tx",
+        menuFeedback: "Feedback", menuHelp: "Aiuto", menuTerms: "Termini", menuLang: "Lingua", menuCache: "Pulisci Cache", menuDownload: "Scarica App", logout: "Disconnetti"
+    }
+};
+
 window.addEventListener('DOMContentLoaded', function() {
     allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
     if (!allRegisteredUsers.some(u => u.username.toLowerCase() === 'tajkun')) {
@@ -621,6 +770,7 @@ window.addEventListener('DOMContentLoaded', function() {
         document.getElementById('reg-input-code').value = refCode;
         switchAuthTab('register');
     }
+    changeLanguage('en');
 });
 
 window.addEventListener('firebase-ready', function() {
@@ -846,7 +996,7 @@ function renderTeamData() {
 
     const l1List = document.getElementById('team-l1-list');
     if(net.l1Members.length === 0) {
-        l1List.innerHTML = '<p class="text-gray-500 text-center py-2">No direct referrals yet.</p>';
+        l1List.innerHTML = '<p class="text-gray-500 text-center py-2" data-i18n="noRef">No direct referrals yet.</p>';
         return;
     }
     let html = '';
@@ -869,7 +1019,7 @@ function renderAssetsData() {
 
     const container = document.getElementById('active-bots-container');
     if(!currentUser.activeBots || currentUser.activeBots.length === 0) {
-        container.innerHTML = '<p class="text-xs text-gray-500 text-center py-4">No active bot investments right now.</p>';
+        container.innerHTML = '<p class="text-xs text-gray-500 text-center py-4" data-i18n="noBots">No active bot investments right now.</p>';
         return;
     }
 
@@ -922,6 +1072,19 @@ function saveNewEmail() {
     saveCurrentUserToStorage();
     closeChangeEmailModal();
     alert('Email updated successfully to: ' + email);
+}
+
+function openLanguageModal() { document.getElementById('modal-lang').style.display = 'flex'; }
+function closeLangModal() { document.getElementById('modal-lang').style.display = 'none'; }
+
+function changeLanguage(lang) {
+    const t = translations[lang] || translations['en'];
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if(t[key]) el.innerText = t[key];
+    });
+    document.getElementById('current-lang-text').innerText = lang.toUpperCase();
+    closeLangModal();
 }
 
 function handleLogoClick() {
