@@ -100,7 +100,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <span class="text-xl font-bold tracking-wider text-emerald-400">AZEL</span>
 </div>
 <div class="flex space-x-4 text-gray-400 text-lg">
-<button onclick="alert('Support is available 24/7.')"><i class="fas fa-headset text-emerald-400"></i></button>
+<button onclick="openHelpModal()"><i class="fas fa-headset text-emerald-400"></i></button>
 <button onclick="openLanguageModal()"><i class="fas fa-globe text-emerald-400"></i></button>
 <button onclick="alert('No new notifications.')"><i class="fas fa-bell"></i></button>
 </div>
@@ -270,7 +270,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
-        <div onclick="alert('Help Center is 24/7 active.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+        <div onclick="openHelpModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="far fa-circle-question text-emerald-400 text-sm w-4 text-center"></i>
                 <span class="text-white font-medium" data-i18n="menu_help">Help Center</span>
@@ -313,6 +313,29 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     <button onclick="handleUserLogout()" class="w-full emerald-card py-3 rounded-2xl text-center text-red-500 font-bold text-xs hover:bg-red-950/20 transition">
         <span data-i18n="logout">Log Out</span>
     </button>
+</div>
+
+<!-- MODAL ZA HELP CENTER / PODRŠKU -->
+<div id="modal-help" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-sm space-y-4 bg-[#0b0e14] border border-emerald-500/30">
+        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
+            <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
+                <i class="fas fa-headset"></i> Help Center / Support
+            </h3>
+            <button onclick="closeHelpModal()" class="text-gray-400 hover:text-white text-sm"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="space-y-3 text-xs">
+            <p class="text-gray-400 text-[11px]">Describe your problem or question below, and our support team will review it on the Admin Panel.</p>
+            <div>
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Your Message / Problem:</label>
+                <textarea id="help-message-input" rows="4" placeholder="Type your message here..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400 text-xs"></textarea>
+            </div>
+        </div>
+        <div class="flex space-x-2 pt-1">
+            <button onclick="closeHelpModal()" class="w-1/2 bg-gray-800 text-gray-300 py-2.5 rounded-xl text-xs font-bold">Cancel</button>
+            <button onclick="submitHelpMessage()" class="w-1/2 bg-emerald-500 text-black py-2.5 rounded-xl text-xs font-bold shadow-lg shadow-emerald-500/20">Send Message</button>
+        </div>
+    </div>
 </div>
 
 <!-- MODAL ZA PROFILNU SLIKU -->
@@ -438,7 +461,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </div>
 </div>
 
-<!-- TAJNI ADMIN PIN MODAL (Uklonjen PIN iz naziva) -->
+<!-- TAJNI ADMIN PIN MODAL -->
 <div id="modal-admin-pin" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
     <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-4 bg-[#0b0e14] border border-amber-500/30 text-center">
         <h3 class="text-sm font-bold text-amber-400">Admin Access</h3>
@@ -450,16 +473,28 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </div>
 </div>
 
-<!-- TAJNI ADMIN PANEL MODAL -->
+<!-- TAJNI ADMIN PANEL MODAL (Sadrži i Isplate i Poruke podrške) -->
 <div id="modal-admin-panel" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
     <div class="emerald-card p-5 rounded-2xl w-full max-w-md space-y-4 bg-[#0b0e14] border border-emerald-500/50 max-h-[85vh] flex flex-col">
         <div class="flex justify-between items-center border-b border-gray-800 pb-3 shrink-0">
             <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
-                <i class="fas fa-tasks"></i> Admin Panel - Withdrawal Requests
+                <i class="fas fa-tasks"></i> Admin Panel
             </h3>
             <button onclick="closeAdminPanel()" class="text-gray-400 hover:text-white text-sm"><i class="fas fa-times"></i></button>
         </div>
-        <div id="admin-withdraw-list" class="space-y-3 overflow-y-auto pr-1 grow text-xs"></div>
+        
+        <!-- Tabovi u Admin Panelu -->
+        <div class="flex bg-gray-900 p-1 rounded-xl border border-gray-800 shrink-0 text-xs font-bold">
+            <button id="admin-tab-withdraw" onclick="switchAdminTab('withdraw')" class="flex-1 py-1.5 rounded-lg bg-emerald-500 text-black transition">Withdrawals</button>
+            <button id="admin-tab-support" onclick="switchAdminTab('support')" class="flex-1 py-1.5 rounded-lg text-gray-400 transition">Support Messages</button>
+        </div>
+
+        <!-- Lista Isplata -->
+        <div id="admin-list-withdraw" class="space-y-3 overflow-y-auto pr-1 grow text-xs"></div>
+        
+        <!-- Lista Poruka Podrške (Inicijalno sakrivena) -->
+        <div id="admin-list-support" class="space-y-3 overflow-y-auto pr-1 grow text-xs" style="display: none;"></div>
+
         <button onclick="closeAdminPanel()" class="w-full bg-gray-800 text-gray-300 py-2.5 rounded-xl text-xs font-bold shrink-0 mt-2">Close Panel</button>
     </div>
 </div>
@@ -492,9 +527,15 @@ let selectedNetwork = 'trc20';
 const ADMIN_PIN = "3112";
 let logoClickCount = 0;
 let logoClickTimer = null;
+
 let withdrawRequests = [
     { id: 101, user: "tajkun (119216)", amount: 50.00, address: "TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk", hoursLeft: 71, status: "pending" }
 ];
+
+let supportMessages = [
+    { id: 1, user: "tajkun (119216)", message: "Hello, I need help with my deposit verification.", time: "2026-03-30 14:20" }
+];
+
 const walletAddresses = { trc20: "TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk", bep20: "0xb8574070f05f0863be358dd60f88e7ccc78af512" };
 
 const MAIN_ADMIN_USER = {
@@ -598,6 +639,35 @@ function saveNewEmail() {
     localStorage.setItem('azel_registered_users', JSON.stringify(allUsers));
     closeChangeEmailModal();
     alert('Email updated successfully to: ' + email);
+}
+
+// HELP CENTER FUNKCIJE
+function openHelpModal() {
+    document.getElementById('modal-help').style.display = 'flex';
+}
+function closeHelpModal() {
+    document.getElementById('modal-help').style.display = 'none';
+    document.getElementById('help-message-input').value = '';
+}
+function submitHelpMessage() {
+    const msg = document.getElementById('help-message-input').value.trim();
+    if(!msg) {
+        alert('Please type your message.');
+        return;
+    }
+
+    const now = new Date();
+    const timeStr = now.toISOString().slice(0, 10) + ' ' + now.toTimeString().slice(0, 5);
+
+    supportMessages.push({
+        id: Date.now(),
+        user: (currentUser ? currentUser.username : "tajkun") + " (" + (currentUser ? currentUser.id : "119216") + ")",
+        message: msg,
+        time: timeStr
+    });
+
+    alert('Your message has been sent to support successfully! Admin will review it.');
+    closeHelpModal();
 }
 
 function switchAuthTab(tab) {
@@ -748,14 +818,35 @@ function verifyAdminPin() {
 
 function openAdminPanel() {
     renderAdminWithdrawList();
+    renderAdminSupportList();
+    switchAdminTab('withdraw');
     document.getElementById('modal-admin-panel').style.display = 'flex';
 }
 function closeAdminPanel() {
     document.getElementById('modal-admin-panel').style.display = 'none';
 }
 
+function switchAdminTab(tab) {
+    const btnW = document.getElementById('admin-tab-withdraw');
+    const btnS = document.getElementById('admin-tab-support');
+    const listW = document.getElementById('admin-list-withdraw');
+    const listS = document.getElementById('admin-list-support');
+
+    if(tab === 'withdraw') {
+        btnW.className = "flex-1 py-1.5 rounded-lg bg-emerald-500 text-black transition";
+        btnS.className = "flex-1 py-1.5 rounded-lg text-gray-400 transition";
+        listW.style.display = 'block';
+        listS.style.display = 'none';
+    } else {
+        btnS.className = "flex-1 py-1.5 rounded-lg bg-emerald-500 text-black transition";
+        btnW.className = "flex-1 py-1.5 rounded-lg text-gray-400 transition";
+        listS.style.display = 'block';
+        listW.style.display = 'none';
+    }
+}
+
 function renderAdminWithdrawList() {
-    const listContainer = document.getElementById('admin-withdraw-list');
+    const listContainer = document.getElementById('admin-list-withdraw');
     if(withdrawRequests.length === 0) {
         listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">No active withdrawal requests.</p>';
         return;
@@ -784,6 +875,30 @@ function renderAdminWithdrawList() {
     listContainer.innerHTML = html;
 }
 
+function renderAdminSupportList() {
+    const listContainer = document.getElementById('admin-list-support');
+    if(supportMessages.length === 0) {
+        listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">No support messages.</p>';
+        return;
+    }
+    let html = '';
+    supportMessages.forEach((sup, idx) => {
+        html += `
+            <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-2">
+                <div class="flex justify-between items-center font-bold">
+                    <span class="text-emerald-400">From: ${sup.user}</span>
+                    <span class="text-[9px] text-gray-500">${sup.time}</span>
+                </div>
+                <div class="text-xs text-white bg-black/40 p-2 rounded-lg border border-gray-800">${sup.message}</div>
+                <div class="flex justify-end pt-1">
+                    <button onclick="deleteSupportMsg(${idx})" class="bg-red-500 text-white px-3 py-1 rounded font-bold text-[10px]">Delete / Resolve</button>
+                </div>
+            </div>
+        `;
+    });
+    listContainer.innerHTML = html;
+}
+
 function approveWithdraw(index) {
     withdrawRequests[index].status = 'approved';
     alert('Request successfully approved!');
@@ -793,6 +908,11 @@ function rejectWithdraw(index) {
     withdrawRequests.splice(index, 1);
     alert('Request rejected and deleted.');
     renderAdminWithdrawList();
+}
+function deleteSupportMsg(index) {
+    supportMessages.splice(index, 1);
+    alert('Support message resolved and deleted.');
+    renderAdminSupportList();
 }
 
 function openDepositModal() { document.getElementById('modal-deposit').style.display = 'flex'; }
