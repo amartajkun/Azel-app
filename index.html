@@ -131,8 +131,8 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <span class="text-xl font-bold tracking-wider text-emerald-400">AZEL</span>
 </div>
 <div class="flex space-x-3 text-gray-400 text-lg relative items-center">
-<!-- ADMIN DUGME SE PRIKAZUJE SAMO ZA 'tajkun' -->
-<button id="admin-header-btn" onclick="openAdminPinModal()" class="bg-amber-500/20 text-amber-400 border border-amber-500/40 px-2 py-1 rounded-lg text-[10px] font-bold hidden items-center gap-1">
+<!-- ADMIN DUGME SE PRIKAZUJE SAMO ZA 'tajkun' BEZ ISPISIVANJA PIN-a -->
+<button id="admin-header-btn" onclick="openAdminPinModal()" class="bg-amber-500/20 text-amber-400 border border-amber-500/40 px-2.5 py-1 rounded-lg text-[10px] font-bold hidden items-center gap-1">
     <i class="fas fa-shield-halved"></i> Admin
 </button>
 <button onclick="openHelpModal()" class="relative">
@@ -423,10 +423,10 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </div>
 </div>
 
-<!-- TAJNI ADMIN PIN MODAL -->
+<!-- TAJNI ADMIN PIN MODAL (SAD BEZ ISPISIVANJA BROJA PIN-a U NASLOVU) -->
 <div id="modal-admin-pin" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
     <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-4 bg-[#0b0e14] border border-amber-500/30 text-center">
-        <h3 class="text-sm font-bold text-amber-400">Admin Access PIN (3112)</h3>
+        <h3 class="text-sm font-bold text-amber-400">Admin Security PIN</h3>
         <input type="password" id="admin-pin-input" maxlength="4" placeholder="****" class="w-full bg-gray-900 border border-amber-500/50 p-2.5 rounded-xl text-center text-white text-lg tracking-widest focus:outline-none">
         <div class="flex space-x-2">
             <button onclick="closeAdminPinModal()" class="w-1/2 bg-gray-800 text-gray-300 py-2 rounded-lg text-xs font-bold">Cancel</button>
@@ -626,7 +626,7 @@ function showMainApp() {
     document.getElementById('auth-screen').style.display = 'none';
     document.getElementById('main-app-wrapper').style.display = 'block';
     
-    // PROVERA DA LI JE LOGOVAN ISKLJUČIVO 'tajkun'
+    // PRIKAZ DUGMETA SAMO ZA "tajkun"
     const adminBtn = document.getElementById('admin-header-btn');
     if (currentUser && currentUser.username.toLowerCase() === 'tajkun') {
         adminBtn.style.display = 'flex';
@@ -828,7 +828,7 @@ function updateAppUI() {
     checkBotUnlocks();
 }
 
-// 🟢 ADMIN PROVERA: SAMO 'tajkun' MOŽE OTVORITI
+// 🟢 OTVALJANJE ADMIN MODA ISKLJUČIVO ZA 'tajkun'
 function handleLogoClick() {
     if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') return;
     openAdminPinModal();
