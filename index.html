@@ -136,10 +136,9 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     <i class="fas fa-shield-halved"></i> Admin
     <span id="admin-header-badge" class="bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.2 rounded-full hidden">0</span>
 </button>
-<button onclick="openHelpModal()" class="relative">
-    <i class="fas fa-headset text-emerald-400"></i>
-    <span id="help-badge" class="absolute -top-1 -right-2 bg-red-500 text-white text-[9px] font-bold px-1 rounded-full hidden">0</span>
-</button>
+<a href="https://t.me/OvdjeStaviLinkNaTelegramGrupu" target="_blank" class="relative">
+    <i class="fab fa-telegram text-emerald-400 text-xl"></i>
+</a>
 </div>
 </div>
 
@@ -365,27 +364,10 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </div>
 
     <div class="emerald-card rounded-2xl divide-y divide-gray-800/60 text-xs">
-        <div onclick="alert('Feedback submitted via support.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+        <div onclick="window.open('https://t.me/OvdjeStaviLinkNaTelegramGrupu', '_blank')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
-                <i class="far fa-comment-dots text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium" data-i18n="menuFeedback">Feedback</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
-        </div>
-        <div onclick="openHelpModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
-            <div class="flex items-center space-x-3">
-                <i class="far fa-circle-question text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium" data-i18n="menuHelp">Help Center</span>
-            </div>
-            <div class="flex items-center gap-1">
-                <span id="help-profile-badge" class="bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.2 rounded-full hidden">0</span>
-                <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
-            </div>
-        </div>
-        <div onclick="alert('User Terms & Conditions apply.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
-            <div class="flex items-center space-x-3">
-                <i class="far fa-user text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium" data-i18n="menuTerms">User Terms</span>
+                <i class="fab fa-telegram text-emerald-400 text-sm w-4 text-center"></i>
+                <span class="text-white font-medium">Telegram Support</span>
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
@@ -406,33 +388,11 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
-        <div onclick="alert('App download link copied.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
-            <div class="flex items-center space-x-3">
-                <i class="fas fa-download text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium" data-i18n="menuDownload">Download App</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
-        </div>
     </div>
 
     <button onclick="handleUserLogout()" class="w-full emerald-card py-3 rounded-2xl text-center text-red-500 font-bold text-xs hover:bg-red-950/20 transition">
         <span data-i18n="logout">Log Out</span>
     </button>
-</div>
-
-<!-- MODAL ZA HELP / SUPPORT -->
-<div id="modal-help" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
-    <div class="emerald-card p-5 rounded-2xl w-full max-w-sm space-y-4 bg-[#0b0e14] border border-emerald-500/30">
-        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
-            <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2"><i class="fas fa-headset"></i> Support Chat</h3>
-            <button onclick="closeHelpModal()" class="text-gray-400 hover:text-white text-sm"><i class="fas fa-times"></i></button>
-        </div>
-        <div id="user-chat-history" class="space-y-2 max-h-48 overflow-y-auto pr-1 text-xs bg-gray-950 p-3 rounded-xl border border-gray-800">
-            <p class="text-gray-500 text-center">No messages yet. Send a message to start support chat!</p>
-        </div>
-        <textarea id="help-message-input" rows="3" placeholder="Type your message to support..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none text-xs"></textarea>
-        <button onclick="submitHelpMessage()" class="w-full bg-emerald-500 text-black py-2.5 rounded-xl text-xs font-bold shadow-lg active:scale-95 transition">Send Message</button>
-    </div>
 </div>
 
 <!-- MODAL ZA PROMENU EMAIL-a -->
@@ -546,25 +506,13 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     <div class="emerald-card p-5 rounded-2xl w-full max-w-md space-y-4 bg-[#0b0e14] border border-emerald-500/50 max-h-[85vh] flex flex-col">
         <div class="flex justify-between items-center border-b border-gray-800 pb-3 shrink-0">
             <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
-                <i class="fas fa-tasks"></i> Admin Panel (Database & Support)
+                <i class="fas fa-tasks"></i> Admin Panel (Withdrawals)
             </h3>
             <button onclick="closeAdminPanel()" class="text-gray-400 hover:text-white text-sm"><i class="fas fa-times"></i></button>
-        </div>
-        
-        <div class="flex bg-gray-900 p-1 rounded-xl border border-gray-800 shrink-0 text-xs font-bold">
-            <button id="admin-tab-withdraw" onclick="switchAdminTab('withdraw')" class="flex-1 py-1.5 rounded-lg bg-emerald-500 text-black transition relative">
-                Withdrawals <span id="admin-badge-w" class="bg-red-500 text-white px-1.5 py-0.2 rounded-full text-[9px] ml-1 hidden">0</span>
-            </button>
-            <button id="admin-tab-support" onclick="switchAdminTab('support')" class="flex-1 py-1.5 rounded-lg text-gray-400 transition relative">
-                Support <span id="admin-badge-s" class="bg-red-500 text-white px-1.5 py-0.2 rounded-full text-[9px] ml-1 hidden">0</span>
-            </button>
         </div>
 
         <div id="admin-list-withdraw" class="space-y-3 overflow-y-auto pr-1 grow text-xs">
             <p class="text-gray-400 text-center py-4">No active withdrawal requests.</p>
-        </div>
-        <div id="admin-list-support" class="space-y-3 overflow-y-auto pr-1 grow text-xs" style="display: none;">
-            <p class="text-gray-400 text-center py-4">No support chats.</p>
         </div>
 
         <button onclick="closeAdminPanel()" class="w-full bg-gray-800 text-gray-300 py-2.5 rounded-xl text-xs font-bold shrink-0 mt-2">Close Panel</button>
@@ -600,7 +548,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <script>
 let currentUser = null;
 let allRegisteredUsers = [];
-let supportChatsMap = {};
 let withdrawRequestsMap = {};
 const ADMIN_PIN = "3112";
 
@@ -779,14 +726,6 @@ window.addEventListener('firebase-ready', function() {
     const db = window.FB_DB;
     const ref = window.FB_REF;
     const onValue = window.FB_ON_VALUE;
-
-    onValue(ref(db, 'supportChats'), (snapshot) => {
-        const data = snapshot.val();
-        supportChatsMap = data || {};
-        updateBadges();
-        if(document.getElementById('modal-help').style.display === 'flex') renderUserChatHistory();
-        if(document.getElementById('modal-admin-panel').style.display === 'flex') renderAdminSupportList();
-    });
 
     onValue(ref(db, 'withdrawRequests'), (snapshot) => {
         const data = snapshot.val();
@@ -1117,28 +1056,9 @@ function verifyAdminPin() {
 function openAdminPanel() {
     if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') return;
     renderAdminWithdrawList();
-    renderAdminSupportList();
-    switchAdminTab('withdraw');
     document.getElementById('modal-admin-panel').style.display = 'flex';
 }
 function closeAdminPanel() { document.getElementById('modal-admin-panel').style.display = 'none'; updateBadges(); }
-
-function switchAdminTab(tab) {
-    const btnW = document.getElementById('admin-tab-withdraw');
-    const btnS = document.getElementById('admin-tab-support');
-    const listW = document.getElementById('admin-list-withdraw');
-    const listS = document.getElementById('admin-list-support');
-
-    if(tab === 'withdraw') {
-        btnW.className = "flex-1 py-1.5 rounded-lg bg-emerald-500 text-black transition relative";
-        btnS.className = "flex-1 py-1.5 rounded-lg text-gray-400 transition relative";
-        listW.style.display = 'block'; listS.style.display = 'none';
-    } else {
-        btnS.className = "flex-1 py-1.5 rounded-lg bg-emerald-500 text-black transition relative";
-        btnW.className = "flex-1 py-1.5 rounded-lg text-gray-400 transition relative";
-        listS.style.display = 'block'; listW.style.display = 'none';
-    }
-}
 
 function renderAdminWithdrawList() {
     const listContainer = document.getElementById('admin-list-withdraw');
@@ -1169,60 +1089,6 @@ function renderAdminWithdrawList() {
     listContainer.innerHTML = html;
 }
 
-function renderAdminSupportList() {
-    const listContainer = document.getElementById('admin-list-support');
-    const keys = Object.keys(supportChatsMap);
-    if(keys.length === 0) {
-        listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">No support chats.</p>';
-        return;
-    }
-    let html = '';
-    keys.forEach(key => {
-        let chat = supportChatsMap[key];
-        html += `
-            <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-2">
-                <div class="font-bold text-emerald-400 flex justify-between">
-                    <span>User: ${chat.username} (${chat.userId})</span>
-                    ${chat.unreadByAdmin ? '<span class="bg-red-500 text-white text-[9px] px-1.5 py-0.5 rounded">NEW</span>' : ''}
-                </div>
-                <div class="space-y-1 bg-black/40 p-2 rounded-lg text-[11px] max-h-32 overflow-y-auto">
-        `;
-        if(chat.messages) {
-            Object.values(chat.messages).forEach(m => {
-                html += `<div><span class="font-bold text-${m.sender === 'user' ? 'white' : 'amber-400'}">${m.sender}:</span> ${m.text}</div>`;
-            });
-        }
-        html += `</div>
-                <div class="flex gap-2">
-                    <input type="text" id="admin-reply-${key}" placeholder="Reply..." class="flex-1 bg-black border border-emerald-500/30 p-1.5 rounded text-white text-xs">
-                    <button onclick="sendAdminReply('${key}')" class="bg-emerald-500 text-black px-3 py-1 rounded font-bold text-xs">Send</button>
-                </div>
-            </div>
-        `;
-    });
-    listContainer.innerHTML = html;
-}
-
-function sendAdminReply(chatKey) {
-    const input = document.getElementById(`admin-reply-${chatKey}`);
-    const txt = input.value.trim();
-    if(!txt) return;
-
-    if(!supportChatsMap[chatKey].messages) supportChatsMap[chatKey].messages = {};
-    let msgKey = 'msg_' + Date.now();
-    supportChatsMap[chatKey].messages[msgKey] = { sender: 'admin', text: txt, time: new Date().toLocaleTimeString() };
-    supportChatsMap[chatKey].unreadByAdmin = false;
-    supportChatsMap[chatKey].unreadByUser = true;
-
-    if(window.firebaseReady && window.FB_DB) {
-        window.FB_SET(window.FB_REF(window.FB_DB, 'supportChats/' + chatKey), supportChatsMap[chatKey]).then(() => {
-            input.value = '';
-            renderAdminSupportList();
-            updateBadges();
-        });
-    }
-}
-
 function approveWithdraw(reqKey) {
     if(window.firebaseReady && window.FB_DB) {
         window.FB_SET(window.FB_REF(window.FB_DB, 'withdrawRequests/' + reqKey + '/status'), 'approved').then(() => {
@@ -1234,61 +1100,15 @@ function approveWithdraw(reqKey) {
 }
 
 function updateBadges() {
-    let unreadSupportCount = Object.values(supportChatsMap).filter(c => c.unreadByAdmin).length;
     let pendingWithdrawCount = Object.values(withdrawRequestsMap).filter(w => w.status === 'pending').length;
-    let totalAdminNotifs = unreadSupportCount + pendingWithdrawCount;
 
-    // Admin Badges
     const adminHeaderBadge = document.getElementById('admin-header-badge');
     if(adminHeaderBadge) {
-        if(totalAdminNotifs > 0) { adminHeaderBadge.innerText = totalAdminNotifs; adminHeaderBadge.classList.remove('hidden'); }
+        if(pendingWithdrawCount > 0) { adminHeaderBadge.innerText = pendingWithdrawCount; adminHeaderBadge.classList.remove('hidden'); }
         else { adminHeaderBadge.classList.add('hidden'); }
     }
-
-    const badgeW = document.getElementById('admin-badge-w');
-    if(badgeW) {
-        if(pendingWithdrawCount > 0) { badgeW.innerText = pendingWithdrawCount; badgeW.classList.remove('hidden'); }
-        else { badgeW.classList.add('hidden'); }
-    }
-
-    const badgeS = document.getElementById('admin-badge-s');
-    if(badgeS) {
-        if(unreadSupportCount > 0) { badgeS.innerText = unreadSupportCount; badgeS.classList.remove('hidden'); }
-        else { badgeS.classList.add('hidden'); }
-    }
-
-    // User Badges
-    if (currentUser) {
-        let safeName = currentUser.username.replace(/[^a-zA-Z0-9]/g, '_');
-        let userChat = supportChatsMap[safeName];
-        let userUnread = (userChat && userChat.unreadByUser) ? 1 : 0;
-        
-        const helpBadge = document.getElementById('help-badge');
-        const helpProfileBadge = document.getElementById('help-profile-badge');
-        if(userUnread > 0) {
-            if(helpBadge) { helpBadge.innerText = userUnread; helpBadge.classList.remove('hidden'); }
-            if(helpProfileBadge) { helpProfileBadge.innerText = userUnread; helpProfileBadge.classList.remove('hidden'); }
-        } else {
-            if(helpBadge) helpBadge.classList.add('hidden');
-            if(helpProfileBadge) helpProfileBadge.classList.add('hidden');
-        }
-    }
 }
 
-function openHelpModal() { 
-    document.getElementById('modal-help').style.display = 'flex'; 
-    renderUserChatHistory();
-    if(currentUser) {
-        let safeName = currentUser.username.replace(/[^a-zA-Z0-9]/g, '_');
-        if(supportChatsMap[safeName] && supportChatsMap[safeName].unreadByUser) {
-            supportChatsMap[safeName].unreadByUser = false;
-            if(window.firebaseReady && window.FB_DB) {
-                window.FB_SET(window.FB_REF(window.FB_DB, 'supportChats/' + safeName), supportChatsMap[safeName]);
-            }
-        }
-    }
-}
-function closeHelpModal() { document.getElementById('modal-help').style.display = 'none'; updateBadges(); }
 function openDepositModal() { document.getElementById('modal-deposit').style.display = 'flex'; }
 function closeDepositModal() { document.getElementById('modal-deposit').style.display = 'none'; }
 function openWithdrawModal() { document.getElementById('modal-withdraw').style.display = 'flex'; }
@@ -1326,68 +1146,6 @@ function submitWithdrawRequest() {
     } else {
         alert('Database not ready. Try again in a moment.');
     }
-}
-
-function submitHelpMessage() {
-    const msg = document.getElementById('help-message-input').value.trim();
-    if(!msg || !currentUser) return;
-
-    let safeName = currentUser.username.replace(/[^a-zA-Z0-9]/g, '_');
-    let chatRefPath = 'supportChats/' + safeName;
-
-    if(!supportChatsMap[safeName]) {
-        supportChatsMap[safeName] = {
-            id: Date.now(),
-            username: currentUser.username,
-            userId: currentUser.id,
-            unreadByAdmin: true,
-            unreadByUser: false,
-            messages: {}
-        };
-    }
-
-    if(!supportChatsMap[safeName].messages) supportChatsMap[safeName].messages = {};
-    let msgKey = 'msg_' + Date.now();
-    supportChatsMap[safeName].messages[msgKey] = { sender: 'user', text: msg, time: new Date().toLocaleTimeString() };
-    supportChatsMap[safeName].unreadByAdmin = true;
-
-    if(window.firebaseReady && window.FB_DB) {
-        window.FB_SET(window.FB_REF(window.FB_DB, chatRefPath), supportChatsMap[safeName]).then(() => {
-            document.getElementById('help-message-input').value = '';
-            renderUserChatHistory();
-            updateBadges();
-        }).catch(err => {
-            alert('Error sending message: ' + err.message);
-        });
-    }
-}
-
-function renderUserChatHistory() {
-    const box = document.getElementById('user-chat-history');
-    if(!currentUser) return;
-    let safeName = currentUser.username.replace(/[^a-zA-Z0-9]/g, '_');
-    let chat = supportChatsMap[safeName];
-    
-    if(!chat || !chat.messages || Object.keys(chat.messages).length === 0) {
-        box.innerHTML = '<p class="text-gray-500 text-center py-2">No messages yet. Send a message to start support chat!</p>';
-        return;
-    }
-
-    let html = '';
-    Object.values(chat.messages).forEach(m => {
-        let isMe = m.sender === 'user';
-        html += `
-            <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} my-1">
-                <div class="max-w-[85%] p-2 rounded-xl text-xs ${isMe ? 'bg-emerald-600 text-white' : 'bg-gray-800 text-gray-200 border border-gray-700'}">
-                    <div class="font-bold text-[9px] text-gray-300 mb-0.5">${isMe ? 'You' : 'Support Admin'}</div>
-                    <div>${m.text}</div>
-                </div>
-                <span class="text-[8px] text-gray-500 px-1 mt-0.5">${m.time || ''}</span>
-            </div>
-        `;
-    });
-    box.innerHTML = html;
-    box.scrollTop = box.scrollHeight;
 }
 </script>
 </body>
