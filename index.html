@@ -331,7 +331,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             <button onclick="changeLanguage('en')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>English</span> <span>🇬🇧</span></button>
             <button onclick="changeLanguage('sr')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Srpski / Hrvatski</span> <span>🇷🇸</span></button>
             <button onclick="changeLanguage('sl')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Slovenski</span> <span>🇸🇮</span></button>
-            <button onclick="changeLanguage('mk')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Македонски</span> <span>🇲К</span></button>
+            <button onclick="changeLanguage('mk')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Македонски</span> <span>🇲🇰</span></button>
             <button onclick="changeLanguage('es')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Español</span> <span>🇪🇸</span></button>
             <button onclick="changeLanguage('ru')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Русский</span> <span>🇷🇺</span></button>
             <button onclick="changeLanguage('el')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Ελληνικά</span> <span>🇬🇷</span></button>
@@ -408,16 +408,20 @@ const MAIN_ADMIN_USER = {
     link: window.location.href.split('?')[0].split('#')[0] + '?inviteCode=AZEL-TAJKUN'
 };
 
-let currentUser = JSON.parse(localStorage.getItem('azel_user_data'));
+let currentUser = null;
 
 window.addEventListener('DOMContentLoaded', function() {
     const isLogged = sessionStorage.getItem('azel_logged_in');
     const loggedUsername = sessionStorage.getItem('azel_current_username');
 
+    if (loggedUsername && loggedUsername.toLowerCase() === 'tajkun') {
+        currentUser = MAIN_ADMIN_USER;
+        localStorage.setItem('azel_user_data', JSON.stringify(MAIN_ADMIN_USER));
+    } else {
+        currentUser = JSON.parse(localStorage.getItem('azel_user_data'));
+    }
+
     if (isLogged === 'true') {
-        if (loggedUsername === 'tajkun') {
-            currentUser = MAIN_ADMIN_USER;
-        }
         showMainApp();
     }
 
@@ -435,7 +439,13 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 function updateProfileUI() {
-    if(!currentUser) currentUser = MAIN_ADMIN_USER;
+    const loggedUsername = sessionStorage.getItem('azel_current_username');
+    if (loggedUsername && loggedUsername.toLowerCase() === 'tajkun') {
+        currentUser = MAIN_ADMIN_USER;
+    } else if (!currentUser) {
+        currentUser = MAIN_ADMIN_USER;
+    }
+
     document.getElementById('profile-id-display').innerText = currentUser.id;
     document.getElementById('profile-username-display').innerText = currentUser.username;
     document.getElementById('profile-code-display').innerText = "Invitation code: " + currentUser.code;
@@ -465,20 +475,15 @@ function handleUserLogin() {
         user = 'tajkun';
         currentUser = MAIN_ADMIN_USER;
     } else {
-        // Običan korisnik
-        if (!currentUser || currentUser.username === 'tajkun') {
-            let randomId = Math.floor(100000 + Math.random() * 900000); 
-            let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
-            let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
-            currentUser = {
-                id: randomId,
-                username: user,
-                code: randomCode,
-                link: cleanBaseUrl + '?inviteCode=' + randomCode
-            };
-        } else {
-            currentUser.username = user;
-        }
+        let randomId = Math.floor(100000 + Math.random() * 900000); 
+        let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
+        let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
+        currentUser = {
+            id: randomId,
+            username: user,
+            code: randomCode,
+            link: cleanBaseUrl + '?inviteCode=' + randomCode
+        };
     }
 
     sessionStorage.setItem('azel_logged_in', 'true');
@@ -560,7 +565,7 @@ function switchTab(tabId) {
 function handleLogoClick() {
     const loggedUser = sessionStorage.getItem('azel_current_username') || (currentUser ? currentUser.username : '');
     
-    if (loggedUser.toLowerCase() !== 'tajkun') {
+    if (!loggedUser || loggedUser.toLowerCase() !== 'tajkun') {
         return; 
     }
 
