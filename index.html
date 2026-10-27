@@ -32,7 +32,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 </head>
 <body class="pb-24">
 
-<!-- LOGIN / REGISTRATION SCREEN (ENGLISH BY DEFAULT) -->
+<!-- LOGIN / REGISTRATION SCREEN -->
 <div id="auth-screen">
     <div class="emerald-card p-6 rounded-3xl w-full max-w-sm space-y-4 bg-[#0b0e14] border border-emerald-500/40 shadow-2xl">
         <div class="text-center space-y-1">
@@ -68,7 +68,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
                 <input type="text" id="reg-username-input" placeholder="Choose username..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
             </div>
             <div>
-                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Email Address</label>
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Email Address (Required)</label>
                 <input type="email" id="reg-email-input" placeholder="Enter your email..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
             </div>
             <div>
@@ -238,7 +238,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <button class="bg-emerald-400 text-black px-3 py-1 rounded-full text-[10px] font-bold" data-i18n="upgrade_now">Upgrade</button>
     </div>
 
-    <!-- NOVI MENI PO TVOM IZGLEDU (BEZ CERTIFICATION I INSURANCE RECORDS) -->
     <div class="emerald-card rounded-2xl divide-y divide-gray-800/60 text-xs">
         <div onclick="openChangeEmailModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
@@ -512,14 +511,23 @@ window.addEventListener('DOMContentLoaded', function() {
     const isLogged = sessionStorage.getItem('azel_logged_in');
     const loggedUsername = sessionStorage.getItem('azel_current_username');
 
-    if (loggedUsername && loggedUsername.toLowerCase() === 'tajkun') {
-        currentUser = JSON.parse(localStorage.getItem('azel_user_data')) || MAIN_ADMIN_USER;
-    } else {
-        currentUser = JSON.parse(localStorage.getItem('azel_user_data')) || MAIN_ADMIN_USER;
+    // Učitaj bazu registrovanih korisnika ili postavi inicijalnu sa tajkunom
+    let allUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
+    if (!allUsers.some(u => u.username.toLowerCase() === 'tajkun')) {
+        allUsers.push(MAIN_ADMIN_USER);
+        localStorage.setItem('azel_registered_users', JSON.stringify(allUsers));
     }
 
-    if (isLogged === 'true') {
+    if (loggedUsername && loggedUsername.toLowerCase() === 'tajkun') {
+        currentUser = MAIN_ADMIN_USER;
+    } else if (loggedUsername) {
+        currentUser = allUsers.find(u => u.username.toLowerCase() === loggedUsername.toLowerCase()) || MAIN_ADMIN_USER;
+    }
+
+    if (isLogged === 'true' && loggedUsername) {
         showMainApp();
+    } else {
+        document.getElementById('auth-screen').style.display = 'flex';
     }
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -528,7 +536,7 @@ window.addEventListener('DOMContentLoaded', function() {
         document.getElementById('reg-input-code').value = refCode;
         switchAuthTab('register');
     } else {
-        document.getElementById('reg-input-code').value = currentUser ? currentUser.code : MAIN_ADMIN_USER.code;
+        document.getElementById('reg-input-code').value = MAIN_ADMIN_USER.code;
     }
 
     updateProfileUI();
@@ -536,12 +544,7 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 function updateProfileUI() {
-    const loggedUsername = sessionStorage.getItem('azel_current_username');
-    if (loggedUsername && loggedUsername.toLowerCase() === 'tajkun') {
-        if(!currentUser || currentUser.username !== 'tajkun') currentUser = MAIN_ADMIN_USER;
-    } else if (!currentUser) {
-        currentUser = MAIN_ADMIN_USER;
-    }
+    if (!currentUser) currentUser = MAIN_ADMIN_USER;
 
     document.getElementById('profile-id-display').innerText = currentUser.id || 119216;
     document.getElementById('profile-username-display').innerText = currentUser.username || "tajkun";
@@ -573,6 +576,9 @@ function closeAvatarModal() {
 function saveAvatarUrl() {
     const url = document.getElementById('avatar-url-input').value.trim();
     currentUser.avatar = url;
+    let allUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
+    allUsers = allUsers.map(u => u.username.toLowerCase() === currentUser.username.toLowerCase() ? currentUser : u);
+    localStorage.setItem('azel_registered_users', JSON.stringify(allUsers));
     localStorage.setItem('azel_user_data', JSON.stringify(currentUser));
     updateProfileUI();
     closeAvatarModal();
@@ -592,6 +598,9 @@ function saveNewEmail() {
         return;
     }
     currentUser.email = email;
+    let allUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
+    allUsers = allUsers.map(u => u.username.toLowerCase() === currentUser.username.toLowerCase() ? currentUser : u);
+    localStorage.setItem('azel_registered_users', JSON.stringify(allUsers));
     localStorage.setItem('azel_user_data', JSON.stringify(currentUser));
     closeChangeEmailModal();
     alert('Email updated successfully to: ' + email);
@@ -606,42 +615,32 @@ function switchAuthTab(tab) {
     document.getElementById('tab-reg-btn').className = !isLogin ? 'flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-500 text-black transition' : 'flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 transition';
 }
 
+// STROGA PROVERA PRIJAVLJIVANJA - NEMA ULAZA BEZ REGISTROVANOG NALOGA
 function handleUserLogin() {
     let user = document.getElementById('login-username').value.trim();
     const pass = document.getElementById('login-password').value.trim();
+    
     if(!user || !pass) {
         alert('Please enter username and password!');
         return;
     }
-    
+
     if (user.toLowerCase() === 'tajkun' || user.toLowerCase() === 'amartajkun') {
         user = 'tajkun';
-        let savedData = JSON.parse(localStorage.getItem('azel_user_data'));
-        if (savedData && savedData.username === 'tajkun') {
-            currentUser = savedData;
-        } else {
-            currentUser = MAIN_ADMIN_USER;
-        }
+        currentUser = MAIN_ADMIN_USER;
     } else {
-        let savedData = JSON.parse(localStorage.getItem('azel_user_data'));
-        if (savedData && savedData.username === user) {
-            currentUser = savedData;
-        } else {
-            let randomId = Math.floor(100000 + Math.random() * 900000); 
-            let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
-            let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
-            currentUser = {
-                id: randomId,
-                username: user,
-                code: randomCode,
-                link: cleanBaseUrl + '?inviteCode=' + randomCode,
-                avatar: ""
-            };
+        let allUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
+        let foundUser = allUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
+        
+        if (!foundUser) {
+            alert('Account does not exist! Please register first.');
+            return;
         }
+        currentUser = foundUser;
     }
 
     sessionStorage.setItem('azel_logged_in', 'true');
-    sessionStorage.setItem('azel_current_username', user);
+    sessionStorage.setItem('azel_current_username', currentUser.username);
     localStorage.setItem('azel_user_data', JSON.stringify(currentUser));
     
     updateProfileUI();
@@ -663,6 +662,12 @@ function handleUserRegister() {
         return;
     }
 
+    let allUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
+    if (allUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) {
+        alert('Username already exists! Choose another one or log in.');
+        return;
+    }
+
     let randomId = Math.floor(100000 + Math.random() * 900000); 
     let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
     let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
@@ -676,7 +681,10 @@ function handleUserRegister() {
         avatar: ""
     };
 
+    allUsers.push(currentUser);
+    localStorage.setItem('azel_registered_users', JSON.stringify(allUsers));
     localStorage.setItem('azel_user_data', JSON.stringify(currentUser));
+    
     sessionStorage.setItem('azel_logged_in', 'true');
     sessionStorage.setItem('azel_current_username', user);
 
