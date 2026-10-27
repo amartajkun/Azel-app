@@ -721,7 +721,10 @@ function saveWithdrawRequestsToBin() {
         body: JSON.stringify(withdrawRequests)
     })
     .then(res => res.json())
-    .then(() => updateBadges())
+    .then(() => {
+        updateBadges();
+        renderAdminWithdrawList();
+    })
     .catch(err => alert('Error saving: ' + err.message));
 }
 
@@ -1102,9 +1105,6 @@ function approveWithdraw(idx) {
     if(withdrawRequests[idx]) {
         withdrawRequests[idx].status = 'approved';
         saveWithdrawRequestsToBin();
-        renderAdminWithdrawList();
-        updateBadges();
-        alert('Withdrawal approved!');
     }
 }
 
