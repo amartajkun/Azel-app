@@ -521,9 +521,9 @@ let allRegisteredUsers = [];
 let withdrawRequests = [];
 const ADMIN_PIN = "3112";
 
-// Koristimo javni bin servis za centralno deljenje zahteva za isplatu između svih uređaja
-const BIN_URL = "https://api.jsonbin.io/v3/b/65b12345ef38165677000000/latest"; // Automatski deljeni fajl
-// (Ako želiš svoj poseban besplatni bin, možeš ga kreirati na jsonbin.io za 1 minut, ali ova skripta automatski pamti lokalno i sinhronizuje se)
+// Povezano direktno na tvoj JSONBin nalog
+const BIN_ID = "6ae13079ffd5d16053915188";
+const MASTER_KEY = "$2a$10$dEZ.lwInJSv0XALwpVBrl.xZPANtLWNSkkHVwl9wvE2YOy58Of3wa";
 
 const MAIN_ADMIN_USER = {
     id: 119216,
@@ -698,15 +698,31 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 function loadWithdrawRequests() {
-    // Čitanje sa zajedničkog skladišta ili lokalno sinhronizovano
-    const saved = localStorage.getItem('azel_withdraw_requests_global');
-    withdrawRequests = saved ? JSON.parse(saved) : [];
-    updateBadges();
+    fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        headers: { 'X-Master-Key': MASTER_KEY }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data && data.record) {
+            withdrawRequests = Array.isArray(data.record) ? data.record : (data.record.requests || []);
+            updateBadges();
+        }
+    })
+    .catch(err => console.log('Error loading requests:', err));
 }
 
-function saveWithdrawRequests() {
-    localStorage.setItem('azel_withdraw_requests_global', JSON.stringify(withdrawRequests));
-    updateBadges();
+function saveWithdrawRequestsToBin() {
+    fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': MASTER_KEY
+        },
+        body: JSON.stringify(withdrawRequests)
+    })
+    .then(res => res.json())
+    .then(() => updateBadges())
+    .catch(err => alert('Error saving to server: ' + err.message));
 }
 
 function switchAuthTab(tab) {
@@ -1062,10 +1078,9 @@ function renderAdminWithdrawList() {
 }
 
 function approveWithdraw(idx) {
-    loadWithdrawRequests();
     if(withdrawRequests[idx]) {
         withdrawRequests[idx].status = 'approved';
-        saveWithdrawRequests();
+        saveWithdrawRequestsToBin();
         alert('Withdrawal approved!');
         renderAdminWithdrawList();
         updateBadges();
@@ -1073,7 +1088,6 @@ function approveWithdraw(idx) {
 }
 
 function updateBadges() {
-    loadWithdrawRequests();
     let pendingWithdrawCount = withdrawRequests.filter(w => w.status === 'pending').length;
 
     const adminHeaderBadge = document.getElementById('admin-header-badge');
@@ -1106,15 +1120,37 @@ function submitWithdrawRequest() {
         status: 'pending' 
     };
     
-    loadWithdrawRequests();
-    withdrawRequests.push(req);
-    saveWithdrawRequests();
+    fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        headers: { 'X-Master-Key': MASTER_KEY }
+    })
+    .then(res => res.json())
+    .then(data => {
+        let currentList = [];
+        if (data && data.record) {
+            currentList = Array.isArray(data.record) ? data.record : (data.record.requests || []);
+        }
+        currentList.push(req);
+        withdrawRequests = currentList;
 
-    alert('Withdrawal request submitted successfully!');
-    document.getElementById('withdraw-amount').value = '';
-    document.getElementById('withdraw-address').value = '';
-    closeWithdrawModal();
-    updateBadges();
+        return fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': MASTER_KEY
+            },
+            body: JSON.stringify(withdrawRequests)
+        });
+    })
+    .then(() => {
+        alert('Withdrawal request submitted successfully!');
+        document.getElementById('withdraw-amount').value = '';
+        document.getElementById('withdraw-address').value = '';
+        closeWithdrawModal();
+        updateBadges();
+    })
+    .catch(err => {
+        alert('Error submitting request: ' + err.message);
+    });
 }
 </script>
 </body>
