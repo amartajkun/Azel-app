@@ -102,7 +102,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 </div>
 <div class="flex space-x-3 text-gray-400 text-lg relative items-center">
 <!-- ADMIN DUGME -->
-<button id="admin-header-btn" onclick="openAdminPinModal()" class="bg-amber-500/20 text-amber-400 border border-amber-500/40 px-2.5 py-1 rounded-lg text-[10px] font-bold hidden items-center gap-1 relative">
+<button id="admin-header-btn" onclick="openAdminPinModal()" class="bg-amber-500/20 text-amber-400 border border-amber-500/40 px-2.5 py-1 rounded-lg text-[10px] font-bold items-center gap-1 relative" style="display: none;">
     <i class="fas fa-shield-halved"></i> Admin
     <span id="admin-header-badge" class="bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.2 rounded-full hidden">0</span>
 </button>
@@ -990,6 +990,14 @@ function updateAppUI() {
     document.getElementById('modal-link-display').innerText = currentUser.link;
     document.getElementById('profile-initial').innerText = currentUser.username.charAt(0).toUpperCase();
 
+    // Osiguraj da se Admin dugme uvek prikaže ako je ulogovan tajkun
+    const adminBtn = document.getElementById('admin-header-btn');
+    if (currentUser && currentUser.username.toLowerCase() === 'tajkun') {
+        adminBtn.style.display = 'flex';
+    } else {
+        adminBtn.style.display = 'none';
+    }
+
     if(currentUser.isLicensePaid) {
         document.getElementById('buy-license-btn').innerText = "Paid ✓";
         document.getElementById('buy-license-btn').className = "bg-emerald-950 text-emerald-400 px-4 py-2 rounded-xl text-xs font-bold border border-emerald-500/40 cursor-default";
@@ -1027,7 +1035,7 @@ function openAdminPinModal() {
         alert('Access denied. Admin only.');
         return;
     }
-    document.getElementById('modal-[#modal-admin-pin]').style.display = 'flex';
+    document.getElementById('modal-admin-pin').style.display = 'flex';
 }
 
 function closeAdminPinModal() { document.getElementById('modal-admin-pin').style.display = 'none'; document.getElementById('admin-pin-input').value = ''; }
@@ -1049,7 +1057,6 @@ function openAdminPanel() {
     document.getElementById('modal-admin-panel').style.display = 'flex';
     renderAdminWithdrawList();
     
-    // Automatsko osvežavanje admin panela na svake 1 sekunde radi tajmera
     if(adminInterval) clearInterval(adminInterval);
     adminInterval = setInterval(() => {
         renderAdminWithdrawList();
