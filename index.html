@@ -99,8 +99,11 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <div class="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center font-bold text-black shadow-lg shadow-emerald-500/30">A</div>
 <span class="text-xl font-bold tracking-wider text-emerald-400">AZEL</span>
 </div>
-<div class="flex space-x-4 text-gray-400 text-lg">
-<button onclick="openHelpModal()"><i class="fas fa-headset text-emerald-400"></i></button>
+<div class="flex space-x-4 text-gray-400 text-lg relative">
+<button onclick="openHelpModal()" class="relative">
+    <i class="fas fa-headset text-emerald-400"></i>
+    <span id="help-badge" class="absolute -top-1 -right-2 bg-red-500 text-white text-[9px] font-bold px-1 rounded-full hidden">0</span>
+</button>
 <button onclick="openLanguageModal()"><i class="fas fa-globe text-emerald-400"></i></button>
 <button onclick="alert('No new notifications.')"><i class="fas fa-bell"></i></button>
 </div>
@@ -275,7 +278,10 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
                 <i class="far fa-circle-question text-emerald-400 text-sm w-4 text-center"></i>
                 <span class="text-white font-medium" data-i18n="menu_help">Help Center</span>
             </div>
-            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+            <div class="flex items-center gap-1">
+                <span id="help-profile-badge" class="bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.2 rounded-full hidden">0</span>
+                <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+            </div>
         </div>
         <div onclick="alert('User Terms & Conditions apply.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
@@ -315,25 +321,27 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </button>
 </div>
 
-<!-- MODAL ZA HELP CENTER / PODRŠKU -->
+<!-- MODAL ZA HELP CENTER / CHAT SA PODRŠKOM -->
 <div id="modal-help" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
     <div class="emerald-card p-5 rounded-2xl w-full max-w-sm space-y-4 bg-[#0b0e14] border border-emerald-500/30">
         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
             <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
-                <i class="fas fa-headset"></i> Help Center / Support
+                <i class="fas fa-headset"></i> Support Chat
             </h3>
             <button onclick="closeHelpModal()" class="text-gray-400 hover:text-white text-sm"><i class="fas fa-times"></i></button>
         </div>
-        <div class="space-y-3 text-xs">
-            <p class="text-gray-400 text-[11px]">Describe your problem or question below, and our support team will review it on the Admin Panel.</p>
-            <div>
-                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Your Message / Problem:</label>
-                <textarea id="help-message-input" rows="4" placeholder="Type your message here..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400 text-xs"></textarea>
-            </div>
+        
+        <!-- Prikaz istorije poruka za ulogovanog korisnika -->
+        <div id="user-chat-history" class="space-y-2 max-h-48 overflow-y-auto pr-1 text-xs bg-gray-950 p-3 rounded-xl border border-gray-800">
+            <!-- Poruke se ucitavaju dinamički -->
+        </div>
+
+        <div class="space-y-2 text-xs">
+            <textarea id="help-message-input" rows="3" placeholder="Type your message to support..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400 text-xs"></textarea>
         </div>
         <div class="flex space-x-2 pt-1">
-            <button onclick="closeHelpModal()" class="w-1/2 bg-gray-800 text-gray-300 py-2.5 rounded-xl text-xs font-bold">Cancel</button>
-            <button onclick="submitHelpMessage()" class="w-1/2 bg-emerald-500 text-black py-2.5 rounded-xl text-xs font-bold shadow-lg shadow-emerald-500/20">Send Message</button>
+            <button onclick="closeHelpModal()" class="w-1/2 bg-gray-800 text-gray-300 py-2.5 rounded-xl text-xs font-bold">Close</button>
+            <button onclick="submitHelpMessage()" class="w-1/2 bg-emerald-500 text-black py-2.5 rounded-xl text-xs font-bold shadow-lg shadow-emerald-500/20">Send</button>
         </div>
     </div>
 </div>
@@ -473,7 +481,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </div>
 </div>
 
-<!-- TAJNI ADMIN PANEL MODAL (Sadrži i Isplate i Poruke podrške) -->
+<!-- TAJNI ADMIN PANEL MODAL (Sadrži Isplate sa notifikacijom i Poruke podrške sa mogućnošću odgovora) -->
 <div id="modal-admin-panel" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
     <div class="emerald-card p-5 rounded-2xl w-full max-w-md space-y-4 bg-[#0b0e14] border border-emerald-500/50 max-h-[85vh] flex flex-col">
         <div class="flex justify-between items-center border-b border-gray-800 pb-3 shrink-0">
@@ -483,16 +491,20 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             <button onclick="closeAdminPanel()" class="text-gray-400 hover:text-white text-sm"><i class="fas fa-times"></i></button>
         </div>
         
-        <!-- Tabovi u Admin Panelu -->
+        <!-- Tabovi u Admin Panelu sa brojačima obaveštenja -->
         <div class="flex bg-gray-900 p-1 rounded-xl border border-gray-800 shrink-0 text-xs font-bold">
-            <button id="admin-tab-withdraw" onclick="switchAdminTab('withdraw')" class="flex-1 py-1.5 rounded-lg bg-emerald-500 text-black transition">Withdrawals</button>
-            <button id="admin-tab-support" onclick="switchAdminTab('support')" class="flex-1 py-1.5 rounded-lg text-gray-400 transition">Support Messages</button>
+            <button id="admin-tab-withdraw" onclick="switchAdminTab('withdraw')" class="flex-1 py-1.5 rounded-lg bg-emerald-500 text-black transition relative">
+                Withdrawals <span id="admin-badge-w" class="bg-red-500 text-white px-1.5 py-0.2 rounded-full text-[9px] ml-1 hidden">0</span>
+            </button>
+            <button id="admin-tab-support" onclick="switchAdminTab('support')" class="flex-1 py-1.5 rounded-lg text-gray-400 transition relative">
+                Support <span id="admin-badge-s" class="bg-red-500 text-white px-1.5 py-0.2 rounded-full text-[9px] ml-1 hidden">0</span>
+            </button>
         </div>
 
         <!-- Lista Isplata -->
         <div id="admin-list-withdraw" class="space-y-3 overflow-y-auto pr-1 grow text-xs"></div>
         
-        <!-- Lista Poruka Podrške (Inicijalno sakrivena) -->
+        <!-- Lista Poruka Podrške i Odgovaranja -->
         <div id="admin-list-support" class="space-y-3 overflow-y-auto pr-1 grow text-xs" style="display: none;"></div>
 
         <button onclick="closeAdminPanel()" class="w-full bg-gray-800 text-gray-300 py-2.5 rounded-xl text-xs font-bold shrink-0 mt-2">Close Panel</button>
@@ -532,8 +544,18 @@ let withdrawRequests = [
     { id: 101, user: "tajkun (119216)", amount: 50.00, address: "TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk", hoursLeft: 71, status: "pending" }
 ];
 
-let supportMessages = [
-    { id: 1, user: "tajkun (119216)", message: "Hello, I need help with my deposit verification.", time: "2026-03-30 14:20" }
+// Struktura poruka podrške: sadrži niz poruka u chatu za svakog korisnika
+let supportChats = [
+    {
+        id: 1,
+        username: "tajkun",
+        userId: "119216",
+        unreadByAdmin: true,
+        unreadByUser: false,
+        messages: [
+            { sender: 'user', text: 'Hello, I need help with my deposit verification.', time: '2026-03-30 14:20' }
+        ]
+    }
 ];
 
 const walletAddresses = { trc20: "TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk", bep20: "0xb8574070f05f0863be358dd60f88e7ccc78af512" };
@@ -577,6 +599,7 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     updateProfileUI();
+    updateBadges();
     changeLanguage('en');
 });
 
@@ -641,14 +664,53 @@ function saveNewEmail() {
     alert('Email updated successfully to: ' + email);
 }
 
-// HELP CENTER FUNKCIJE
+// HELP CENTER & CHAT FUNKCIJE
 function openHelpModal() {
+    renderUserChatHistory();
+    // Ako korisnik otvara chat, skidamo mu notifikaciju (unreadByUser)
+    if(currentUser) {
+        let chat = supportChats.find(c => c.username.toLowerCase() === currentUser.username.toLowerCase());
+        if(chat) {
+            chat.unreadByUser = false;
+        }
+    }
+    updateBadges();
     document.getElementById('modal-help').style.display = 'flex';
 }
+
 function closeHelpModal() {
     document.getElementById('modal-help').style.display = 'none';
     document.getElementById('help-message-input').value = '';
 }
+
+function renderUserChatHistory() {
+    const historyContainer = document.getElementById('user-chat-history');
+    if(!currentUser) return;
+
+    let chat = supportChats.find(c => c.username.toLowerCase() === currentUser.username.toLowerCase());
+    if(!chat || chat.messages.length === 0) {
+        historyContainer.innerHTML = '<p class="text-gray-500 text-center py-2 text-[11px]">No messages yet. Send a message to support!</p>';
+        return;
+    }
+
+    let html = '';
+    chat.messages.forEach(m => {
+        if(m.sender === 'user') {
+            html += `<div class="bg-gray-900 p-2.5 rounded-xl border border-gray-800 text-right space-y-1">
+                <div class="text-[9px] text-emerald-400 font-bold">You (${m.time})</div>
+                <div class="text-white text-xs">${m.text}</div>
+            </div>`;
+        } else {
+            html += `<div class="bg-emerald-950/40 p-2.5 rounded-xl border border-emerald-500/30 text-left space-y-1">
+                <div class="text-[9px] text-amber-400 font-bold">Support Admin (${m.time})</div>
+                <div class="text-white text-xs">${m.text}</div>
+            </div>`;
+        }
+    });
+    historyContainer.innerHTML = html;
+    historyContainer.scrollTop = historyContainer.scrollHeight;
+}
+
 function submitHelpMessage() {
     const msg = document.getElementById('help-message-input').value.trim();
     if(!msg) {
@@ -659,15 +721,67 @@ function submitHelpMessage() {
     const now = new Date();
     const timeStr = now.toISOString().slice(0, 10) + ' ' + now.toTimeString().slice(0, 5);
 
-    supportMessages.push({
-        id: Date.now(),
-        user: (currentUser ? currentUser.username : "tajkun") + " (" + (currentUser ? currentUser.id : "119216") + ")",
-        message: msg,
-        time: timeStr
-    });
+    let chat = supportChats.find(c => c.username.toLowerCase() === currentUser.username.toLowerCase());
+    if(!chat) {
+        chat = {
+            id: Date.now(),
+            username: currentUser.username,
+            userId: currentUser.id,
+            unreadByAdmin: true,
+            unreadByUser: false,
+            messages: []
+        };
+        supportChats.push(chat);
+    }
 
-    alert('Your message has been sent to support successfully! Admin will review it.');
-    closeHelpModal();
+    chat.messages.push({ sender: 'user', text: msg, time: timeStr });
+    chat.unreadByAdmin = true;
+
+    document.getElementById('help-message-input').value = '';
+    renderUserChatHistory();
+    updateBadges();
+    alert('Message sent to support successfully! Admin will be notified.');
+}
+
+function updateBadges() {
+    // Broj nepročitanih poruka za admina
+    let unreadSupportCount = supportChats.filter(c => c.unreadByAdmin).length;
+    // Broj pending isplata za admina
+    let pendingWithdrawCount = withdrawRequests.filter(w => w.status === 'pending').length;
+
+    const adminBadgeW = document.getElementById('admin-badge-w');
+    const adminBadgeS = document.getElementById('admin-badge-s');
+
+    if(pendingWithdrawCount > 0) {
+        adminBadgeW.innerText = pendingWithdrawCount;
+        adminBadgeW.classList.remove('hidden');
+    } else {
+        adminBadgeW.classList.add('hidden');
+    }
+
+    if(unreadSupportCount > 0) {
+        adminBadgeS.innerText = unreadSupportCount;
+        adminBadgeS.classList.remove('hidden');
+    } else {
+        adminBadgeS.classList.add('hidden');
+    }
+
+    // Notifikacije za ulogovanog korisnika
+    if(currentUser) {
+        let userChat = supportChats.find(c => c.username.toLowerCase() === currentUser.username.toLowerCase());
+        const helpBadge = document.getElementById('help-badge');
+        const helpProfileBadge = document.getElementById('help-profile-badge');
+
+        if(userChat && userChat.unreadByUser) {
+            helpBadge.innerText = "!";
+            helpBadge.classList.remove('hidden');
+            helpProfileBadge.innerText = "New reply";
+            helpProfileBadge.classList.remove('hidden');
+        } else {
+            helpBadge.classList.add('hidden');
+            helpProfileBadge.classList.add('hidden');
+        }
+    }
 }
 
 function switchAuthTab(tab) {
@@ -701,6 +815,7 @@ function handleUserLogin() {
     sessionStorage.setItem('azel_current_username', currentUser.username);
     
     updateProfileUI();
+    updateBadges();
     showMainApp();
 }
 
@@ -746,6 +861,7 @@ function handleUserRegister() {
     sessionStorage.setItem('azel_current_username', user);
 
     updateProfileUI();
+    updateBadges();
     alert('Successfully registered and logged in!');
     showMainApp();
 }
@@ -824,6 +940,7 @@ function openAdminPanel() {
 }
 function closeAdminPanel() {
     document.getElementById('modal-admin-panel').style.display = 'none';
+    updateBadges();
 }
 
 function switchAdminTab(tab) {
@@ -833,15 +950,19 @@ function switchAdminTab(tab) {
     const listS = document.getElementById('admin-list-support');
 
     if(tab === 'withdraw') {
-        btnW.className = "flex-1 py-1.5 rounded-lg bg-emerald-500 text-black transition";
-        btnS.className = "flex-1 py-1.5 rounded-lg text-gray-400 transition";
+        btnW.className = "flex-1 py-1.5 rounded-lg bg-emerald-500 text-black transition relative";
+        btnS.className = "flex-1 py-1.5 rounded-lg text-gray-400 transition relative";
         listW.style.display = 'block';
         listS.style.display = 'none';
     } else {
-        btnS.className = "flex-1 py-1.5 rounded-lg bg-emerald-500 text-black transition";
-        btnW.className = "flex-1 py-1.5 rounded-lg text-gray-400 transition";
+        btnS.className = "flex-1 py-1.5 rounded-lg bg-emerald-500 text-black transition relative";
+        btnW.className = "flex-1 py-1.5 rounded-lg text-gray-400 transition relative";
         listS.style.display = 'block';
         listW.style.display = 'none';
+
+        // Kad admin otvori Support tab, označavamo sve poruke kao pročitane od strane admina
+        supportChats.forEach(c => c.unreadByAdmin = false);
+        updateBadges();
     }
 }
 
@@ -877,21 +998,37 @@ function renderAdminWithdrawList() {
 
 function renderAdminSupportList() {
     const listContainer = document.getElementById('admin-list-support');
-    if(supportMessages.length === 0) {
-        listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">No support messages.</p>';
+    if(supportChats.length === 0) {
+        listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">No support chats.</p>';
         return;
     }
     let html = '';
-    supportMessages.forEach((sup, idx) => {
+    supportChats.forEach((chat, cIdx) => {
+        let lastMsg = chat.messages[chat.messages.length - 1] || { text: 'No messages', time: '' };
         html += `
             <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-2">
-                <div class="flex justify-between items-center font-bold">
-                    <span class="text-emerald-400">From: ${sup.user}</span>
-                    <span class="text-[9px] text-gray-500">${sup.time}</span>
+                <div class="flex justify-between items-center font-bold border-b border-gray-800 pb-1.5">
+                    <span class="text-emerald-400">User: ${chat.username} (${chat.userId})</span>
+                    <span class="text-[9px] text-gray-500">${lastMsg.time}</span>
                 </div>
-                <div class="text-xs text-white bg-black/40 p-2 rounded-lg border border-gray-800">${sup.message}</div>
-                <div class="flex justify-end pt-1">
-                    <button onclick="deleteSupportMsg(${idx})" class="bg-red-500 text-white px-3 py-1 rounded font-bold text-[10px]">Delete / Resolve</button>
+                
+                <!-- Istorija poruka u chatu -->
+                <div class="space-y-1.5 max-h-32 overflow-y-auto bg-black/40 p-2 rounded-lg border border-gray-800 text-[11px]">
+        `;
+        chat.messages.forEach(m => {
+            if(m.sender === 'user') {
+                html += `<div class="text-white"><span class="text-emerald-400 font-bold">${chat.username}:</span> ${m.text}</div>`;
+            } else {
+                html += `<div class="text-emerald-300"><span class="text-amber-400 font-bold">Admin:</span> ${m.text}</div>`;
+            }
+        });
+        html += `
+                </div>
+                
+                <!-- Polje za odgovor admina -->
+                <div class="flex gap-2 pt-1">
+                    <input type="text" id="admin-reply-input-${cIdx}" placeholder="Type reply to user..." class="flex-1 bg-black border border-emerald-500/30 p-2 rounded-lg text-white text-xs">
+                    <button onclick="sendAdminReply(${cIdx})" class="bg-emerald-500 text-black px-3 py-1.5 rounded-lg font-bold text-xs">Reply</button>
                 </div>
             </div>
         `;
@@ -899,20 +1036,40 @@ function renderAdminSupportList() {
     listContainer.innerHTML = html;
 }
 
+function sendAdminReply(chatIndex) {
+    const input = document.getElementById(`admin-reply-input-${chatIndex}`);
+    const replyText = input.value.trim();
+    if(!replyText) {
+        alert('Please type a reply.');
+        return;
+    }
+
+    const now = new Date();
+    const timeStr = now.toISOString().slice(0, 10) + ' ' + now.toTimeString().slice(0, 5);
+
+    supportChats[chatIndex].messages.push({
+        sender: 'admin',
+        text: replyText,
+        time: timeStr
+    });
+    supportChats[chatIndex].unreadByUser = true; // Obaveštenje za korisnika da ima odgovor
+
+    input.value = '';
+    renderAdminSupportList();
+    alert('Reply sent successfully to user!');
+}
+
 function approveWithdraw(index) {
     withdrawRequests[index].status = 'approved';
     alert('Request successfully approved!');
     renderAdminWithdrawList();
+    updateBadges();
 }
 function rejectWithdraw(index) {
     withdrawRequests.splice(index, 1);
     alert('Request rejected and deleted.');
     renderAdminWithdrawList();
-}
-function deleteSupportMsg(index) {
-    supportMessages.splice(index, 1);
-    alert('Support message resolved and deleted.');
-    renderAdminSupportList();
+    updateBadges();
 }
 
 function openDepositModal() { document.getElementById('modal-deposit').style.display = 'flex'; }
@@ -980,7 +1137,8 @@ function submitWithdrawRequest() {
         status: 'pending'
     });
 
-    alert('Withdrawal request submitted successfully! Funds will arrive within 72 hours.');
+    updateBadges();
+    alert('Withdrawal request submitted successfully! Admin has been notified.');
     closeWithdrawModal();
     document.getElementById('withdraw-amount').value = '';
     document.getElementById('withdraw-address').value = '';
