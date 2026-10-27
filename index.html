@@ -13,36 +13,6 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
-<!-- FIREBASE SDK v10 -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getDatabase, ref, set, get, onValue, push, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyAPfXCQryjXKNil5__N85Lnim46Tv-jDjQ",
-    authDomain: "azel-app-9c065.firebaseapp.com",
-    databaseURL: "https://azel-app-9c065-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "azel-app-9c065",
-    storageBucket: "azel-app-9c065.appspot.com",
-    messagingSenderId: "739286488852",
-    appId: "1:739286488852:web:c2d5f2830086abcebe5861"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-
-  window.FB_DB = db;
-  window.FB_REF = ref;
-  window.FB_SET = set;
-  window.FB_GET = get;
-  window.FB_ON_VALUE = onValue;
-  window.FB_PUSH = push;
-  window.FB_UPDATE = update;
-  window.firebaseReady = true;
-  
-  window.dispatchEvent(new Event('firebase-ready'));
-</script>
-
 <style>
 body { background-color: #0b0e14; color: #e6edf3; font-family: -apple-system, sans-serif; user-select: none; }
 .emerald-card { background: #161c2d; border: 1px solid rgba(255, 255, 255, 0.05); }
@@ -548,7 +518,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <script>
 let currentUser = null;
 let allRegisteredUsers = [];
-let withdrawRequestsMap = {};
+let withdrawRequests = [];
 const ADMIN_PIN = "3112";
 
 const MAIN_ADMIN_USER = {
@@ -720,20 +690,19 @@ window.addEventListener('DOMContentLoaded', function() {
         switchAuthTab('register');
     }
     changeLanguage('en');
+    loadWithdrawRequests();
 });
 
-window.addEventListener('firebase-ready', function() {
-    const db = window.FB_DB;
-    const ref = window.FB_REF;
-    const onValue = window.FB_ON_VALUE;
+function loadWithdrawRequests() {
+    const saved = localStorage.getItem('azel_withdraw_requests');
+    withdrawRequests = saved ? JSON.parse(saved) : [];
+    updateBadges();
+}
 
-    onValue(ref(db, 'withdrawRequests'), (snapshot) => {
-        const data = snapshot.val();
-        withdrawRequestsMap = data || {};
-        updateBadges();
-        if(document.getElementById('modal-admin-panel').style.display === 'flex') renderAdminWithdrawList();
-    });
-});
+function saveWithdrawRequests() {
+    localStorage.setItem('azel_withdraw_requests', JSON.stringify(withdrawRequests));
+    updateBadges();
+}
 
 function switchAuthTab(tab) {
     const isLogin = tab === 'login';
@@ -1055,21 +1024,21 @@ function verifyAdminPin() {
 
 function openAdminPanel() {
     if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') return;
+    loadWithdrawRequests();
     renderAdminWithdrawList();
     document.getElementById('modal-admin-panel').style.display = 'flex';
 }
 function closeAdminPanel() { document.getElementById('modal-admin-panel').style.display = 'none'; updateBadges(); }
 
 function renderAdminWithdrawList() {
+    loadWithdrawRequests();
     const listContainer = document.getElementById('admin-list-withdraw');
-    const keys = Object.keys(withdrawRequestsMap);
-    if(keys.length === 0) {
+    if(!withdrawRequests || withdrawRequests.length === 0) {
         listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">No active withdrawal requests.</p>';
         return;
     }
     let html = '';
-    keys.forEach(key => {
-        let req = withdrawRequestsMap[key];
+    withdrawRequests.forEach((req, idx) => {
         html += `
             <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-2">
                 <div class="flex justify-between items-center font-bold">
@@ -1080,7 +1049,7 @@ function renderAdminWithdrawList() {
                 <div class="flex justify-between items-center pt-1">
                     <span class="text-amber-400 text-[10px]">Status: ${req.status}</span>
                     ${req.status === 'pending' ? `
-                        <button onclick="approveWithdraw('${key}')" class="bg-emerald-500 text-black px-3 py-1 rounded font-bold text-[10px]">Approve</button>
+                        <button onclick="approveWithdraw(${idx})" class="bg-emerald-500 text-black px-3 py-1 rounded font-bold text-[10px]">Approve</button>
                     ` : `<span class="text-emerald-500 font-bold text-[10px]">Approved ✓</span>`}
                 </div>
             </div>
@@ -1089,18 +1058,20 @@ function renderAdminWithdrawList() {
     listContainer.innerHTML = html;
 }
 
-function approveWithdraw(reqKey) {
-    if(window.firebaseReady && window.FB_DB) {
-        window.FB_SET(window.FB_REF(window.FB_DB, 'withdrawRequests/' + reqKey + '/status'), 'approved').then(() => {
-            alert('Withdrawal approved!');
-            renderAdminWithdrawList();
-            updateBadges();
-        });
+function approveWithdraw(idx) {
+    loadWithdrawRequests();
+    if(withdrawRequests[idx]) {
+        withdrawRequests[idx].status = 'approved';
+        saveWithdrawRequests();
+        alert('Withdrawal approved!');
+        renderAdminWithdrawList();
+        updateBadges();
     }
 }
 
 function updateBadges() {
-    let pendingWithdrawCount = Object.values(withdrawRequestsMap).filter(w => w.status === 'pending').length;
+    loadWithdrawRequests();
+    let pendingWithdrawCount = withdrawRequests.filter(w => w.status === 'pending').length;
 
     const adminHeaderBadge = document.getElementById('admin-header-badge');
     if(adminHeaderBadge) {
@@ -1132,20 +1103,15 @@ function submitWithdrawRequest() {
         status: 'pending' 
     };
     
-    if(window.firebaseReady && window.FB_DB) {
-        const newRef = window.FB_PUSH(window.FB_REF(window.FB_DB, 'withdrawRequests'));
-        window.FB_SET(newRef, req).then(() => {
-            alert('Withdrawal request submitted successfully!');
-            document.getElementById('withdraw-amount').value = '';
-            document.getElementById('withdraw-address').value = '';
-            closeWithdrawModal();
-            updateBadges();
-        }).catch(err => {
-            alert('Error submitting request: ' + err.message);
-        });
-    } else {
-        alert('Database not ready. Try again in a moment.');
-    }
+    loadWithdrawRequests();
+    withdrawRequests.push(req);
+    saveWithdrawRequests();
+
+    alert('Withdrawal request submitted successfully!');
+    document.getElementById('withdraw-amount').value = '';
+    document.getElementById('withdraw-address').value = '';
+    closeWithdrawModal();
+    updateBadges();
 }
 </script>
 </body>
