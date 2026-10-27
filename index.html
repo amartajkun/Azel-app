@@ -212,8 +212,12 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <div id="page-profile" class="page-content p-4 space-y-4">
     <div class="flex items-center justify-between">
         <div class="flex items-center space-x-3">
-            <div class="w-14 h-14 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center">
+            <div onclick="openAvatarModal()" class="w-14 h-14 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center cursor-pointer relative overflow-hidden group shadow-lg" title="Click to change avatar">
+                <img id="profile-avatar-img" src="" alt="" class="w-full h-full object-cover hidden">
                 <span id="profile-initial" class="text-2xl font-bold text-emerald-400">A</span>
+                <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                    <i class="fas fa-camera text-white text-xs"></i>
+                </div>
             </div>
             <div>
                 <h2 id="profile-username-display" class="text-xl font-bold text-white flex items-center gap-1">tajkun</h2>
@@ -225,6 +229,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         </div>
         <i class="fas fa-star text-emerald-400 text-lg"></i>
     </div>
+
     <div class="emerald-card p-3 rounded-xl flex justify-between items-center">
         <div class="flex items-center space-x-2">
             <i class="fas fa-crown text-emerald-400 text-sm"></i>
@@ -232,15 +237,108 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         </div>
         <button class="bg-emerald-400 text-black px-3 py-1 rounded-full text-[10px] font-bold" data-i18n="upgrade_now">Upgrade</button>
     </div>
+
+    <!-- NOVI MENI PO TVOM IZGLEDU (BEZ CERTIFICATION I INSURANCE RECORDS) -->
     <div class="emerald-card rounded-2xl divide-y divide-gray-800/60 text-xs">
-        <div onclick="openLanguageModal()" class="p-3 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20">
-            <div class="flex items-center space-x-3"><i class="fas fa-globe text-emerald-400 text-sm"></i><span data-i18n="switch_lang" class="font-bold text-emerald-400">Switch Language</span></div>
-            <span id="current-lang-text" class="text-[10px] text-gray-400">EN ></span>
+        <div onclick="openChangeEmailModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+            <div class="flex items-center space-x-3">
+                <i class="far fa-envelope text-emerald-400 text-sm w-4 text-center"></i>
+                <span class="text-white font-medium">Change Email</span>
+            </div>
+            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+        </div>
+        <div onclick="alert('Login Password settings')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-lock text-emerald-400 text-sm w-4 text-center"></i>
+                <span class="text-white font-medium">Login Password</span>
+            </div>
+            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+        </div>
+        <div onclick="alert('Transaction Password settings')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-shield-halved text-emerald-400 text-sm w-4 text-center"></i>
+                <span class="text-white font-medium">Transaction Password</span>
+            </div>
+            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
     </div>
+
+    <div class="emerald-card rounded-2xl divide-y divide-gray-800/60 text-xs">
+        <div onclick="alert('Feedback submitted via support.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+            <div class="flex items-center space-x-3">
+                <i class="far fa-comment-dots text-emerald-400 text-sm w-4 text-center"></i>
+                <span class="text-white font-medium">Feedback</span>
+            </div>
+            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+        </div>
+        <div onclick="alert('Help Center is 24/7 active.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+            <div class="flex items-center space-x-3">
+                <i class="far fa-circle-question text-emerald-400 text-sm w-4 text-center"></i>
+                <span class="text-white font-medium">Help Center</span>
+            </div>
+            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+        </div>
+        <div onclick="alert('User Terms & Conditions apply.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+            <div class="flex items-center space-x-3">
+                <i class="far fa-user text-emerald-400 text-sm w-4 text-center"></i>
+                <span class="text-white font-medium">User Terms</span>
+            </div>
+            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+        </div>
+        <div onclick="openLanguageModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-globe text-emerald-400 text-sm w-4 text-center"></i>
+                <span class="text-white font-medium">Switch Language</span>
+            </div>
+            <div class="flex items-center gap-1">
+                <span id="current-lang-text" class="text-[10px] text-gray-400">EN</span>
+                <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+            </div>
+        </div>
+        <div onclick="alert('Cache cleared successfully!')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+            <div class="flex items-center space-x-3">
+                <i class="far fa-trash-can text-emerald-400 text-sm w-4 text-center"></i>
+                <span class="text-white font-medium">Clear Cache</span>
+            </div>
+            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+        </div>
+        <div onclick="alert('App download link copied.')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-download text-emerald-400 text-sm w-4 text-center"></i>
+                <span class="text-white font-medium">Download App</span>
+            </div>
+            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+        </div>
+    </div>
+
     <button onclick="handleUserLogout()" class="w-full emerald-card py-3 rounded-2xl text-center text-red-500 font-bold text-xs hover:bg-red-950/20 transition">
-        <span data-i18n="logout">Log Out</span>
+        <span>Log Out</span>
     </button>
+</div>
+
+<!-- MODAL ZA PROFILNU SLIKU -->
+<div id="modal-avatar" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-4 bg-[#0b0e14] border border-emerald-500/30">
+        <h3 class="text-sm font-bold text-emerald-400">Set Profile Picture</h3>
+        <p class="text-[11px] text-gray-400">Enter direct image URL or choose preset:</p>
+        <input type="text" id="avatar-url-input" placeholder="https://example.com/image.jpg" class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white text-xs">
+        <div class="flex space-x-2">
+            <button onclick="closeAvatarModal()" class="w-1/2 bg-gray-800 text-gray-300 py-2 rounded-lg text-xs font-bold">Cancel</button>
+            <button onclick="saveAvatarUrl()" class="w-1/2 bg-emerald-500 text-black py-2 rounded-lg text-xs font-bold">Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ZA PROMENU EMAIL-a -->
+<div id="modal-change-email" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-4 bg-[#0b0e14] border border-emerald-500/30">
+        <h3 class="text-sm font-bold text-emerald-400">Change Email Address</h3>
+        <input type="email" id="new-email-input" placeholder="Enter new email..." class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white text-xs">
+        <div class="flex space-x-2">
+            <button onclick="closeChangeEmailModal()" class="w-1/2 bg-gray-800 text-gray-300 py-2 rounded-lg text-xs font-bold">Cancel</button>
+            <button onclick="saveNewEmail()" class="w-1/2 bg-emerald-500 text-black py-2 rounded-lg text-xs font-bold">Update</button>
+        </div>
+    </div>
 </div>
 
 <!-- MODAL ZA "INVITE FRIENDS" -->
@@ -400,12 +498,12 @@ let withdrawRequests = [
 ];
 const walletAddresses = { trc20: "TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk", bep20: "0xb8574070f05f0863be358dd60f88e7ccc78af512" };
 
-// GLAVNI FIKSNI NALOG ("tajkun")
 const MAIN_ADMIN_USER = {
     id: 119216,
     username: "tajkun",
     code: "AZEL-TAJKUN",
-    link: window.location.href.split('?')[0].split('#')[0] + '?inviteCode=AZEL-TAJKUN'
+    link: window.location.href.split('?')[0].split('#')[0] + '?inviteCode=AZEL-TAJKUN',
+    avatar: ""
 };
 
 let currentUser = null;
@@ -415,10 +513,9 @@ window.addEventListener('DOMContentLoaded', function() {
     const loggedUsername = sessionStorage.getItem('azel_current_username');
 
     if (loggedUsername && loggedUsername.toLowerCase() === 'tajkun') {
-        currentUser = MAIN_ADMIN_USER;
-        localStorage.setItem('azel_user_data', JSON.stringify(MAIN_ADMIN_USER));
+        currentUser = JSON.parse(localStorage.getItem('azel_user_data')) || MAIN_ADMIN_USER;
     } else {
-        currentUser = JSON.parse(localStorage.getItem('azel_user_data'));
+        currentUser = JSON.parse(localStorage.getItem('azel_user_data')) || MAIN_ADMIN_USER;
     }
 
     if (isLogged === 'true') {
@@ -441,17 +538,63 @@ window.addEventListener('DOMContentLoaded', function() {
 function updateProfileUI() {
     const loggedUsername = sessionStorage.getItem('azel_current_username');
     if (loggedUsername && loggedUsername.toLowerCase() === 'tajkun') {
-        currentUser = MAIN_ADMIN_USER;
+        if(!currentUser || currentUser.username !== 'tajkun') currentUser = MAIN_ADMIN_USER;
     } else if (!currentUser) {
         currentUser = MAIN_ADMIN_USER;
     }
 
-    document.getElementById('profile-id-display').innerText = currentUser.id;
-    document.getElementById('profile-username-display').innerText = currentUser.username;
-    document.getElementById('profile-code-display').innerText = "Invitation code: " + currentUser.code;
-    document.getElementById('modal-code-display').innerText = currentUser.code;
-    document.getElementById('modal-link-display').innerText = currentUser.link;
-    document.getElementById('invite-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=${encodeURIComponent(currentUser.link)}`;
+    document.getElementById('profile-id-display').innerText = currentUser.id || 119216;
+    document.getElementById('profile-username-display').innerText = currentUser.username || "tajkun";
+    document.getElementById('profile-code-display').innerText = "Invitation code: " + (currentUser.code || "AZEL-TAJKUN");
+    document.getElementById('modal-code-display').innerText = currentUser.code || "AZEL-TAJKUN";
+    document.getElementById('modal-link-display').innerText = currentUser.link || MAIN_ADMIN_USER.link;
+    document.getElementById('invite-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=${encodeURIComponent(currentUser.link || MAIN_ADMIN_USER.link)}`;
+
+    const avatarImg = document.getElementById('profile-avatar-img');
+    const initialSpan = document.getElementById('profile-initial');
+    if(currentUser.avatar && currentUser.avatar.trim() !== '') {
+        avatarImg.src = currentUser.avatar;
+        avatarImg.classList.remove('hidden');
+        initialSpan.classList.add('hidden');
+    } else {
+        avatarImg.classList.add('hidden');
+        initialSpan.classList.remove('hidden');
+        initialSpan.innerText = (currentUser.username ? currentUser.username.charAt(0).toUpperCase() : 'A');
+    }
+}
+
+function openAvatarModal() {
+    document.getElementById('modal-avatar').style.display = 'flex';
+    document.getElementById('avatar-url-input').value = currentUser.avatar || '';
+}
+function closeAvatarModal() {
+    document.getElementById('modal-avatar').style.display = 'none';
+}
+function saveAvatarUrl() {
+    const url = document.getElementById('avatar-url-input').value.trim();
+    currentUser.avatar = url;
+    localStorage.setItem('azel_user_data', JSON.stringify(currentUser));
+    updateProfileUI();
+    closeAvatarModal();
+    alert('Profile picture updated successfully!');
+}
+
+function openChangeEmailModal() {
+    document.getElementById('modal-change-email').style.display = 'flex';
+}
+function closeChangeEmailModal() {
+    document.getElementById('modal-change-email').style.display = 'none';
+}
+function saveNewEmail() {
+    const email = document.getElementById('new-email-input').value.trim();
+    if(!email) {
+        alert('Please enter a valid email address.');
+        return;
+    }
+    currentUser.email = email;
+    localStorage.setItem('azel_user_data', JSON.stringify(currentUser));
+    closeChangeEmailModal();
+    alert('Email updated successfully to: ' + email);
 }
 
 function switchAuthTab(tab) {
@@ -473,17 +616,28 @@ function handleUserLogin() {
     
     if (user.toLowerCase() === 'tajkun' || user.toLowerCase() === 'amartajkun') {
         user = 'tajkun';
-        currentUser = MAIN_ADMIN_USER;
+        let savedData = JSON.parse(localStorage.getItem('azel_user_data'));
+        if (savedData && savedData.username === 'tajkun') {
+            currentUser = savedData;
+        } else {
+            currentUser = MAIN_ADMIN_USER;
+        }
     } else {
-        let randomId = Math.floor(100000 + Math.random() * 900000); 
-        let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
-        let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
-        currentUser = {
-            id: randomId,
-            username: user,
-            code: randomCode,
-            link: cleanBaseUrl + '?inviteCode=' + randomCode
-        };
+        let savedData = JSON.parse(localStorage.getItem('azel_user_data'));
+        if (savedData && savedData.username === user) {
+            currentUser = savedData;
+        } else {
+            let randomId = Math.floor(100000 + Math.random() * 900000); 
+            let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
+            let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
+            currentUser = {
+                id: randomId,
+                username: user,
+                code: randomCode,
+                link: cleanBaseUrl + '?inviteCode=' + randomCode,
+                avatar: ""
+            };
+        }
     }
 
     sessionStorage.setItem('azel_logged_in', 'true');
@@ -516,8 +670,10 @@ function handleUserRegister() {
     currentUser = {
         id: randomId,
         username: user,
+        email: email,
         code: randomCode,
-        link: cleanBaseUrl + '?inviteCode=' + randomCode
+        link: cleanBaseUrl + '?inviteCode=' + randomCode,
+        avatar: ""
     };
 
     localStorage.setItem('azel_user_data', JSON.stringify(currentUser));
@@ -561,7 +717,7 @@ function switchTab(tabId) {
     window.scrollTo(0, 0);
 }
 
-// TAJNI ADMIN PANEL - SAMO I ISKLJUČIVO ZA "tajkun" (Na 3 klika)
+// TAJNI ADMIN PANEL - SAMO ZA "tajkun" (Na 3 klika)
 function handleLogoClick() {
     const loggedUser = sessionStorage.getItem('azel_current_username') || (currentUser ? currentUser.username : '');
     
@@ -767,8 +923,8 @@ function changeLanguage(lang) {
         const key = el.getAttribute('data-i18n');
         if(t[key]) el.innerText = t[key];
     });
-    const langNames = { en: 'EN >', sr: 'SR >', sl: 'SL >', mk: 'MK >', es: 'ES >', ru: 'RU >', el: 'EL >', it: 'IT >' };
-    document.getElementById('current-lang-text').innerText = langNames[lang] || 'EN >';
+    const langNames = { en: 'EN', sr: 'SR', sl: 'SL', mk: 'MK', es: 'ES', ru: 'RU', el: 'EL', it: 'IT' };
+    document.getElementById('current-lang-text').innerText = langNames[lang] || 'EN';
     closeLangModal();
 }
 </script>
