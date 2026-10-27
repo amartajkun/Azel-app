@@ -431,7 +431,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
                 <input type="text" id="withdraw-address" placeholder="Enter address..." class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white font-mono text-[11px]">
             </div>
         </div>
-        <button onclick="submitWithdrawRequest()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black py-2.5 rounded-xl text-xs font-bold active:scale-95 transition">Confirm Withdrawal</button>
+        <button id="withdraw-submit-btn" onclick="submitWithdrawRequest()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black py-2.5 rounded-xl text-xs font-bold active:scale-95 transition">Confirm Withdrawal</button>
     </div>
 </div>
 
@@ -519,9 +519,9 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 let currentUser = null;
 let allRegisteredUsers = [];
 let withdrawRequests = [];
+let adminInterval = null;
 const ADMIN_PIN = "3112";
 
-// Povezano direktno na tvoj JSONBin nalog
 const BIN_ID = "6ae13079ffd5d16053915188";
 const MASTER_KEY = "$2a$10$dEZ.lwInJSv0XALwpVBrl.xZPANtLWNSkkHVwl9wvE2YOy58Of3wa";
 
@@ -694,10 +694,10 @@ window.addEventListener('DOMContentLoaded', function() {
         switchAuthTab('register');
     }
     changeLanguage('en');
-    loadWithdrawRequests();
+    loadWithdrawRequestsQuiet();
 });
 
-function loadWithdrawRequests() {
+function loadWithdrawRequestsQuiet() {
     fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
         headers: { 'X-Master-Key': MASTER_KEY }
     })
@@ -708,7 +708,7 @@ function loadWithdrawRequests() {
             updateBadges();
         }
     })
-    .catch(err => console.log('Error loading requests:', err));
+    .catch(err => console.log('Error:', err));
 }
 
 function saveWithdrawRequestsToBin() {
@@ -722,7 +722,7 @@ function saveWithdrawRequestsToBin() {
     })
     .then(res => res.json())
     .then(() => updateBadges())
-    .catch(err => alert('Error saving to server: ' + err.message));
+    .catch(err => alert('Error saving: ' + err.message));
 }
 
 function switchAuthTab(tab) {
@@ -992,7 +992,7 @@ function updateAppUI() {
         document.getElementById('buy-license-btn').className = "bg-emerald-950 text-emerald-400 px-4 py-2 rounded-xl text-xs font-bold border border-emerald-500/40 cursor-default";
     }
     checkBotUnlocks();
-    updateBadges();
+    loadWithdrawRequestsQuiet();
 }
 
 function openChangeEmailModal() { document.getElementById('modal-change-email').style.display = 'flex'; }
@@ -1043,47 +1043,68 @@ function verifyAdminPin() {
 
 function openAdminPanel() {
     if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') return;
-    loadWithdrawRequests();
-    renderAdminWithdrawList();
     document.getElementById('modal-admin-panel').style.display = 'flex';
+    renderAdminWithdrawList();
+    
+    // Automatsko osvežavanje admin panela na svake 3 sekunde
+    if(adminInterval) clearInterval(adminInterval);
+    adminInterval = setInterval(() => {
+        renderAdminWithdrawList();
+    }, 3000);
 }
-function closeAdminPanel() { document.getElementById('modal-admin-panel').style.display = 'none'; updateBadges(); }
+
+function closeAdminPanel() { 
+    document.getElementById('modal-admin-panel').style.display = 'none'; 
+    if(adminInterval) clearInterval(adminInterval);
+    loadWithdrawRequestsQuiet(); 
+}
 
 function renderAdminWithdrawList() {
-    loadWithdrawRequests();
-    const listContainer = document.getElementById('admin-list-withdraw');
-    if(!withdrawRequests || withdrawRequests.length === 0) {
-        listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">No active withdrawal requests.</p>';
-        return;
-    }
-    let html = '';
-    withdrawRequests.forEach((req, idx) => {
-        html += `
-            <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-2">
-                <div class="flex justify-between items-center font-bold">
-                    <span class="text-white">User: ${req.user}</span>
-                    <span class="text-emerald-400">${req.amount} USDT</span>
-                </div>
-                <div class="text-[10px] text-gray-400 font-mono truncate">Address: ${req.address}</div>
-                <div class="flex justify-between items-center pt-1">
-                    <span class="text-amber-400 text-[10px]">Status: ${req.status}</span>
-                    ${req.status === 'pending' ? `
-                        <button onclick="approveWithdraw(${idx})" class="bg-emerald-500 text-black px-3 py-1 rounded font-bold text-[10px]">Approve</button>
-                    ` : `<span class="text-emerald-500 font-bold text-[10px]">Approved ✓</span>`}
-                </div>
-            </div>
-        `;
-    });
-    listContainer.innerHTML = html;
+    fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        headers: { 'X-Master-Key': MASTER_KEY }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data && data.record) {
+            withdrawRequests = Array.isArray(data.record) ? data.record : (data.record.requests || []);
+            updateBadges();
+
+            const listContainer = document.getElementById('admin-list-withdraw');
+            if(!withdrawRequests || withdrawRequests.length === 0) {
+                listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">No active withdrawal requests.</p>';
+                return;
+            }
+            let html = '';
+            withdrawRequests.forEach((req, idx) => {
+                html += `
+                    <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-2">
+                        <div class="flex justify-between items-center font-bold">
+                            <span class="text-white">User: ${req.user}</span>
+                            <span class="text-emerald-400">${req.amount} USDT</span>
+                        </div>
+                        <div class="text-[10px] text-gray-400 font-mono truncate">Address: ${req.address}</div>
+                        <div class="flex justify-between items-center pt-1">
+                            <span class="text-amber-400 text-[10px]">Status: ${req.status}</span>
+                            ${req.status === 'pending' ? `
+                                <button onclick="approveWithdraw(${idx})" class="bg-emerald-500 text-black px-3 py-1 rounded font-bold text-[10px]">Approve</button>
+                            ` : `<span class="text-emerald-500 font-bold text-[10px]">Approved ✓</span>`}
+                        </div>
+                    </div>
+                `;
+            });
+            listContainer.innerHTML = html;
+        }
+    })
+    .catch(err => console.log('Admin refresh error:', err));
 }
 
 function approveWithdraw(idx) {
     if(withdrawRequests[idx]) {
         withdrawRequests[idx].status = 'approved';
         saveWithdrawRequestsToBin();
-        alert('Withdrawal approved!');
         renderAdminWithdrawList();
         updateBadges();
+        alert('Withdrawal approved!');
     }
 }
 
@@ -1111,6 +1132,11 @@ function submitWithdrawRequest() {
 
     if(!amount || amount < 50) { alert('Minimum withdrawal amount is 50 USDT.'); return; }
     if(!address) { alert('Please enter address.'); return; }
+
+    const submitBtn = document.getElementById('withdraw-submit-btn');
+    submitBtn.innerText = "Processing...";
+    submitBtn.disabled = true;
+    submitBtn.classList.add('opacity-50');
 
     let req = { 
         id: Date.now(), 
@@ -1150,6 +1176,11 @@ function submitWithdrawRequest() {
     })
     .catch(err => {
         alert('Error submitting request: ' + err.message);
+    })
+    .finally(() => {
+        submitBtn.innerText = "Confirm Withdrawal";
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('opacity-50');
     });
 }
 </script>
