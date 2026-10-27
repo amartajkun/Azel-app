@@ -32,7 +32,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 </head>
 <body class="pb-24">
 
-<!-- LOGIN / REGISTRATION SCREEN -->
+<!-- LOGIN / REGISTRATION SCREEN (ENGLISH BY DEFAULT) -->
 <div id="auth-screen">
     <div class="emerald-card p-6 rounded-3xl w-full max-w-sm space-y-4 bg-[#0b0e14] border border-emerald-500/40 shadow-2xl">
         <div class="text-center space-y-1">
@@ -42,49 +42,49 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         </div>
 
         <div class="flex bg-gray-900 p-1 rounded-xl border border-gray-800">
-            <button id="tab-login-btn" onclick="switchAuthTab('login')" class="flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-500 text-black transition">Prijava</button>
-            <button id="tab-reg-btn" onclick="switchAuthTab('register')" class="flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 transition">Registracija</button>
+            <button id="tab-login-btn" onclick="switchAuthTab('login')" class="flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-500 text-black transition">Log In</button>
+            <button id="tab-reg-btn" onclick="switchAuthTab('register')" class="flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 transition">Register</button>
         </div>
 
         <!-- LOGIN FORM -->
         <div id="form-login" class="space-y-3 text-xs">
             <div>
-                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Korisničko ime</label>
-                <input type="text" id="login-username" placeholder="Unesite username..." class="w-full bg-gray-900 border border-emerald-500/30 p-3 rounded-xl text-white focus:outline-none focus:border-emerald-400">
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Username</label>
+                <input type="text" id="login-username" placeholder="Enter username..." class="w-full bg-gray-900 border border-emerald-500/30 p-3 rounded-xl text-white focus:outline-none focus:border-emerald-400">
             </div>
             <div>
-                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Lozinka</label>
-                <input type="password" id="login-password" placeholder="Unesite lozinku..." class="w-full bg-gray-900 border border-emerald-500/30 p-3 rounded-xl text-white focus:outline-none focus:border-emerald-400">
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Password</label>
+                <input type="password" id="login-password" placeholder="Enter password..." class="w-full bg-gray-900 border border-emerald-500/30 p-3 rounded-xl text-white focus:outline-none focus:border-emerald-400">
             </div>
             <button onclick="handleUserLogin()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-xs shadow-lg shadow-emerald-500/20 active:scale-95 transition mt-2">
-                Prijavi se
+                Log In
             </button>
         </div>
 
         <!-- REGISTER FORM -->
         <div id="form-register" class="space-y-2.5 text-xs" style="display: none;">
             <div>
-                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Korisničko ime</label>
-                <input type="text" id="reg-username-input" placeholder="Izaberite username..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Username</label>
+                <input type="text" id="reg-username-input" placeholder="Choose username..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
             </div>
             <div>
-                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Email adresa</label>
-                <input type="email" id="reg-email-input" placeholder="Unesite vaš email..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Email Address</label>
+                <input type="email" id="reg-email-input" placeholder="Enter your email..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
             </div>
             <div>
-                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Pozivni kod</label>
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Invitation Code</label>
                 <input type="text" id="reg-input-code" readonly class="w-full bg-gray-950 border border-emerald-500/40 p-2.5 rounded-xl text-emerald-300 font-mono font-bold">
             </div>
             <div>
-                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Lozinka</label>
-                <input type="password" id="reg-pass-input" placeholder="Kreirajte lozinku..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Password</label>
+                <input type="password" id="reg-pass-input" placeholder="Create password..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
             </div>
             <div>
-                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Potvrdite lozinku</label>
-                <input type="password" id="reg-confirm-input" placeholder="Potvrdite lozinku..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Confirm Password</label>
+                <input type="password" id="reg-confirm-input" placeholder="Confirm password..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
             </div>
             <button onclick="handleUserRegister()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-xs shadow-lg shadow-emerald-500/20 active:scale-95 transition mt-2">
-                Registruj se
+                Register
             </button>
         </div>
     </div>
@@ -358,12 +358,12 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     <div class="emerald-card p-5 rounded-2xl w-full max-w-md space-y-4 bg-[#0b0e14] border border-emerald-500/50 max-h-[85vh] flex flex-col">
         <div class="flex justify-between items-center border-b border-gray-800 pb-3 shrink-0">
             <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
-                <i class="fas fa-tasks"></i> Admin Panel - Zahtevi za Isplatu
+                <i class="fas fa-tasks"></i> Admin Panel - Withdrawal Requests
             </h3>
             <button onclick="closeAdminPanel()" class="text-gray-400 hover:text-white text-sm"><i class="fas fa-times"></i></button>
         </div>
         <div id="admin-withdraw-list" class="space-y-3 overflow-y-auto pr-1 grow text-xs"></div>
-        <button onclick="closeAdminPanel()" class="w-full bg-gray-800 text-gray-300 py-2.5 rounded-xl text-xs font-bold shrink-0 mt-2">Zatvori Panel</button>
+        <button onclick="closeAdminPanel()" class="w-full bg-gray-800 text-gray-300 py-2.5 rounded-xl text-xs font-bold shrink-0 mt-2">Close Panel</button>
     </div>
 </div>
 
@@ -450,14 +450,25 @@ function switchAuthTab(tab) {
 }
 
 function handleUserLogin() {
-    const user = document.getElementById('login-username').value.trim();
+    let user = document.getElementById('login-username').value.trim();
     const pass = document.getElementById('login-password').value.trim();
     if(!user || !pass) {
-        alert('Molimo unesite korisničko ime i lozinku!');
+        alert('Please enter username and password!');
         return;
     }
+    
+    // Provera za tvoj glavni admin nalog
+    if (user.toLowerCase() === 'tajkun' || user.toLowerCase() === 'amartajkun') {
+        user = 'tajkun';
+    }
+
     sessionStorage.setItem('azel_logged_in', 'true');
     sessionStorage.setItem('azel_current_username', user);
+    
+    currentUser.username = user;
+    localStorage.setItem('azel_user_data', JSON.stringify(currentUser));
+    document.getElementById('profile-username-display').innerText = user;
+
     showMainApp();
 }
 
@@ -468,11 +479,11 @@ function handleUserRegister() {
     const confirmPass = document.getElementById('reg-confirm-input').value.trim();
 
     if(!user || !email || !pass) {
-        alert('Molimo popunite sva obavezna polja, uključujući email!');
+        alert('Please fill in all required fields, including email!');
         return;
     }
     if(pass !== confirmPass) {
-        alert('Lozinke se ne podudaraju!');
+        alert('Passwords do not match!');
         return;
     }
 
@@ -480,7 +491,7 @@ function handleUserRegister() {
     localStorage.setItem('azel_user_data', JSON.stringify(currentUser));
     document.getElementById('profile-username-display').innerText = user;
 
-    alert('Uspešno ste se registrovali i prijavili!');
+    alert('Successfully registered and logged in!');
     sessionStorage.setItem('azel_logged_in', 'true');
     sessionStorage.setItem('azel_current_username', user);
     showMainApp();
@@ -518,19 +529,20 @@ function switchTab(tabId) {
     window.scrollTo(0, 0);
 }
 
-// TAJNI ADMIN PANEL - Samo za "tajkun", na 3 klika
+// TAJNI ADMIN PANEL - SAMO I ISKLJUČIVO ZA "tajkun" (Na 3 klika)
 function handleLogoClick() {
     const loggedUser = sessionStorage.getItem('azel_current_username') || currentUser.username;
     
+    // Bilo koji drugi nalog (uključujući "ammar") neće moći otvoriti admin panel!
     if (loggedUser.toLowerCase() !== 'tajkun') {
-        return; // Običan korisnik ne može da otvori admin panel
+        return; 
     }
 
     logoClickCount++;
     if(logoClickTimer) clearTimeout(logoClickTimer);
     logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 2000);
 
-    if(logoClickCount >= 3) { // Postavljeno na 3 klika
+    if(logoClickCount >= 3) { // 3 klika
         logoClickCount = 0;
         document.getElementById('modal-admin-pin').style.display = 'flex';
     }
@@ -547,7 +559,7 @@ function verifyAdminPin() {
         closeAdminPinModal();
         openAdminPanel();
     } else {
-        alert('Pogrešan PIN!');
+        alert('Incorrect PIN!');
         document.getElementById('admin-pin-input').value = '';
     }
 }
@@ -563,7 +575,7 @@ function closeAdminPanel() {
 function renderAdminWithdrawList() {
     const listContainer = document.getElementById('admin-withdraw-list');
     if(withdrawRequests.length === 0) {
-        listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">Nema aktivnih zahteva za isplatu.</p>';
+        listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">No active withdrawal requests.</p>';
         return;
     }
     let html = '';
@@ -571,18 +583,18 @@ function renderAdminWithdrawList() {
         html += `
             <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-2">
                 <div class="flex justify-between items-center font-bold">
-                    <span class="text-white">Korisnik: ${req.user}</span>
+                    <span class="text-white">User: ${req.user}</span>
                     <span class="text-emerald-400">${req.amount} USDT</span>
                 </div>
-                <div class="text-[10px] text-gray-400 font-mono truncate">Adresa: ${req.address}</div>
+                <div class="text-[10px] text-gray-400 font-mono truncate">Address: ${req.address}</div>
                 <div class="flex justify-between items-center pt-1">
-                    <span class="text-amber-400 text-[10px]">Preostalo: ${req.hoursLeft}h</span>
+                    <span class="text-amber-400 text-[10px]">Time left: ${req.hoursLeft}h</span>
                     ${req.status === 'pending' ? `
                         <div class="flex gap-2">
-                            <button onclick="approveWithdraw(${idx})" class="bg-emerald-500 text-black px-3 py-1 rounded font-bold text-[10px]">Odobri</button>
-                            <button onclick="rejectWithdraw(${idx})" class="bg-red-500 text-white px-3 py-1 rounded font-bold text-[10px]">Odbij</button>
+                            <button onclick="approveWithdraw(${idx})" class="bg-emerald-500 text-black px-3 py-1 rounded font-bold text-[10px]">Approve</button>
+                            <button onclick="rejectWithdraw(${idx})" class="bg-red-500 text-white px-3 py-1 rounded font-bold text-[10px]">Reject</button>
                         </div>
-                    ` : `<span class="text-emerald-500 font-bold text-[10px]">Odobreno ✓</span>`}
+                    ` : `<span class="text-emerald-500 font-bold text-[10px]">Approved ✓</span>`}
                 </div>
             </div>
         `;
@@ -592,12 +604,12 @@ function renderAdminWithdrawList() {
 
 function approveWithdraw(index) {
     withdrawRequests[index].status = 'approved';
-    alert('Zahtev uspešno odobren!');
+    alert('Request successfully approved!');
     renderAdminWithdrawList();
 }
 function rejectWithdraw(index) {
     withdrawRequests.splice(index, 1);
-    alert('Zahtev odbijen i obrisan.');
+    alert('Request rejected and deleted.');
     renderAdminWithdrawList();
 }
 
@@ -630,7 +642,7 @@ function selectNetwork(net) {
 function copyAddress() {
     const addr = walletAddresses[selectedNetwork];
     navigator.clipboard.writeText(addr).then(() => {
-        alert('Kripto adresa uspešno kopirana!');
+        alert('Crypto address copied successfully!');
     });
 }
 
@@ -642,15 +654,15 @@ function submitWithdrawRequest() {
     const address = document.getElementById('withdraw-address').value.trim();
 
     if(!amount || amount < 50) {
-        alert('Minimalni iznos za isplatu je 50 USDT.');
+        alert('Minimum withdrawal amount is 50 USDT.');
         return;
     }
     if(!address) {
-        alert('Unesite kripto adresu za isplatu.');
+        alert('Please enter crypto address.');
         return;
     }
     if(amount > currentBalance) {
-        alert('Nemate dovoljno sredstava na računu.');
+        alert('Insufficient funds.');
         return;
     }
 
@@ -666,7 +678,7 @@ function submitWithdrawRequest() {
         status: 'pending'
     });
 
-    alert('Uspešno ste podneli zahtev za isplatu! Sredstva stižu u roku od 72 sata.');
+    alert('Withdrawal request submitted successfully! Funds will arrive within 72 hours.');
     closeWithdrawModal();
     document.getElementById('withdraw-amount').value = '';
     document.getElementById('withdraw-address').value = '';
@@ -677,12 +689,12 @@ function closeInviteModal() { document.getElementById('modal-invite').style.disp
 
 function copyMyInviteLink() {
     navigator.clipboard.writeText(currentUser.link).then(() => {
-        alert('Pozivni link uspešno kopiran!');
+        alert('Invitation link copied!');
     });
 }
 function copyMyInviteCode() {
     navigator.clipboard.writeText(currentUser.code).then(() => {
-        alert('Pozivni kod kopiran: ' + currentUser.code);
+        alert('Invitation code copied: ' + currentUser.code);
     });
 }
 
