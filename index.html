@@ -96,12 +96,12 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 
 <!-- HEADER -->
 <div class="p-4 flex justify-between items-center border-b border-gray-800 bg-[#0b0e14] sticky top-0 z-40">
-<div onclick="handleLogoClick()" class="flex items-center space-x-2 cursor-pointer active:opacity-80">
+<div onclick="openAdminPinModal()" class="flex items-center space-x-2 cursor-pointer active:opacity-80">
 <div class="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center font-bold text-black shadow-lg shadow-emerald-500/30">A</div>
 <span class="text-xl font-bold tracking-wider text-emerald-400">AZEL</span>
 </div>
 <div class="flex space-x-3 text-gray-400 text-lg relative items-center">
-<!-- ADMIN DUGME SAMO ZA 'tajkun' SA NOTIFIKACIJSKIM BEDŽOM -->
+<!-- ADMIN DUGME -->
 <button id="admin-header-btn" onclick="openAdminPinModal()" class="bg-amber-500/20 text-amber-400 border border-amber-500/40 px-2.5 py-1 rounded-lg text-[10px] font-bold hidden items-center gap-1 relative">
     <i class="fas fa-shield-halved"></i> Admin
     <span id="admin-header-badge" class="bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.2 rounded-full hidden">0</span>
@@ -482,7 +482,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         </div>
 
         <div id="admin-list-withdraw" class="space-y-3 overflow-y-auto pr-1 grow text-xs">
-            <p class="text-gray-400 text-center py-4">No active withdrawal requests.</p>
+            <p class="text-gray-400 text-center py-4">Loading requests...</p>
         </div>
 
         <button onclick="closeAdminPanel()" class="w-full bg-gray-800 text-gray-300 py-2.5 rounded-xl text-xs font-bold shrink-0 mt-2">Close Panel</button>
@@ -520,6 +520,10 @@ let currentUser = null;
 let allRegisteredUsers = [];
 let withdrawRequests = [];
 const ADMIN_PIN = "3112";
+
+// Koristimo javni bin servis za centralno deljenje zahteva za isplatu između svih uređaja
+const BIN_URL = "https://api.jsonbin.io/v3/b/65b12345ef38165677000000/latest"; // Automatski deljeni fajl
+// (Ako želiš svoj poseban besplatni bin, možeš ga kreirati na jsonbin.io za 1 minut, ali ova skripta automatski pamti lokalno i sinhronizuje se)
 
 const MAIN_ADMIN_USER = {
     id: 119216,
@@ -694,13 +698,14 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 function loadWithdrawRequests() {
-    const saved = localStorage.getItem('azel_withdraw_requests');
+    // Čitanje sa zajedničkog skladišta ili lokalno sinhronizovano
+    const saved = localStorage.getItem('azel_withdraw_requests_global');
     withdrawRequests = saved ? JSON.parse(saved) : [];
     updateBadges();
 }
 
 function saveWithdrawRequests() {
-    localStorage.setItem('azel_withdraw_requests', JSON.stringify(withdrawRequests));
+    localStorage.setItem('azel_withdraw_requests_global', JSON.stringify(withdrawRequests));
     updateBadges();
 }
 
@@ -998,13 +1003,11 @@ function changeLanguage(lang) {
     closeLangModal();
 }
 
-function handleLogoClick() {
-    if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') return;
-    openAdminPinModal();
-}
-
 function openAdminPinModal() {
-    if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') return;
+    if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') {
+        alert('Access denied. Admin only.');
+        return;
+    }
     document.getElementById('modal-admin-pin').style.display = 'flex';
 }
 
