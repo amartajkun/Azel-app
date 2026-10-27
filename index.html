@@ -1027,7 +1027,7 @@ function openAdminPinModal() {
         alert('Access denied. Admin only.');
         return;
     }
-    document.getElementById('modal-admin-pin').style.display = 'flex';
+    document.getElementById('modal-[#modal-admin-pin]').style.display = 'flex';
 }
 
 function closeAdminPinModal() { document.getElementById('modal-admin-pin').style.display = 'none'; document.getElementById('admin-pin-input').value = ''; }
@@ -1049,17 +1049,33 @@ function openAdminPanel() {
     document.getElementById('modal-admin-panel').style.display = 'flex';
     renderAdminWithdrawList();
     
-    // Automatsko osvežavanje admin panela na svake 3 sekunde
+    // Automatsko osvežavanje admin panela na svake 1 sekunde radi tajmera
     if(adminInterval) clearInterval(adminInterval);
     adminInterval = setInterval(() => {
         renderAdminWithdrawList();
-    }, 3000);
+    }, 1000);
 }
 
 function closeAdminPanel() { 
     document.getElementById('modal-admin-panel').style.display = 'none'; 
     if(adminInterval) clearInterval(adminInterval);
     loadWithdrawRequestsQuiet(); 
+}
+
+function formatDuration(ms) {
+    if(ms <= 0) return "00h 00m 00s";
+    let totalSec = Math.floor(ms / 1000);
+    let hours = Math.floor(totalSec / 3600);
+    let minutes = Math.floor((totalSec % 3600) / 60);
+    let seconds = totalSec % 60;
+    return `${hours}h ${minutes < 10 ? '0' : ''}${minutes}m ${seconds < 10 ? '0' : ''}${seconds}s`;
+}
+
+function formatPassedTime(ms) {
+    let totalSec = Math.floor(ms / 1000);
+    let hours = Math.floor(totalSec / 3600);
+    let minutes = Math.floor((totalSec % 3600) / 60);
+    return `${hours}h ${minutes}m`;
 }
 
 function renderAdminWithdrawList() {
@@ -1077,20 +1093,55 @@ function renderAdminWithdrawList() {
                 listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">No active withdrawal requests.</p>';
                 return;
             }
+
+            const now = Date.now();
+            const DURATION_72H = 72 * 60 * 60 * 1000;
+
             let html = '';
             withdrawRequests.forEach((req, idx) => {
+                let createdAt = req.timestamp || req.id;
+                let elapsed = now - createdAt;
+                let remaining = DURATION_72H - elapsed;
+
+                let timeStatusHtml = '';
+                let approveBtnText = "Approve";
+                let approveBtnColor = "bg-emerald-500 text-black";
+
+                if (req.status === 'pending') {
+                    if (remaining > 0) {
+                        timeStatusHtml = `
+                            <div class="flex justify-between items-center bg-gray-950 p-2 rounded-lg border border-amber-500/30 text-[10px]">
+                                <span class="text-amber-400 font-bold"><i class="far fa-clock"></i> 72h Lock Active</span>
+                                <span class="text-emerald-400 font-mono font-bold">${formatDuration(remaining)} remaining</span>
+                            </div>
+                            <div class="text-[9px] text-gray-400">Time passed: <strong class="text-white">${formatPassedTime(elapsed)}</strong></div>
+                        `;
+                    } else {
+                        timeStatusHtml = `
+                            <div class="flex justify-between items-center bg-emerald-950/40 p-2 rounded-lg border border-emerald-500/50 text-[10px]">
+                                <span class="text-emerald-400 font-bold"><i class="fas fa-check-circle"></i> 72h Period Passed!</span>
+                                <span class="text-white font-mono font-bold">Ready to payout</span>
+                            </div>
+                        `;
+                        approveBtnColor = "bg-emerald-400 text-black shadow-lg shadow-emerald-500/30 animate-pulse";
+                    }
+                }
+
                 html += `
                     <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-2">
                         <div class="flex justify-between items-center font-bold">
                             <span class="text-white">User: ${req.user}</span>
-                            <span class="text-emerald-400">${req.amount} USDT</span>
+                            <span class="text-emerald-400 text-sm">$${req.amount} USDT</span>
                         </div>
                         <div class="text-[10px] text-gray-400 font-mono truncate">Address: ${req.address}</div>
-                        <div class="flex justify-between items-center pt-1">
-                            <span class="text-amber-400 text-[10px]">Status: ${req.status}</span>
+                        ${req.status === 'pending' ? timeStatusHtml : ''}
+                        <div class="flex justify-between items-center pt-1 border-t border-gray-800/80">
+                            <span class="text-amber-400 text-[10px] uppercase tracking-wider font-bold">Status: ${req.status}</span>
                             ${req.status === 'pending' ? `
-                                <button onclick="approveWithdraw(${idx})" class="bg-emerald-500 text-black px-3 py-1 rounded font-bold text-[10px]">Approve</button>
-                            ` : `<span class="text-emerald-500 font-bold text-[10px]">Approved ✓</span>`}
+                                <button onclick="approveWithdraw(${idx})" class="${approveBtnColor} px-3 py-1.5 rounded-lg font-bold text-[10px] transition active:scale-95">
+                                    ${approveBtnText}
+                                </button>
+                            ` : `<span class="text-emerald-400 font-bold text-[10px] bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded">Approved ✓</span>`}
                         </div>
                     </div>
                 `;
@@ -1104,6 +1155,7 @@ function renderAdminWithdrawList() {
 function approveWithdraw(idx) {
     if(withdrawRequests[idx]) {
         withdrawRequests[idx].status = 'approved';
+        withdrawRequests[idx].approvedAt = Date.now();
         saveWithdrawRequestsToBin();
     }
 }
@@ -1140,6 +1192,7 @@ function submitWithdrawRequest() {
 
     let req = { 
         id: Date.now(), 
+        timestamp: Date.now(),
         user: currentUser.username + " (" + currentUser.id + ")", 
         amount: amount, 
         address: address, 
@@ -1168,7 +1221,7 @@ function submitWithdrawRequest() {
         });
     })
     .then(() => {
-        alert('Withdrawal request submitted successfully!');
+        alert('Withdrawal request submitted successfully! (72h processing window)');
         document.getElementById('withdraw-amount').value = '';
         document.getElementById('withdraw-address').value = '';
         closeWithdrawModal();
