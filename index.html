@@ -500,6 +500,7 @@ const walletAddresses = { trc20: "TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk", bep20: "0
 const MAIN_ADMIN_USER = {
     id: 119216,
     username: "tajkun",
+    email: "tajkun@azel.com",
     code: "AZEL-TAJKUN",
     link: window.location.href.split('?')[0].split('#')[0] + '?inviteCode=AZEL-TAJKUN',
     avatar: ""
@@ -508,26 +509,21 @@ const MAIN_ADMIN_USER = {
 let currentUser = null;
 
 window.addEventListener('DOMContentLoaded', function() {
-    const isLogged = sessionStorage.getItem('azel_logged_in');
-    const loggedUsername = sessionStorage.getItem('azel_current_username');
-
-    // Učitaj bazu registrovanih korisnika ili postavi inicijalnu sa tajkunom
     let allUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
     if (!allUsers.some(u => u.username.toLowerCase() === 'tajkun')) {
         allUsers.push(MAIN_ADMIN_USER);
         localStorage.setItem('azel_registered_users', JSON.stringify(allUsers));
     }
 
-    if (loggedUsername && loggedUsername.toLowerCase() === 'tajkun') {
-        currentUser = MAIN_ADMIN_USER;
-    } else if (loggedUsername) {
-        currentUser = allUsers.find(u => u.username.toLowerCase() === loggedUsername.toLowerCase()) || MAIN_ADMIN_USER;
-    }
+    const isLogged = sessionStorage.getItem('azel_logged_in');
+    const loggedUsername = sessionStorage.getItem('azel_current_username');
 
     if (isLogged === 'true' && loggedUsername) {
+        currentUser = allUsers.find(u => u.username.toLowerCase() === loggedUsername.toLowerCase()) || MAIN_ADMIN_USER;
         showMainApp();
     } else {
         document.getElementById('auth-screen').style.display = 'flex';
+        document.getElementById('main-app-wrapper').style.display = 'none';
     }
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -579,7 +575,6 @@ function saveAvatarUrl() {
     let allUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
     allUsers = allUsers.map(u => u.username.toLowerCase() === currentUser.username.toLowerCase() ? currentUser : u);
     localStorage.setItem('azel_registered_users', JSON.stringify(allUsers));
-    localStorage.setItem('azel_user_data', JSON.stringify(currentUser));
     updateProfileUI();
     closeAvatarModal();
     alert('Profile picture updated successfully!');
@@ -601,7 +596,6 @@ function saveNewEmail() {
     let allUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
     allUsers = allUsers.map(u => u.username.toLowerCase() === currentUser.username.toLowerCase() ? currentUser : u);
     localStorage.setItem('azel_registered_users', JSON.stringify(allUsers));
-    localStorage.setItem('azel_user_data', JSON.stringify(currentUser));
     closeChangeEmailModal();
     alert('Email updated successfully to: ' + email);
 }
@@ -615,7 +609,6 @@ function switchAuthTab(tab) {
     document.getElementById('tab-reg-btn').className = !isLogin ? 'flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-500 text-black transition' : 'flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 transition';
 }
 
-// STROGA PROVERA PRIJAVLJIVANJA - NEMA ULAZA BEZ REGISTROVANOG NALOGA
 function handleUserLogin() {
     let user = document.getElementById('login-username').value.trim();
     const pass = document.getElementById('login-password').value.trim();
@@ -625,23 +618,17 @@ function handleUserLogin() {
         return;
     }
 
-    if (user.toLowerCase() === 'tajkun' || user.toLowerCase() === 'amartajkun') {
-        user = 'tajkun';
-        currentUser = MAIN_ADMIN_USER;
-    } else {
-        let allUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
-        let foundUser = allUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
-        
-        if (!foundUser) {
-            alert('Account does not exist! Please register first.');
-            return;
-        }
-        currentUser = foundUser;
+    let allUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
+    let foundUser = allUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
+    
+    if (!foundUser) {
+        alert('Account does not exist! Please register first.');
+        return;
     }
 
+    currentUser = foundUser;
     sessionStorage.setItem('azel_logged_in', 'true');
     sessionStorage.setItem('azel_current_username', currentUser.username);
-    localStorage.setItem('azel_user_data', JSON.stringify(currentUser));
     
     updateProfileUI();
     showMainApp();
@@ -683,7 +670,6 @@ function handleUserRegister() {
 
     allUsers.push(currentUser);
     localStorage.setItem('azel_registered_users', JSON.stringify(allUsers));
-    localStorage.setItem('azel_user_data', JSON.stringify(currentUser));
     
     sessionStorage.setItem('azel_logged_in', 'true');
     sessionStorage.setItem('azel_current_username', user);
