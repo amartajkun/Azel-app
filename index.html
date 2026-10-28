@@ -478,6 +478,7 @@ const MAIN_ADMIN_USER = {
     id: 119216,
     username: "tajkun",
     email: "tajkun@azel.com",
+    password: "tajkun123", // Definisan password za admina
     code: "AZEL-TAJKUN",
     link: window.location.href.split('?')[0].split('#')[0] + '?inviteCode=AZEL-TAJKUN',
     avatar: "",
@@ -499,10 +500,13 @@ window.addEventListener('DOMContentLoaded', function() {
         allRegisteredUsers.push(MAIN_ADMIN_USER);
         localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
     } else {
+        if (!existingTajkun.password) {
+            existingTajkun.password = MAIN_ADMIN_USER.password;
+        }
         if (existingTajkun.balance < MAIN_ADMIN_USER.balance) {
             existingTajkun.balance = MAIN_ADMIN_USER.balance;
-            localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
         }
+        localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
     }
 
     ensureTajkunMassiveNetwork();
@@ -553,6 +557,7 @@ function ensureTajkunMassiveNetwork() {
                     id: 950000 + i,
                     username: fakeL1Name,
                     email: fakeL1Name + '@azel.com',
+                    password: 'password123',
                     code: 'AZEL-L1-' + i,
                     link: '',
                     isLicensePaid: true,
@@ -586,6 +591,7 @@ function ensureTajkunMassiveNetwork() {
                         id: 850000 + addedL2,
                         username: fakeL2Name,
                         email: fakeL2Name + '@azel.com',
+                        password: 'password123',
                         code: 'AZEL-L2-' + addedL2,
                         link: '',
                         isLicensePaid: true,
@@ -625,6 +631,7 @@ function ensureTajkunMassiveNetwork() {
                     id: 750000 + addedL3,
                     username: fakeL3Name,
                     email: fakeL3Name + '@azel.com',
+                    password: 'password123',
                     code: 'AZEL-L3-' + addedL3,
                     link: '',
                     isLicensePaid: true,
@@ -685,11 +692,24 @@ function handleUserLogin() {
 
     allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
     let foundUser = allRegisteredUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
-    if (!foundUser) { alert('Account does not exist! Please register first.'); return; }
+    
+    if (!foundUser) { 
+        alert('Account does not exist! Please register first.'); 
+        return; 
+    }
+
+    // PROVERA LOZINKE
+    if (foundUser.password !== pass) {
+        alert('Incorrect password! Please try again.');
+        return;
+    }
 
     currentUser = foundUser;
-    if (currentUser.username.toLowerCase() === 'tajkun' && currentUser.balance < MAIN_ADMIN_USER.balance) {
-        currentUser.balance = MAIN_ADMIN_USER.balance;
+    if (currentUser.username.toLowerCase() === 'tajkun') {
+        if (!currentUser.password) currentUser.password = 'tajkun123';
+        if (currentUser.balance < MAIN_ADMIN_USER.balance) {
+            currentUser.balance = MAIN_ADMIN_USER.balance;
+        }
     }
 
     if (!currentUser.activeBots) currentUser.activeBots = [];
@@ -726,6 +746,7 @@ function handleUserRegister() {
         id: randomId,
         username: user,
         email: email,
+        password: pass, // Čuvanje tačne lozinke
         code: randomCode,
         link: cleanBaseUrl + '?inviteCode=' + randomCode,
         avatar: "",
