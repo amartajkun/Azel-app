@@ -20,10 +20,15 @@ body { background-color: #07090e; color: #e6edf3; font-family: -apple-system, sa
 background: linear-gradient(135deg, #10b981 0%, #043829 50%, #111622 100%);
 border: 1px solid rgba(16, 185, 129, 0.3);
 }
+.invite-gradient-card {
+background: linear-gradient(135deg, #10b981 0%, #059669 50%, #043829 100%);
+border: 1px solid rgba(16, 185, 129, 0.4);
+box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
+}
 #auth-screen { display: flex; position: fixed; inset: 0; background: #07090e; z-index: 100; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
 #main-app-wrapper { display: none; }
 
-/* NOVI SUPRIJEMNI DIZAJN: SLIKA LIJEVO, PANEL DESNO */
+/* KARTICE: SLIKA LIJEVO, PANEL DESNO */
 .bot-box-card {
     background: #111622;
     border-radius: 1rem;
@@ -38,9 +43,9 @@ border: 1px solid rgba(16, 185, 129, 0.3);
 .card-theme-3 { border: 1px solid rgba(168, 85, 247, 0.4); }
 .card-theme-4 { border: 1px solid rgba(236, 72, 153, 0.4); }
 .card-theme-5 { border: 1px solid rgba(249, 115, 22, 0.5); }
-.card-theme-6 { border: 1px solid #ef4444; box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
+.card-theme-6 { border: 1px solid #ef4444; box-shadow: 0 0 15px rgba(239, 68, 68, 0.25); background: linear-gradient(135deg, #1b070b 0%, #111622 70%); }
 
-/* AGRESIVNE ROBOT SLIKE SA LIJEVE STRANE (NOVI LKOVI) */
+/* OZBILJNE ROBOT SLIKE SA LIJEVE STRANE */
 .robot-pic-left {
     width: 110px;
     height: 135px;
@@ -48,9 +53,9 @@ border: 1px solid rgba(16, 185, 129, 0.3);
     background-size: cover;
     background-position: center;
     flex-shrink: 0;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
 }
 
-/* 100% OZBILJNE CYBERPUNK / MECHA SLIKE */
 .pic-bot-1 { background-image: url('https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=500&auto=format&fit=crop&q=80'); }
 .pic-bot-2 { background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop&q=80'); }
 .pic-bot-3 { background-image: url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=500&auto=format&fit=crop&q=80'); }
@@ -69,7 +74,7 @@ border: 1px solid rgba(16, 185, 129, 0.3);
 </head>
 <body class="pb-24">
 
-<!-- LOGIN EKRAN -->
+<!-- LOGIN / REGISTRATION SCREEN -->
 <div id="auth-screen">
     <div class="emerald-card p-6 rounded-3xl w-full max-w-sm space-y-4 bg-[#07090e] border border-emerald-500/40 shadow-2xl">
         <div class="text-center space-y-1">
@@ -83,40 +88,42 @@ border: 1px solid rgba(16, 185, 129, 0.3);
             <button id="tab-reg-btn" onclick="switchAuthTab('register')" class="flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 transition">Registracija</button>
         </div>
 
+        <!-- LOGIN FORM -->
         <div id="form-login" class="space-y-3 text-xs">
             <div>
                 <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Korisničko ime</label>
-                <input type="text" id="login-username" placeholder="Unesi korisničko ime..." class="w-full bg-gray-900 border border-emerald-500/30 p-3 rounded-xl text-white">
+                <input type="text" id="login-username" placeholder="Unesi korisničko ime..." class="w-full bg-gray-900 border border-emerald-500/30 p-3 rounded-xl text-white focus:outline-none focus:border-emerald-400">
             </div>
             <div>
                 <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Lozinka</label>
-                <input type="password" id="login-password" placeholder="Unesi lozinku..." class="w-full bg-gray-900 border border-emerald-500/30 p-3 rounded-xl text-white">
+                <input type="password" id="login-password" placeholder="Unesi lozinku..." class="w-full bg-gray-900 border border-emerald-500/30 p-3 rounded-xl text-white focus:outline-none focus:border-emerald-400">
             </div>
             <button onclick="handleUserLogin()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-xs shadow-lg shadow-emerald-500/20 active:scale-95 transition mt-2">
                 Prijavi se
             </button>
         </div>
 
+        <!-- REGISTER FORM -->
         <div id="form-register" class="space-y-2.5 text-xs" style="display: none;">
             <div>
                 <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Korisničko ime</label>
-                <input type="text" id="reg-username-input" placeholder="Izaberi korisničko ime..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white">
+                <input type="text" id="reg-username-input" placeholder="Izaberi korisničko ime..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
             </div>
             <div>
                 <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Email adresa</label>
-                <input type="email" id="reg-email-input" placeholder="Unesi email..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white">
+                <input type="email" id="reg-email-input" placeholder="Unesi email..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
             </div>
             <div>
                 <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Pozivni kod (opcionalno)</label>
-                <input type="text" id="reg-input-code" placeholder="Unesi kod..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white font-mono font-bold">
+                <input type="text" id="reg-input-code" placeholder="Unesi pozivni kod..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white font-mono font-bold focus:outline-none focus:border-emerald-400">
             </div>
             <div>
                 <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Lozinka</label>
-                <input type="password" id="reg-pass-input" placeholder="Kreiraj lozinku..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white">
+                <input type="password" id="reg-pass-input" placeholder="Kreiraj lozinku..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
             </div>
             <div>
                 <label class="text-[10px] text-emerald-400 font-bold mb-1 block">Potvrdi lozinku</label>
-                <input type="password" id="reg-confirm-input" placeholder="Ponovi lozinku..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white">
+                <input type="password" id="reg-confirm-input" placeholder="Ponovi lozinku..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
             </div>
             <button onclick="handleUserRegister()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-xs shadow-lg shadow-emerald-500/20 active:scale-95 transition mt-2">
                 Registruj se
@@ -125,15 +132,17 @@ border: 1px solid rgba(16, 185, 129, 0.3);
     </div>
 </div>
 
-<!-- GLAVNA APLIKACIJA -->
+<!-- GLAVNI WRAPPER APLIKACIJE -->
 <div id="main-app-wrapper">
 
+<!-- HEADER -->
 <div class="p-4 flex justify-between items-center border-b border-gray-800 bg-[#07090e] sticky top-0 z-40">
-<div onclick="openAdminPinModal()" class="flex items-center space-x-2 cursor-pointer">
+<div onclick="openAdminPinModal()" class="flex items-center space-x-2 cursor-pointer active:opacity-80">
 <div class="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center font-bold text-black shadow-lg shadow-emerald-500/30">A</div>
 <span class="text-xl font-bold tracking-wider text-emerald-400">AZEL</span>
 </div>
 <div class="flex space-x-3 text-gray-400 text-lg relative items-center">
+<!-- ADMIN DUGME -->
 <button id="admin-header-btn" onclick="openAdminPinModal()" class="bg-amber-500/20 text-amber-400 border border-amber-500/40 px-2.5 py-1 rounded-lg text-[10px] font-bold items-center gap-1 relative" style="display: none;">
     <i class="fas fa-shield-halved"></i> Admin
     <span id="admin-header-badge" class="bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.2 rounded-full hidden">0</span>
@@ -144,7 +153,7 @@ border: 1px solid rgba(16, 185, 129, 0.3);
 </div>
 </div>
 
-<!-- 1. HOME -->
+<!-- 1. POČETNA / HOME STRANICA -->
 <div id="page-home" class="page-content active p-4 space-y-4">
     <div class="flex justify-center mb-2">
         <button onclick="switchTab('tab-market')" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-sm shadow-lg shadow-emerald-500/25 transition">
@@ -183,11 +192,12 @@ border: 1px solid rgba(16, 185, 129, 0.3);
     </div>
 </div>
 
-<!-- 2. MARKET (SLIKA LIJEVO, DESNO PANEL SA FIKSNOM ZARADOM) -->
+<!-- 2. MARKET / BOT PAKETI I LICENCA (SLIKA LIJEVO, PANEL DESNO, FIKSNA ZARADA) -->
 <div id="page-market" class="page-content p-4 space-y-4">
     <h2 class="text-lg font-bold text-emerald-400 mb-1">Tržište Botova & Licenca</h2>
     <p class="text-xs text-gray-400 mb-3">Platite $5 licencu jednom, a zatim aktivirajte bot pakete.</p>
 
+    <!-- LICENCA KARTICA -->
     <div id="license-card-box" class="emerald-card p-4 rounded-2xl flex justify-between items-center bg-emerald-950/20 border-emerald-500/40">
         <div>
             <h3 class="text-sm font-bold text-white">Doživotna Korisnička Licenca</h3>
@@ -196,9 +206,10 @@ border: 1px solid rgba(16, 185, 129, 0.3);
         <button id="buy-license-btn" onclick="buyUserLicense()" class="bg-emerald-500 text-black px-4 py-2 rounded-xl text-xs font-bold shadow-lg">Plati $5</button>
     </div>
 
+    <!-- BOT LISTA -->
     <div class="space-y-4" id="bots-market-container">
         
-        <!-- BOT 1 -->
+        <!-- Bot 1 ($100) -->
         <div class="bot-box-card card-theme-1">
             <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
                 <span class="text-base font-extrabold text-white">BOT-1</span>
@@ -223,11 +234,11 @@ border: 1px solid rgba(16, 185, 129, 0.3);
             </div>
             <div class="flex justify-between items-center pt-1 border-t border-gray-800">
                 <span class="text-[10px] text-emerald-400 font-bold">Status: Otključano (Besplatno)</span>
-                <button onclick="buyBot(1, 100, 2.50)" class="bg-emerald-500 text-black font-bold px-4 py-2 rounded-xl text-xs shadow-md active:scale-95 transition">Aktiviraj Bot 1</button>
+                <button onclick="buyBot(1, 100, 2.50)" class="bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-4 py-2 rounded-xl text-xs shadow-md active:scale-95 transition">Aktiviraj Bot 1</button>
             </div>
         </div>
 
-        <!-- BOT 2 -->
+        <!-- Bot 2 ($200) -->
         <div class="bot-box-card card-theme-2">
             <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
                 <span class="text-base font-extrabold text-white">BOT-2</span>
@@ -252,11 +263,11 @@ border: 1px solid rgba(16, 185, 129, 0.3);
             </div>
             <div class="flex justify-between items-center pt-1 border-t border-gray-800">
                 <span class="text-[10px] text-emerald-400 font-bold">Status: Otključano (Besplatno)</span>
-                <button onclick="buyBot(2, 200, 5.00)" class="bg-blue-500 text-black font-bold px-4 py-2 rounded-xl text-xs shadow-md active:scale-95 transition">Aktiviraj Bot 2</button>
+                <button onclick="buyBot(2, 200, 5.00)" class="bg-blue-500 hover:bg-blue-400 text-black font-bold px-4 py-2 rounded-xl text-xs shadow-md active:scale-95 transition">Aktiviraj Bot 2</button>
             </div>
         </div>
 
-        <!-- BOT 3 -->
+        <!-- Bot 3 ($500) -->
         <div class="bot-box-card card-theme-3" id="bot-card-3">
             <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
                 <span class="text-base font-extrabold text-white">BOT-3</span>
@@ -285,7 +296,7 @@ border: 1px solid rgba(16, 185, 129, 0.3);
             </div>
         </div>
 
-        <!-- BOT 4 -->
+        <!-- Bot 4 ($1,000) -->
         <div class="bot-box-card card-theme-4" id="bot-card-4">
             <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
                 <span class="text-base font-extrabold text-white">BOT-4</span>
@@ -314,7 +325,7 @@ border: 1px solid rgba(16, 185, 129, 0.3);
             </div>
         </div>
 
-        <!-- BOT 5 -->
+        <!-- Bot 5 ($2,500) -->
         <div class="bot-box-card card-theme-5" id="bot-card-5">
             <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
                 <span class="text-base font-extrabold text-white">BOT-5</span>
@@ -343,7 +354,7 @@ border: 1px solid rgba(16, 185, 129, 0.3);
             </div>
         </div>
 
-        <!-- BOT 6 (ELITE) -->
+        <!-- Bot 6 ($5,000) - ELITE BEAST -->
         <div class="bot-box-card card-theme-6" id="bot-card-6">
             <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
                 <span class="text-base font-extrabold text-white">BOT-6 <span class="text-xs text-red-400 animate-pulse font-normal">🔥 ELITE</span></span>
@@ -375,21 +386,35 @@ border: 1px solid rgba(16, 185, 129, 0.3);
     </div>
 </div>
 
-<!-- 3. TEAM -->
+<!-- 3. TEAM / MREŽA (L1, L2, L3) -->
 <div id="page-team" class="page-content p-4 space-y-4">
     <h2 class="text-lg font-bold text-emerald-400 mb-1">Mrežni Tim</h2>
+    <p class="text-xs text-gray-400 mb-3">Pratite preporuke kroz 3 nivoa za otključavanje viših bot paketa.</p>
+
     <div class="grid grid-cols-3 gap-2 text-center">
-        <div class="emerald-card p-3 rounded-xl"><div class="text-[10px] text-gray-400">Line 1 (L1)</div><div id="count-l1" class="text-lg font-bold text-emerald-400">0</div></div>
-        <div class="emerald-card p-3 rounded-xl"><div class="text-[10px] text-gray-400">Line 2 (L2)</div><div id="count-l2" class="text-lg font-bold text-emerald-400">0</div></div>
-        <div class="emerald-card p-3 rounded-xl"><div class="text-[10px] text-gray-400">Line 3 (L3)</div><div id="count-l3" class="text-lg font-bold text-emerald-400">0</div></div>
+        <div class="emerald-card p-3 rounded-xl">
+            <div class="text-[10px] text-gray-400">Line 1 (L1)</div>
+            <div id="count-l1" class="text-lg font-bold text-emerald-400">0</div>
+        </div>
+        <div class="emerald-card p-3 rounded-xl">
+            <div class="text-[10px] text-gray-400">Line 2 (L2)</div>
+            <div id="count-l2" class="text-lg font-bold text-emerald-400">0</div>
+        </div>
+        <div class="emerald-card p-3 rounded-xl">
+            <div class="text-[10px] text-gray-400">Line 3 (L3)</div>
+            <div id="count-l3" class="text-lg font-bold text-emerald-400">0</div>
+        </div>
     </div>
+
     <div class="emerald-card p-4 rounded-2xl space-y-3">
-        <h3 class="text-xs font-bold text-white border-b border-gray-800 pb-2">Direktne Preporuke (L1)</h3>
-        <div id="team-l1-list" class="space-y-2 text-xs"><p class="text-gray-500 text-center py-2">Nema direktnih preporuka.</p></div>
+        <h3 class="text-xs font-bold text-white border-b border-gray-800 pb-2">Direktne Preporuke (L1 Članovi)</h3>
+        <div id="team-l1-list" class="space-y-2 text-xs">
+            <p class="text-gray-500 text-center py-2">Još uvek nema direktnih preporuka.</p>
+        </div>
     </div>
 </div>
 
-<!-- 4. ASSETS -->
+<!-- 4. ASSETS / NOVČANIK -->
 <div id="page-wallet" class="page-content p-4 space-y-4">
     <h2 class="text-lg font-bold text-emerald-400 mb-2">Imovina & Kapital</h2>
     <div class="emerald-card p-4 rounded-2xl space-y-3">
@@ -402,68 +427,196 @@ border: 1px solid rgba(16, 185, 129, 0.3);
             <span class="text-xs text-amber-400 font-bold">$<span id="wallet-frozen-display">0.00</span></span>
         </div>
     </div>
-    <h3 class="text-sm font-bold text-white pt-2">Aktivne Investicije (60 Dana)</h3>
-    <div id="active-bots-container" class="space-y-3"><p class="text-xs text-gray-500 text-center py-4">Nema aktivnih botova.</p></div>
+
+    <h3 class="text-sm font-bold text-white pt-2">Aktivne Investicije Botova (60 Dana)</h3>
+    <div id="active-bots-container" class="space-y-3">
+        <p class="text-xs text-gray-500 text-center py-4">Trenutno nema aktivnih bot investicija.</p>
+    </div>
 </div>
 
-<!-- 5. PROFILE -->
+<!-- 5. PROFIL -->
 <div id="page-profile" class="page-content p-4 space-y-4">
     <div class="flex items-center justify-between">
         <div class="flex items-center space-x-3">
-            <div class="w-14 h-14 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center font-bold text-2xl text-emerald-400" id="profile-initial">A</div>
+            <div class="w-14 h-14 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center relative overflow-hidden shadow-lg">
+                <span id="profile-initial" class="text-2xl font-bold text-emerald-400">A</span>
+            </div>
             <div>
-                <h2 id="profile-username-display" class="text-xl font-bold text-white">tajkun</h2>
+                <h2 id="profile-username-display" class="text-xl font-bold text-white flex items-center gap-1">tajkun</h2>
                 <p class="text-xs text-gray-400">ID: <span id="profile-id-display">119216</span></p>
-                <div class="inline-flex gap-1 bg-emerald-950/40 border border-emerald-500/20 rounded-full px-2 py-0.5 text-[10px] text-emerald-400 mt-1">
-                    <span id="profile-code-display">AZEL-TAJKUN</span>
+                <div class="inline-flex items-center gap-1 bg-emerald-950/40 border border-emerald-500/20 rounded-full px-2 py-0.5 text-[10px] text-emerald-400 mt-1">
+                    <span id="profile-code-display">Pozivni kod: AZEL-TAJKUN</span>
                 </div>
             </div>
         </div>
+        <i class="fas fa-star text-emerald-400 text-lg"></i>
     </div>
-    <button onclick="handleUserLogout()" class="w-full emerald-card py-3 rounded-2xl text-center text-red-500 font-bold text-xs">Odjava</button>
+
+    <div class="emerald-card p-3 rounded-xl flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+            <i class="fas fa-crown text-emerald-400 text-sm"></i>
+            <span class="text-[11px] text-gray-300">VIP Channel VIP0</span>
+        </div>
+        <button class="bg-emerald-400 text-black px-3 py-1 rounded-full text-[10px] font-bold">Nadogradi</button>
+    </div>
+
+    <div class="emerald-card rounded-2xl divide-y divide-gray-800/60 text-xs">
+        <div onclick="openChangeEmailModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+            <div class="flex items-center space-x-3">
+                <i class="far fa-envelope text-emerald-400 text-sm w-4 text-center"></i>
+                <span class="text-white font-medium">Promeni Email</span>
+            </div>
+            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+        </div>
+        <div onclick="alert('Podešavanja lozinke za prijavu')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-lock text-emerald-400 text-sm w-4 text-center"></i>
+                <span class="text-white font-medium">Lozinka za prijavu</span>
+            </div>
+            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+        </div>
+        <div onclick="alert('Podešavanja transakcione lozinke')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-shield-halved text-emerald-400 text-sm w-4 text-center"></i>
+                <span class="text-white font-medium">Transakciona lozinka</span>
+            </div>
+            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+        </div>
+    </div>
+
+    <button onclick="handleUserLogout()" class="w-full emerald-card py-3 rounded-2xl text-center text-red-500 font-bold text-xs hover:bg-red-950/20 transition">
+        <span>Odjavi se</span>
+    </button>
 </div>
 
-<!-- MODALI -->
+<!-- MODAL ZA PROMENU EMAIL-a -->
+<div id="modal-change-email" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-4 bg-[#07090e] border border-emerald-500/30">
+        <h3 class="text-sm font-bold text-emerald-400">Promeni Email adresu</h3>
+        <input type="email" id="new-email-input" placeholder="Unesi novi email..." class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white text-xs">
+        <div class="flex space-x-2">
+            <button onclick="closeChangeEmailModal()" class="w-1/2 bg-gray-800 text-gray-300 py-2 rounded-lg text-xs font-bold">Otkaži</button>
+            <button onclick="saveNewEmail()" class="w-1/2 bg-emerald-500 text-black py-2 rounded-lg text-xs font-bold">Sačuvaj</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ZA UPLATU (DEPOSIT) -->
 <div id="modal-deposit" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
-    <div class="emerald-card p-5 rounded-2xl w-full max-w-sm space-y-4 bg-[#07090e] border border-emerald-500/30 text-center">
-        <h3 class="text-sm font-bold text-emerald-400">USDT Uplata</h3>
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk" class="w-28 h-28 mx-auto border p-1 bg-white rounded">
-        <button onclick="closeDepositModal()" class="w-full bg-emerald-500 text-black py-2 rounded-xl text-xs font-bold">Zatvori</button>
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-sm space-y-4 bg-[#07090e] border border-emerald-500/30">
+        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
+            <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2"><i class="fas fa-wallet"></i> USDT Uplata</h3>
+            <button onclick="closeDepositModal()" class="text-gray-400 hover:text-white text-sm"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="bg-gray-950/80 p-3 rounded-xl border border-gray-800 text-center space-y-2">
+            <div class="flex justify-center"><img src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk" alt="QR" class="w-28 h-28 border-2 border-emerald-500/40 rounded-lg p-1 bg-white"></div>
+            <div class="text-[10px] text-emerald-400 font-bold">TRC-20 Adresa</div>
+            <div class="flex items-center justify-between bg-gray-900 p-2 rounded-lg border border-gray-800">
+                <span class="text-[10px] font-mono text-emerald-300 truncate mr-2">TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk</span>
+                <button onclick="navigator.clipboard.writeText('TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk').then(()=>alert('Kopirano!'))" class="bg-emerald-500 text-black px-2 py-1 rounded text-[10px] font-bold">Kopiraj</button>
+            </div>
+        </div>
+        <button onclick="closeDepositModal()" class="w-full bg-emerald-500 text-black font-bold py-2.5 rounded-xl text-xs">Zatvori</button>
     </div>
 </div>
 
+<!-- MODAL ZA ISPLATU (WITHDRAW) -->
 <div id="modal-withdraw" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
-    <div class="emerald-card p-5 rounded-2xl w-full max-w-sm space-y-4 bg-[#07090e] border border-emerald-500/30 text-xs">
-        <h3 class="text-sm font-bold text-emerald-400">Zahtjev za Isplatu</h3>
-        <input type="number" id="withdraw-amount" placeholder="Min. 50 USDT" class="w-full bg-gray-900 border p-2.5 rounded text-white">
-        <input type="text" id="withdraw-address" placeholder="TRC-20 Adresa" class="w-full bg-gray-900 border p-2.5 rounded text-white font-mono text-[10px]">
-        <button onclick="submitWithdrawRequest()" class="w-full bg-emerald-500 text-black py-2.5 rounded font-bold">Pošalji Isplatu</button>
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-sm space-y-4 bg-[#07090e] border border-emerald-500/30">
+        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
+            <h3 class="text-sm font-bold text-emerald-400">Zahtjev za Isplatu</h3>
+            <button onclick="closeWithdrawModal()" class="text-gray-400 hover:text-white text-sm"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="space-y-3 text-xs">
+            <div>
+                <label class="text-[10px] text-gray-400 mb-1 block">Iznos (USDT):</label>
+                <input type="number" id="withdraw-amount" placeholder="Min. 50 USDT" class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white">
+            </div>
+            <div>
+                <label class="text-[10px] text-gray-400 mb-1 block">Kripto Adresa:</label>
+                <input type="text" id="withdraw-address" placeholder="Unesite adresu..." class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white font-mono text-[11px]">
+            </div>
+        </div>
+        <button id="withdraw-submit-btn" onclick="submitWithdrawRequest()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black py-2.5 rounded-xl text-xs font-bold active:scale-95 transition">Potvrdi Isplatu</button>
     </div>
 </div>
 
+<!-- MODAL ZA POZIVNICE (INVITE) -->
+<div id="modal-invite" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50 overflow-y-auto">
+    <div class="emerald-card p-5 rounded-3xl w-full max-w-sm space-y-4 bg-[#07090e] border border-emerald-500/40 my-auto relative">
+        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
+            <h3 class="text-sm font-bold text-emerald-400">Pozovite Prijatelje & Gradite Mrežu</h3>
+            <button onclick="closeInviteModal()" class="text-gray-400 hover:text-white text-base"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="invite-gradient-card p-4 rounded-2xl text-white space-y-3 text-center">
+            <p class="text-[11px] font-bold text-emerald-100">Razvijajte L1, L2, L3 linije da otključate Botove 3, 4, 5 i 6!</p>
+            <div onclick="navigator.clipboard.writeText(currentUser ? currentUser.code : '').then(()=>alert('Kod kopiran!'))" class="bg-black/30 p-2.5 rounded-xl border border-white/10 flex justify-between items-center cursor-pointer">
+                <span class="text-[11px] text-emerald-200">Pozivni kod</span>
+                <span id="modal-code-display" class="font-mono font-bold text-white text-xs bg-emerald-500/30 px-2 py-0.5 rounded">...</span>
+            </div>
+        </div>
+        <div class="space-y-1.5 text-xs">
+            <label class="text-[10px] text-gray-400 block font-bold">Pozivni Link</label>
+            <div class="bg-gray-900 p-2.5 rounded-xl border border-gray-800 text-[10px] font-mono text-emerald-300 truncate" id="modal-link-display">Učitavanje...</div>
+        </div>
+        <button onclick="navigator.clipboard.writeText(currentUser ? currentUser.link : '').then(()=>alert('Link kopiran!'))" class="w-full bg-emerald-500 text-black font-bold py-3 rounded-xl text-xs shadow-lg flex items-center justify-center gap-2">
+            <i class="far fa-copy"></i> Kopiraj pozivni link
+        </button>
+    </div>
+</div>
+
+<!-- TAJNI ADMIN PIN MODAL -->
 <div id="modal-admin-pin" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
-    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-4 text-center">
-        <h3 class="text-sm font-bold text-amber-400">Admin PIN</h3>
-        <input type="password" id="admin-pin-input" maxlength="4" placeholder="****" class="w-full bg-gray-900 border p-2.5 rounded text-center text-lg text-white">
-        <button onclick="verifyAdminPin()" class="w-full bg-amber-500 text-black py-2 rounded font-bold text-xs">Potvrdi</button>
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-4 bg-[#07090e] border border-amber-500/30 text-center">
+        <h3 class="text-sm font-bold text-amber-400">Admin Sigurnosni PIN</h3>
+        <input type="password" id="admin-pin-input" maxlength="4" placeholder="****" class="w-full bg-gray-900 border border-amber-500/50 p-2.5 rounded-xl text-center text-white text-lg tracking-widest focus:outline-none">
+        <div class="flex space-x-2">
+            <button onclick="closeAdminPinModal()" class="w-1/2 bg-gray-800 text-gray-300 py-2 rounded-lg text-xs font-bold">Otkaži</button>
+            <button onclick="verifyAdminPin()" class="w-1/2 bg-amber-500 text-black py-2 rounded-lg text-xs font-bold">Potvrdi</button>
+        </div>
     </div>
 </div>
 
+<!-- ADMIN PANEL MODAL -->
 <div id="modal-admin-panel" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
-    <div class="emerald-card p-5 rounded-2xl w-full max-w-md space-y-4 max-h-[85vh] flex flex-col">
-        <h3 class="text-sm font-bold text-emerald-400">Admin Panel (Isplate)</h3>
-        <div id="admin-list-withdraw" class="space-y-3 overflow-y-auto grow text-xs"><p class="text-gray-400">Učitavanje...</p></div>
-        <button onclick="closeAdminPanel()" class="w-full bg-gray-800 text-gray-300 py-2 rounded text-xs font-bold">Zatvori</button>
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-md space-y-4 bg-[#07090e] border border-emerald-500/50 max-h-[85vh] flex flex-col">
+        <div class="flex justify-between items-center border-b border-gray-800 pb-3 shrink-0">
+            <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
+                <i class="fas fa-tasks"></i> Admin Panel (Isplate)
+            </h3>
+            <button onclick="closeAdminPanel()" class="text-gray-400 hover:text-white text-sm"><i class="fas fa-times"></i></button>
+        </div>
+
+        <div id="admin-list-withdraw" class="space-y-3 overflow-y-auto pr-1 grow text-xs">
+            <p class="text-gray-400 text-center py-4">Učitavanje zahtjeva...</p>
+        </div>
+
+        <button onclick="closeAdminPanel()" class="w-full bg-gray-800 text-gray-300 py-2.5 rounded-xl text-xs font-bold shrink-0 mt-2">Zatvori Panel</button>
     </div>
 </div>
 
 <!-- DONJA NAVIGACIJA -->
 <div class="fixed bottom-0 left-0 right-0 bg-[#07090e] border-t border-gray-800 flex justify-around p-3 text-[10px] text-gray-400 z-40">
-    <button id="tab-home" onclick="switchTab('tab-home')" class="flex flex-col items-center text-emerald-400"><i class="fas fa-house text-base"><span>Početna</span></i></button>
-    <button id="tab-market" onclick="switchTab('tab-market')" class="flex flex-col items-center"><i class="fas fa-robot text-base"><span>Tržište</span></i></button>
-    <button id="tab-team" onclick="switchTab('tab-team')" class="flex flex-col items-center"><i class="fas fa-users text-base"><span>Tim</span></i></button>
-    <button id="tab-wallet" onclick="switchTab('tab-wallet')" class="flex flex-col items-center"><i class="fas fa-wallet text-base"><span>Novčanik</span></i></button>
-    <button id="tab-profile" onclick="switchTab('tab-profile')" class="flex flex-col items-center"><i class="fas fa-user text-base"><span>Profil</span></i></button>
+    <button id="tab-home" onclick="switchTab('tab-home')" class="flex flex-col items-center text-emerald-400">
+        <i class="fas fa-house text-base"></i>
+        <span>Početna</span>
+    </button>
+    <button id="tab-market" onclick="switchTab('tab-market')" class="flex flex-col items-center">
+        <i class="fas fa-robot text-base"></i>
+        <span>Tržište</span>
+    </button>
+    <button id="tab-team" onclick="switchTab('tab-team')" class="flex flex-col items-center">
+        <i class="fas fa-users text-base"></i>
+        <span>Tim</span>
+    </button>
+    <button id="tab-wallet" onclick="switchTab('tab-wallet')" class="flex flex-col items-center">
+        <i class="fas fa-wallet text-base"></i>
+        <span>Novčanik</span>
+    </button>
+    <button id="tab-profile" onclick="switchTab('tab-profile')" class="flex flex-col items-center">
+        <i class="fas fa-user text-base"></i>
+        <span>Profil</span>
+    </button>
 </div>
 
 </div>
@@ -472,109 +625,588 @@ border: 1px solid rgba(16, 185, 129, 0.3);
 let currentUser = null;
 let allRegisteredUsers = [];
 let withdrawRequests = [];
+let adminInterval = null;
 const ADMIN_PIN = "3112";
+
 const BIN_ID = "6ae13079ffd5d16053915188";
 const MASTER_KEY = "$2a$10$dEZ.lwInJSv0XALwpVBrl.xZPANtLWNSkkHVwl9wvE2YOy58Of3wa";
 
 const MAIN_ADMIN_USER = {
-    id: 119216, username: "tajkun", email: "tajkun@azel.com", code: "AZEL-TAJKUN",
-    link: window.location.href.split('?')[0] + '?inviteCode=AZEL-TAJKUN',
-    isLicensePaid: true, referrer: null, activeBots: [], balance: 12450.80
+    id: 119216,
+    username: "tajkun",
+    email: "tajkun@azel.com",
+    code: "AZEL-TAJKUN",
+    link: window.location.href.split('?')[0].split('#')[0] + '?inviteCode=AZEL-TAJKUN',
+    avatar: "",
+    isLicensePaid: true,
+    referrer: null,
+    activeBots: [],
+    balance: 12450.80
 };
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', function() {
     allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
     if (!allRegisteredUsers.some(u => u.username.toLowerCase() === 'tajkun')) {
         allRegisteredUsers.push(MAIN_ADMIN_USER);
         localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
     }
-    if (sessionStorage.getItem('azel_logged_in') === 'true') {
-        currentUser = allRegisteredUsers.find(u => u.username.toLowerCase() === sessionStorage.getItem('azel_current_username')) || MAIN_ADMIN_USER;
+
+    const isLogged = sessionStorage.getItem('azel_logged_in');
+    const loggedUsername = sessionStorage.getItem('azel_current_username');
+
+    if (isLogged === 'true' && loggedUsername) {
+        currentUser = allRegisteredUsers.find(u => u.username.toLowerCase() === loggedUsername.toLowerCase()) || MAIN_ADMIN_USER;
         showMainApp();
     } else {
         document.getElementById('auth-screen').style.display = 'flex';
         document.getElementById('main-app-wrapper').style.display = 'none';
     }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const refCode = urlParams.get('inviteCode') || urlParams.get('ref');
+    if (refCode) {
+        document.getElementById('reg-input-code').value = refCode;
+        switchAuthTab('register');
+    }
+    loadWithdrawRequestsQuiet();
 });
 
+function loadWithdrawRequestsQuiet() {
+    fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        headers: { 'X-Master-Key': MASTER_KEY }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data && data.record) {
+            withdrawRequests = Array.isArray(data.record) ? data.record : (data.record.requests || []);
+            updateBadges();
+        }
+    })
+    .catch(err => console.log('Error:', err));
+}
+
+function saveWithdrawRequestsToBin() {
+    fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': MASTER_KEY
+        },
+        body: JSON.stringify(withdrawRequests)
+    })
+    .then(res => res.json())
+    .then(() => {
+        updateBadges();
+        renderAdminWithdrawList();
+    })
+    .catch(err => alert('Greška pri čuvanju: ' + err.message));
+}
+
 function switchAuthTab(tab) {
-    let isLog = tab === 'login';
-    document.getElementById('form-login').style.display = isLog ? 'block' : 'none';
-    document.getElementById('form-register').style.display = isLog ? 'none' : 'block';
-    document.getElementById('tab-login-btn').className = isLog ? 'flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-500 text-black' : 'flex-1 py-2 text-xs font-bold rounded-lg text-gray-400';
-    document.getElementById('tab-reg-btn').className = !isLog ? 'flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-500 text-black' : 'flex-1 py-2 text-xs font-bold rounded-lg text-gray-400';
+    const isLogin = tab === 'login';
+    document.getElementById('form-login').style.display = isLogin ? 'block' : 'none';
+    document.getElementById('form-register').style.display = isLogin ? 'none' : 'block';
+    document.getElementById('tab-login-btn').className = isLogin ? 'flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-500 text-black transition' : 'flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 transition';
+    document.getElementById('tab-reg-btn').className = !isLogin ? 'flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-500 text-black transition' : 'flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 transition';
 }
 
 function handleUserLogin() {
-    let u = document.getElementById('login-username').value.trim();
-    let p = document.getElementById('login-password').value.trim();
-    let found = allRegisteredUsers.find(x => x.username.toLowerCase() === u.toLowerCase());
-    if(!found) { alert('Korisnik ne postoji!'); return; }
-    currentUser = found;
+    let user = document.getElementById('login-username').value.trim();
+    const pass = document.getElementById('login-password').value.trim();
+    if(!user || !pass) { alert('Unesite korisničko ime i lozinku!'); return; }
+
+    allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
+    let foundUser = allRegisteredUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
+    if (!foundUser) { alert('Nalog ne postoji! Prvo se registrujte.'); return; }
+
+    currentUser = foundUser;
     sessionStorage.setItem('azel_logged_in', 'true');
     sessionStorage.setItem('azel_current_username', currentUser.username);
     showMainApp();
 }
 
 function handleUserRegister() {
-    let u = document.getElementById('reg-username-input').value.trim();
-    let e = document.getElementById('reg-email-input').value.trim();
-    let p = document.getElementById('reg-pass-input').value.trim();
-    if(!u || !e || !p) { alertpop('Popuni sva polja!'); return; }
-    currentUser = { id: Math.floor(100000+Math.random()*900000), username: u, email: e, code: 'AZEL-'+Math.random().toString(36).substring(2,8).toUpperCase(), isLicensePaid: false, activeBots: [], balance: 1000 };
+    const user = document.getElementById('reg-username-input').value.trim();
+    const email = document.getElementById('reg-email-input').value.trim();
+    const inviteCode = document.getElementById('reg-input-code').value.trim();
+    const pass = document.getElementById('reg-pass-input').value.trim();
+    const confirmPass = document.getElementById('reg-confirm-input').value.trim();
+
+    if(!user || !email || !pass) { alert('Popunite sva obavezna polja!'); return; }
+    if(pass !== confirmPass) { alert('Lozinke se ne podudaraju!'); return; }
+
+    allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
+    if (allRegisteredUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { alert('Korisničko ime već postoji!'); return; }
+
+    let randomId = Math.floor(100000 + Math.random() * 900000); 
+    let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
+    let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
+
+    currentUser = {
+        id: randomId,
+        username: user,
+        email: email,
+        code: randomCode,
+        link: cleanBaseUrl + '?inviteCode=' + randomCode,
+        avatar: "",
+        isLicensePaid: false,
+        referrer: inviteCode || null,
+        activeBots: [],
+        balance: 1000.00
+    };
+
     allRegisteredUsers.push(currentUser);
     localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
+    
     sessionStorage.setItem('azel_logged_in', 'true');
-    sessionStorage.setItem('azel_current_username', u);
+    sessionStorage.setItem('azel_current_username', user);
+
+    alert('Uspešno registrovani! Platite licencu od $5 za početak.');
     showMainApp();
 }
 
 function showMainApp() {
     document.getElementById('auth-screen').style.display = 'none';
     document.getElementById('main-app-wrapper').style.display = 'block';
-    if(currentUser.username.toLowerCase() === 'tajkun') document.getElementById('admin-header-btn').style.display = 'flex';
+    
+    const adminBtn = document.getElementById('admin-header-btn');
+    if (currentUser && currentUser.username.toLowerCase() === 'tajkun') {
+        adminBtn.style.display = 'flex';
+    } else {
+        adminBtn.style.display = 'none';
+    }
+
+    updateAppUI();
 }
 
 function handleUserLogout() {
-    sessionStorage.clear();
-    location.reload();
+    sessionStorage.removeItem('azel_logged_in');
+    sessionStorage.removeItem('azel_current_username');
+    document.getElementById('main-app-wrapper').style.display = 'none';
+    document.getElementById('auth-screen').style.display = 'flex';
 }
 
-function switchTab(id) {
+function switchTab(tabId) {
     document.querySelectorAll('.page-content').forEach(el => el.classList.remove('active'));
-    document.getElementById(id === 'tab-market' ? 'page-market' : id === 'tab-team' ? 'page-team' : id === 'tab-wallet' ? 'page-wallet' : id === 'tab-profile' ? 'page-profile' : 'page-home').classList.add('active');
+    document.querySelectorAll('.fixed.bottom-0 button').forEach(el => {
+        el.classList.remove('text-emerald-400');
+        el.classList.add('text-gray-400');
+    });
+
+    let targetPage = 'page-home';
+    if (tabId === 'tab-market') targetPage = 'page-market';
+    else if (tabId === 'tab-team') targetPage = 'page-team';
+    else if (tabId === 'tab-wallet') targetPage = 'page-wallet';
+    else if (tabId === 'tab-profile') targetPage = 'page-profile';
+
+    document.getElementById(targetPage).classList.add('active');
+    const btn = document.getElementById(tabId);
+    if(btn) {
+        btn.classList.remove('text-gray-400');
+        btn.classList.add('text-emerald-400');
+    }
     window.scrollTo(0, 0);
+    if(tabId === 'tab-team') renderTeamData();
+    if(tabId === 'tab-market') checkBotUnlocks();
+    if(tabId === 'tab-wallet') renderAssetsData();
 }
 
 function buyUserLicense() {
+    if(currentUser.isLicensePaid) { alert('Licenca je već plaćena!'); return; }
     currentUser.isLicensePaid = true;
-    localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
-    alert('Licenca uspešno plaćena!');
-    location.reload();
+    saveCurrentUserToStorage();
+    updateAppUI();
+    alert('Licenca uspešno plaćena ($5)! Sada možete aktivirati botove.');
 }
 
-function buyBot(lvl, price, daily) {
-    if(!currentUser.isLicensePaid) { alert('Moraš platiti licencu od $5!'); return; }
+function getNetworkCounts(username) {
+    allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
+    let l1Members = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === username.toLowerCase());
+    let l1Count = l1Members.length;
+
+    let l2Count = 0;
+    let l2Usernames = [];
+    l1Members.forEach(l1 => {
+        let l2s = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === l1.username.toLowerCase());
+        l2Count += l2s.length;
+        l2s.forEach(l2 => l2Usernames.push(l2.username));
+    });
+
+    let l3Count = 0;
+    l2Usernames.forEach(l2Name => {
+        let l3s = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === l2Name.toLowerCase());
+        l3Count += l3s.length;
+    });
+
+    return { l1Count, l2Count, l3Count, l1Members };
+}
+
+function checkBotUnlocks() {
+    if(!currentUser.isLicensePaid) {
+        document.getElementById('license-card-box').style.borderColor = '#10b981';
+        for(let i=3; i<=6; i++) {
+            document.getElementById(`bot-btn-${i}`).disabled = true;
+            document.getElementById(`bot-btn-${i}`).className = "bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed";
+        }
+        return;
+    }
+
+    let net = getNetworkCounts(currentUser.username);
+
+    if(net.l1Count >= 5) unlockBotUI(3); else lockBotUI(3, `Uslov: ${net.l1Count}/5 u L1`);
+    if(net.l1Count >= 10 && net.l2Count >= 5) unlockBotUI(4); else lockBotUI(4, `Uslov: 10 L1 & 5 L2`);
+    if(net.l1Count >= 20 && net.l2Count >= 15 && net.l3Count >= 5) unlockBotUI(5); else lockBotUI(5, `Uslov: 20 L1, 15 L2, 5 L3`);
+    if(net.l1Count >= 50 && net.l2Count >= 30 && net.l3Count >= 20) unlockBotUI(6); else lockBotUI(6, `Uslov: 50 L1, 30 L2, 20 L3`);
+}
+
+function unlockBotUI(level) {
+    const btn = document.getElementById(`bot-btn-${level}`);
+    const status = document.getElementById(`bot-status-${level}`);
+    btn.disabled = false;
+    let colorClass = level === 3 ? "bg-purple-500 hover:bg-purple-400 text-black shadow-purple-500/20" :
+                     level === 4 ? "bg-pink-500 hover:bg-pink-400 text-black shadow-pink-500/20" :
+                     level === 5 ? "bg-orange-500 hover:bg-orange-400 text-black shadow-orange-500/20" :
+                     "bg-red-500 hover:bg-red-400 text-white shadow-red-500/30 animate-pulse";
+    btn.className = `${colorClass} font-bold px-4 py-2 rounded-xl text-xs shadow-md active:scale-95 transition`;
+    btn.innerText = `Aktiviraj Bot ${level}`;
+    status.innerText = "Status: Otključano ✓";
+    status.className = "text-[10px] text-emerald-400 font-bold";
+}
+
+function lockBotUI(level, reqText) {
+    const btn = document.getElementById(`bot-btn-${level}`);
+    const status = document.getElementById(`bot-status-${level}`);
+    btn.disabled = true;
+    btn.className = "bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed";
+    btn.innerText = "Zaključano";
+    status.innerText = reqText;
+    status.className = "text-[10px] text-amber-400 font-bold";
+}
+
+function buyBot(level, price, dailyEarning) {
+    if(!currentUser.isLicensePaid) { alert('Moraš prvo platiti licencu od $5!'); return; }
+
+    let startDate = new Date().toISOString();
+    let endDate = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString();
+
     if(!currentUser.activeBots) currentUser.activeBots = [];
-    currentUser.activeBots.push({ level: lvl, price: price, dailyEarning: daily, status: 'ACTIVE' });
-    localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
-    alert('Bot uspešno aktiviran!');
+    currentUser.activeBots.push({
+        level: level, price: price, dailyEarning: dailyEarning, startDate: startDate, endDate: endDate, status: 'ACTIVE'
+    });
+
+    saveCurrentUserToStorage();
+    alert(`Bot ${level} ($${price}) uspešno aktiviran na 60 dana!`);
+    renderAssetsData();
     switchTab('tab-wallet');
+}
+
+function renderTeamData() {
+    let net = getNetworkCounts(currentUser.username);
+    document.getElementById('count-l1').innerText = net.l1Count;
+    document.getElementById('count-l2').innerText = net.l2Count;
+    document.getElementById('count-l3').innerText = net.l3Count;
+
+    const l1List = document.getElementById('team-l1-list');
+    if(net.l1Members.length === 0) {
+        l1List.innerHTML = '<p class="text-gray-500 text-center py-2">Još uvek nema direktnih preporuka.</p>';
+        return;
+    }
+    let html = '';
+    net.l1Members.forEach(m => {
+        html += `<div class="bg-gray-900 p-2.5 rounded-xl border border-gray-800 flex justify-between items-center">
+            <span class="text-white font-bold">${m.username}</span>
+            <span class="text-emerald-400 text-[10px]">ID: ${m.id}</span>
+        </div>`;
+    });
+    l1List.innerHTML = html;
+}
+
+function renderAssetsData() {
+    let frozenTotal = 0;
+    if(currentUser.activeBots) {
+        currentUser.activeBots.forEach(b => { if(b.status === 'ACTIVE') frozenTotal += b.price; });
+    }
+    document.getElementById('wallet-frozen-display').innerText = frozenTotal.toLocaleString('en-US', {minimumFractionDigits: 2});
+    document.getElementById('wallet-balance-display').innerText = (currentUser.balance !== undefined ? currentUser.balance : 12450.80).toLocaleString('en-US', {minimumFractionDigits: 2});
+
+    const container = document.getElementById('active-bots-container');
+    if(!currentUser.activeBots || currentUser.activeBots.length === 0) {
+        container.innerHTML = '<p class="text-xs text-gray-500 text-center py-4">Trenutno nema aktivnih bot investicija.</p>';
+        return;
+    }
+
+    let html = '';
+    currentUser.activeBots.forEach((bot) => {
+        html += `
+            <div class="emerald-card p-4 rounded-2xl space-y-2 border border-emerald-500/30">
+                <div class="flex justify-between items-center font-bold">
+                    <span class="text-white">Bot Level ${bot.level} ($${bot.price})</span>
+                    <span class="text-emerald-400 text-xs">+$${bot.dailyEarning}/dan</span>
+                </div>
+                <div class="text-[11px] text-gray-400 flex justify-between">
+                    <span>Zamrznuti kapital: <strong class="text-white">$${bot.price}</strong></span>
+                    <span class="text-amber-400">60-dnevni ciklus aktivan</span>
+                </div>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+}
+
+function saveCurrentUserToStorage() {
+    allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
+    allRegisteredUsers = allRegisteredUsers.map(u => u.username.toLowerCase() === currentUser.username.toLowerCase() ? currentUser : u);
+    localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
+}
+
+function updateAppUI() {
+    if(!currentUser) currentUser = MAIN_ADMIN_USER;
+    document.getElementById('profile-id-display').innerText = currentUser.id;
+    document.getElementById('profile-username-display').innerText = currentUser.username;
+    document.getElementById('profile-code-display').innerText = "Pozivni kod: " + currentUser.code;
+    document.getElementById('modal-code-display').innerText = currentUser.code;
+    document.getElementById('modal-link-display').innerText = currentUser.link;
+    document.getElementById('profile-initial').innerText = currentUser.username.charAt(0).toUpperCase();
+
+    const adminBtn = document.getElementById('admin-header-btn');
+    if (currentUser && currentUser.username.toLowerCase() === 'tajkun') {
+        adminBtn.style.display = 'flex';
+    } else {
+        adminBtn.style.display = 'none';
+    }
+
+    if(currentUser.isLicensePaid) {
+        document.getElementById('buy-license-btn').innerText = "Plaćeno ✓";
+        document.getElementById('buy-license-btn').className = "bg-emerald-950 text-emerald-400 px-4 py-2 rounded-xl text-xs font-bold border border-emerald-500/40 cursor-default";
+    }
+    checkBotUnlocks();
+    loadWithdrawRequestsQuiet();
+}
+
+function openChangeEmailModal() { document.getElementById('modal-change-email').style.display = 'flex'; }
+function closeChangeEmailModal() { document.getElementById('modal-change-email').style.display = 'none'; }
+function saveNewEmail() {
+    const email = document.getElementById('new-email-input').value.trim();
+    if(!email) { alert('Unesite validan email.'); return; }
+    currentUser.email = email;
+    saveCurrentUserToStorage();
+    closeChangeEmailModal();
+    alert('Email uspešno ažuriran na: ' + email);
+}
+
+function openAdminPinModal() {
+    if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') {
+        alert('Pristup odbijen. Samo za administratore.');
+        return;
+    }
+    document.getElementById('modal-admin-pin').style.display = 'flex';
+}
+
+function closeAdminPinModal() { document.getElementById('modal-admin-pin').style.display = 'none'; document.getElementById('admin-pin-input').value = ''; }
+
+function verifyAdminPin() {
+    if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') return;
+    const pin = document.getElementById('admin-pin-input').value.trim();
+    if(pin === ADMIN_PIN) {
+        closeAdminPinModal();
+        openAdminPanel();
+    } else {
+        alert('Pogrešan PIN!');
+        document.getElementById('admin-pin-input').value = '';
+    }
+}
+
+function openAdminPanel() {
+    if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') return;
+    document.getElementById('modal-admin-panel').style.display = 'flex';
+    renderAdminWithdrawList();
+    
+    if(adminInterval) clearInterval(adminInterval);
+    adminInterval = setInterval(() => {
+        renderAdminWithdrawList();
+    }, 1000);
+}
+
+function closeAdminPanel() { 
+    document.getElementById('modal-admin-panel').style.display = 'none'; 
+    if(adminInterval) clearInterval(adminInterval);
+    loadWithdrawRequestsQuiet(); 
+}
+
+function formatDuration(ms) {
+    if(ms <= 0) return "00h 00m 00s";
+    let totalSec = Math.floor(ms / 1000);
+    let hours = Math.floor(totalSec / 3600);
+    let minutes = Math.floor((totalSec % 3600) / 60);
+    let seconds = totalSec % 60;
+    return `${hours}h ${minutes < 10 ? '0' : ''}${minutes}m ${seconds < 10 ? '0' : ''}${seconds}s`;
+}
+
+function formatPassedTime(ms) {
+    let totalSec = Math.floor(ms / 1000);
+    let hours = Math.floor(totalSec / 3600);
+    let minutes = Math.floor((totalSec % 3600) / 60);
+    return `${hours}h ${minutes}m`;
+}
+
+function renderAdminWithdrawList() {
+    fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        headers: { 'X-Master-Key': MASTER_KEY }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data && data.record) {
+            withdrawRequests = Array.isArray(data.record) ? data.record : (data.record.requests || []);
+            updateBadges();
+
+            const listContainer = document.getElementById('admin-list-withdraw');
+            if(!withdrawRequests || withdrawRequests.length === 0) {
+                listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">Nema aktivnih zahteva za isplatu.</p>';
+                return;
+            }
+
+            const now = Date.now();
+            const DURATION_72H = 72 * 60 * 60 * 1000;
+
+            let html = '';
+            withdrawRequests.forEach((req, idx) => {
+                let createdAt = req.timestamp || req.id;
+                let elapsed = now - createdAt;
+                let remaining = DURATION_72H - elapsed;
+
+                let timeStatusHtml = '';
+                let approveBtnText = "Odobri";
+                let approveBtnColor = "bg-emerald-500 text-black";
+
+                if (req.status === 'pending') {
+                    if (remaining > 0) {
+                        timeStatusHtml = `
+                            <div class="flex justify-between items-center bg-gray-950 p-2 rounded-lg border border-amber-500/30 text-[10px]">
+                                <span class="text-amber-400 font-bold"><i class="far fa-clock"></i> 72h zaključavanje</span>
+                                <span class="text-emerald-400 font-mono font-bold">${formatDuration(remaining)} preostalo</span>
+                            </div>
+                            <div class="text-[9px] text-gray-400">Prošlo vreme: <strong class="text-white">${formatPassedTime(elapsed)}</strong></div>
+                        `;
+                    } else {
+                        timeStatusHtml = `
+                            <div class="flex justify-between items-center bg-emerald-950/40 p-2 rounded-lg border border-emerald-500/50 text-[10px]">
+                                <span class="text-emerald-400 font-bold"><i class="fas fa-check-circle"></i> 72h period je istekao!</span>
+                                <span class="text-white font-mono font-bold">Spremno za isplatu</span>
+                            </div>
+                        `;
+                        approveBtnColor = "bg-emerald-400 text-black shadow-lg shadow-emerald-500/30 animate-pulse";
+                    }
+                }
+
+                html += `
+                    <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-2">
+                        <div class="flex justify-between items-center font-bold">
+                            <span class="text-white">Korisnik: ${req.user}</span>
+                            <span class="text-emerald-400 text-sm">$${req.amount} USDT</span>
+                        </div>
+                        <div class="text-[10px] text-gray-400 font-mono truncate">Adresa: ${req.address}</div>
+                        ${req.status === 'pending' ? timeStatusHtml : ''}
+                        <div class="flex justify-between items-center pt-1 border-t border-gray-800/80">
+                            <span class="text-amber-400 text-[10px] uppercase tracking-wider font-bold">Status: ${req.status}</span>
+                            ${req.status === 'pending' ? `
+                                <button onclick="approveWithdraw(${idx})" class="${approveBtnColor} px-3 py-1.5 rounded-lg font-bold text-[10px] transition active:scale-95">
+                                    ${approveBtnText}
+                                </button>
+                            ` : `<span class="text-emerald-400 font-bold text-[10px] bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded">Odobreno ✓</span>`}
+                        </div>
+                    </div>
+                `;
+            });
+            listContainer.innerHTML = html;
+        }
+    })
+    .catch(err => console.log('Greška osvežavanja:', err));
+}
+
+function approveWithdraw(idx) {
+    if(withdrawRequests[idx]) {
+        withdrawRequests[idx].status = 'approved';
+        withdrawRequests[idx].approvedAt = Date.now();
+        saveWithdrawRequestsToBin();
+    }
+}
+
+function updateBadges() {
+    let pendingWithdrawCount = withdrawRequests.filter(w => w.status === 'pending').length;
+
+    const adminHeaderBadge = document.getElementById('admin-header-badge');
+    if(adminHeaderBadge) {
+        if(pendingWithdrawCount > 0) { adminHeaderBadge.innerText = pendingWithdrawCount; adminHeaderBadge.classList.remove('hidden'); }
+        else { adminHeaderBadge.classList.add('hidden'); }
+    }
 }
 
 function openDepositModal() { document.getElementById('modal-deposit').style.display = 'flex'; }
 function closeDepositModal() { document.getElementById('modal-deposit').style.display = 'none'; }
 function openWithdrawModal() { document.getElementById('modal-withdraw').style.display = 'flex'; }
 function closeWithdrawModal() { document.getElementById('modal-withdraw').style.display = 'none'; }
-function openAdminPinModal() { document.getElementById('modal-admin-pin').style.display = 'flex'; }
-function verifyAdminPin() {
-    if(document.getElementById('admin-pin-input').value === ADMIN_PIN) {
-        document.getElementById('modal-admin-pin').style.display = 'none';
-        document.getElementById('modal-admin-panel').style.display = 'flex';
-    } else { alert('Pogrešan PIN!'); }
+function openInviteModal() { document.getElementById('modal-invite').style.display = 'flex'; }
+function closeInviteModal() { document.getElementById('modal-invite').style.display = 'none'; }
+
+function submitWithdrawRequest() {
+    const amountVal = document.getElementById('withdraw-amount').value;
+    const address = document.getElementById('withdraw-address').value.trim();
+    const amount = parseFloat(amountVal);
+
+    if(!amount || amount < 50) { alert('Minimalni iznos za isplatu je 50 USDT.'); return; }
+    if(!address) { alert('Unesite kripto adresu.'); return; }
+
+    const submitBtn = document.getElementById('withdraw-submit-btn');
+    submitBtn.innerText = "Obrada...";
+    submitBtn.disabled = true;
+    submitBtn.classList.add('opacity-50');
+
+    let req = { 
+        id: Date.now(), 
+        timestamp: Date.now(),
+        user: currentUser.username + " (" + currentUser.id + ")", 
+        amount: amount, 
+        address: address, 
+        status: 'pending' 
+    };
+    
+    fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        headers: { 'X-Master-Key': MASTER_KEY }
+    })
+    .then(res => res.json())
+    .then(data => {
+        let currentList = [];
+        if (data && data.record) {
+            currentList = Array.isArray(data.record) ? data.record : (data.record.requests || []);
+        }
+        currentList.push(req);
+        withdrawRequests = currentList;
+
+        return fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': MASTER_KEY
+            },
+            body: JSON.stringify(withdrawRequests)
+        });
+    })
+    .then(() => {
+        alert('Zahtjev za isplatu uspešno poslat! (72h period obrade)');
+        document.getElementById('withdraw-amount').value = '';
+        document.getElementById('withdraw-address').value = '';
+        closeWithdrawModal();
+        updateBadges();
+    })
+    .catch(err => {
+        alert('Greška pri slanju zahtjeva: ' + err.message);
+    })
+    .finally(() => {
+        submitBtn.innerText = "Potvrdi Isplatu";
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('opacity-50');
+    });
 }
-function closeAdminPanel() { document.getElementById('modal-admin-panel').style.display = 'none'; }
-function submitWithdrawRequest() { alert('Zahtjev poslat!'); closeWithdrawModal(); }
 </script>
 </body>
 </html>
