@@ -43,9 +43,9 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 .card-theme-3 { border: 1px solid rgba(168, 85, 247, 0.4); }
 .card-theme-4 { border: 1px solid rgba(236, 72, 153, 0.4); }
 .card-theme-5 { border: 1px solid rgba(249, 115, 22, 0.5); }
-.card-theme-6 { border: 1px solid #ef4444; box-shadow: 0 0 20px rgba(239, 68, 68, 0.4); background: linear-gradient(135deg, #1b070b 0%, #111622 70%); }
+.card-theme-6 { border: 1px solid #ef4444; box-shadow: 0 0 25px rgba(239, 68, 68, 0.5); background: linear-gradient(135deg, #200508 0%, #111622 70%); }
 
-/* AGRESIVNE ROBOT SLIKE SA LIJEVE STRANE - SVE JAČE OD 1 DO 6 */
+/* AGRESIVNE CRVENE MAŠINE I TERMINATOR SLIKE SA LIJEVE STRANE */
 .robot-pic-left {
     width: 110px;
     height: 135px;
@@ -53,21 +53,21 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     background-size: cover;
     background-position: center;
     flex-shrink: 0;
-    box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.9);
 }
 
-/* Bot 1: Početni cyberpunk sistem */
+/* Bot 1: Cyberpunk početak */
 .pic-bot-1 { background-image: url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=500&auto=format&fit=crop&q=80'); }
-/* Bot 2: Napredna neon mreža */
+/* Bot 2: Neon mreža */
 .pic-bot-2 { background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=500&auto=format&fit=crop&q=80'); }
-/* Bot 3: Mračni procesor sa crvenim tonom */
-.pic-bot-3 { background-image: url('https://images.unsplash.com/photo-1563089145-599997674d42?w=500&auto=format&fit=crop&q=80'); }
-/* Bot 4: Agresivna kibernetička struktura */
-.pic-bot-4 { background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop&q=80'); }
-/* Bot 5: Moćni mecha endoskelet */
-.pic-bot-5 { background-image: url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=500&auto=format&fit=crop&q=80'); }
-/* Bot 6: Vrhunska elitna mašina sa crvenim očima i efektom uništenja */
-.pic-bot-6 { background-image: url('https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500&auto=format&fit=crop&q=80'); filter: contrast(1.3) brightness(0.9); }
+/* Bot 3: Tačno onaj tvoj crveni binarni cyberpunk lik iz primjera */
+.pic-bot-3 { background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop&q=80'); filter: sepia(1) hue-rotate(300deg) saturate(5); }
+/* Bot 4: Moćna kibernetička glava sa crvenim očima */
+.pic-bot-4 { background-image: url('https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=500&auto=format&fit=crop&q=80'); filter: contrast(1.3) drop-shadow(0 0 5px red); }
+/* Bot 5: Opasni Terminator oklop sa crvenim sjajem */
+.pic-bot-5 { background-image: url('https://images.unsplash.com/photo-1563089145-599997674d42?w=500&auto=format&fit=crop&q=80'); filter: brightness(0.9) contrast(1.4); }
+/* Bot 6: Vrhunski beskompromisni elitni ubica sa užarenim crvenim očima */
+.pic-bot-6 { background-image: url('https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500&auto=format&fit=crop&q=80'); filter: contrast(1.4) drop-shadow(0 0 8px rgba(255,0,0,0.8)); }
 
 .info-panel-right {
     background: #090d16;
@@ -212,7 +212,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <button id="buy-license-btn" onclick="buyUserLicense()" class="bg-emerald-500 text-black px-4 py-2 rounded-xl text-xs font-bold shadow-lg" data-i18n="payLicenseBtn">Pay $5</button>
     </div>
 
-    <!-- BOT LISTA SA AGRESIVNIM ROBOT SLIKAMA LIJEVO -->
+    <!-- BOT LISTA SA BRUTALNIM CRVENIM ROBOTIMA -->
     <div class="space-y-4" id="bots-market-container">
         
         <!-- Bot 1 ($100) -->
@@ -1367,3 +1367,4 @@ function submitWithdrawRequest() {
 </script>
 </body>
 </html>
+
