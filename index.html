@@ -782,17 +782,38 @@ function renderAssetsData() {
         return;
     }
 
+    // Mapiranje klasa slika za botove da u assets budu identične kao u marketu
+    const botPicClasses = {
+        1: 'pic-bot-1',
+        2: 'pic-bot-2',
+        3: 'pic-bot-3',
+        4: 'pic-bot-4',
+        5: 'pic-bot-5',
+        6: 'pic-bot-6'
+    };
+
     let html = '';
     currentUser.activeBots.forEach((bot) => {
+        let picClass = botPicClasses[bot.level] || 'pic-bot-1';
+        let themeClass = 'card-theme-' + bot.level;
+
         html += `
-            <div class="emerald-card p-4 rounded-2xl space-y-2 border border-emerald-500/30">
-                <div class="flex justify-between items-center font-bold">
-                    <span class="text-white">Bot Level ${bot.level} ($${bot.price})</span>
-                    <span class="text-emerald-400 text-xs">+$${bot.dailyEarning}/day</span>
+            <div class="bot-box-card ${themeClass}">
+                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
+                    <span class="text-base font-extrabold text-white">BOT-${bot.level}</span>
+                    <span class="text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded font-bold">Active Asset</span>
                 </div>
-                <div class="text-[11px] text-gray-400 flex justify-between">
-                    <span>Frozen Capital: <strong class="text-white">$${bot.price}</strong></span>
-                    <span class="text-amber-400">60-Day Cycle Active</span>
+                <div class="flex gap-3 items-center">
+                    <div class="robot-pic-left ${picClass}"></div>
+                    <div class="info-panel-right space-y-1.5 text-xs">
+                        <div class="flex justify-between items-center border-b border-gray-800/60 pb-1"><span class="text-gray-400">Pledge Amount</span><span class="text-emerald-400 font-bold font-mono">$${bot.price}</span></div>
+                        <div class="flex justify-between items-center border-b border-gray-800/60 pb-1"><span class="text-gray-400">Daily Return</span><span class="text-emerald-400 font-bold font-mono">+$${bot.dailyEarning} / day</span></div>
+                        <div class="flex justify-between items-center"><span class="text-gray-400">Duration</span><span class="text-white font-bold">60 Days</span></div>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center pt-1 border-t border-gray-800">
+                    <span class="text-[10px] text-amber-400 font-bold">Cycle Running</span>
+                    <button class="bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-4 py-2 rounded-xl text-xs shadow-md transition">Start bot</button>
                 </div>
             </div>
         `;
