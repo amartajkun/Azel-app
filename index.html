@@ -8,74 +8,72 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="AZEL">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0b0e14">
+<meta name="theme-color" content="#07090e">
 <link rel="apple-touch-icon" href="https://img.icons8.com/color/180/emerald.png">
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
 <style>
-body { background-color: #0b0e14; color: #e6edf3; font-family: -apple-system, sans-serif; user-select: none; }
-.emerald-card { background: #161c2d; border: 1px solid rgba(255, 255, 255, 0.05); }
+body { background-color: #07090e; color: #e6edf3; font-family: -apple-system, sans-serif; user-select: none; }
+.emerald-card { background: #111622; border: 1px solid rgba(255, 255, 255, 0.06); }
 .page-content { display: none; }
 .page-content.active { display: block; }
 .gradient-banner {
-background: linear-gradient(135deg, #10b981 0%, #064e3b 40%, #161c2d 100%);
-border: 1px solid rgba(16, 185, 129, 0.2);
+background: linear-gradient(135deg, #10b981 0%, #043829 50%, #111622 100%);
+border: 1px solid rgba(16, 185, 129, 0.3);
+box-shadow: 0 8px 25px rgba(16, 185, 129, 0.1);
 }
 .invite-gradient-card {
-background: linear-gradient(135deg, #10b981 0%, #059669 50%, #064e3b 100%);
+background: linear-gradient(135deg, #10b981 0%, #059669 50%, #043829 100%);
 border: 1px solid rgba(16, 185, 129, 0.4);
 box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 }
-#auth-screen { display: flex; position: fixed; inset: 0; background: #0b0e14; z-index: 100; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
+#auth-screen { display: flex; position: fixed; inset: 0; background: #07090e; z-index: 100; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
 #main-app-wrapper { display: none; }
 
-/* VRHUNSKI STILOVI ZA BOT KARTICE SA INTEGRISANIM VIZUALIMA */
-.bot-card-pro {
+/* ULTRA MODERNE BOT KARTICE SA SAVRŠENIM UTAPANJEM */
+.bot-card-ultra {
     position: relative;
-    border-radius: 1.25rem;
-    padding: 1.2rem;
+    border-radius: 1.35rem;
+    padding: 1.15rem;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.9rem;
+    backdrop-filter: blur(10px);
 }
 
-.bot-card-1 { border: 1px solid rgba(16, 185, 129, 0.3); background: linear-gradient(135deg, #161c2d 0%, #0c1a16 100%); }
-.bot-card-2 { border: 1px solid rgba(59, 130, 246, 0.4); background: linear-gradient(135deg, #161c2d 0%, #0b1528 100%); }
-.bot-card-3 { border: 1px solid rgba(168, 85, 247, 0.5); background: linear-gradient(135deg, #161c2d 0%, #19102b 100%); }
-.bot-card-4 { border: 1px solid rgba(236, 72, 153, 0.6); background: linear-gradient(135deg, #161c2d 0%, #260e21 100%); }
-.bot-card-5 { border: 1px solid rgba(249, 115, 22, 0.7); background: linear-gradient(135deg, #161c2d 0%, #28140a 100%); box-shadow: 0 0 20px rgba(249, 115, 22, 0.15); }
-.bot-card-6 { border: 1px solid rgba(239, 68, 68, 0.9); background: linear-gradient(135deg, #1d0a0e 0%, #161c2d 50%, #2b0808 100%); box-shadow: 0 0 25px rgba(239, 68, 68, 0.3); }
+.card-theme-1 { border: 1px solid rgba(16, 185, 129, 0.35); background: linear-gradient(135deg, #111622 0%, #071712 100%); }
+.card-theme-2 { border: 1px solid rgba(59, 130, 246, 0.4); background: linear-gradient(135deg, #111622 0%, #071224 100%); }
+.card-theme-3 { border: 1px solid rgba(168, 85, 247, 0.45); background: linear-gradient(135deg, #111622 0%, #150c26 100%); }
+.card-theme-4 { border: 1px solid rgba(236, 72, 153, 0.5); background: linear-gradient(135deg, #111622 0%, #220b1e 100%); }
+.card-theme-5 { border: 1px solid rgba(249, 115, 22, 0.6); background: linear-gradient(135deg, #111622 0%, #221208 100%); box-shadow: 0 0 20px rgba(249, 115, 22, 0.12); }
+.card-theme-6 { border: 1px solid rgba(239, 68, 68, 0.8); background: linear-gradient(135deg, #1e070b 0%, #111622 60%, #280606 100%); box-shadow: 0 0 25px rgba(239, 68, 68, 0.25); }
 
-/* PROFESIONALNI 3D ROBOT AVATARI SA POZADINSKIM GLOW EFEKTOM */
-.robot-avatar {
-    width: 68px;
-    height: 68px;
+/* FOTO ILUSTRACIJE ROBOTA SA GLOW EFEKTOM I PROZIRNOŠĆU */
+.robot-3d-avatar {
+    width: 65px;
+    height: 65px;
     border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    position: relative;
     background-size: cover;
     background-position: center;
-    box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
+    flex-shrink: 0;
+    position: relative;
 }
 
-.avatar-1 { background-image: linear-gradient(rgba(16,185,129,0.2), rgba(16,185,129,0.4)), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&auto=format&fit=crop&q=80'); border: 1px solid rgba(16,185,129,0.5); }
-.avatar-2 { background-image: linear-gradient(rgba(59,130,246,0.2), rgba(59,130,246,0.4)), url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=150&auto=format&fit=crop&q=80'); border: 1px solid rgba(59,130,246,0.6); }
-.avatar-3 { background-image: linear-gradient(rgba(168,85,247,0.2), rgba(168,85,247,0.4)), url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=150&auto=format&fit=crop&q=80'); border: 1px solid rgba(168,85,247,0.7); }
-.avatar-4 { background-image: linear-gradient(rgba(236,72,153,0.2), rgba(236,72,153,0.4)), url('https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=150&auto=format&fit=crop&q=80'); border: 1px solid rgba(236,72,153,0.8); }
-.avatar-5 { background-image: linear-gradient(rgba(249,115,22,0.25), rgba(249,115,22,0.45)), url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=150&auto=format&fit=crop&q=80'); border: 1px solid rgba(249,115,22,0.9); box-shadow: 0 0 12px rgba(249,115,22,0.4); }
-.avatar-6 { background-image: linear-gradient(rgba(239,68,68,0.3), rgba(239,68,68,0.6)), url('https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=150&auto=format&fit=crop&q=80'); border: 1px solid #ef4444; box-shadow: 0 0 18px rgba(239,68,68,0.7); }
+.avatar-img-1 { background-image: url('https://cdn.jsdelivr.net/gh/alohe/avatars/png/bot_1.png'); filter: drop-shadow(0 0 8px rgba(16,185,129,0.5)); }
+.avatar-img-2 { background-image: url('https://cdn.jsdelivr.net/gh/alohe/avatars/png/bot_3.png'); filter: drop-shadow(0 0 8px rgba(59,130,246,0.5)); }
+.avatar-img-3 { background-image: url('https://cdn.jsdelivr.net/gh/alohe/avatars/png/bot_4.png'); filter: drop-shadow(0 0 10px rgba(168,85,247,0.6)); }
+.avatar-img-4 { background-image: url('https://cdn.jsdelivr.net/gh/alohe/avatars/png/bot_5.png'); filter: drop-shadow(0 0 10px rgba(236,72,153,0.6)); }
+.avatar-img-5 { background-image: url('https://cdn.jsdelivr.net/gh/alohe/avatars/png/bot_6.png'); filter: drop-shadow(0 0 12px rgba(249,115,22,0.7)); }
+.avatar-img-6 { background-image: url('https://cdn.jsdelivr.net/gh/alohe/avatars/png/notion_14.png'); filter: drop-shadow(0 0 15px rgba(239,68,68,0.9)); animation: pulse 2s infinite; }
 </style>
 </head>
 <body class="pb-24">
 
 <!-- LOGIN / REGISTRATION SCREEN -->
 <div id="auth-screen">
-    <div class="emerald-card p-6 rounded-3xl w-full max-w-sm space-y-4 bg-[#0b0e14] border border-emerald-500/40 shadow-2xl">
+    <div class="emerald-card p-6 rounded-3xl w-full max-w-sm space-y-4 bg-[#07090e] border border-emerald-500/40 shadow-2xl">
         <div class="text-center space-y-1">
             <div class="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center font-bold text-black text-xl mx-auto shadow-lg shadow-emerald-500/30 mb-2">A</div>
             <h1 class="text-2xl font-bold text-emerald-400">AZEL</h1>
@@ -135,7 +133,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <div id="main-app-wrapper">
 
 <!-- HEADER -->
-<div class="p-4 flex justify-between items-center border-b border-gray-800 bg-[#0b0e14] sticky top-0 z-40">
+<div class="p-4 flex justify-between items-center border-b border-gray-800 bg-[#07090e] sticky top-0 z-40">
 <div onclick="openAdminPinModal()" class="flex items-center space-x-2 cursor-pointer active:opacity-80">
 <div class="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center font-bold text-black shadow-lg shadow-emerald-500/30">A</div>
 <span class="text-xl font-bold tracking-wider text-emerald-400">AZEL</span>
@@ -205,112 +203,112 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <button id="buy-license-btn" onclick="buyUserLicense()" class="bg-emerald-500 text-black px-4 py-2 rounded-xl text-xs font-bold shadow-lg" data-i18n="payLicenseBtn">Pay $5</button>
     </div>
 
-    <!-- BOT LISTA SA VRHUNSKIM 3D AVATARIMA U STILU POZADINE -->
+    <!-- BOT LISTA SA SAVRŠENO UKLOPLJENIM 3D ROBOTIMA -->
     <div class="space-y-4" id="bots-market-container">
         
         <!-- Bot 1 ($100) - Stable AI -->
-        <div class="bot-card-pro bot-card-1">
+        <div class="bot-card-ultra card-theme-1">
             <div class="flex items-center space-x-3.5">
-                <div class="robot-avatar avatar-1"></div>
+                <div class="robot-3d-avatar avatar-img-1"></div>
                 <div class="flex-1">
                     <div class="flex justify-between items-center">
                         <span class="text-sm font-bold text-white">Bot 1 ($100)</span>
-                        <span class="text-[11px] text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-500/30">Stable AI</span>
+                        <span class="text-[11px] text-emerald-400 font-bold bg-emerald-950/80 px-2.5 py-0.5 rounded-full border border-emerald-500/30">Stable AI</span>
                     </div>
                     <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-emerald-400 font-bold">$2.50 / day</span></p>
                     <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$150</strong> (50% / 60 Days)</p>
                 </div>
             </div>
-            <div class="flex justify-between items-center pt-2 border-t border-emerald-900/40">
+            <div class="flex justify-between items-center pt-2 border-t border-emerald-950/50">
                 <div class="text-[10px] text-emerald-400 font-bold" data-i18n="statusUnlocked">Status: Unlocked (Free)</div>
                 <button onclick="buyBot(1, 100, 2.50)" class="bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-4 py-2 rounded-xl text-xs shadow-md shadow-emerald-500/20 active:scale-95 transition" data-i18n="activateBot1">Activate Bot 1</button>
             </div>
         </div>
 
         <!-- Bot 2 ($200) - Quantum AI -->
-        <div class="bot-card-pro bot-card-2">
+        <div class="bot-card-ultra card-theme-2">
             <div class="flex items-center space-x-3.5">
-                <div class="robot-avatar avatar-2"></div>
+                <div class="robot-3d-avatar avatar-img-2"></div>
                 <div class="flex-1">
                     <div class="flex justify-between items-center">
                         <span class="text-sm font-bold text-white">Bot 2 ($200)</span>
-                        <span class="text-[11px] text-blue-400 font-bold bg-blue-950/80 px-2 py-0.5 rounded-full border border-blue-500/30">Quantum AI</span>
+                        <span class="text-[11px] text-blue-400 font-bold bg-blue-950/80 px-2.5 py-0.5 rounded-full border border-blue-500/30">Quantum AI</span>
                     </div>
                     <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-blue-400 font-bold">$5.00 / day</span></p>
                     <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$300</strong> (50% / 60 Days)</p>
                 </div>
             </div>
-            <div class="flex justify-between items-center pt-2 border-t border-blue-900/40">
+            <div class="flex justify-between items-center pt-2 border-t border-blue-950/50">
                 <div class="text-[10px] text-emerald-400 font-bold" data-i18n="statusUnlocked">Status: Unlocked (Free)</div>
                 <button onclick="buyBot(2, 200, 5.00)" class="bg-blue-500 hover:bg-blue-400 text-black font-bold px-4 py-2 rounded-xl text-xs shadow-md shadow-blue-500/20 active:scale-95 transition" data-i18n="activateBot2">Activate Bot 2</button>
             </div>
         </div>
 
         <!-- Bot 3 ($500) - Neural Core -->
-        <div class="bot-card-pro bot-card-3" id="bot-card-3">
+        <div class="bot-card-ultra card-theme-3" id="bot-card-3">
             <div class="flex items-center space-x-3.5">
-                <div class="robot-avatar avatar-3"></div>
+                <div class="robot-3d-avatar avatar-img-3"></div>
                 <div class="flex-1">
                     <div class="flex justify-between items-center">
                         <span class="text-sm font-bold text-white">Bot 3 ($500)</span>
-                        <span class="text-[11px] text-purple-400 font-bold bg-purple-950/80 px-2 py-0.5 rounded-full border border-purple-500/30">Neural Core</span>
+                        <span class="text-[11px] text-purple-400 font-bold bg-purple-950/80 px-2.5 py-0.5 rounded-full border border-purple-500/30">Neural Core</span>
                     </div>
                     <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-purple-400 font-bold">$12.50 / day</span></p>
                     <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$750</strong> (50% / 60 Days)</p>
                 </div>
             </div>
-            <div class="flex justify-between items-center pt-2 border-t border-purple-900/40">
+            <div class="flex justify-between items-center pt-2 border-t border-purple-950/50">
                 <div id="bot-status-3" class="text-[10px] text-amber-400 font-bold">Requirement: 5 active members in L1</div>
                 <button id="bot-btn-3" onclick="buyBot(3, 500, 12.50)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
             </div>
         </div>
 
         <!-- Bot 4 ($1,000) - Apex HFT -->
-        <div class="bot-card-pro bot-card-4" id="bot-card-4">
+        <div class="bot-card-ultra card-theme-4" id="bot-card-4">
             <div class="flex items-center space-x-3.5">
-                <div class="robot-avatar avatar-4"></div>
+                <div class="robot-3d-avatar avatar-img-4"></div>
                 <div class="flex-1">
                     <div class="flex justify-between items-center">
                         <span class="text-sm font-bold text-white">Bot 4 ($1,000)</span>
-                        <span class="text-[11px] text-pink-400 font-bold bg-pink-950/80 px-2 py-0.5 rounded-full border border-pink-500/30">Apex HFT</span>
+                        <span class="text-[11px] text-pink-400 font-bold bg-pink-950/80 px-2.5 py-0.5 rounded-full border border-pink-500/30">Apex HFT</span>
                     </div>
                     <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-pink-400 font-bold">$25.00 / day</span></p>
                     <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$1,500</strong> (50% / 60 Days)</p>
                 </div>
             </div>
-            <div class="flex justify-between items-center pt-2 border-t border-pink-900/40">
+            <div class="flex justify-between items-center pt-2 border-t border-pink-950/50">
                 <div id="bot-status-4" class="text-[10px] text-amber-400 font-bold">Requirement: 10 in L1 + 5 in L2</div>
                 <button id="bot-btn-4" onclick="buyBot(4, 1000, 25.00)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
             </div>
         </div>
 
         <!-- Bot 5 ($2,500) - Turbo Matrix -->
-        <div class="bot-card-pro bot-card-5" id="bot-card-5">
+        <div class="bot-card-ultra card-theme-5" id="bot-card-5">
             <div class="flex items-center space-x-3.5">
-                <div class="robot-avatar avatar-5"></div>
+                <div class="robot-3d-avatar avatar-img-5"></div>
                 <div class="flex-1">
                     <div class="flex justify-between items-center">
                         <span class="text-sm font-bold text-white">Bot 5 ($2,500)</span>
-                        <span class="text-[11px] text-orange-400 font-bold bg-orange-950/80 px-2 py-0.5 rounded-full border border-orange-500/40">Turbo Matrix</span>
+                        <span class="text-[11px] text-orange-400 font-bold bg-orange-950/80 px-2.5 py-0.5 rounded-full border border-orange-500/40">Turbo Matrix</span>
                     </div>
                     <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-orange-400 font-bold">$62.50 / day</span></p>
                     <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$3,750</strong> (50% / 60 Days)</p>
                 </div>
             </div>
-            <div class="flex justify-between items-center pt-2 border-t border-orange-900/40">
+            <div class="flex justify-between items-center pt-2 border-t border-orange-950/50">
                 <div id="bot-status-5" class="text-[10px] text-amber-400 font-bold">Requirement: 20 in L1 + 15 in L2 + 5 in L3</div>
                 <button id="bot-btn-5" onclick="buyBot(5, 2500, 62.50)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
             </div>
         </div>
 
         <!-- Bot 6 ($5,000) - Elite Beast -->
-        <div class="bot-card-pro bot-card-6" id="bot-card-6">
+        <div class="bot-card-ultra card-theme-6" id="bot-card-6">
             <div class="flex items-center space-x-3.5">
-                <div class="robot-avatar avatar-6"></div>
+                <div class="robot-3d-avatar avatar-img-6"></div>
                 <div class="flex-1">
                     <div class="flex justify-between items-center">
                         <span class="text-sm font-bold text-white">Bot 6 ($5,000)</span>
-                        <span class="text-[11px] text-red-400 font-bold bg-red-950/90 px-2 py-0.5 rounded-full border border-red-500/60 animate-pulse">🔥 Elite Beast</span>
+                        <span class="text-[11px] text-red-400 font-bold bg-red-950/90 px-2.5 py-0.5 rounded-full border border-red-500/60 animate-pulse">🔥 Elite Beast</span>
                     </div>
                     <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-red-400 font-bold">$125.00 / day</span></p>
                     <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$7,500</strong> (50% / 60 Days)</p>
@@ -457,7 +455,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 
 <!-- MODAL ZA PROMENU EMAIL-a -->
 <div id="modal-change-email" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
-    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-4 bg-[#0b0e14] border border-emerald-500/30">
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-4 bg-[#07090e] border border-emerald-500/30">
         <h3 class="text-sm font-bold text-emerald-400">Change Email Address</h3>
         <input type="email" id="new-email-input" placeholder="Enter new email..." class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white text-xs">
         <div class="flex space-x-2">
@@ -469,7 +467,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 
 <!-- MODAL ZA JEZIK -->
 <div id="modal-lang" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4 z-50">
-    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-2 bg-[#0b0e14] max-h-[80vh] overflow-y-auto">
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-2 bg-[#07090e] max-h-[80vh] overflow-y-auto">
         <h3 class="text-base font-bold text-emerald-400 mb-2">Select Language</h3>
         <div class="space-y-1.5 text-xs">
             <button onclick="changeLanguage('en')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>English</span> <span>🇬🇧</span></button>
@@ -487,7 +485,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 
 <!-- MODAL ZA UPLATU (DEPOSIT) -->
 <div id="modal-deposit" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
-    <div class="emerald-card p-5 rounded-2xl w-full max-w-sm space-y-4 bg-[#0b0e14] border border-emerald-500/30">
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-sm space-y-4 bg-[#07090e] border border-emerald-500/30">
         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
             <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2"><i class="fas fa-wallet"></i> USDT Deposit</h3>
             <button onclick="closeDepositModal()" class="text-gray-400 hover:text-white text-sm"><i class="fas fa-times"></i></button>
@@ -506,7 +504,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 
 <!-- MODAL ZA ISPLATU (WITHDRAW) -->
 <div id="modal-withdraw" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
-    <div class="emerald-card p-5 rounded-2xl w-full max-w-sm space-y-4 bg-[#0b0e14] border border-emerald-500/30">
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-sm space-y-4 bg-[#07090e] border border-emerald-500/30">
         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
             <h3 class="text-sm font-bold text-emerald-400">Withdrawal Request</h3>
             <button onclick="closeWithdrawModal()" class="text-gray-400 hover:text-white text-sm"><i class="fas fa-times"></i></button>
@@ -527,7 +525,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 
 <!-- MODAL ZA POZIVNICE (INVITE) -->
 <div id="modal-invite" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50 overflow-y-auto">
-    <div class="emerald-card p-5 rounded-3xl w-full max-w-sm space-y-4 bg-[#0b0e14] border border-emerald-500/40 my-auto relative">
+    <div class="emerald-card p-5 rounded-3xl w-full max-w-sm space-y-4 bg-[#07090e] border border-emerald-500/40 my-auto relative">
         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
             <h3 class="text-sm font-bold text-emerald-400">Invite Friends & Build Network</h3>
             <button onclick="closeInviteModal()" class="text-gray-400 hover:text-white text-base"><i class="fas fa-times"></i></button>
@@ -551,7 +549,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 
 <!-- TAJNI ADMIN PIN MODAL -->
 <div id="modal-admin-pin" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
-    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-4 bg-[#0b0e14] border border-amber-500/30 text-center">
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-4 bg-[#07090e] border border-amber-500/30 text-center">
         <h3 class="text-sm font-bold text-amber-400">Admin Security PIN</h3>
         <input type="password" id="admin-pin-input" maxlength="4" placeholder="****" class="w-full bg-gray-900 border border-amber-500/50 p-2.5 rounded-xl text-center text-white text-lg tracking-widest focus:outline-none">
         <div class="flex space-x-2">
@@ -563,7 +561,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 
 <!-- ADMIN PANEL MODAL -->
 <div id="modal-admin-panel" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
-    <div class="emerald-card p-5 rounded-2xl w-full max-w-md space-y-4 bg-[#0b0e14] border border-emerald-500/50 max-h-[85vh] flex flex-col">
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-md space-y-4 bg-[#07090e] border border-emerald-500/50 max-h-[85vh] flex flex-col">
         <div class="flex justify-between items-center border-b border-gray-800 pb-3 shrink-0">
             <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
                 <i class="fas fa-tasks"></i> Admin Panel (Withdrawals)
@@ -580,7 +578,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 </div>
 
 <!-- DONJA NAVIGACIJA -->
-<div class="fixed bottom-0 left-0 right-0 bg-[#0b0e14] border-t border-gray-800 flex justify-around p-3 text-[10px] text-gray-400 z-40">
+<div class="fixed bottom-0 left-0 right-0 bg-[#07090e] border-t border-gray-800 flex justify-around p-3 text-[10px] text-gray-400 z-40">
     <button id="tab-home" onclick="switchTab('tab-home')" class="flex flex-col items-center text-emerald-400">
         <i class="fas fa-house text-base"></i>
         <span data-i18n="navHome">Home</span>
