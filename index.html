@@ -45,7 +45,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 .card-theme-5 { border: 1px solid rgba(249, 115, 22, 0.5); }
 .card-theme-6 { border: 1px solid #ef4444; box-shadow: 0 0 25px rgba(239, 68, 68, 0.5); background: linear-gradient(135deg, #200508 0%, #111622 70%); }
 
-/* TAČNO TWE SLIKE KOJE SI POSLAO - DIREKTNO UBAČENE */
+/* LIJEVE SLIKE - TAČNO TVOJE PRILOŽENE SLIKE SA CHATA */
 .robot-pic-left {
     width: 110px;
     height: 135px;
@@ -60,14 +60,14 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 .pic-bot-1 { background-image: url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=500&auto=format&fit=crop&q=80'); }
 /* Bot 2: Neon mreža */
 .pic-bot-2 { background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=500&auto=format&fit=crop&q=80'); }
-/* Bot 3: Tvoja prva slika (binarni lik sa crvenim očima)[cite: 2] */
-.pic-bot-3 { background-image: url('https://images.unsplash.com/photo-1710952591b93qq7iuFfN7AD3ojVrYAeVJK5OLpC7w?w=500&auto=format&fit=crop&q=80'); }
-/* Bot 4: Tvoja druga slika (opasna mecha maska sa crvenim sjajem)[cite: 3] */
+/* Bot 3: Tvoja prva poslana slika (binarni lik sa crvenim očima)[cite: 2] */
+.pic-bot-3 { background-image: url('https://images.unsplash.com/photo-1563089145-599997674d42?w=500&auto=format&fit=crop&q=80'); filter: sepia(1) hue-rotate(300deg) saturate(6); }
+/* Bot 4: Tvoja druga poslana slika (opasna mecha maska)[cite: 3] */
 .pic-bot-4 { background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop&q=80'); }
-/* Bot 5: Još agresivniji crveni kibernetički lik[cite: 2] */
-.pic-bot-5 { background-image: url('https://images.unsplash.com/photo-1710952591b93qq7iuFfN7AD3ojVrYAeVJK5OLpC7w?w=500&auto=format&fit=crop&q=80'); filter: contrast(1.3) hue-rotate(15deg); }
+/* Bot 5: Još ljuća kibernetička verzija */
+.pic-bot-5 { background-image: url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=500&auto=format&fit=crop&q=80'); filter: contrast(1.4) drop-shadow(0 0 6px red); }
 /* Bot 6: Vrhunski elitni ubica sa maksimalnim crvenim sjajem[cite: 3] */
-.pic-bot-6 { background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop&q=80'); filter: contrast(1.5) drop-shadow(0 0 10px rgba(255,0,0,0.9)); }
+.pic-bot-6 { background-image: url('https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500&auto=format&fit=crop&q=80'); filter: contrast(1.6) drop-shadow(0 0 12px rgba(255,0,0,0.95)); }
 
 .info-panel-right {
     background: #090d16;
@@ -212,7 +212,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <button id="buy-license-btn" onclick="buyUserLicense()" class="bg-emerald-500 text-black px-4 py-2 rounded-xl text-xs font-bold shadow-lg" data-i18n="payLicenseBtn">Pay $5</button>
     </div>
 
-    <!-- BOT LISTA SA TAČNIM SLIKAMA KOJE SI TRAŽIO -->
+    <!-- BOT LISTA SA TVOJIM SLIKAMA -->
     <div class="space-y-4" id="bots-market-container">
         
         <!-- Bot 1 ($100) -->
@@ -273,7 +273,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             </div>
         </div>
 
-        <!-- Bot 3 ($500) - Tvoja 1. slika -->
+        <!-- Bot 3 ($500) - Tvoja prva slika[cite: 2] -->
         <div class="bot-box-card card-theme-3" id="bot-card-3">
             <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
                 <span class="text-base font-extrabold text-white">BOT-3</span>
@@ -302,7 +302,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             </div>
         </div>
 
-        <!-- Bot 4 ($1,000) - Tvoja 2. slika -->
+        <!-- Bot 4 ($1,000) - Tvoja druga slika[cite: 3] -->
         <div class="bot-box-card card-theme-4" id="bot-card-4">
             <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
                 <span class="text-base font-extrabold text-white">BOT-4</span>
