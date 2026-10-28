@@ -30,78 +30,45 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 #auth-screen { display: flex; position: fixed; inset: 0; background: #0b0e14; z-index: 100; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
 #main-app-wrapper { display: none; }
 
-/* Dvoranski pozadinski dizajni i bot kartice */
-.bot-card-custom {
+/* VRHUNSKI STILOVI ZA BOT KARTICE SA INTEGRISANIM VIZUALIMA */
+.bot-card-pro {
     position: relative;
-    overflow: hidden;
     border-radius: 1.25rem;
-    padding: 1.1rem;
+    padding: 1.2rem;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: 0.85rem;
-    transition: all 0.3s ease;
+    gap: 1rem;
 }
 
-.bot-card-bg-overlay {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.85;
-}
+.bot-card-1 { border: 1px solid rgba(16, 185, 129, 0.3); background: linear-gradient(135deg, #161c2d 0%, #0c1a16 100%); }
+.bot-card-2 { border: 1px solid rgba(59, 130, 246, 0.4); background: linear-gradient(135deg, #161c2d 0%, #0b1528 100%); }
+.bot-card-3 { border: 1px solid rgba(168, 85, 247, 0.5); background: linear-gradient(135deg, #161c2d 0%, #19102b 100%); }
+.bot-card-4 { border: 1px solid rgba(236, 72, 153, 0.6); background: linear-gradient(135deg, #161c2d 0%, #260e21 100%); }
+.bot-card-5 { border: 1px solid rgba(249, 115, 22, 0.7); background: linear-gradient(135deg, #161c2d 0%, #28140a 100%); box-shadow: 0 0 20px rgba(249, 115, 22, 0.15); }
+.bot-card-6 { border: 1px solid rgba(239, 68, 68, 0.9); background: linear-gradient(135deg, #1d0a0e 0%, #161c2d 50%, #2b0808 100%); box-shadow: 0 0 25px rgba(239, 68, 68, 0.3); }
 
-.bot-card-content {
-    position: relative;
-    z-index: 10;
-}
-
-/* GRADIENTI I STILOVI OD BOT 1 DO BOT 6 */
-.bot-card-1 {
-    border: 1px solid rgba(16, 185, 129, 0.35);
-    background: linear-gradient(135deg, #131926 0%, #0c1816 100%);
-}
-.bot-card-2 {
-    border: 1px solid rgba(59, 130, 246, 0.45);
-    background: linear-gradient(135deg, #131926 0%, #0b1828 100%);
-}
-.bot-card-3 {
-    border: 1px solid rgba(168, 85, 247, 0.55);
-    background: linear-gradient(135deg, #131926 0%, #1c112b 100%);
-}
-.bot-card-4 {
-    border: 1px solid rgba(236, 72, 153, 0.65);
-    background: linear-gradient(135deg, #131926 0%, #260e22 100%);
-}
-.bot-card-5 {
-    border: 1px solid rgba(249, 115, 22, 0.75);
-    background: linear-gradient(135deg, #1a1424 0%, #29150b 100%);
-    box-shadow: 0 0 20px rgba(249, 115, 22, 0.15);
-}
-.bot-card-6 {
-    border: 1px solid rgba(239, 68, 68, 0.95);
-    background: linear-gradient(135deg, #240c12 0%, #17070b 50%, #2b0808 100%);
-    box-shadow: 0 0 25px rgba(239, 68, 68, 0.3);
-}
-
-/* AVATARI ROBOTA - UGRAĐENI VECTOR SVG STILOVI */
-.bot-avatar-box {
-    width: 64px;
-    height: 64px;
-    border-radius: 18px;
+/* PROFESIONALNI 3D ROBOT AVATARI SA POZADINSKIM GLOW EFEKTOM */
+.robot-avatar {
+    width: 68px;
+    height: 68px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
     position: relative;
-    backdrop-filter: blur(4px);
+    background-size: cover;
+    background-position: center;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
 }
 
-.avatar-bg-1 { background: radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, rgba(16, 185, 129, 0.05) 100%); border: 1px solid rgba(16, 185, 129, 0.4); }
-.avatar-bg-2 { background: radial-gradient(circle, rgba(59, 130, 246, 0.35) 0%, rgba(59, 130, 246, 0.05) 100%); border: 1px solid rgba(59, 130, 246, 0.5); }
-.avatar-bg-3 { background: radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, rgba(168, 85, 247, 0.05) 100%); border: 1px solid rgba(168, 85, 247, 0.6); }
-.avatar-bg-4 { background: radial-gradient(circle, rgba(236, 72, 153, 0.45) 0%, rgba(236, 72, 153, 0.05) 100%); border: 1px solid rgba(236, 72, 153, 0.7); }
-.avatar-bg-5 { background: radial-gradient(circle, rgba(249, 115, 22, 0.5) 0%, rgba(249, 115, 22, 0.1) 100%); border: 1px solid rgba(249, 115, 22, 0.8); box-shadow: 0 0 12px rgba(249, 115, 22, 0.4); }
-.avatar-bg-6 { background: radial-gradient(circle, rgba(239, 68, 68, 0.6) 0%, rgba(239, 68, 68, 0.15) 100%); border: 1px solid rgba(239, 68, 68, 1); box-shadow: 0 0 18px rgba(239, 68, 68, 0.6); }
+.avatar-1 { background-image: linear-gradient(rgba(16,185,129,0.2), rgba(16,185,129,0.4)), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&auto=format&fit=crop&q=80'); border: 1px solid rgba(16,185,129,0.5); }
+.avatar-2 { background-image: linear-gradient(rgba(59,130,246,0.2), rgba(59,130,246,0.4)), url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=150&auto=format&fit=crop&q=80'); border: 1px solid rgba(59,130,246,0.6); }
+.avatar-3 { background-image: linear-gradient(rgba(168,85,247,0.2), rgba(168,85,247,0.4)), url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=150&auto=format&fit=crop&q=80'); border: 1px solid rgba(168,85,247,0.7); }
+.avatar-4 { background-image: linear-gradient(rgba(236,72,153,0.2), rgba(236,72,153,0.4)), url('https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=150&auto=format&fit=crop&q=80'); border: 1px solid rgba(236,72,153,0.8); }
+.avatar-5 { background-image: linear-gradient(rgba(249,115,22,0.25), rgba(249,115,22,0.45)), url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=150&auto=format&fit=crop&q=80'); border: 1px solid rgba(249,115,22,0.9); box-shadow: 0 0 12px rgba(249,115,22,0.4); }
+.avatar-6 { background-image: linear-gradient(rgba(239,68,68,0.3), rgba(239,68,68,0.6)), url('https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=150&auto=format&fit=crop&q=80'); border: 1px solid #ef4444; box-shadow: 0 0 18px rgba(239,68,68,0.7); }
 </style>
 </head>
 <body class="pb-24">
@@ -238,201 +205,120 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <button id="buy-license-btn" onclick="buyUserLicense()" class="bg-emerald-500 text-black px-4 py-2 rounded-xl text-xs font-bold shadow-lg" data-i18n="payLicenseBtn">Pay $5</button>
     </div>
 
-    <!-- BOT LISTA SA LUKSUZNIM POZADINSKIM ROBOT VIZUALIMA -->
+    <!-- BOT LISTA SA VRHUNSKIM 3D AVATARIMA U STILU POZADINE -->
     <div class="space-y-4" id="bots-market-container">
         
-        <!-- BOT 1 ($100) - STABLE EMERALD -->
-        <div class="bot-card-custom bot-card-1">
-            <div class="bot-card-bg-overlay">
-                <svg width="100%" height="100%" viewBox="0 0 400 160" preserveAspectRatio="none">
-                    <circle cx="360" cy="30" r="90" fill="none" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.15"/>
-                    <path d="M 220,160 L 380,0" stroke="#10b981" stroke-width="1" stroke-dasharray="4,4" stroke-opacity="0.2"/>
-                </svg>
+        <!-- Bot 1 ($100) - Stable AI -->
+        <div class="bot-card-pro bot-card-1">
+            <div class="flex items-center space-x-3.5">
+                <div class="robot-avatar avatar-1"></div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-bold text-white">Bot 1 ($100)</span>
+                        <span class="text-[11px] text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-500/30">Stable AI</span>
+                    </div>
+                    <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-emerald-400 font-bold">$2.50 / day</span></p>
+                    <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$150</strong> (50% / 60 Days)</p>
+                </div>
             </div>
-            <div class="bot-card-content space-y-3">
-                <div class="flex items-center space-x-3">
-                    <div class="bot-avatar-box avatar-bg-1">
-                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="11" width="18" height="10" rx="3"></rect>
-                            <circle cx="9" cy="16" r="1.5" fill="#10b981"></circle>
-                            <circle cx="15" cy="16" r="1.5" fill="#10b981"></circle>
-                            <path d="M12 2v6M8 8h8"></path>
-                        </svg>
-                    </div>
-                    <div class="flex-1">
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm font-bold text-white">Bot 1 ($100)</span>
-                            <span class="text-[10px] text-emerald-400 font-bold bg-emerald-950/80 px-2.5 py-0.5 rounded-full border border-emerald-500/30">Stable Emerald</span>
-                        </div>
-                        <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-emerald-400 font-bold">$2.50 / day</span></p>
-                        <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$150</strong> (50% / 60 Days)</p>
-                    </div>
-                </div>
-                <div class="flex justify-between items-center pt-2 border-t border-gray-800/80">
-                    <div class="text-[10px] text-emerald-400 font-bold" data-i18n="statusUnlocked">Status: Unlocked (Free)</div>
-                    <button onclick="buyBot(1, 100, 2.50)" class="bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-4 py-2 rounded-xl text-xs shadow-md shadow-emerald-500/20 active:scale-95 transition" data-i18n="activateBot1">Activate Bot 1</button>
-                </div>
+            <div class="flex justify-between items-center pt-2 border-t border-emerald-900/40">
+                <div class="text-[10px] text-emerald-400 font-bold" data-i18n="statusUnlocked">Status: Unlocked (Free)</div>
+                <button onclick="buyBot(1, 100, 2.50)" class="bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-4 py-2 rounded-xl text-xs shadow-md shadow-emerald-500/20 active:scale-95 transition" data-i18n="activateBot1">Activate Bot 1</button>
             </div>
         </div>
 
-        <!-- BOT 2 ($200) - QUANTUM CYBER -->
-        <div class="bot-card-custom bot-card-2">
-            <div class="bot-card-bg-overlay">
-                <svg width="100%" height="100%" viewBox="0 0 400 160" preserveAspectRatio="none">
-                    <polygon points="300,-10 420,50 340,170" fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-opacity="0.2"/>
-                    <circle cx="340" cy="80" r="45" fill="none" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3,3" stroke-opacity="0.25"/>
-                </svg>
+        <!-- Bot 2 ($200) - Quantum AI -->
+        <div class="bot-card-pro bot-card-2">
+            <div class="flex items-center space-x-3.5">
+                <div class="robot-avatar avatar-2"></div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-bold text-white">Bot 2 ($200)</span>
+                        <span class="text-[11px] text-blue-400 font-bold bg-blue-950/80 px-2 py-0.5 rounded-full border border-blue-500/30">Quantum AI</span>
+                    </div>
+                    <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-blue-400 font-bold">$5.00 / day</span></p>
+                    <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$300</strong> (50% / 60 Days)</p>
+                </div>
             </div>
-            <div class="bot-card-content space-y-3">
-                <div class="flex items-center space-x-3">
-                    <div class="bot-avatar-box avatar-bg-2">
-                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="4" width="20" height="16" rx="4"></rect>
-                            <path d="M8 12h8M12 8v8"></path>
-                            <circle cx="7" cy="8" r="1" fill="#3b82f6"></circle>
-                            <circle cx="17" cy="16" r="1" fill="#3b82f6"></circle>
-                        </svg>
-                    </div>
-                    <div class="flex-1">
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm font-bold text-white">Bot 2 ($200)</span>
-                            <span class="text-[10px] text-blue-400 font-bold bg-blue-950/80 px-2.5 py-0.5 rounded-full border border-blue-500/30">Quantum Cyber</span>
-                        </div>
-                        <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-blue-400 font-bold">$5.00 / day</span></p>
-                        <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$300</strong> (50% / 60 Days)</p>
-                    </div>
-                </div>
-                <div class="flex justify-between items-center pt-2 border-t border-gray-800/80">
-                    <div class="text-[10px] text-emerald-400 font-bold" data-i18n="statusUnlocked">Status: Unlocked (Free)</div>
-                    <button onclick="buyBot(2, 200, 5.00)" class="bg-blue-500 hover:bg-blue-400 text-black font-bold px-4 py-2 rounded-xl text-xs shadow-md shadow-blue-500/20 active:scale-95 transition" data-i18n="activateBot2">Activate Bot 2</button>
-                </div>
+            <div class="flex justify-between items-center pt-2 border-t border-blue-900/40">
+                <div class="text-[10px] text-emerald-400 font-bold" data-i18n="statusUnlocked">Status: Unlocked (Free)</div>
+                <button onclick="buyBot(2, 200, 5.00)" class="bg-blue-500 hover:bg-blue-400 text-black font-bold px-4 py-2 rounded-xl text-xs shadow-md shadow-blue-500/20 active:scale-95 transition" data-i18n="activateBot2">Activate Bot 2</button>
             </div>
         </div>
 
-        <!-- BOT 3 ($500) - NEURAL CORE -->
-        <div class="bot-card-custom bot-card-3" id="bot-card-3">
-            <div class="bot-card-bg-overlay">
-                <svg width="100%" height="100%" viewBox="0 0 400 160" preserveAspectRatio="none">
-                    <path d="M 250,0 Q 320,80 400,20" fill="none" stroke="#a855f7" stroke-width="2" stroke-opacity="0.25"/>
-                    <circle cx="320" cy="80" r="30" fill="none" stroke="#a855f7" stroke-width="1.5" stroke-opacity="0.3"/>
-                </svg>
+        <!-- Bot 3 ($500) - Neural Core -->
+        <div class="bot-card-pro bot-card-3" id="bot-card-3">
+            <div class="flex items-center space-x-3.5">
+                <div class="robot-avatar avatar-3"></div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-bold text-white">Bot 3 ($500)</span>
+                        <span class="text-[11px] text-purple-400 font-bold bg-purple-950/80 px-2 py-0.5 rounded-full border border-purple-500/30">Neural Core</span>
+                    </div>
+                    <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-purple-400 font-bold">$12.50 / day</span></p>
+                    <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$750</strong> (50% / 60 Days)</p>
+                </div>
             </div>
-            <div class="bot-card-content space-y-3">
-                <div class="flex items-center space-x-3">
-                    <div class="bot-avatar-box avatar-bg-3">
-                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                        </svg>
-                    </div>
-                    <div class="flex-1">
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm font-bold text-white">Bot 3 ($500)</span>
-                            <span class="text-[10px] text-purple-400 font-bold bg-purple-950/80 px-2.5 py-0.5 rounded-full border border-purple-500/30">Neural Core</span>
-                        </div>
-                        <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-purple-400 font-bold">$12.50 / day</span></p>
-                        <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$750</strong> (50% / 60 Days)</p>
-                    </div>
-                </div>
-                <div class="flex justify-between items-center pt-2 border-t border-gray-800/80">
-                    <div id="bot-status-3" class="text-[10px] text-amber-400 font-bold">Requirement: 5 active members in L1</div>
-                    <button id="bot-btn-3" onclick="buyBot(3, 500, 12.50)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
-                </div>
+            <div class="flex justify-between items-center pt-2 border-t border-purple-900/40">
+                <div id="bot-status-3" class="text-[10px] text-amber-400 font-bold">Requirement: 5 active members in L1</div>
+                <button id="bot-btn-3" onclick="buyBot(3, 500, 12.50)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
             </div>
         </div>
 
-        <!-- BOT 4 ($1,000) - APEX HFT -->
-        <div class="bot-card-custom bot-card-4" id="bot-card-4">
-            <div class="bot-card-bg-overlay">
-                <svg width="100%" height="100%" viewBox="0 0 400 160" preserveAspectRatio="none">
-                    <line x1="260" y1="0" x2="400" y2="140" stroke="#ec4899" stroke-width="2" stroke-opacity="0.3"/>
-                    <line x1="280" y1="0" x2="400" y2="120" stroke="#ec4899" stroke-width="1" stroke-opacity="0.2"/>
-                    <circle cx="350" cy="50" r="40" fill="none" stroke="#ec4899" stroke-width="1.5" stroke-opacity="0.3"/>
-                </svg>
+        <!-- Bot 4 ($1,000) - Apex HFT -->
+        <div class="bot-card-pro bot-card-4" id="bot-card-4">
+            <div class="flex items-center space-x-3.5">
+                <div class="robot-avatar avatar-4"></div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-bold text-white">Bot 4 ($1,000)</span>
+                        <span class="text-[11px] text-pink-400 font-bold bg-pink-950/80 px-2 py-0.5 rounded-full border border-pink-500/30">Apex HFT</span>
+                    </div>
+                    <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-pink-400 font-bold">$25.00 / day</span></p>
+                    <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$1,500</strong> (50% / 60 Days)</p>
+                </div>
             </div>
-            <div class="bot-card-content space-y-3">
-                <div class="flex items-center space-x-3">
-                    <div class="bot-avatar-box avatar-bg-4">
-                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                        </svg>
-                    </div>
-                    <div class="flex-1">
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm font-bold text-white">Bot 4 ($1,000)</span>
-                            <span class="text-[10px] text-pink-400 font-bold bg-pink-950/80 px-2.5 py-0.5 rounded-full border border-pink-500/30">Apex HFT</span>
-                        </div>
-                        <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-pink-400 font-bold">$25.00 / day</span></p>
-                        <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$1,500</strong> (50% / 60 Days)</p>
-                    </div>
-                </div>
-                <div class="flex justify-between items-center pt-2 border-t border-gray-800/80">
-                    <div id="bot-status-4" class="text-[10px] text-amber-400 font-bold">Requirement: 10 in L1 + 5 in L2</div>
-                    <button id="bot-btn-4" onclick="buyBot(4, 1000, 25.00)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
-                </div>
+            <div class="flex justify-between items-center pt-2 border-t border-pink-900/40">
+                <div id="bot-status-4" class="text-[10px] text-amber-400 font-bold">Requirement: 10 in L1 + 5 in L2</div>
+                <button id="bot-btn-4" onclick="buyBot(4, 1000, 25.00)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
             </div>
         </div>
 
-        <!-- BOT 5 ($2,500) - TURBO MATRIX -->
-        <div class="bot-card-custom bot-card-5" id="bot-card-5">
-            <div class="bot-card-bg-overlay">
-                <svg width="100%" height="100%" viewBox="0 0 400 160" preserveAspectRatio="none">
-                    <polygon points="260,160 340,10 420,160" fill="none" stroke="#f97316" stroke-width="2" stroke-opacity="0.35"/>
-                    <circle cx="340" cy="70" r="35" fill="none" stroke="#f97316" stroke-width="1" stroke-dasharray="4,2" stroke-opacity="0.4"/>
-                </svg>
+        <!-- Bot 5 ($2,500) - Turbo Matrix -->
+        <div class="bot-card-pro bot-card-5" id="bot-card-5">
+            <div class="flex items-center space-x-3.5">
+                <div class="robot-avatar avatar-5"></div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-bold text-white">Bot 5 ($2,500)</span>
+                        <span class="text-[11px] text-orange-400 font-bold bg-orange-950/80 px-2 py-0.5 rounded-full border border-orange-500/40">Turbo Matrix</span>
+                    </div>
+                    <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-orange-400 font-bold">$62.50 / day</span></p>
+                    <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$3,750</strong> (50% / 60 Days)</p>
+                </div>
             </div>
-            <div class="bot-card-content space-y-3">
-                <div class="flex items-center space-x-3">
-                    <div class="bot-avatar-box avatar-bg-5">
-                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
-                            <path d="M2 12h20"></path>
-                        </svg>
-                    </div>
-                    <div class="flex-1">
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm font-bold text-white">Bot 5 ($2,500)</span>
-                            <span class="text-[10px] text-orange-400 font-bold bg-orange-950/80 px-2.5 py-0.5 rounded-full border border-orange-500/40">Turbo Matrix</span>
-                        </div>
-                        <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-orange-400 font-bold">$62.50 / day</span></p>
-                        <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$3,750</strong> (50% / 60 Days)</p>
-                    </div>
-                </div>
-                <div class="flex justify-between items-center pt-2 border-t border-gray-800/80">
-                    <div id="bot-status-5" class="text-[10px] text-amber-400 font-bold">Requirement: 20 in L1 + 15 in L2 + 5 in L3</div>
-                    <button id="bot-btn-5" onclick="buyBot(5, 2500, 62.50)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
-                </div>
+            <div class="flex justify-between items-center pt-2 border-t border-orange-900/40">
+                <div id="bot-status-5" class="text-[10px] text-amber-400 font-bold">Requirement: 20 in L1 + 15 in L2 + 5 in L3</div>
+                <button id="bot-btn-5" onclick="buyBot(5, 2500, 62.50)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
             </div>
         </div>
 
-        <!-- BOT 6 ($5,000) - ELITE BEAST -->
-        <div class="bot-card-custom bot-card-6" id="bot-card-6">
-            <div class="bot-card-bg-overlay">
-                <svg width="100%" height="100%" viewBox="0 0 400 160" preserveAspectRatio="none">
-                    <path d="M 220,160 L 320,0 L 400,160 Z" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-opacity="0.45"/>
-                    <circle cx="320" cy="80" r="50" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="5,3" stroke-opacity="0.5"/>
-                </svg>
+        <!-- Bot 6 ($5,000) - Elite Beast -->
+        <div class="bot-card-pro bot-card-6" id="bot-card-6">
+            <div class="flex items-center space-x-3.5">
+                <div class="robot-avatar avatar-6"></div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-bold text-white">Bot 6 ($5,000)</span>
+                        <span class="text-[11px] text-red-400 font-bold bg-red-950/90 px-2 py-0.5 rounded-full border border-red-500/60 animate-pulse">🔥 Elite Beast</span>
+                    </div>
+                    <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-red-400 font-bold">$125.00 / day</span></p>
+                    <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$7,500</strong> (50% / 60 Days)</p>
+                </div>
             </div>
-            <div class="bot-card-content space-y-3">
-                <div class="flex items-center space-x-3">
-                    <div class="bot-avatar-box avatar-bg-6">
-                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-pulse">
-                            <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
-                        </svg>
-                    </div>
-                    <div class="flex-1">
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm font-bold text-white">Bot 6 ($5,000)</span>
-                            <span class="text-[10px] text-red-400 font-bold bg-red-950/90 px-2.5 py-0.5 rounded-full border border-red-500/60 animate-pulse">🔥 Elite Beast</span>
-                        </div>
-                        <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-red-400 font-bold">$125.00 / day</span></p>
-                        <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$7,500</strong> (50% / 60 Days)</p>
-                    </div>
-                </div>
-                <div class="flex justify-between items-center pt-2 border-t border-red-950/80">
-                    <div id="bot-status-6" class="text-[10px] text-amber-400 font-bold">Requirement: 50 in L1 + 30 in L2 + 20 in L3</div>
-                    <button id="bot-btn-6" onclick="buyBot(6, 5000, 125.00)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
-                </div>
+            <div class="flex justify-between items-center pt-2 border-t border-red-950/80">
+                <div id="bot-status-6" class="text-[10px] text-amber-400 font-bold">Requirement: 50 in L1 + 30 in L2 + 20 in L3</div>
+                <button id="bot-btn-6" onclick="buyBot(6, 5000, 125.00)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
             </div>
         </div>
 
