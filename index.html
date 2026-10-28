@@ -129,7 +129,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <!-- GLAVNA APLIKACIJA -->
 <div id="main-app-wrapper">
 <div class="p-4 flex justify-between items-center border-b border-gray-800 bg-[#07090e] sticky top-0 z-40">
-<div onclick="openAdminPinModal()" class="flex items-center space-x-2 cursor-pointer active:opacity-80">
+<div class="flex items-center space-x-2">
 <div class="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center font-bold text-black shadow-lg shadow-emerald-500/30">A</div>
 <span class="text-xl font-bold tracking-wider text-emerald-400">AZEL</span>
 </div>
@@ -326,6 +326,10 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             <div class="flex items-center space-x-3"><i class="far fa-envelope text-emerald-400 text-sm w-4 text-center"></i><span class="text-white font-medium" data-i18n="menuChangeEmail">Change Email</span></div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
+        <div onclick="openChangePasswordModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+            <div class="flex items-center space-x-3"><i class="fas fa-lock text-emerald-400 text-sm w-4 text-center"></i><span class="text-white font-medium">Change Password</span></div>
+            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+        </div>
         <div onclick="openLanguageModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3"><i class="fas fa-globe text-emerald-400 text-sm w-4 text-center"></i><span class="text-white font-medium" data-i18n="menuLang">Switch Language</span></div>
             <div class="flex items-center gap-1"><span id="current-lang-text" class="text-[10px] text-gray-400">EN</span><i class="fas fa-chevron-right text-gray-500 text-[10px]"></i></div>
@@ -342,6 +346,29 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <div class="flex space-x-2">
             <button onclick="closeChangeEmailModal()" class="w-1/2 bg-gray-800 text-gray-300 py-2 rounded-lg text-xs font-bold">Cancel</button>
             <button onclick="saveNewEmail()" class="w-1/2 bg-emerald-500 text-black py-2 rounded-lg text-xs font-bold">Update</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ZA PROMENU LOZINKE -->
+<div id="modal-change-password" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-3 bg-[#07090e] border border-emerald-500/30 text-xs">
+        <h3 class="text-sm font-bold text-emerald-400 mb-1">Change Password</h3>
+        <div>
+            <label class="text-[10px] text-gray-400 block mb-1">Current Password:</label>
+            <input type="password" id="current-password-input" placeholder="Enter current password..." class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white">
+        </div>
+        <div>
+            <label class="text-[10px] text-gray-400 block mb-1">New Password:</label>
+            <input type="password" id="new-password-input" placeholder="Enter new password..." class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white">
+        </div>
+        <div>
+            <label class="text-[10px] text-gray-400 block mb-1">Confirm New Password:</label>
+            <input type="password" id="confirm-password-input" placeholder="Confirm new password..." class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white">
+        </div>
+        <div class="flex space-x-2 pt-2">
+            <button onclick="closeChangePasswordModal()" class="w-1/2 bg-gray-800 text-gray-300 py-2 rounded-lg font-bold">Cancel</button>
+            <button onclick="saveNewPassword()" class="w-1/2 bg-emerald-500 text-black py-2 rounded-lg font-bold">Update</button>
         </div>
     </div>
 </div>
@@ -478,7 +505,7 @@ const MAIN_ADMIN_USER = {
     id: 119216,
     username: "tajkun",
     email: "tajkun@azel.com",
-    password: "tajkun123", // Definisan password za admina
+    password: "tajkun123",
     code: "AZEL-TAJKUN",
     link: window.location.href.split('?')[0].split('#')[0] + '?inviteCode=AZEL-TAJKUN',
     avatar: "",
@@ -698,7 +725,6 @@ function handleUserLogin() {
         return; 
     }
 
-    // PROVERA LOZINKE
     if (foundUser.password !== pass) {
         alert('Incorrect password! Please try again.');
         return;
@@ -746,7 +772,7 @@ function handleUserRegister() {
         id: randomId,
         username: user,
         email: email,
-        password: pass, // Čuvanje tačne lozinke
+        password: pass,
         code: randomCode,
         link: cleanBaseUrl + '?inviteCode=' + randomCode,
         avatar: "",
@@ -1004,7 +1030,7 @@ function startBotTrading(uniqueId) {
     }
 
     bot.tradingStatus = 'TRADING';
-    bot.tradingEndsAt = Date.now() + (60 * 60 * 1000); // 1 sat
+    bot.tradingEndsAt = Date.now() + (60 * 60 * 1000);
 
     saveCurrentUserToStorage();
     renderAssetsData();
@@ -1183,6 +1209,38 @@ function saveNewEmail() {
     saveCurrentUserToStorage();
     closeChangeEmailModal();
     alert('Email updated successfully to: ' + email);
+}
+
+function openChangePasswordModal() { document.getElementById('modal-change-password').style.display = 'flex'; }
+function closeChangePasswordModal() { 
+    document.getElementById('modal-change-password').style.display = 'none'; 
+    document.getElementById('current-password-input').value = '';
+    document.getElementById('new-password-input').value = '';
+    document.getElementById('confirm-password-input').value = '';
+}
+
+function saveNewPassword() {
+    const currentPass = document.getElementById('current-password-input').value.trim();
+    const newPass = document.getElementById('new-password-input').value.trim();
+    const confirmPass = document.getElementById('confirm-password-input').value.trim();
+
+    if (!currentPass || !newPass || !confirmPass) {
+        alert('Please fill in all password fields!');
+        return;
+    }
+    if (currentUser.password && currentUser.password !== currentPass) {
+        alert('Incorrect current password!');
+        return;
+    }
+    if (newPass !== confirmPass) {
+        alert('New passwords do not match!');
+        return;
+    }
+
+    currentUser.password = newPass;
+    saveCurrentUserToStorage();
+    closeChangePasswordModal();
+    alert('Password updated successfully!');
 }
 
 function openLanguageModal() { document.getElementById('modal-lang').style.display = 'flex'; }
