@@ -484,7 +484,7 @@ const MAIN_ADMIN_USER = {
     isLicensePaid: true,
     referrer: null,
     activeBots: [],
-    balance: 15450.80
+    balance: 15950.80
 };
 
 const translations = {
@@ -494,12 +494,18 @@ const translations = {
 
 window.addEventListener('DOMContentLoaded', function() {
     allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
-    if (!allRegisteredUsers.some(u => u.username.toLowerCase() === 'tajkun')) {
+    let existingTajkun = allRegisteredUsers.find(u => u.username.toLowerCase() === 'tajkun');
+    if (!existingTajkun) {
         allRegisteredUsers.push(MAIN_ADMIN_USER);
         localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
+    } else {
+        // Ako već postoji, osiguravamo da ima ažurirani balans ukoliko je bio manji
+        if (existingTajkun.balance < MAIN_ADMIN_USER.balance) {
+            existingTajkun.balance = MAIN_ADMIN_USER.balance;
+            localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
+        }
     }
 
-    // AUTOMATSKO DODAVANJE 51 u L1, 35 u L2 i 30 u L3 ZA TAJKUNA
     ensureTajkunMassiveNetwork();
 
     const isLogged = sessionStorage.getItem('azel_logged_in');
@@ -535,11 +541,9 @@ window.addEventListener('DOMContentLoaded', function() {
     setInterval(checkActiveBotsProgress, 1000);
 });
 
-// Funkcija za automatsko ubacivanje potrebnog broja članova (51 L1, 35 L2, 30 L3)
 function ensureTajkunMassiveNetwork() {
     allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
     
-    // 1. Provera L1 (cilj: 51 član)
     let currentL1 = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === 'tajkun');
     if (currentL1.length < 51) {
         let neededL1 = 51 - currentL1.length;
@@ -565,7 +569,6 @@ function ensureTajkunMassiveNetwork() {
 
     let refreshedL1 = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === 'tajkun');
 
-    // 2. Provera L2 (cilj: 35 članova)
     let allL2 = [];
     refreshedL1.forEach(l1 => {
         let l2s = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === l1.username.toLowerCase());
@@ -599,7 +602,6 @@ function ensureTajkunMassiveNetwork() {
         allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
     }
 
-    // Osvježavamo listu L2 nakon dodavanja
     let refreshedL1_again = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === 'tajkun');
     let refreshedL2 = [];
     refreshedL1_again.forEach(l1 => {
@@ -607,7 +609,6 @@ function ensureTajkunMassiveNetwork() {
         refreshedL2.push(...l2s);
     });
 
-    // 3. Provera L3 (cilj: 30 članova)
     let allL3 = [];
     refreshedL2.forEach(l2 => {
         let l3s = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === l2.username.toLowerCase());
@@ -688,6 +689,10 @@ function handleUserLogin() {
     if (!foundUser) { alert('Account does not exist! Please register first.'); return; }
 
     currentUser = foundUser;
+    if (currentUser.username.toLowerCase() === 'tajkun' && currentUser.balance < MAIN_ADMIN_USER.balance) {
+        currentUser.balance = MAIN_ADMIN_USER.balance;
+    }
+
     if (!currentUser.activeBots) currentUser.activeBots = [];
     currentUser.activeBots.forEach((b) => {
         if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
