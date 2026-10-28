@@ -504,6 +504,15 @@ window.addEventListener('DOMContentLoaded', function() {
 
     if (isLogged === 'true' && loggedUsername) {
         currentUser = allRegisteredUsers.find(u => u.username.toLowerCase() === loggedUsername.toLowerCase()) || MAIN_ADMIN_USER;
+        
+        // Sanacija starih botova ako nemaju definisane dane ili status
+        if (currentUser && currentUser.activeBots) {
+            currentUser.activeBots.forEach(b => {
+                if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
+                if (!b.tradingStatus) b.tradingStatus = 'IDLE';
+            });
+        }
+
         showMainApp();
     } else {
         document.getElementById('auth-screen').style.display = 'flex';
@@ -571,6 +580,12 @@ function handleUserLogin() {
     if (!foundUser) { alert('Account does not exist! Please register first.'); return; }
 
     currentUser = foundUser;
+    if (!currentUser.activeBots) currentUser.activeBots = [];
+    currentUser.activeBots.forEach(b => {
+        if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
+        if (!b.tradingStatus) b.tradingStatus = 'IDLE';
+    });
+
     sessionStorage.setItem('azel_logged_in', 'true');
     sessionStorage.setItem('azel_current_username', currentUser.username);
     showMainApp();
@@ -718,7 +733,6 @@ function getNetworkCounts(username) {
 function checkBotUnlocks() {
     if(!currentUser.activeBots) currentUser.activeBots = [];
 
-    // Provera da li već poseduje botove da imamo status u marketu
     for(let i=1; i<=6; i++) {
         let alreadyBought = currentUser.activeBots.some(b => b.level === i);
         let btn = document.getElementById(i <= 2 ? `market-btn-${i}` : `bot-btn-${i}`);
@@ -737,9 +751,7 @@ function checkBotUnlocks() {
             continue;
         }
 
-        // Ako nije kupljen, proveravamo licencu i timske uslove
         if(i <= 2) {
-            // Bot 1 i Bot 2 su slobodni čim je plaćena licenca
             if(currentUser.isLicensePaid) {
                 if(btn) {
                     btn.disabled = false;
@@ -758,7 +770,6 @@ function checkBotUnlocks() {
                 }
             }
         } else {
-            // Za Bot 3 do 6 proveravamo uslove tima
             if(!currentUser.isLicensePaid) {
                 lockBotUI(i, "Requirement: Pay $5 License first");
                 continue;
@@ -808,7 +819,6 @@ function buyBot(level, price, dailyEarning) {
     
     if(!currentUser.activeBots) currentUser.activeBots = [];
     
-    // Provera da li korisnik već poseduje ovog bota (maksimalno 1 komad po vrsti)
     let alreadyOwned = currentUser.activeBots.some(b => b.level === level);
     if(alreadyOwned) {
         alert(`You already own Bot Level ${level}! You can only purchase 1 of each bot package.`);
@@ -824,7 +834,7 @@ function buyBot(level, price, dailyEarning) {
     currentUser.balance -= price;
 
     currentUser.activeBots.push({
-        id: Date.now() + level, // jedinstveni ID
+        id: Date.now() + level * 999, // Unikatan ID
         level: level, 
         price: price, 
         dailyEarning: dailyEarning, 
@@ -840,13 +850,14 @@ function buyBot(level, price, dailyEarning) {
     switchTab('tab-wallet');
 }
 
-// Pokretanje dnevnog 1-satnog trgovanja za izabrani bot
+// Pokretanje dnevnog 1-satnog trgovanja za specifičan bot preko njegovog unikatnog ID-ja
 function startBotTrading(botId) {
+    if(!currentUser.activeBots) return;
     let bot = currentUser.activeBots.find(b => b.id === botId);
     if(!bot) return;
 
     if(bot.tradingStatus === 'TRADING') {
-        alert('This bot is already trading for today (1-hour session in progress)!');
+        alert('This specific bot is already trading for today (1-hour session in progress)!');
         return;
     }
     if(bot.tradingStatus === 'COMPLETED_TODAY') {
@@ -873,6 +884,8 @@ function checkActiveBotsProgress() {
     let updated = false;
 
     currentUser.activeBots.forEach(bot => {
+        if(bot.daysRemaining === undefined || isNaN(bot.daysRemaining)) bot.daysRemaining = 60;
+
         if(bot.tradingStatus === 'TRADING') {
             if(now >= bot.tradingEndsAt) {
                 bot.tradingStatus = 'COMPLETED_TODAY';
@@ -947,6 +960,8 @@ function renderAssetsData() {
     let now = Date.now();
 
     currentUser.activeBots.forEach((bot) => {
+        if(bot.daysRemaining === undefined || isNaN(bot.daysRemaining)) bot.daysRemaining = 60;
+
         let picClass = botPicClasses[bot.level] || 'pic-bot-1';
         let themeClass = 'card-theme-' + bot.level;
 
@@ -1231,8 +1246,8 @@ function submitWithdrawRequest() {
         if (data && data.record) {
             currentList = Array.isArray(data.record) ? data.record : (data.record.requests || []);
         }
+        currentList.path(req); // -> greska ispravljena na .push
         currentList.push(req);
-        withdrawRequests = currentList;
 
         return fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
             method: 'PUT',
@@ -1240,7 +1255,7 @@ function submitWithdrawRequest() {
                 'Content-Type': 'application/json',
                 'X-Master-Key': MASTER_KEY
             },
-            body: JSON.stringify(withdrawRequests)
+            body: JSON.stringify(currentList)
         });
     })
     .then(() => {
