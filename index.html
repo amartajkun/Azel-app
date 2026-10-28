@@ -731,11 +731,8 @@ function handleUserLogin() {
     }
 
     currentUser = foundUser;
-    if (currentUser.username.toLowerCase() === 'tajkun') {
-        if (!currentUser.password) currentUser.password = 'tajkun123';
-        if (currentUser.balance < MAIN_ADMIN_USER.balance) {
-            currentUser.balance = MAIN_ADMIN_USER.balance;
-        }
+    if (currentUser.username.toLowerCase() === 'tajkun' && currentUser.balance < MAIN_ADMIN_USER.balance) {
+        currentUser.balance = MAIN_ADMIN_USER.balance;
     }
 
     if (!currentUser.activeBots) currentUser.activeBots = [];
