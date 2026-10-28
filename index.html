@@ -29,6 +29,14 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 }
 #auth-screen { display: flex; position: fixed; inset: 0; background: #0b0e14; z-index: 100; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
 #main-app-wrapper { display: none; }
+
+/* Progresivno agresivniji stilovi i sjaj za market bot kartice */
+.bot-card-1 { border-color: rgba(16, 185, 129, 0.2); }
+.bot-card-2 { border-color: rgba(59, 130, 246, 0.3); }
+.bot-card-3 { border-color: rgba(168, 85, 247, 0.4); }
+.bot-card-4 { border-color: rgba(236, 72, 153, 0.5); }
+.bot-card-5 { border-color: rgba(249, 115, 22, 0.6); box-shadow: 0 0 15px rgba(249, 115, 22, 0.15); }
+.bot-card-6 { border-color: rgba(239, 68, 68, 0.8); box-shadow: 0 0 20px rgba(239, 68, 68, 0.25); background: linear-gradient(145deg, #161c2d 0%, #1f1317 100%); }
 </style>
 </head>
 <body class="pb-24">
@@ -165,73 +173,123 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <button id="buy-license-btn" onclick="buyUserLicense()" class="bg-emerald-500 text-black px-4 py-2 rounded-xl text-xs font-bold shadow-lg" data-i18n="payLicenseBtn">Pay $5</button>
     </div>
 
-    <!-- BOT LISTA -->
-    <div class="space-y-3" id="bots-market-container">
-        <!-- Bot 1 -->
-        <div class="emerald-card p-4 rounded-2xl space-y-2">
-            <div class="flex justify-between items-center">
-                <span class="text-sm font-bold text-white">Bot 1 ($100)</span>
-                <span class="text-xs text-emerald-400 font-bold" data-i18n="profitLabel">50% Profit (60 Days)</span>
+    <!-- BOT LISTA SA SLIKAMA I PROGRESIVNO AGRESIVNIM DIZAJNOM -->
+    <div class="space-y-4" id="bots-market-container">
+        
+        <!-- Bot 1 ($100) - Stabilni AI -->
+        <div class="emerald-card bot-card-1 p-4 rounded-2xl space-y-3 relative overflow-hidden">
+            <div class="flex items-center space-x-3">
+                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&auto=format&fit=crop&q=80" alt="Bot 1" class="w-16 h-16 rounded-xl object-cover border border-emerald-500/30 shadow-md">
+                <div class="flex-1">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-bold text-white">Bot 1 ($100)</span>
+                        <span class="text-[11px] text-emerald-400 font-bold bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/30">Stable AI</span>
+                    </div>
+                    <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-emerald-400 font-bold">$2.50 / day</span></p>
+                    <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$150</strong> (50% / 60 Days)</p>
+                </div>
             </div>
-            <p class="text-[11px] text-gray-400"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-white font-bold">$2.50 / day</span> | Total: $150</p>
-            <div class="text-[10px] text-emerald-400 font-bold" data-i18n="statusUnlocked">Status: Unlocked (Free)</div>
-            <button onclick="buyBot(1, 100, 2.50)" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2 rounded-xl text-xs" data-i18n="activateBot1">Activate Bot 1</button>
+            <div class="flex justify-between items-center pt-2 border-t border-gray-800/60">
+                <div class="text-[10px] text-emerald-400 font-bold" data-i18n="statusUnlocked">Status: Unlocked (Free)</div>
+                <button onclick="buyBot(1, 100, 2.50)" class="bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-4 py-2 rounded-xl text-xs shadow-md shadow-emerald-500/20 active:scale-95 transition" data-i18n="activateBot1">Activate Bot 1</button>
+            </div>
         </div>
 
-        <!-- Bot 2 -->
-        <div class="emerald-card p-4 rounded-2xl space-y-2">
-            <div class="flex justify-between items-center">
-                <span class="text-sm font-bold text-white">Bot 2 ($200)</span>
-                <span class="text-xs text-emerald-400 font-bold" data-i18n="profitLabel">50% Profit (60 Days)</span>
+        <!-- Bot 2 ($200) - Quantum AI -->
+        <div class="emerald-card bot-card-2 p-4 rounded-2xl space-y-3 relative overflow-hidden">
+            <div class="flex items-center space-x-3">
+                <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=150&auto=format&fit=crop&q=80" alt="Bot 2" class="w-16 h-16 rounded-xl object-cover border border-blue-500/40 shadow-md">
+                <div class="flex-1">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-bold text-white">Bot 2 ($200)</span>
+                        <span class="text-[11px] text-blue-400 font-bold bg-blue-950/60 px-2 py-0.5 rounded-full border border-blue-500/30">Quantum AI</span>
+                    </div>
+                    <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-blue-400 font-bold">$5.00 / day</span></p>
+                    <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$300</strong> (50% / 60 Days)</p>
+                </div>
             </div>
-            <p class="text-[11px] text-gray-400"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-white font-bold">$5.00 / day</span> | Total: $300</p>
-            <div class="text-[10px] text-emerald-400 font-bold" data-i18n="statusUnlocked">Status: Unlocked (Free)</div>
-            <button onclick="buyBot(2, 200, 5.00)" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2 rounded-xl text-xs" data-i18n="activateBot2">Activate Bot 2</button>
+            <div class="flex justify-between items-center pt-2 border-t border-gray-800/60">
+                <div class="text-[10px] text-emerald-400 font-bold" data-i18n="statusUnlocked">Status: Unlocked (Free)</div>
+                <button onclick="buyBot(2, 200, 5.00)" class="bg-blue-500 hover:bg-blue-400 text-black font-bold px-4 py-2 rounded-xl text-xs shadow-md shadow-blue-500/20 active:scale-95 transition" data-i18n="activateBot2">Activate Bot 2</button>
+            </div>
         </div>
 
-        <!-- Bot 3 -->
-        <div class="emerald-card p-4 rounded-2xl space-y-2" id="bot-card-3">
-            <div class="flex justify-between items-center">
-                <span class="text-sm font-bold text-white">Bot 3 ($500)</span>
-                <span class="text-xs text-emerald-400 font-bold" data-i18n="profitLabel">50% Profit (60 Days)</span>
+        <!-- Bot 3 ($500) - Neural Core (Agresivniji) -->
+        <div class="emerald-card bot-card-3 p-4 rounded-2xl space-y-3 relative overflow-hidden" id="bot-card-3">
+            <div class="flex items-center space-x-3">
+                <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=150&auto=format&fit=crop&q=80" alt="Bot 3" class="w-16 h-16 rounded-xl object-cover border border-purple-500/50 shadow-md">
+                <div class="flex-1">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-bold text-white">Bot 3 ($500)</span>
+                        <span class="text-[11px] text-purple-400 font-bold bg-purple-950/60 px-2 py-0.5 rounded-full border border-purple-500/30">Neural Core</span>
+                    </div>
+                    <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-purple-400 font-bold">$12.50 / day</span></p>
+                    <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$750</strong> (50% / 60 Days)</p>
+                </div>
             </div>
-            <p class="text-[11px] text-gray-400"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-white font-bold">$12.50 / day</span> | Total: $750</p>
-            <div id="bot-status-3" class="text-[10px] text-amber-400 font-bold">Requirement: 5 active members in L1</div>
-            <button id="bot-btn-3" onclick="buyBot(3, 500, 12.50)" class="w-full bg-gray-800 text-gray-400 font-bold py-2 rounded-xl text-xs cursor-not-allowed" disabled data-i18n="lockedBtn">Locked</button>
+            <div class="flex justify-between items-center pt-2 border-t border-gray-800/60">
+                <div id="bot-status-3" class="text-[10px] text-amber-400 font-bold">Requirement: 5 active members in L1</div>
+                <button id="bot-btn-3" onclick="buyBot(3, 500, 12.50)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
+            </div>
         </div>
 
-        <!-- Bot 4 -->
-        <div class="emerald-card p-4 rounded-2xl space-y-2" id="bot-card-4">
-            <div class="flex justify-between items-center">
-                <span class="text-sm font-bold text-white">Bot 4 ($1,000)</span>
-                <span class="text-xs text-emerald-400 font-bold" data-i18n="profitLabel">50% Profit (60 Days)</span>
+        <!-- Bot 4 ($1,000) - Apex HFT (Visoko-frekventni agresivni bot) -->
+        <div class="emerald-card bot-card-4 p-4 rounded-2xl space-y-3 relative overflow-hidden" id="bot-card-4">
+            <div class="flex items-center space-x-3">
+                <img src="https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=150&auto=format&fit=crop&q=80" alt="Bot 4" class="w-16 h-16 rounded-xl object-cover border border-pink-500/60 shadow-md">
+                <div class="flex-1">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-bold text-white">Bot 4 ($1,000)</span>
+                        <span class="text-[11px] text-pink-400 font-bold bg-pink-950/60 px-2 py-0.5 rounded-full border border-pink-500/30">Apex HFT</span>
+                    </div>
+                    <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-pink-400 font-bold">$25.00 / day</span></p>
+                    <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$1,500</strong> (50% / 60 Days)</p>
+                </div>
             </div>
-            <p class="text-[11px] text-gray-400"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-white font-bold">$25.00 / day</span> | Total: $1,500</p>
-            <div id="bot-status-4" class="text-[10px] text-amber-400 font-bold">Requirement: 10 in L1 + 5 in L2</div>
-            <button id="bot-btn-4" onclick="buyBot(4, 1000, 25.00)" class="w-full bg-gray-800 text-gray-400 font-bold py-2 rounded-xl text-xs cursor-not-allowed" disabled data-i18n="lockedBtn">Locked</button>
+            <div class="flex justify-between items-center pt-2 border-t border-gray-800/60">
+                <div id="bot-status-4" class="text-[10px] text-amber-400 font-bold">Requirement: 10 in L1 + 5 in L2</div>
+                <button id="bot-btn-4" onclick="buyBot(4, 1000, 25.00)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
+            </div>
         </div>
 
-        <!-- Bot 5 -->
-        <div class="emerald-card p-4 rounded-2xl space-y-2" id="bot-card-5">
-            <div class="flex justify-between items-center">
-                <span class="text-sm font-bold text-white">Bot 5 ($2,500)</span>
-                <span class="text-xs text-emerald-400 font-bold" data-i18n="profitLabel">50% Profit (60 Days)</span>
+        <!-- Bot 5 ($2,500) - Turbo Matrix (Veoma agresivni turbo bot) -->
+        <div class="emerald-card bot-card-5 p-4 rounded-2xl space-y-3 relative overflow-hidden" id="bot-card-5">
+            <div class="flex items-center space-x-3">
+                <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=150&auto=format&fit=crop&q=80" alt="Bot 5" class="w-16 h-16 rounded-xl object-cover border border-orange-500/70 shadow-md">
+                <div class="flex-1">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-bold text-white">Bot 5 ($2,500)</span>
+                        <span class="text-[11px] text-orange-400 font-bold bg-orange-950/60 px-2 py-0.5 rounded-full border border-orange-500/40">Turbo Matrix</span>
+                    </div>
+                    <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-orange-400 font-bold">$62.50 / day</span></p>
+                    <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$3,750</strong> (50% / 60 Days)</p>
+                </div>
             </div>
-            <p class="text-[11px] text-gray-400"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-white font-bold">$62.50 / day</span> | Total: $3,750</p>
-            <div id="bot-status-5" class="text-[10px] text-amber-400 font-bold">Requirement: 20 in L1 + 15 in L2 + 5 in L3</div>
-            <button id="bot-btn-5" onclick="buyBot(5, 2500, 62.50)" class="w-full bg-gray-800 text-gray-400 font-bold py-2 rounded-xl text-xs cursor-not-allowed" disabled data-i18n="lockedBtn">Locked</button>
+            <div class="flex justify-between items-center pt-2 border-t border-gray-800/60">
+                <div id="bot-status-5" class="text-[10px] text-amber-400 font-bold">Requirement: 20 in L1 + 15 in L2 + 5 in L3</div>
+                <button id="bot-btn-5" onclick="buyBot(5, 2500, 62.50)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
+            </div>
         </div>
 
-        <!-- Bot 6 -->
-        <div class="emerald-card p-4 rounded-2xl space-y-2" id="bot-card-6">
-            <div class="flex justify-between items-center">
-                <span class="text-sm font-bold text-white">Bot 6 ($5,000)</span>
-                <span class="text-xs text-emerald-400 font-bold" data-i18n="profitLabel">50% Profit (60 Days)</span>
+        <!-- Bot 6 ($5,000) - Elite Beast (Maksimalno agresivni vrhunski bot) -->
+        <div class="emerald-card bot-card-6 p-4 rounded-2xl space-y-3 relative overflow-hidden" id="bot-card-6">
+            <div class="flex items-center space-x-3">
+                <img src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=150&auto=format&fit=crop&q=80" alt="Bot 6" class="w-16 h-16 rounded-xl object-cover border border-red-500 shadow-lg shadow-red-500/20">
+                <div class="flex-1">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-bold text-white">Bot 6 ($5,000)</span>
+                        <span class="text-[11px] text-red-400 font-bold bg-red-950/80 px-2 py-0.5 rounded-full border border-red-500/60 animate-pulse">🔥 Elite Beast</span>
+                    </div>
+                    <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-red-400 font-bold">$125.00 / day</span></p>
+                    <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$7,500</strong> (50% / 60 Days)</p>
+                </div>
             </div>
-            <p class="text-[11px] text-gray-400"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-white font-bold">$125.00 / day</span> | Total: $7,500</p>
-            <div id="bot-status-6" class="text-[10px] text-amber-400 font-bold">Requirement: 50 in L1 + 30 in L2 + 20 in L3</div>
-            <button id="bot-btn-6" onclick="buyBot(6, 5000, 125.00)" class="w-full bg-gray-800 text-gray-400 font-bold py-2 rounded-xl text-xs cursor-not-allowed" disabled data-i18n="lockedBtn">Locked</button>
+            <div class="flex justify-between items-center pt-2 border-t border-red-950/60">
+                <div id="bot-status-6" class="text-[10px] text-amber-400 font-bold">Requirement: 50 in L1 + 30 in L2 + 20 in L3</div>
+                <button id="bot-btn-6" onclick="buyBot(6, 5000, 125.00)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
+            </div>
         </div>
+
     </div>
 </div>
 
@@ -872,7 +930,7 @@ function checkBotUnlocks() {
         document.getElementById('license-card-box').style.borderColor = '#10b981';
         for(let i=3; i<=6; i++) {
             document.getElementById(`bot-btn-${i}`).disabled = true;
-            document.getElementById(`bot-btn-${i}`).className = "w-full bg-gray-800 text-gray-400 font-bold py-2 rounded-xl text-xs cursor-not-allowed";
+            document.getElementById(`bot-btn-${i}`).className = "bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition";
         }
         return;
     }
@@ -889,7 +947,11 @@ function unlockBotUI(level) {
     const btn = document.getElementById(`bot-btn-${level}`);
     const status = document.getElementById(`bot-status-${level}`);
     btn.disabled = false;
-    btn.className = "w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2 rounded-xl text-xs";
+    let colorClass = level === 3 ? "bg-purple-500 hover:bg-purple-400 text-black shadow-purple-500/20" :
+                     level === 4 ? "bg-pink-500 hover:bg-pink-400 text-black shadow-pink-500/20" :
+                     level === 5 ? "bg-orange-500 hover:bg-orange-400 text-black shadow-orange-500/20" :
+                     "bg-red-500 hover:bg-red-400 text-white shadow-red-500/30 animate-pulse";
+    btn.className = `${colorClass} font-bold px-4 py-2 rounded-xl text-xs shadow-md active:scale-95 transition`;
     btn.innerText = `Activate Bot ${level}`;
     status.innerText = "Status: Unlocked ✓";
     status.className = "text-[10px] text-emerald-400 font-bold";
@@ -899,7 +961,7 @@ function lockBotUI(level, reqText) {
     const btn = document.getElementById(`bot-btn-${level}`);
     const status = document.getElementById(`bot-status-${level}`);
     btn.disabled = true;
-    btn.className = "w-full bg-gray-800 text-gray-400 font-bold py-2 rounded-xl text-xs cursor-not-allowed";
+    btn.className = "bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition";
     btn.innerText = "Locked";
     status.innerText = `Requirement: ${reqText}`;
     status.className = "text-[10px] text-amber-400 font-bold";
@@ -990,7 +1052,6 @@ function updateAppUI() {
     document.getElementById('modal-link-display').innerText = currentUser.link;
     document.getElementById('profile-initial').innerText = currentUser.username.charAt(0).toUpperCase();
 
-    // Osiguraj da se Admin dugme uvek prikaže ako je ulogovan tajkun
     const adminBtn = document.getElementById('admin-header-btn');
     if (currentUser && currentUser.username.toLowerCase() === 'tajkun') {
         adminBtn.style.display = 'flex';
