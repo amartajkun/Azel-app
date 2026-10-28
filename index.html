@@ -31,42 +31,55 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 #auth-screen { display: flex; position: fixed; inset: 0; background: #07090e; z-index: 100; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
 #main-app-wrapper { display: none; }
 
-/* ULTRA MODERNE BOT KARTICE SA SAVRŠENIM UTAPANJEM */
-.bot-card-ultra {
+/* DIZAJN BOT KARTICA U STILU SA SLIKE (LIJEVO SLIKA/NAZIV, DESNO PANEL) */
+.bot-card-gpt {
     position: relative;
-    border-radius: 1.35rem;
-    padding: 1.15rem;
+    border-radius: 1.25rem;
+    padding: 1rem;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: 0.9rem;
-    backdrop-filter: blur(10px);
+    gap: 0.8rem;
+    background: #111622;
 }
 
-.card-theme-1 { border: 1px solid rgba(16, 185, 129, 0.35); background: linear-gradient(135deg, #111622 0%, #071712 100%); }
-.card-theme-2 { border: 1px solid rgba(59, 130, 246, 0.4); background: linear-gradient(135deg, #111622 0%, #071224 100%); }
-.card-theme-3 { border: 1px solid rgba(168, 85, 247, 0.45); background: linear-gradient(135deg, #111622 0%, #150c26 100%); }
-.card-theme-4 { border: 1px solid rgba(236, 72, 153, 0.5); background: linear-gradient(135deg, #111622 0%, #220b1e 100%); }
-.card-theme-5 { border: 1px solid rgba(249, 115, 22, 0.6); background: linear-gradient(135deg, #111622 0%, #221208 100%); box-shadow: 0 0 20px rgba(249, 115, 22, 0.12); }
-.card-theme-6 { border: 1px solid rgba(239, 68, 68, 0.8); background: linear-gradient(135deg, #1e070b 0%, #111622 60%, #280606 100%); box-shadow: 0 0 25px rgba(239, 68, 68, 0.25); }
+.theme-1 { border: 1px solid rgba(16, 185, 129, 0.35); }
+.theme-2 { border: 1px solid rgba(59, 130, 246, 0.4); }
+.theme-3 { border: 1px solid rgba(168, 85, 247, 0.45); }
+.theme-4 { border: 1px solid rgba(236, 72, 153, 0.5); }
+.theme-5 { border: 1px solid rgba(249, 115, 22, 0.6); box-shadow: 0 0 15px rgba(249, 115, 22, 0.12); }
+.theme-6 { border: 1px solid rgba(239, 68, 68, 0.85); box-shadow: 0 0 22px rgba(239, 68, 68, 0.25); background: linear-gradient(135deg, #1b070b 0%, #111622 70%); }
 
-/* FOTO ILUSTRACIJE ROBOTA SA GLOW EFEKTOM I PROZIRNOŠĆU */
-.robot-3d-avatar {
-    width: 65px;
-    height: 65px;
-    border-radius: 16px;
+/* AGRESIVNI 3D ROBOTI - OD MIRNIJIH KA OPASNIM ELITE ZVIJERIMA */
+.robot-img-box {
+    width: 100%;
+    height: 140px;
+    border-radius: 12px;
     background-size: cover;
     background-position: center;
-    flex-shrink: 0;
     position: relative;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.7);
 }
 
-.avatar-img-1 { background-image: url('https://cdn.jsdelivr.net/gh/alohe/avatars/png/bot_1.png'); filter: drop-shadow(0 0 8px rgba(16,185,129,0.5)); }
-.avatar-img-2 { background-image: url('https://cdn.jsdelivr.net/gh/alohe/avatars/png/bot_3.png'); filter: drop-shadow(0 0 8px rgba(59,130,246,0.5)); }
-.avatar-img-3 { background-image: url('https://cdn.jsdelivr.net/gh/alohe/avatars/png/bot_4.png'); filter: drop-shadow(0 0 10px rgba(168,85,247,0.6)); }
-.avatar-img-4 { background-image: url('https://cdn.jsdelivr.net/gh/alohe/avatars/png/bot_5.png'); filter: drop-shadow(0 0 10px rgba(236,72,153,0.6)); }
-.avatar-img-5 { background-image: url('https://cdn.jsdelivr.net/gh/alohe/avatars/png/bot_6.png'); filter: drop-shadow(0 0 12px rgba(249,115,22,0.7)); }
-.avatar-img-6 { background-image: url('https://cdn.jsdelivr.net/gh/alohe/avatars/png/notion_14.png'); filter: drop-shadow(0 0 15px rgba(239,68,68,0.9)); animation: pulse 2s infinite; }
+/* 1. Bot 1: Bazični, uredan AI bot */
+.bot-pic-1 { background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop&q=80'); border: 1px solid rgba(16,185,129,0.4); }
+/* 2. Bot 2: Napredniji plavi mecha */
+.bot-pic-2 { background-image: url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=500&auto=format&fit=crop&q=80'); border: 1px solid rgba(59,130,246,0.5); }
+/* 3. Bot 3: Moćni ljubičasti neuralni core */
+.bot-pic-3 { background-image: url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=500&auto=format&fit=crop&q=80'); border: 1px solid rgba(168,85,247,0.6); }
+/* 4. Bot 4: Agresivni pink/cyan borbeni android */
+.bot-pic-4 { background-image: url('https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=500&auto=format&fit=crop&q=80'); border: 1px solid rgba(236,72,153,0.7); }
+/* 5. Bot 5: Opasni narandžasti teški ratni robot */
+.bot-pic-5 { background-image: url('https://images.unsplash.com/photo-1546776310-eef45dd6d63c?w=500&auto=format&fit=crop&q=80'); border: 1px solid rgba(249,115,22,0.8); }
+/* 6. Bot 6: Maksimalno agresivna crvena Elite Zvijer sa glow efektom */
+.bot-pic-6 { background-image: url('https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=500&auto=format&fit=crop&q=80'); border: 1px solid #ef4444; box-shadow: 0 0 15px rgba(239,68,68,0.6); animation: pulse 2s infinite; }
+
+.right-panel-box {
+    background: #0d121d;
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 12px;
+    padding: 10px;
+}
 </style>
 </head>
 <body class="pb-24">
@@ -189,7 +202,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </div>
 </div>
 
-<!-- 2. MARKET / BOT PAKETI I LICENCA -->
+<!-- 2. MARKET / BOT PAKETI I LICENCA (SA FIKSNOM ZARADOM U DOLARIMA I AGRESIVNIM 3D ROBOTIMA) -->
 <div id="page-market" class="page-content p-4 space-y-4">
     <h2 class="text-lg font-bold text-emerald-400 mb-1" data-i18n="marketTitle">Bot Market & License</h2>
     <p class="text-xs text-gray-400 mb-3" data-i18n="marketSub">Pay $5 license once, then activate your bot packages.</p>
@@ -203,118 +216,202 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <button id="buy-license-btn" onclick="buyUserLicense()" class="bg-emerald-500 text-black px-4 py-2 rounded-xl text-xs font-bold shadow-lg" data-i18n="payLicenseBtn">Pay $5</button>
     </div>
 
-    <!-- BOT LISTA SA SAVRŠENO UKLOPLJENIM 3D ROBOTIMA -->
+    <!-- BOT LISTA SA FIKSNIM DOLARSKIM ZARADAMA I AGRESIVNIM 3D ROBOTIMA -->
     <div class="space-y-4" id="bots-market-container">
         
-        <!-- Bot 1 ($100) - Stable AI -->
-        <div class="bot-card-ultra card-theme-1">
-            <div class="flex items-center space-x-3.5">
-                <div class="robot-3d-avatar avatar-img-1"></div>
-                <div class="flex-1">
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm font-bold text-white">Bot 1 ($100)</span>
-                        <span class="text-[11px] text-emerald-400 font-bold bg-emerald-950/80 px-2.5 py-0.5 rounded-full border border-emerald-500/30">Stable AI</span>
-                    </div>
-                    <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-emerald-400 font-bold">$2.50 / day</span></p>
-                    <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$150</strong> (50% / 60 Days)</p>
+        <!-- Bot 1 ($100) -->
+        <div class="bot-card-gpt theme-1">
+            <div class="flex justify-between items-center">
+                <span class="text-base font-extrabold text-white">BOT-1</span>
+                <div class="flex items-center gap-1.5 bg-emerald-950/80 border border-emerald-500/30 px-2.5 py-1 rounded-lg">
+                    <i class="fas fa-shield-alt text-emerald-400 text-[10px]"></i>
+                    <span class="text-[10px] text-emerald-400 font-bold">VIP Strategy</span>
                 </div>
             </div>
-            <div class="flex justify-between items-center pt-2 border-t border-emerald-950/50">
+            
+            <div class="robot-img-box bot-pic-1"></div>
+
+            <div class="right-panel-box space-y-2 text-xs">
+                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
+                    <span class="text-gray-400">Pledge Amount</span>
+                    <span class="text-emerald-400 font-bold font-mono">$100</span>
+                </div>
+                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
+                    <span class="text-gray-400">Daily Return</span>
+                    <span class="text-emerald-400 font-bold font-mono">+$2.50 / day</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-400">Duration</span>
+                    <span class="text-white font-bold">60 Days</span>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center pt-1">
                 <div class="text-[10px] text-emerald-400 font-bold" data-i18n="statusUnlocked">Status: Unlocked (Free)</div>
                 <button onclick="buyBot(1, 100, 2.50)" class="bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-4 py-2 rounded-xl text-xs shadow-md shadow-emerald-500/20 active:scale-95 transition" data-i18n="activateBot1">Activate Bot 1</button>
             </div>
         </div>
 
-        <!-- Bot 2 ($200) - Quantum AI -->
-        <div class="bot-card-ultra card-theme-2">
-            <div class="flex items-center space-x-3.5">
-                <div class="robot-3d-avatar avatar-img-2"></div>
-                <div class="flex-1">
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm font-bold text-white">Bot 2 ($200)</span>
-                        <span class="text-[11px] text-blue-400 font-bold bg-blue-950/80 px-2.5 py-0.5 rounded-full border border-blue-500/30">Quantum AI</span>
-                    </div>
-                    <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-blue-400 font-bold">$5.00 / day</span></p>
-                    <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$300</strong> (50% / 60 Days)</p>
+        <!-- Bot 2 ($200) -->
+        <div class="bot-card-gpt theme-2">
+            <div class="flex justify-between items-center">
+                <span class="text-base font-extrabold text-white">BOT-2</span>
+                <div class="flex items-center gap-1.5 bg-blue-950/80 border border-blue-500/30 px-2.5 py-1 rounded-lg">
+                    <i class="fas fa-shield-alt text-blue-400 text-[10px]"></i>
+                    <span class="text-[10px] text-blue-400 font-bold">VIP Strategy</span>
                 </div>
             </div>
-            <div class="flex justify-between items-center pt-2 border-t border-blue-950/50">
+            
+            <div class="robot-img-box bot-pic-2"></div>
+
+            <div class="right-panel-box space-y-2 text-xs">
+                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
+                    <span class="text-gray-400">Pledge Amount</span>
+                    <span class="text-blue-400 font-bold font-mono">$200</span>
+                </div>
+                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
+                    <span class="text-gray-400">Daily Return</span>
+                    <span class="text-blue-400 font-bold font-mono">+$5.00 / day</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-400">Duration</span>
+                    <span class="text-white font-bold">60 Days</span>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center pt-1">
                 <div class="text-[10px] text-emerald-400 font-bold" data-i18n="statusUnlocked">Status: Unlocked (Free)</div>
                 <button onclick="buyBot(2, 200, 5.00)" class="bg-blue-500 hover:bg-blue-400 text-black font-bold px-4 py-2 rounded-xl text-xs shadow-md shadow-blue-500/20 active:scale-95 transition" data-i18n="activateBot2">Activate Bot 2</button>
             </div>
         </div>
 
-        <!-- Bot 3 ($500) - Neural Core -->
-        <div class="bot-card-ultra card-theme-3" id="bot-card-3">
-            <div class="flex items-center space-x-3.5">
-                <div class="robot-3d-avatar avatar-img-3"></div>
-                <div class="flex-1">
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm font-bold text-white">Bot 3 ($500)</span>
-                        <span class="text-[11px] text-purple-400 font-bold bg-purple-950/80 px-2.5 py-0.5 rounded-full border border-purple-500/30">Neural Core</span>
-                    </div>
-                    <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-purple-400 font-bold">$12.50 / day</span></p>
-                    <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$750</strong> (50% / 60 Days)</p>
+        <!-- Bot 3 ($500) -->
+        <div class="bot-card-gpt theme-3" id="bot-card-3">
+            <div class="flex justify-between items-center">
+                <span class="text-base font-extrabold text-white">BOT-3</span>
+                <div class="flex items-center gap-1.5 bg-purple-950/80 border border-purple-500/30 px-2.5 py-1 rounded-lg">
+                    <i class="fas fa-shield-alt text-purple-400 text-[10px]"></i>
+                    <span class="text-[10px] text-purple-400 font-bold">VIP Strategy</span>
                 </div>
             </div>
-            <div class="flex justify-between items-center pt-2 border-t border-purple-950/50">
+            
+            <div class="robot-img-box bot-pic-3"></div>
+
+            <div class="right-panel-box space-y-2 text-xs">
+                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
+                    <span class="text-gray-400">Pledge Amount</span>
+                    <span class="text-purple-400 font-bold font-mono">$500</span>
+                </div>
+                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
+                    <span class="text-gray-400">Daily Return</span>
+                    <span class="text-purple-400 font-bold font-mono">+$12.50 / day</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-400">Duration</span>
+                    <span class="text-white font-bold">60 Days</span>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center pt-1">
                 <div id="bot-status-3" class="text-[10px] text-amber-400 font-bold">Requirement: 5 active members in L1</div>
                 <button id="bot-btn-3" onclick="buyBot(3, 500, 12.50)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
             </div>
         </div>
 
-        <!-- Bot 4 ($1,000) - Apex HFT -->
-        <div class="bot-card-ultra card-theme-4" id="bot-card-4">
-            <div class="flex items-center space-x-3.5">
-                <div class="robot-3d-avatar avatar-img-4"></div>
-                <div class="flex-1">
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm font-bold text-white">Bot 4 ($1,000)</span>
-                        <span class="text-[11px] text-pink-400 font-bold bg-pink-950/80 px-2.5 py-0.5 rounded-full border border-pink-500/30">Apex HFT</span>
-                    </div>
-                    <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-pink-400 font-bold">$25.00 / day</span></p>
-                    <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$1,500</strong> (50% / 60 Days)</p>
+        <!-- Bot 4 ($1,000) -->
+        <div class="bot-card-gpt theme-4" id="bot-card-4">
+            <div class="flex justify-between items-center">
+                <span class="text-base font-extrabold text-white">BOT-4</span>
+                <div class="flex items-center gap-1.5 bg-pink-950/80 border border-pink-500/30 px-2.5 py-1 rounded-lg">
+                    <i class="fas fa-shield-alt text-pink-400 text-[10px]"></i>
+                    <span class="text-[10px] text-pink-400 font-bold">VIP Strategy</span>
                 </div>
             </div>
-            <div class="flex justify-between items-center pt-2 border-t border-pink-950/50">
+            
+            <div class="robot-img-box bot-pic-4"></div>
+
+            <div class="right-panel-box space-y-2 text-xs">
+                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
+                    <span class="text-gray-400">Pledge Amount</span>
+                    <span class="text-pink-400 font-bold font-mono">$1,000</span>
+                </div>
+                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
+                    <span class="text-gray-400">Daily Return</span>
+                    <span class="text-pink-400 font-bold font-mono">+$25.00 / day</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-400">Duration</span>
+                    <span class="text-white font-bold">60 Days</span>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center pt-1">
                 <div id="bot-status-4" class="text-[10px] text-amber-400 font-bold">Requirement: 10 in L1 + 5 in L2</div>
                 <button id="bot-btn-4" onclick="buyBot(4, 1000, 25.00)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
             </div>
         </div>
 
-        <!-- Bot 5 ($2,500) - Turbo Matrix -->
-        <div class="bot-card-ultra card-theme-5" id="bot-card-5">
-            <div class="flex items-center space-x-3.5">
-                <div class="robot-3d-avatar avatar-img-5"></div>
-                <div class="flex-1">
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm font-bold text-white">Bot 5 ($2,500)</span>
-                        <span class="text-[11px] text-orange-400 font-bold bg-orange-950/80 px-2.5 py-0.5 rounded-full border border-orange-500/40">Turbo Matrix</span>
-                    </div>
-                    <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-orange-400 font-bold">$62.50 / day</span></p>
-                    <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$3,750</strong> (50% / 60 Days)</p>
+        <!-- Bot 5 ($2,500) -->
+        <div class="bot-card-gpt theme-5" id="bot-card-5">
+            <div class="flex justify-between items-center">
+                <span class="text-base font-extrabold text-white">BOT-5</span>
+                <div class="flex items-center gap-1.5 bg-orange-950/80 border border-orange-500/30 px-2.5 py-1 rounded-lg">
+                    <i class="fas fa-shield-alt text-orange-400 text-[10px]"></i>
+                    <span class="text-[10px] text-orange-400 font-bold">VIP Strategy</span>
                 </div>
             </div>
-            <div class="flex justify-between items-center pt-2 border-t border-orange-950/50">
+            
+            <div class="robot-img-box bot-pic-5"></div>
+
+            <div class="right-panel-box space-y-2 text-xs">
+                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
+                    <span class="text-gray-400">Pledge Amount</span>
+                    <span class="text-orange-400 font-bold font-mono">$2,500</span>
+                </div>
+                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
+                    <span class="text-gray-400">Daily Return</span>
+                    <span class="text-orange-400 font-bold font-mono">+$62.50 / day</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-400">Duration</span>
+                    <span class="text-white font-bold">60 Days</span>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center pt-1">
                 <div id="bot-status-5" class="text-[10px] text-amber-400 font-bold">Requirement: 20 in L1 + 15 in L2 + 5 in L3</div>
                 <button id="bot-btn-5" onclick="buyBot(5, 2500, 62.50)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
             </div>
         </div>
 
-        <!-- Bot 6 ($5,000) - Elite Beast -->
-        <div class="bot-card-ultra card-theme-6" id="bot-card-6">
-            <div class="flex items-center space-x-3.5">
-                <div class="robot-3d-avatar avatar-img-6"></div>
-                <div class="flex-1">
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm font-bold text-white">Bot 6 ($5,000)</span>
-                        <span class="text-[11px] text-red-400 font-bold bg-red-950/90 px-2.5 py-0.5 rounded-full border border-red-500/60 animate-pulse">🔥 Elite Beast</span>
-                    </div>
-                    <p class="text-[11px] text-gray-300 mt-1"><span data-i18n="dailyEarning">Daily Earning:</span> <span class="text-red-400 font-bold">$125.00 / day</span></p>
-                    <p class="text-[10px] text-gray-400">Total Return: <strong class="text-white">$7,500</strong> (50% / 60 Days)</p>
+        <!-- Bot 6 ($5,000) - ELITE BEAST -->
+        <div class="bot-card-gpt theme-6" id="bot-card-6">
+            <div class="flex justify-between items-center">
+                <span class="text-base font-extrabold text-white">BOT-6 <span class="text-xs text-red-400 animate-pulse font-normal">🔥 ELITE</span></span>
+                <div class="flex items-center gap-1.5 bg-red-950/80 border border-red-500/40 px-2.5 py-1 rounded-lg">
+                    <i class="fas fa-shield-alt text-red-400 text-[10px]"></i>
+                    <span class="text-[10px] text-red-400 font-bold">VIP Strategy</span>
                 </div>
             </div>
-            <div class="flex justify-between items-center pt-2 border-t border-red-950/80">
+            
+            <div class="robot-img-box bot-pic-6"></div>
+
+            <div class="right-panel-box space-y-2 text-xs">
+                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
+                    <span class="text-gray-400">Pledge Amount</span>
+                    <span class="text-red-400 font-bold font-mono">$5,000</span>
+                </div>
+                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
+                    <span class="text-gray-400">Daily Return</span>
+                    <span class="text-red-400 font-bold font-mono">+$125.00 / day</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-400">Duration</span>
+                    <span class="text-white font-bold">60 Days</span>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center pt-1">
                 <div id="bot-status-6" class="text-[10px] text-amber-400 font-bold">Requirement: 50 in L1 + 30 in L2 + 20 in L3</div>
                 <button id="bot-btn-6" onclick="buyBot(6, 5000, 125.00)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
             </div>
@@ -634,126 +731,14 @@ const translations = {
         recharge: "Recharge", withdraw: "Withdrawal", inviteFriends: "Invite Friends",
         marketTitle: "Bot Market & License", marketSub: "Pay $5 license once, then activate your bot packages.",
         licenseTitle: "Lifetime User License", licenseDesc: "Required once for platform access. Fee:", payLicenseBtn: "Pay $5",
-        profitLabel: "50% Profit (60 Days)", dailyEarning: "Daily Earning:", statusUnlocked: "Status: Unlocked (Free)",
+        statusUnlocked: "Status: Unlocked (Free)",
         activateBot1: "Activate Bot 1", activateBot2: "Activate Bot 2", lockedBtn: "Locked",
         teamTitle: "My Network Team", teamSub: "Track your referrals across 3 levels to unlock higher bot packages.",
         line1: "Line 1 (L1)", line2: "Line 2 (L2)", line3: "Line 3 (L3)", directRef: "Direct Referrals (L1 Members)", noRef: "No direct referrals yet.",
         assetsTitle: "Assets & Capital", availBalance: "Available Balance", frozenCap: "Frozen Capital (Active Bots)",
         activeBotsTitle: "Active Bot Investments (60 Days)", noBots: "No active bot investments right now.",
         upgradeBtn: "Upgrade", menuChangeEmail: "Change Email", menuLoginPass: "Login Password", menuTxPass: "Transaction Password",
-        menuFeedback: "Feedback", menuHelp: "Help Center", menuTerms: "User Terms", menuLang: "Switch Language", menuCache: "Clear Cache", menuDownload: "Download App", logout: "Log Out"
-    },
-    sr: {
-        navHome: "Početna", navMarket: "Tržište", navTeam: "Tim", navAssets: "Imovina", navProfile: "Profil",
-        goToMarket: "Idi na Tržište Botova i Licencu", bannerSub: "STABILNA BOT PLATFORMA", bannerTitle: "AZEL CIKLUSI OD 60 DANA",
-        bannerDesc: "Aktivirajte licencu od $5 jednom u životu, gradite mrežu kroz L1, L2, L3 i pokrenite botove za profitabilne cikluse od 60 dana.",
-        recharge: "Uplata", withdraw: "Isplata", inviteFriends: "Pozovi Prijatelje",
-        marketTitle: "Tržište Botova i Licenca", marketSub: "Platite $5 licencu jednom, pa aktivirajte bot pakete.",
-        licenseTitle: "Doživotna Korisnička Licenca", licenseDesc: "Obavezno jednom za pristup platformi. Naknada:", payLicenseBtn: "Plati $5",
-        profitLabel: "50% Profit (60 Dana)", dailyEarning: "Dnevna Zarada:", statusUnlocked: "Status: Otključano (Besplatno)",
-        activateBot1: "Aktiviraj Bota 1", activateBot2: "Aktiviraj Bota 2", lockedBtn: "Zaključano",
-        teamTitle: "Moj Mrežni Tim", teamSub: "Pratite preporuke kroz 3 nivoa da otključate više bot pakete.",
-        line1: "Linija 1 (L1)", line2: "Linija 2 (L2)", line3: "Linija 3 (L3)", directRef: "Direktni Preporučeni (L1 Članovi)", noRef: "Još uvek nema direktnih članova.",
-        assetsTitle: "Imovina i Kapital", availBalance: "Raspoloživi Balans", frozenCap: "Zaključani Kapital (Aktivni Botovi)",
-        activeBotsTitle: "Aktivne Investicije Botova (60 Dana)", noBots: "Trenutno nema aktivnih bot investicija.",
-        upgradeBtn: "Nadogradi", menuChangeEmail: "Promeni Email", menuLoginPass: "Lozinka za Prijavu", menuTxPass: "Lozinka za Transakcije",
-        menuFeedback: "Povratne Informacije", menuHelp: "Centar za Pomoć", menuTerms: "Uslovi Korišćenja", menuLang: "Promeni Jezik", menuCache: "Obriši Keš", menuDownload: "Preuzmi Aplikaciju", logout: "Odjavi se"
-    },
-    sl: {
-        navHome: "Domov", navMarket: "Trg", navTeam: "Ekipa", navAssets: "Sredstva", navProfile: "Profil",
-        goToMarket: "Pojdi na trg botov in licenco", bannerSub: "STABILNA PLATFORMA BOT", bannerTitle: "AZEL 60-DNEVNI CIKLI",
-        bannerDesc: "Aktivirajte enkratno $5 licenco, zgradite mrežo prek L1, L2, L3 in zaženite trgovalne bote.",
-        recharge: "Polog", withdraw: "Izplačilo", inviteFriends: "Povabi Prijatelje",
-        marketTitle: "Trg Botov in Licenca", marketSub: "Plačajte $5 licenco enkrat, nato aktivirajte pakete.",
-        licenseTitle: "Doživljenjska Uporabniška Licenca", licenseDesc: "Obvezno enkrat za dostop. Taksa:", payLicenseBtn: "Plačaj $5",
-        profitLabel: "50% Dobiček (60 Dni)", dailyEarning: "Dnevni Zasn.", statusUnlocked: "Status: Odklenjeno",
-        activateBot1: "Aktiviraj Bota 1", activateBot2: "Aktiviraj Bota 2", lockedBtn: "Zaklenjeno",
-        teamTitle: "Moja Mrežna Ekipa", teamSub: "Spremljajte napotitve prek 3 ravni.",
-        line1: "Linija 1 (L1)", line2: "Linija 2 (L2)", line3: "Linija 3 (L3)", directRef: "Neposredni Člani (L1)", noRef: "Ni neposrednih članov.",
-        assetsTitle: "Sredstva in Kapital", availBalance: "Razpoložljivo Stanje", frozenCap: "Zamrznjen Kapital",
-        activeBotsTitle: "Aktivne Naložbe Botov (60 Dni)", noBots: "Ni aktivnih naložb.",
-        upgradeBtn: "Nadgradi", menuChangeEmail: "Spremeni E-pošto", menuLoginPass: "Geslo za Prijavo", menuTxPass: "Geslo za Transakcije",
-        menuFeedback: "Povratne Informacije", menuHelp: "Pomoč", menuTerms: "Pogoji", menuLang: "Jezik", menuCache: "Počisti Predpomnilnik", menuDownload: "Prenesi Aplikacijo", logout: "Odjava"
-    },
-    mk: {
-        navHome: "Дома", navMarket: "Пазар", navTeam: "Тим", navAssets: "Средства", navProfile: "Профил",
-        goToMarket: "Одете на Пазар на Ботови", bannerSub: "СТАБИЛНА БОТ ПЛАТФОРМА", bannerTitle: "АЗЕЛ 60-ДНЕВНИ ЦИКЛУСИ",
-        bannerDesc: "Активирајте ја лиценцата од $5 еднаш, изградете мрежа преку L1, L2, L3.",
-        recharge: "Уплата", withdraw: "Исплата", inviteFriends: "Покани Пријатели",
-        marketTitle: "Пазар на Ботови и Лиценца", marketSub: "Платете ја лиценцата од $5 еднаш.",
-        licenseTitle: "Доживотна Корисничка Лиценца", licenseDesc: "Задолжително еднаш за пристап. Надоместок:", payLicenseBtn: "Плати $5",
-        profitLabel: "50% Профит (60 Дена)", dailyEarning: "Дневна Заработка:", statusUnlocked: "Статус: Отклучено",
-        activateBot1: "Активирај Бот 1", activateBot2: "Активирај Бот 2", lockedBtn: "Заклучено",
-        teamTitle: "Мој Мрежен Тим", teamSub: "Следете ги препораките низ 3 нивоа.",
-        line1: "Линија 1 (L1)", line2: "Линија 2 (L2)", line3: "Линија 3 (L3)", directRef: "Директни Реферали (L1)", noRef: "Нема директни реферали.",
-        assetsTitle: "Средства и Капитал", availBalance: "Расположив Салдо", frozenCap: "Замрзнат Капитал",
-        activeBotsTitle: "Активни Инвестиции на Ботови (60 Дена)", noBots: "Нема активни инвестиции.",
-        upgradeBtn: "Надгради", menuChangeEmail: "Промени Е-пошта", menuLoginPass: "Лозинка за Најава", menuTxPass: "Лозинка за Трансакции",
-        menuFeedback: "Повратни информации", menuHelp: "Центар за помош", menuTerms: "Услови", menuLang: "Промени Јазик", menuCache: "Исчисти Кеш", menuDownload: "Преземи Апликација", logout: "Одјави се"
-    },
-    es: {
-        navHome: "Inicio", navMarket: "Mercado", navTeam: "Equipo", navAssets: "Activos", navProfile: "Perfil",
-        goToMarket: "Ir al Mercado de Bots", bannerSub: "PLATAFORMA ESTABLE", bannerTitle: "CICLOS DE 60 DÍAS AZEL",
-        bannerDesc: "Activa tu licencia de $5 una vez, construye tu red y despliega bots.",
-        recharge: "Recargar", withdraw: "Retiro", inviteFriends: "Invitar Amigos",
-        marketTitle: "Mercado y Licencia", marketSub: "Paga la licencia de $5 una vez.",
-        licenseTitle: "Licencia de Usuario Vitalicia", licenseDesc: "Requerido una vez. Tarifa:", payLicenseBtn: "Pagar $5",
-        profitLabel: "50% Ganancia (60 Días)", dailyEarning: "Ganancia Diaria:", statusUnlocked: "Estado: Desbloqueado",
-        activateBot1: "Activar Bot 1", activateBot2: "Activar Bot 2", lockedBtn: "Bloqueado",
-        teamTitle: "Mi Equipo de Red", teamSub: "Rastrea tus referencias en 3 niveles.",
-        line1: "Línea 1 (L1)", line2: "Línea 2 (L2)", line3: "Línea 3 (L3)", directRef: "Referidos Directos", noRef: "Sin referidos directos.",
-        assetsTitle: "Activos y Capital", availBalance: "Saldo Disponible", frozenCap: "Capital Congelado",
-        activeBotsTitle: "Inversiones Activas (60 Días)", noBots: "No hay inversiones activas.",
-        upgradeBtn: "Actualizar", menuChangeEmail: "Cambiar Correo", menuLoginPass: "Contraseña", menuTxPass: "Contraseña Tx",
-        menuFeedback: "Comentarios", menuHelp: "Ayuda", menuTerms: "Términos", menuLang: "Idioma", menuCache: "Limpiar Caché", menuDownload: "Descargar App", logout: "Cerrar Sesión"
-    },
-    ru: {
-        navHome: "Главная", navMarket: "Рынок", navTeam: "Команда", navAssets: "Активы", navProfile: "Профиль",
-        goToMarket: "Перейти к рынку ботов", bannerSub: "СТАБИЛЬНАЯ ПЛАТФОРМА", bannerTitle: "ЦИКЛЫ AZEL 60 ДНЕЙ",
-        bannerDesc: "Активируйте лицензию за $5 один раз, стройте сеть по уровням L1, L2, L3.",
-        recharge: "Пополнить", withdraw: "Вывод", inviteFriends: "Пригласить",
-        marketTitle: "Рынок ботов и лицензия", marketSub: "Оплатите лицензию $5 один раз.",
-        licenseTitle: "Пожизненная лицензия", licenseDesc: "Требуется один раз. Стоимость:", payLicenseBtn: "Оплатить $5",
-        profitLabel: "50% Прибыль (60 Дней)", dailyEarning: "Доход в день:", statusUnlocked: "Статус: Разблокировано",
-        activateBot1: "Активировать Бот 1", activateBot2: "Активировать Бот 2", lockedBtn: "Заблокировано",
-        teamTitle: "Моя сетевая команда", teamSub: "Отслеживайте рефералов по 3 уровням.",
-        line1: "Линия 1 (L1)", line2: "Линия 2 (L2)", line3: "Линия 3 (L3)", directRef: "Прямые рефералы", noRef: "Нет прямых рефералов.",
-        assetsTitle: "Активы и капитал", availBalance: "Доступный баланс", frozenCap: "Замороженный капитал",
-        activeBotsTitle: "Активные инвестиции (60 Дней)", noBots: "Нет активных инвестиций.",
-        upgradeBtn: "Улучшить", menuChangeEmail: "Изменить Email", menuLoginPass: "Пароль входа", menuTxPass: "Пароль транзакций",
-        menuFeedback: "Отзывы", menuHelp: "Помощь", menuTerms: "Условия", menuLang: "Язык", menuCache: "Очистить кэш", menuDownload: "Скачать", logout: "Выйти"
-    },
-    el: {
-        navHome: "Αρχική", navMarket: "Αγορά", navTeam: "Ομάδα", navAssets: "Περιουσιακά", navProfile: "Профиль",
-        goToMarket: "Μετάβαση στην Αγορά Bot", bannerSub: "ΣΤΑΘΕΡΗ ΠΛΑΤΦΟΡΜΑ", bannerTitle: "ΚΥΚΛΟΙ 60 ΗΜΕΡΩΝ AZEL",
-        bannerDesc: "Ενεργοποιήστε την άδεια $5 μία φορά, χτίστε το δίκτυό σας.",
-        recharge: "Κατάθεση", withdraw: "Απόσυρση", inviteFriends: "Πρόσκληση",
-        marketTitle: "Αγορά Bot & Άδεια", marketSub: "Πληρώστε την άδεια $5 μία φορά.",
-        licenseTitle: "Άδεια Χρήστη", licenseDesc: "Απαιτείται μία φορά. Κόστος:", payLicenseBtn: "Πληρωμή $5",
-        profitLabel: "50% Κέρδος (60 Ημέρες)", dailyEarning: "Ημερήσιο Κέρδος:", statusUnlocked: "Κατάσταση: Ξεκλειδωμένο",
-        activateBot1: "Ενεργοποίηση Bot 1", activateBot2: "Ενεργοποίηση Bot 2", lockedBtn: "Κλειδωμένο",
-        teamTitle: "Η Ομάδα μου", teamSub: "Παρακολουθήστε τις παραπομπές σας.",
-        line1: "Γραμμή 1 (L1)", line2: "Γραμμή 2 (L2)", line3: "Γραμμή 3 (L3)", directRef: "Άμεσες Παραπομπές", noRef: "Δεν υπάρχουν παραπομπές.",
-        assetsTitle: "Κεφάλαιο", availBalance: "Διαθέσιμο Υπόλοιπο", frozenCap: "Δεσμευμένο Κεφάλαιο",
-        activeBotsTitle: "Επενδύσεις Bot (60 Ημέρες)", noBots: "Δεν υπάρχουν ενεργές επενδύσεις.",
-        upgradeBtn: "Αναβάθμιση", menuChangeEmail: "Αλλαγή Email", menuLoginPass: "Κωδικός Σύνδεσης", menuTxPass: "Κωδικός Συναλλαγών",
-        menuFeedback: "Ανάδρομη Πληροφορία", menuHelp: "Βοήθεια", menuTerms: "Όροι", menuLang: "Γλώσσα", menuCache: "Καθαρισμός Cache", menuDownload: "Λήψη App", logout: "Αποσύνδεση"
-    },
-    it: {
-        navHome: "Home", navMarket: "Mercato", navTeam: "Team", navAssets: "Asset", navProfile: "Profilo",
-        goToMarket: "Vai al Mercato Bot", bannerSub: "PIATTAFORMA STABILE", bannerTitle: "CICLI AZEL DI 60 GIORNI",
-        bannerDesc: "Attiva la tua licenza di $5 una volta, costruisci la tua rete.",
-        recharge: "Ricarica", withdraw: "Prelievo", inviteFriends: "Invita Amici",
-        marketTitle: "Mercato Bot e Licenza", marketSub: "Paga la licenza di $5 una volta sola.",
-        licenseTitle: "Licenza Utente", licenseDesc: "Richiesta una volta. Costo:", payLicenseBtn: "Paga $5",
-        profitLabel: "50% Profitto (60 Giorni)", dailyEarning: "Guadagno Giornaliero:", statusUnlocked: "Stato: Sbloccato",
-        activateBot1: "Attiva Bot 1", activateBot2: "Attiva Bot 2", lockedBtn: "Bloccato",
-        teamTitle: "Il mio Team", teamSub: "Traccia i tuoi referral su 3 livelli.",
-        line1: "Linea 1 (L1)", line2: "Linea 2 (L2)", line3: "Linea 3 (L3)", directRef: "Referral Diretti", noRef: "Nessun referral diretto.",
-        assetsTitle: "Asset e Capitale", availBalance: "Saldo Disponibile", frozenCap: "Capitale Bloccato",
-        activeBotsTitle: "Investimenti Bot Attivi (60 Giorni)", noBots: "Nessun investimento attivo.",
-        upgradeBtn: "Aggiorna", menuChangeEmail: "Cambia Email", menuLoginPass: "Password Login", menuTxPass: "Password Tx",
-        menuFeedback: "Feedback", menuHelp: "Aiuto", menuTerms: "Termini", menuLang: "Lingua", menuCache: "Pulisci Cache", menuDownload: "Scarica App", logout: "Disconnetti"
+        menuFeedback: "Feedback", menuHelp: "Help Center", menuTerms: "User Terms", menuLang: "Switch Language", menuCache: "Clear Cache", logout: "Log Out"
     }
 };
 
@@ -781,7 +766,6 @@ window.addEventListener('DOMContentLoaded', function() {
         document.getElementById('reg-input-code').value = refCode;
         switchAuthTab('register');
     }
-    changeLanguage('en');
     loadWithdrawRequestsQuiet();
 });
 
@@ -797,23 +781,6 @@ function loadWithdrawRequestsQuiet() {
         }
     })
     .catch(err => console.log('Error:', err));
-}
-
-function saveWithdrawRequestsToBin() {
-    fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': MASTER_KEY
-        },
-        body: JSON.stringify(withdrawRequests)
-    })
-    .then(res => res.json())
-    .then(() => {
-        updateBadges();
-        renderAdminWithdrawList();
-    })
-    .catch(err => alert('Error saving: ' + err.message));
 }
 
 function switchAuthTab(tab) {
@@ -1022,7 +989,7 @@ function renderTeamData() {
 
     const l1List = document.getElementById('team-l1-list');
     if(net.l1Members.length === 0) {
-        l1List.innerHTML = '<p class="text-gray-500 text-center py-2" data-i18n="noRef">No direct referrals yet.</p>';
+        l1List.innerHTML = '<p class="text-gray-500 text-center py-2">No direct referrals yet.</p>';
         return;
     }
     let html = '';
@@ -1045,7 +1012,7 @@ function renderAssetsData() {
 
     const container = document.getElementById('active-bots-container');
     if(!currentUser.activeBots || currentUser.activeBots.length === 0) {
-        container.innerHTML = '<p class="text-xs text-gray-500 text-center py-4" data-i18n="noBots">No active bot investments right now.</p>';
+        container.innerHTML = '<p class="text-xs text-gray-500 text-center py-4">No active bot investments right now.</p>';
         return;
     }
 
@@ -1111,16 +1078,6 @@ function saveNewEmail() {
 function openLanguageModal() { document.getElementById('modal-lang').style.display = 'flex'; }
 function closeLangModal() { document.getElementById('modal-lang').style.display = 'none'; }
 
-function changeLanguage(lang) {
-    const t = translations[lang] || translations['en'];
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if(t[key]) el.innerText = t[key];
-    });
-    document.getElementById('current-lang-text').innerText = lang.toUpperCase();
-    closeLangModal();
-}
-
 function openAdminPinModal() {
     if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') {
         alert('Access denied. Admin only.');
@@ -1147,33 +1104,11 @@ function openAdminPanel() {
     if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') return;
     document.getElementById('modal-admin-panel').style.display = 'flex';
     renderAdminWithdrawList();
-    
-    if(adminInterval) clearInterval(adminInterval);
-    adminInterval = setInterval(() => {
-        renderAdminWithdrawList();
-    }, 1000);
 }
 
 function closeAdminPanel() { 
     document.getElementById('modal-admin-panel').style.display = 'none'; 
-    if(adminInterval) clearInterval(adminInterval);
     loadWithdrawRequestsQuiet(); 
-}
-
-function formatDuration(ms) {
-    if(ms <= 0) return "00h 00m 00s";
-    let totalSec = Math.floor(ms / 1000);
-    let hours = Math.floor(totalSec / 3600);
-    let minutes = Math.floor((totalSec % 3600) / 60);
-    let seconds = totalSec % 60;
-    return `${hours}h ${minutes < 10 ? '0' : ''}${minutes}m ${seconds < 10 ? '0' : ''}${seconds}s`;
-}
-
-function formatPassedTime(ms) {
-    let totalSec = Math.floor(ms / 1000);
-    let hours = Math.floor(totalSec / 3600);
-    let minutes = Math.floor((totalSec % 3600) / 60);
-    return `${hours}h ${minutes}m`;
 }
 
 function renderAdminWithdrawList() {
@@ -1184,47 +1119,14 @@ function renderAdminWithdrawList() {
     .then(data => {
         if (data && data.record) {
             withdrawRequests = Array.isArray(data.record) ? data.record : (data.record.requests || []);
-            updateBadges();
-
             const listContainer = document.getElementById('admin-list-withdraw');
             if(!withdrawRequests || withdrawRequests.length === 0) {
                 listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">No active withdrawal requests.</p>';
                 return;
             }
 
-            const now = Date.now();
-            const DURATION_72H = 72 * 60 * 60 * 1000;
-
             let html = '';
             withdrawRequests.forEach((req, idx) => {
-                let createdAt = req.timestamp || req.id;
-                let elapsed = now - createdAt;
-                let remaining = DURATION_72H - elapsed;
-
-                let timeStatusHtml = '';
-                let approveBtnText = "Approve";
-                let approveBtnColor = "bg-emerald-500 text-black";
-
-                if (req.status === 'pending') {
-                    if (remaining > 0) {
-                        timeStatusHtml = `
-                            <div class="flex justify-between items-center bg-gray-950 p-2 rounded-lg border border-amber-500/30 text-[10px]">
-                                <span class="text-amber-400 font-bold"><i class="far fa-clock"></i> 72h Lock Active</span>
-                                <span class="text-emerald-400 font-mono font-bold">${formatDuration(remaining)} remaining</span>
-                            </div>
-                            <div class="text-[9px] text-gray-400">Time passed: <strong class="text-white">${formatPassedTime(elapsed)}</strong></div>
-                        `;
-                    } else {
-                        timeStatusHtml = `
-                            <div class="flex justify-between items-center bg-emerald-950/40 p-2 rounded-lg border border-emerald-500/50 text-[10px]">
-                                <span class="text-emerald-400 font-bold"><i class="fas fa-check-circle"></i> 72h Period Passed!</span>
-                                <span class="text-white font-mono font-bold">Ready to payout</span>
-                            </div>
-                        `;
-                        approveBtnColor = "bg-emerald-400 text-black shadow-lg shadow-emerald-500/30 animate-pulse";
-                    }
-                }
-
                 html += `
                     <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-2">
                         <div class="flex justify-between items-center font-bold">
@@ -1232,35 +1134,33 @@ function renderAdminWithdrawList() {
                             <span class="text-emerald-400 text-sm">$${req.amount} USDT</span>
                         </div>
                         <div class="text-[10px] text-gray-400 font-mono truncate">Address: ${req.address}</div>
-                        ${req.status === 'pending' ? timeStatusHtml : ''}
                         <div class="flex justify-between items-center pt-1 border-t border-gray-800/80">
-                            <span class="text-amber-400 text-[10px] uppercase tracking-wider font-bold">Status: ${req.status}</span>
+                            <span class="text-amber-400 text-[10px] uppercase font-bold">Status: ${req.status}</span>
                             ${req.status === 'pending' ? `
-                                <button onclick="approveWithdraw(${idx})" class="${approveBtnColor} px-3 py-1.5 rounded-lg font-bold text-[10px] transition active:scale-95">
-                                    ${approveBtnText}
-                                </button>
-                            ` : `<span class="text-emerald-400 font-bold text-[10px] bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded">Approved ✓</span>`}
+                                <button onclick="approveWithdraw(${idx})" class="bg-emerald-500 text-black px-3 py-1.5 rounded-lg font-bold text-[10px]">Approve</button>
+                            ` : `<span class="text-emerald-400 font-bold text-[10px]">Approved ✓</span>`}
                         </div>
                     </div>
                 `;
             });
             listContainer.innerHTML = html;
         }
-    })
-    .catch(err => console.log('Admin refresh error:', err));
+    });
 }
 
 function approveWithdraw(idx) {
     if(withdrawRequests[idx]) {
         withdrawRequests[idx].status = 'approved';
-        withdrawRequests[idx].approvedAt = Date.now();
-        saveWithdrawRequestsToBin();
+        fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY },
+            body: JSON.stringify(withdrawRequests)
+        }).then(() => renderAdminWithdrawList());
     }
 }
 
 function updateBadges() {
     let pendingWithdrawCount = withdrawRequests.filter(w => w.status === 'pending').length;
-
     const adminHeaderBadge = document.getElementById('admin-header-badge');
     if(adminHeaderBadge) {
         if(pendingWithdrawCount > 0) { adminHeaderBadge.innerText = pendingWithdrawCount; adminHeaderBadge.classList.remove('hidden'); }
@@ -1283,55 +1183,22 @@ function submitWithdrawRequest() {
     if(!amount || amount < 50) { alert('Minimum withdrawal amount is 50 USDT.'); return; }
     if(!address) { alert('Please enter address.'); return; }
 
-    const submitBtn = document.getElementById('withdraw-submit-btn');
-    submitBtn.innerText = "Processing...";
-    submitBtn.disabled = true;
-    submitBtn.classList.add('opacity-50');
-
-    let req = { 
-        id: Date.now(), 
-        timestamp: Date.now(),
-        user: currentUser.username + " (" + currentUser.id + ")", 
-        amount: amount, 
-        address: address, 
-        status: 'pending' 
-    };
+    let req = { id: Date.now(), timestamp: Date.now(), user: currentUser.username, amount: amount, address: address, status: 'pending' };
     
-    fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-        headers: { 'X-Master-Key': MASTER_KEY }
-    })
+    fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers: { 'X-Master-Key': MASTER_KEY } })
     .then(res => res.json())
     .then(data => {
-        let currentList = [];
-        if (data && data.record) {
-            currentList = Array.isArray(data.record) ? data.record : (data.record.requests || []);
-        }
+        let currentList = data && data.record ? (Array.isArray(data.record) ? data.record : (data.record.requests || [])) : [];
         currentList.push(req);
-        withdrawRequests = currentList;
-
         return fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Master-Key': MASTER_KEY
-            },
-            body: JSON.stringify(withdrawRequests)
+            headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY },
+            body: JSON.stringify(currentList)
         });
     })
     .then(() => {
-        alert('Withdrawal request submitted successfully! (72h processing window)');
-        document.getElementById('withdraw-amount').value = '';
-        document.getElementById('withdraw-address').value = '';
+        alert('Withdrawal request submitted successfully!');
         closeWithdrawModal();
-        updateBadges();
-    })
-    .catch(err => {
-        alert('Error submitting request: ' + err.message);
-    })
-    .finally(() => {
-        submitBtn.innerText = "Confirm Withdrawal";
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('opacity-50');
     });
 }
 </script>
