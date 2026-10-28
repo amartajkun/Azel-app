@@ -31,16 +31,16 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 #auth-screen { display: flex; position: fixed; inset: 0; background: #07090e; z-index: 100; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
 #main-app-wrapper { display: none; }
 
-/* DIZAJN BOT KARTICA U STILU SA SLIKE (LIJEVO SLIKA/NAZIV, DESNO PANEL) */
-.bot-card-gpt {
+/* PROFI KARTICE - SLIKA LIJEVO, PANEL DESNO */
+.bot-card-pro {
     position: relative;
     border-radius: 1.25rem;
     padding: 1rem;
     overflow: hidden;
+    background: #111622;
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
-    background: #111622;
 }
 
 .theme-1 { border: 1px solid rgba(16, 185, 129, 0.35); }
@@ -50,35 +50,31 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 .theme-5 { border: 1px solid rgba(249, 115, 22, 0.6); box-shadow: 0 0 15px rgba(249, 115, 22, 0.12); }
 .theme-6 { border: 1px solid rgba(239, 68, 68, 0.85); box-shadow: 0 0 22px rgba(239, 68, 68, 0.25); background: linear-gradient(135deg, #1b070b 0%, #111622 70%); }
 
-/* AGRESIVNI 3D ROBOTI - OD MIRNIJIH KA OPASNIM ELITE ZVIJERIMA */
-.robot-img-box {
-    width: 100%;
-    height: 140px;
+/* OZBILJNI, AGRESIVNI 3D ROBOTI NA LIJEVOJ STRANI */
+.robot-side-img {
+    width: 120px;
+    height: 145px;
     border-radius: 12px;
     background-size: cover;
     background-position: center;
-    position: relative;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.7);
+    flex-shrink: 0;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
 }
 
-/* 1. Bot 1: Bazični, uredan AI bot */
-.bot-pic-1 { background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop&q=80'); border: 1px solid rgba(16,185,129,0.4); }
-/* 2. Bot 2: Napredniji plavi mecha */
-.bot-pic-2 { background-image: url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=500&auto=format&fit=crop&q=80'); border: 1px solid rgba(59,130,246,0.5); }
-/* 3. Bot 3: Moćni ljubičasti neuralni core */
-.bot-pic-3 { background-image: url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=500&auto=format&fit=crop&q=80'); border: 1px solid rgba(168,85,247,0.6); }
-/* 4. Bot 4: Agresivni pink/cyan borbeni android */
-.bot-pic-4 { background-image: url('https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=500&auto=format&fit=crop&q=80'); border: 1px solid rgba(236,72,153,0.7); }
-/* 5. Bot 5: Opasni narandžasti teški ratni robot */
-.bot-pic-5 { background-image: url('https://images.unsplash.com/photo-1546776310-eef45dd6d63c?w=500&auto=format&fit=crop&q=80'); border: 1px solid rgba(249,115,22,0.8); }
-/* 6. Bot 6: Maksimalno agresivna crvena Elite Zvijer sa glow efektom */
-.bot-pic-6 { background-image: url('https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=500&auto=format&fit=crop&q=80'); border: 1px solid #ef4444; box-shadow: 0 0 15px rgba(239,68,68,0.6); animation: pulse 2s infinite; }
+/* FOTOGRAFIJE MOĆNIH ROBOTA (CRNI, METALNI, CYBERPUNK, SVE AGRESIVNIJI) */
+.bot-img-1 { background-image: url('https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=500&auto=format&fit=crop&q=80'); border: 1px solid rgba(16,185,129,0.4); }
+.bot-img-2 { background-image: url('https://images.unsplash.com/photo-1546776310-eef45dd6d63c?w=500&auto=format&fit=crop&q=80'); border: 1px solid rgba(59,130,246,0.5); }
+.bot-img-3 { background-image: url('https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500&auto=format&fit=crop&q=80'); border: 1px solid rgba(168,85,247,0.6); }
+.bot-img-4 { background-image: url('https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=500&auto=format&fit=crop&q=80'); border: 1px solid rgba(236,72,153,0.7); }
+.bot-img-5 { background-image: url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=500&auto=format&fit=crop&q=80'); border: 1px solid rgba(249,115,22,0.8); }
+.bot-img-6 { background-image: url('https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=500&auto=format&fit=crop&q=80'); border: 1px solid #ef4444; box-shadow: 0 0 15px rgba(239,68,68,0.7); animation: pulse 2s infinite; }
 
-.right-panel-box {
+.right-info-panel {
     background: #0d121d;
-    border: 1px solid rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.05);
     border-radius: 12px;
     padding: 10px;
+    flex-grow: 1;
 }
 </style>
 </head>
@@ -166,7 +162,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <!-- 1. POČETNA / HOME STRANICA -->
 <div id="page-home" class="page-content active p-4 space-y-4">
     <div class="flex justify-center mb-2">
-        <button onclick="switchTab('tab-market')" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-sm shadow-lg shadow-emerald-500/25 transition" data-i18n="goToMarket">
+        <button onclick="switchTab('tab-market')" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-sm shadow-lg shadow-emerald-500/25 transition">
             Go to Bot Market & License
         </button>
     </div>
@@ -174,14 +170,14 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     <div class="gradient-banner p-4 rounded-2xl relative overflow-hidden space-y-2 text-white">
         <div class="flex justify-between items-start">
             <div class="space-y-1">
-                <h2 class="text-xs font-extrabold text-emerald-300 tracking-wider" data-i18n="bannerSub">STABLE BOT PLATFORM</h2>
-                <h3 class="text-sm font-bold text-white" data-i18n="bannerTitle">AZEL 60-DAY CYCLES</h3>
+                <h2 class="text-xs font-extrabold text-emerald-300 tracking-wider">STABLE BOT PLATFORM</h2>
+                <h3 class="text-sm font-bold text-white">AZEL 60-DAY CYCLES</h3>
             </div>
             <div class="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center shrink-0 ml-2">
                 <i class="fas fa-robot text-emerald-300"></i>
             </div>
         </div>
-        <p class="text-[11px] text-gray-200 leading-relaxed" data-i18n="bannerDesc">
+        <p class="text-[11px] text-gray-200 leading-relaxed">
             Activate your once-in-a-lifetime $5 license, build your network across L1, L2, L3, and deploy trading bots for 60-day profitable cycles.
         </p>
     </div>
@@ -189,231 +185,237 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     <div class="grid grid-cols-3 gap-2 text-center">
         <button onclick="openDepositModal()" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
             <i class="fas fa-qrcode text-emerald-400 text-lg"></i>
-            <span class="text-[10px] text-gray-300" data-i18n="recharge">Recharge</span>
+            <span class="text-[10px] text-gray-300">Recharge</span>
         </button>
         <button onclick="openWithdrawModal()" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
             <i class="fas fa-arrow-up-from-bracket text-emerald-400 text-lg"></i>
-            <span class="text-[10px] text-gray-300" data-i18n="withdraw">Withdrawal</span>
+            <span class="text-[10px] text-gray-300">Withdrawal</span>
         </button>
         <button onclick="openInviteModal()" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition">
             <i class="fas fa-gift text-emerald-400 text-lg"></i>
-            <span class="text-[10px] text-gray-300" data-i18n="inviteFriends">Invite Friends</span>
+            <span class="text-[10px] text-gray-300">Invite Friends</span>
         </button>
     </div>
 </div>
 
-<!-- 2. MARKET / BOT PAKETI I LICENCA (SA FIKSNOM ZARADOM U DOLARIMA I AGRESIVNIM 3D ROBOTIMA) -->
+<!-- 2. MARKET / BOT PAKETI I LICENCA (SLIKA LIJEVO, PANEL DESNO, FIKSNA ZARADA U DOLARIMA) -->
 <div id="page-market" class="page-content p-4 space-y-4">
-    <h2 class="text-lg font-bold text-emerald-400 mb-1" data-i18n="marketTitle">Bot Market & License</h2>
-    <p class="text-xs text-gray-400 mb-3" data-i18n="marketSub">Pay $5 license once, then activate your bot packages.</p>
+    <h2 class="text-lg font-bold text-emerald-400 mb-1">Bot Market & License</h2>
+    <p class="text-xs text-gray-400 mb-3">Pay $5 license once, then activate your bot packages.</p>
 
     <!-- LICENCA KARTICA -->
     <div id="license-card-box" class="emerald-card p-4 rounded-2xl flex justify-between items-center bg-emerald-950/20 border-emerald-500/40">
         <div>
-            <h3 class="text-sm font-bold text-white" data-i18n="licenseTitle">Lifetime User License</h3>
-            <p class="text-[11px] text-gray-400"><span data-i18n="licenseDesc">Required once for platform access. Fee:</span> <span class="text-emerald-400 font-bold">$5.00</span></p>
+            <h3 class="text-sm font-bold text-white">Lifetime User License</h3>
+            <p class="text-[11px] text-gray-400">Required once for platform access. Fee: <span class="text-emerald-400 font-bold">$5.00</span></p>
         </div>
-        <button id="buy-license-btn" onclick="buyUserLicense()" class="bg-emerald-500 text-black px-4 py-2 rounded-xl text-xs font-bold shadow-lg" data-i18n="payLicenseBtn">Pay $5</button>
+        <button id="buy-license-btn" onclick="buyUserLicense()" class="bg-emerald-500 text-black px-4 py-2 rounded-xl text-xs font-bold shadow-lg">Pay $5</button>
     </div>
 
-    <!-- BOT LISTA SA FIKSNIM DOLARSKIM ZARADAMA I AGRESIVNIM 3D ROBOTIMA -->
+    <!-- BOT LISTA -->
     <div class="space-y-4" id="bots-market-container">
         
         <!-- Bot 1 ($100) -->
-        <div class="bot-card-gpt theme-1">
-            <div class="flex justify-between items-center">
-                <span class="text-base font-extrabold text-white">BOT-1</span>
-                <div class="flex items-center gap-1.5 bg-emerald-950/80 border border-emerald-500/30 px-2.5 py-1 rounded-lg">
+        <div class="bot-card-pro theme-1">
+            <div class="flex justify-between items-center border-b border-gray-800/80 pb-2">
+                <span class="text-base font-extrabold text-white tracking-wide">BOT-1</span>
+                <div class="flex items-center gap-1.5 bg-emerald-950/80 border border-emerald-500/30 px-2 py-0.5 rounded-lg">
                     <i class="fas fa-shield-alt text-emerald-400 text-[10px]"></i>
                     <span class="text-[10px] text-emerald-400 font-bold">VIP Strategy</span>
                 </div>
             </div>
-            
-            <div class="robot-img-box bot-pic-1"></div>
 
-            <div class="right-panel-box space-y-2 text-xs">
-                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
-                    <span class="text-gray-400">Pledge Amount</span>
-                    <span class="text-emerald-400 font-bold font-mono">$100</span>
-                </div>
-                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
-                    <span class="text-gray-400">Daily Return</span>
-                    <span class="text-emerald-400 font-bold font-mono">+$2.50 / day</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-400">Duration</span>
-                    <span class="text-white font-bold">60 Days</span>
+            <div class="flex gap-3 items-center">
+                <div class="robot-side-img bot-img-1"></div>
+                <div class="right-info-panel space-y-1.5 text-xs">
+                    <div class="flex justify-between items-center border-b border-gray-800 pb-1">
+                        <span class="text-gray-400">Pledge Amount</span>
+                        <span class="text-emerald-400 font-bold font-mono">$100</span>
+                    </div>
+                    <div class="flex justify-between items-center border-b border-gray-800 pb-1">
+                        <span class="text-gray-400">Daily Return</span>
+                        <span class="text-emerald-400 font-bold font-mono">+$2.50 / day</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400">Duration</span>
+                        <span class="text-white font-bold">60 Days</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="flex justify-between items-center pt-1">
-                <div class="text-[10px] text-emerald-400 font-bold" data-i18n="statusUnlocked">Status: Unlocked (Free)</div>
-                <button onclick="buyBot(1, 100, 2.50)" class="bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-4 py-2 rounded-xl text-xs shadow-md shadow-emerald-500/20 active:scale-95 transition" data-i18n="activateBot1">Activate Bot 1</button>
+            <div class="flex justify-between items-center pt-1 border-t border-gray-800/60">
+                <div class="text-[10px] text-emerald-400 font-bold">Status: Unlocked (Free)</div>
+                <button onclick="buyBot(1, 100, 2.50)" class="bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-4 py-2 rounded-xl text-xs shadow-md shadow-emerald-500/25 active:scale-95 transition">Activate Bot 1</button>
             </div>
         </div>
 
         <!-- Bot 2 ($200) -->
-        <div class="bot-card-gpt theme-2">
-            <div class="flex justify-between items-center">
-                <span class="text-base font-extrabold text-white">BOT-2</span>
-                <div class="flex items-center gap-1.5 bg-blue-950/80 border border-blue-500/30 px-2.5 py-1 rounded-lg">
+        <div class="bot-card-pro theme-2">
+            <div class="flex justify-between items-center border-b border-gray-800/80 pb-2">
+                <span class="text-base font-extrabold text-white tracking-wide">BOT-2</span>
+                <div class="flex items-center gap-1.5 bg-blue-950/80 border border-blue-500/30 px-2 py-0.5 rounded-lg">
                     <i class="fas fa-shield-alt text-blue-400 text-[10px]"></i>
                     <span class="text-[10px] text-blue-400 font-bold">VIP Strategy</span>
                 </div>
             </div>
-            
-            <div class="robot-img-box bot-pic-2"></div>
 
-            <div class="right-panel-box space-y-2 text-xs">
-                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
-                    <span class="text-gray-400">Pledge Amount</span>
-                    <span class="text-blue-400 font-bold font-mono">$200</span>
-                </div>
-                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
-                    <span class="text-gray-400">Daily Return</span>
-                    <span class="text-blue-400 font-bold font-mono">+$5.00 / day</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-400">Duration</span>
-                    <span class="text-white font-bold">60 Days</span>
+            <div class="flex gap-3 items-center">
+                <div class="robot-side-img bot-img-2"></div>
+                <div class="right-info-panel space-y-1.5 text-xs">
+                    <div class="flex justify-between items-center border-b border-gray-800 pb-1">
+                        <span class="text-gray-400">Pledge Amount</span>
+                        <span class="text-blue-400 font-bold font-mono">$200</span>
+                    </div>
+                    <div class="flex justify-between items-center border-b border-gray-800 pb-1">
+                        <span class="text-gray-400">Daily Return</span>
+                        <span class="text-blue-400 font-bold font-mono">+$5.00 / day</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400">Duration</span>
+                        <span class="text-white font-bold">60 Days</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="flex justify-between items-center pt-1">
-                <div class="text-[10px] text-emerald-400 font-bold" data-i18n="statusUnlocked">Status: Unlocked (Free)</div>
-                <button onclick="buyBot(2, 200, 5.00)" class="bg-blue-500 hover:bg-blue-400 text-black font-bold px-4 py-2 rounded-xl text-xs shadow-md shadow-blue-500/20 active:scale-95 transition" data-i18n="activateBot2">Activate Bot 2</button>
+            <div class="flex justify-between items-center pt-1 border-t border-gray-800/60">
+                <div class="text-[10px] text-emerald-400 font-bold">Status: Unlocked (Free)</div>
+                <button onclick="buyBot(2, 200, 5.00)" class="bg-blue-500 hover:bg-blue-400 text-black font-bold px-4 py-2 rounded-xl text-xs shadow-md shadow-blue-500/25 active:scale-95 transition">Activate Bot 2</button>
             </div>
         </div>
 
         <!-- Bot 3 ($500) -->
-        <div class="bot-card-gpt theme-3" id="bot-card-3">
-            <div class="flex justify-between items-center">
-                <span class="text-base font-extrabold text-white">BOT-3</span>
-                <div class="flex items-center gap-1.5 bg-purple-950/80 border border-purple-500/30 px-2.5 py-1 rounded-lg">
+        <div class="bot-card-pro theme-3" id="bot-card-3">
+            <div class="flex justify-between items-center border-b border-gray-800/80 pb-2">
+                <span class="text-base font-extrabold text-white tracking-wide">BOT-3</span>
+                <div class="flex items-center gap-1.5 bg-purple-950/80 border border-purple-500/30 px-2 py-0.5 rounded-lg">
                     <i class="fas fa-shield-alt text-purple-400 text-[10px]"></i>
                     <span class="text-[10px] text-purple-400 font-bold">VIP Strategy</span>
                 </div>
             </div>
-            
-            <div class="robot-img-box bot-pic-3"></div>
 
-            <div class="right-panel-box space-y-2 text-xs">
-                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
-                    <span class="text-gray-400">Pledge Amount</span>
-                    <span class="text-purple-400 font-bold font-mono">$500</span>
-                </div>
-                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
-                    <span class="text-gray-400">Daily Return</span>
-                    <span class="text-purple-400 font-bold font-mono">+$12.50 / day</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-400">Duration</span>
-                    <span class="text-white font-bold">60 Days</span>
+            <div class="flex gap-3 items-center">
+                <div class="robot-side-img bot-img-3"></div>
+                <div class="right-info-panel space-y-1.5 text-xs">
+                    <div class="flex justify-between items-center border-b border-gray-800 pb-1">
+                        <span class="text-gray-400">Pledge Amount</span>
+                        <span class="text-purple-400 font-bold font-mono">$500</span>
+                    </div>
+                    <div class="flex justify-between items-center border-b border-gray-800 pb-1">
+                        <span class="text-gray-400">Daily Return</span>
+                        <span class="text-purple-400 font-bold font-mono">+$12.50 / day</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400">Duration</span>
+                        <span class="text-white font-bold">60 Days</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="flex justify-between items-center pt-1">
+            <div class="flex justify-between items-center pt-1 border-t border-gray-800/60">
                 <div id="bot-status-3" class="text-[10px] text-amber-400 font-bold">Requirement: 5 active members in L1</div>
-                <button id="bot-btn-3" onclick="buyBot(3, 500, 12.50)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
+                <button id="bot-btn-3" onclick="buyBot(3, 500, 12.50)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition">Locked</button>
             </div>
         </div>
 
         <!-- Bot 4 ($1,000) -->
-        <div class="bot-card-gpt theme-4" id="bot-card-4">
-            <div class="flex justify-between items-center">
-                <span class="text-base font-extrabold text-white">BOT-4</span>
-                <div class="flex items-center gap-1.5 bg-pink-950/80 border border-pink-500/30 px-2.5 py-1 rounded-lg">
+        <div class="bot-card-pro theme-4" id="bot-card-4">
+            <div class="flex justify-between items-center border-b border-gray-800/80 pb-2">
+                <span class="text-base font-extrabold text-white tracking-wide">BOT-4</span>
+                <div class="flex items-center gap-1.5 bg-pink-950/80 border border-pink-500/30 px-2 py-0.5 rounded-lg">
                     <i class="fas fa-shield-alt text-pink-400 text-[10px]"></i>
                     <span class="text-[10px] text-pink-400 font-bold">VIP Strategy</span>
                 </div>
             </div>
-            
-            <div class="robot-img-box bot-pic-4"></div>
 
-            <div class="right-panel-box space-y-2 text-xs">
-                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
-                    <span class="text-gray-400">Pledge Amount</span>
-                    <span class="text-pink-400 font-bold font-mono">$1,000</span>
-                </div>
-                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
-                    <span class="text-gray-400">Daily Return</span>
-                    <span class="text-pink-400 font-bold font-mono">+$25.00 / day</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-400">Duration</span>
-                    <span class="text-white font-bold">60 Days</span>
+            <div class="flex gap-3 items-center">
+                <div class="robot-side-img bot-img-4"></div>
+                <div class="right-info-panel space-y-1.5 text-xs">
+                    <div class="flex justify-between items-center border-b border-gray-800 pb-1">
+                        <span class="text-gray-400">Pledge Amount</span>
+                        <span class="text-pink-400 font-bold font-mono">$1,000</span>
+                    </div>
+                    <div class="flex justify-between items-center border-b border-gray-800 pb-1">
+                        <span class="text-gray-400">Daily Return</span>
+                        <span class="text-pink-400 font-bold font-mono">+$25.00 / day</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400">Duration</span>
+                        <span class="text-white font-bold">60 Days</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="flex justify-between items-center pt-1">
+            <div class="flex justify-between items-center pt-1 border-t border-gray-800/60">
                 <div id="bot-status-4" class="text-[10px] text-amber-400 font-bold">Requirement: 10 in L1 + 5 in L2</div>
-                <button id="bot-btn-4" onclick="buyBot(4, 1000, 25.00)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
+                <button id="bot-btn-4" onclick="buyBot(4, 1000, 25.00)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition">Locked</button>
             </div>
         </div>
 
         <!-- Bot 5 ($2,500) -->
-        <div class="bot-card-gpt theme-5" id="bot-card-5">
-            <div class="flex justify-between items-center">
-                <span class="text-base font-extrabold text-white">BOT-5</span>
-                <div class="flex items-center gap-1.5 bg-orange-950/80 border border-orange-500/30 px-2.5 py-1 rounded-lg">
+        <div class="bot-card-pro theme-5" id="bot-card-5">
+            <div class="flex justify-between items-center border-b border-gray-800/80 pb-2">
+                <span class="text-base font-extrabold text-white tracking-wide">BOT-5</span>
+                <div class="flex items-center gap-1.5 bg-orange-950/80 border border-orange-500/30 px-2 py-0.5 rounded-lg">
                     <i class="fas fa-shield-alt text-orange-400 text-[10px]"></i>
                     <span class="text-[10px] text-orange-400 font-bold">VIP Strategy</span>
                 </div>
             </div>
-            
-            <div class="robot-img-box bot-pic-5"></div>
 
-            <div class="right-panel-box space-y-2 text-xs">
-                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
-                    <span class="text-gray-400">Pledge Amount</span>
-                    <span class="text-orange-400 font-bold font-mono">$2,500</span>
-                </div>
-                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
-                    <span class="text-gray-400">Daily Return</span>
-                    <span class="text-orange-400 font-bold font-mono">+$62.50 / day</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-400">Duration</span>
-                    <span class="text-white font-bold">60 Days</span>
+            <div class="flex gap-3 items-center">
+                <div class="robot-side-img bot-img-5"></div>
+                <div class="right-info-panel space-y-1.5 text-xs">
+                    <div class="flex justify-between items-center border-b border-gray-800 pb-1">
+                        <span class="text-gray-400">Pledge Amount</span>
+                        <span class="text-orange-400 font-bold font-mono">$2,500</span>
+                    </div>
+                    <div class="flex justify-between items-center border-b border-gray-800 pb-1">
+                        <span class="text-gray-400">Daily Return</span>
+                        <span class="text-orange-400 font-bold font-mono">+$62.50 / day</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400">Duration</span>
+                        <span class="text-white font-bold">60 Days</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="flex justify-between items-center pt-1">
+            <div class="flex justify-between items-center pt-1 border-t border-gray-800/60">
                 <div id="bot-status-5" class="text-[10px] text-amber-400 font-bold">Requirement: 20 in L1 + 15 in L2 + 5 in L3</div>
-                <button id="bot-btn-5" onclick="buyBot(5, 2500, 62.50)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
+                <button id="bot-btn-5" onclick="buyBot(5, 2500, 62.50)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition">Locked</button>
             </div>
         </div>
 
         <!-- Bot 6 ($5,000) - ELITE BEAST -->
-        <div class="bot-card-gpt theme-6" id="bot-card-6">
-            <div class="flex justify-between items-center">
-                <span class="text-base font-extrabold text-white">BOT-6 <span class="text-xs text-red-400 animate-pulse font-normal">🔥 ELITE</span></span>
-                <div class="flex items-center gap-1.5 bg-red-950/80 border border-red-500/40 px-2.5 py-1 rounded-lg">
+        <div class="bot-card-pro theme-6" id="bot-card-6">
+            <div class="flex justify-between items-center border-b border-gray-800/80 pb-2">
+                <span class="text-base font-extrabold text-white tracking-wide">BOT-6 <span class="text-xs text-red-400 animate-pulse font-normal">🔥 ELITE</span></span>
+                <div class="flex items-center gap-1.5 bg-red-950/80 border border-red-500/40 px-2 py-0.5 rounded-lg">
                     <i class="fas fa-shield-alt text-red-400 text-[10px]"></i>
                     <span class="text-[10px] text-red-400 font-bold">VIP Strategy</span>
                 </div>
             </div>
-            
-            <div class="robot-img-box bot-pic-6"></div>
 
-            <div class="right-panel-box space-y-2 text-xs">
-                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
-                    <span class="text-gray-400">Pledge Amount</span>
-                    <span class="text-red-400 font-bold font-mono">$5,000</span>
-                </div>
-                <div class="flex justify-between items-center border-b border-gray-800 pb-1.5">
-                    <span class="text-gray-400">Daily Return</span>
-                    <span class="text-red-400 font-bold font-mono">+$125.00 / day</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-400">Duration</span>
-                    <span class="text-white font-bold">60 Days</span>
+            <div class="flex gap-3 items-center">
+                <div class="robot-side-img bot-img-6"></div>
+                <div class="right-info-panel space-y-1.5 text-xs">
+                    <div class="flex justify-between items-center border-b border-gray-800 pb-1">
+                        <span class="text-gray-400">Pledge Amount</span>
+                        <span class="text-red-400 font-bold font-mono">$5,000</span>
+                    </div>
+                    <div class="flex justify-between items-center border-b border-gray-800 pb-1">
+                        <span class="text-gray-400">Daily Return</span>
+                        <span class="text-red-400 font-bold font-mono">+$125.00 / day</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400">Duration</span>
+                        <span class="text-white font-bold">60 Days</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="flex justify-between items-center pt-1">
+            <div class="flex justify-between items-center pt-1 border-t border-gray-800/60">
                 <div id="bot-status-6" class="text-[10px] text-amber-400 font-bold">Requirement: 50 in L1 + 30 in L2 + 20 in L3</div>
-                <button id="bot-btn-6" onclick="buyBot(6, 5000, 125.00)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition" data-i18n="lockedBtn">Locked</button>
+                <button id="bot-btn-6" onclick="buyBot(6, 5000, 125.00)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed transition">Locked</button>
             </div>
         </div>
 
@@ -422,49 +424,49 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 
 <!-- 3. TEAM / MREŽA (L1, L2, L3) -->
 <div id="page-team" class="page-content p-4 space-y-4">
-    <h2 class="text-lg font-bold text-emerald-400 mb-1" data-i18n="teamTitle">My Network Team</h2>
-    <p class="text-xs text-gray-400 mb-3" data-i18n="teamSub">Track your referrals across 3 levels to unlock higher bot packages.</p>
+    <h2 class="text-lg font-bold text-emerald-400 mb-1">My Network Team</h2>
+    <p class="text-xs text-gray-400 mb-3">Track your referrals across 3 levels to unlock higher bot packages.</p>
 
     <div class="grid grid-cols-3 gap-2 text-center">
         <div class="emerald-card p-3 rounded-xl">
-            <div class="text-[10px] text-gray-400" data-i18n="line1">Line 1 (L1)</div>
+            <div class="text-[10px] text-gray-400">Line 1 (L1)</div>
             <div id="count-l1" class="text-lg font-bold text-emerald-400">0</div>
         </div>
         <div class="emerald-card p-3 rounded-xl">
-            <div class="text-[10px] text-gray-400" data-i18n="line2">Line 2 (L2)</div>
+            <div class="text-[10px] text-gray-400">Line 2 (L2)</div>
             <div id="count-l2" class="text-lg font-bold text-emerald-400">0</div>
         </div>
         <div class="emerald-card p-3 rounded-xl">
-            <div class="text-[10px] text-gray-400" data-i18n="line3">Line 3 (L3)</div>
+            <div class="text-[10px] text-gray-400">Line 3 (L3)</div>
             <div id="count-l3" class="text-lg font-bold text-emerald-400">0</div>
         </div>
     </div>
 
     <div class="emerald-card p-4 rounded-2xl space-y-3">
-        <h3 class="text-xs font-bold text-white border-b border-gray-800 pb-2" data-i18n="directRef">Direct Referrals (L1 Members)</h3>
+        <h3 class="text-xs font-bold text-white border-b border-gray-800 pb-2">Direct Referrals (L1 Members)</h3>
         <div id="team-l1-list" class="space-y-2 text-xs">
-            <p class="text-gray-500 text-center py-2" data-i18n="noRef">No direct referrals yet.</p>
+            <p class="text-gray-500 text-center py-2">No direct referrals yet.</p>
         </div>
     </div>
 </div>
 
 <!-- 4. ASSETS / NOVČANIK -->
 <div id="page-wallet" class="page-content p-4 space-y-4">
-    <h2 class="text-lg font-bold text-emerald-400 mb-2" data-i18n="assetsTitle">Assets & Capital</h2>
+    <h2 class="text-lg font-bold text-emerald-400 mb-2">Assets & Capital</h2>
     <div class="emerald-card p-4 rounded-2xl space-y-3">
         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
-            <span class="text-sm font-bold text-white" data-i18n="availBalance">Available Balance</span>
+            <span class="text-sm font-bold text-white">Available Balance</span>
             <span class="text-sm text-emerald-400 font-bold">$<span id="wallet-balance-display">12,450.80</span></span>
         </div>
         <div class="flex justify-between items-center">
-            <span class="text-xs text-gray-400" data-i18n="frozenCap">Frozen Capital (Active Bots)</span>
+            <span class="text-xs text-gray-400">Frozen Capital (Active Bots)</span>
             <span class="text-xs text-amber-400 font-bold">$<span id="wallet-frozen-display">0.00</span></span>
         </div>
     </div>
 
-    <h3 class="text-sm font-bold text-white pt-2" data-i18n="activeBotsTitle">Active Bot Investments (60 Days)</h3>
+    <h3 class="text-sm font-bold text-white pt-2">Active Bot Investments (60 Days)</h3>
     <div id="active-bots-container" class="space-y-3">
-        <p class="text-xs text-gray-500 text-center py-4" data-i18n="noBots">No active bot investments right now.</p>
+        <p class="text-xs text-gray-500 text-center py-4">No active bot investments right now.</p>
     </div>
 </div>
 
@@ -491,96 +493,39 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             <i class="fas fa-crown text-emerald-400 text-sm"></i>
             <span class="text-[11px] text-gray-300">VIP Channel VIP0</span>
         </div>
-        <button class="bg-emerald-400 text-black px-3 py-1 rounded-full text-[10px] font-bold" data-i18n="upgradeBtn">Upgrade</button>
+        <button class="bg-emerald-400 text-black px-3 py-1 rounded-full text-[10px] font-bold">Upgrade</button>
     </div>
 
     <div class="emerald-card rounded-2xl divide-y divide-gray-800/60 text-xs">
         <div onclick="openChangeEmailModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="far fa-envelope text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium" data-i18n="menuChangeEmail">Change Email</span>
+                <span class="text-white font-medium">Change Email</span>
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
         <div onclick="alert('Login Password settings')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="fas fa-lock text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium" data-i18n="menuLoginPass">Login Password</span>
+                <span class="text-white font-medium">Login Password</span>
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
         <div onclick="alert('Transaction Password settings')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3">
                 <i class="fas fa-shield-halved text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium" data-i18n="menuTxPass">Transaction Password</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
-        </div>
-    </div>
-
-    <div class="emerald-card rounded-2xl divide-y divide-gray-800/60 text-xs">
-        <div onclick="window.open('https://t.me/OvdjeStaviLinkNaTelegramGrupu', '_blank')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
-            <div class="flex items-center space-x-3">
-                <i class="fab fa-telegram text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium">Telegram Support</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
-        </div>
-        <div onclick="openLanguageModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
-            <div class="flex items-center space-x-3">
-                <i class="fas fa-globe text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium" data-i18n="menuLang">Switch Language</span>
-            </div>
-            <div class="flex items-center gap-1">
-                <span id="current-lang-text" class="text-[10px] text-gray-400">EN</span>
-                <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
-            </div>
-        </div>
-        <div onclick="alert('Cache cleared successfully!')" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
-            <div class="flex items-center space-x-3">
-                <i class="far fa-trash-can text-emerald-400 text-sm w-4 text-center"></i>
-                <span class="text-white font-medium" data-i18n="menuCache">Clear Cache</span>
+                <span class="text-white font-medium">Transaction Password</span>
             </div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
     </div>
 
     <button onclick="handleUserLogout()" class="w-full emerald-card py-3 rounded-2xl text-center text-red-500 font-bold text-xs hover:bg-red-950/20 transition">
-        <span data-i18n="logout">Log Out</span>
+        <span>Log Out</span>
     </button>
 </div>
 
-<!-- MODAL ZA PROMENU EMAIL-a -->
-<div id="modal-change-email" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
-    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-4 bg-[#07090e] border border-emerald-500/30">
-        <h3 class="text-sm font-bold text-emerald-400">Change Email Address</h3>
-        <input type="email" id="new-email-input" placeholder="Enter new email..." class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white text-xs">
-        <div class="flex space-x-2">
-            <button onclick="closeChangeEmailModal()" class="w-1/2 bg-gray-800 text-gray-300 py-2 rounded-lg text-xs font-bold">Cancel</button>
-            <button onclick="saveNewEmail()" class="w-1/2 bg-emerald-500 text-black py-2 rounded-lg text-xs font-bold">Update</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL ZA JEZIK -->
-<div id="modal-lang" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4 z-50">
-    <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-2 bg-[#07090e] max-h-[80vh] overflow-y-auto">
-        <h3 class="text-base font-bold text-emerald-400 mb-2">Select Language</h3>
-        <div class="space-y-1.5 text-xs">
-            <button onclick="changeLanguage('en')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>English</span> <span>🇬🇧</span></button>
-            <button onclick="changeLanguage('sr')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Srpski / Hrvatski</span> <span>🇷🇸</span></button>
-            <button onclick="changeLanguage('sl')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Slovenski</span> <span>🇸🇮</span></button>
-            <button onclick="changeLanguage('mk')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Македонски</span> <span>🇲🇰</span></button>
-            <button onclick="changeLanguage('es')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Español</span> <span>🇪🇸</span></button>
-            <button onclick="changeLanguage('ru')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Русский</span> <span>🇷🇺</span></button>
-            <button onclick="changeLanguage('el')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Ελληνικά</span> <span>🇬🇷</span></button>
-            <button onclick="changeLanguage('it')" class="w-full text-left p-2 rounded bg-gray-900 text-white flex justify-between"><span>Italiano</span> <span>🇮🇹</span></button>
-        </div>
-        <button onclick="closeLangModal()" class="w-full bg-gray-800 text-gray-300 py-2 rounded-lg text-xs font-bold mt-3">Close</button>
-    </div>
-</div>
-
-<!-- MODAL ZA UPLATU (DEPOSIT) -->
+<!-- MODAL ZA UPLATU -->
 <div id="modal-deposit" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
     <div class="emerald-card p-5 rounded-2xl w-full max-w-sm space-y-4 bg-[#07090e] border border-emerald-500/30">
         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
@@ -599,7 +544,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </div>
 </div>
 
-<!-- MODAL ZA ISPLATU (WITHDRAW) -->
+<!-- MODAL ZA ISPLATU -->
 <div id="modal-withdraw" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
     <div class="emerald-card p-5 rounded-2xl w-full max-w-sm space-y-4 bg-[#07090e] border border-emerald-500/30">
         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
@@ -620,7 +565,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </div>
 </div>
 
-<!-- MODAL ZA POZIVNICE (INVITE) -->
+<!-- MODAL ZA POZIVNICE -->
 <div id="modal-invite" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50 overflow-y-auto">
     <div class="emerald-card p-5 rounded-3xl w-full max-w-sm space-y-4 bg-[#07090e] border border-emerald-500/40 my-auto relative">
         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
@@ -678,23 +623,23 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <div class="fixed bottom-0 left-0 right-0 bg-[#07090e] border-t border-gray-800 flex justify-around p-3 text-[10px] text-gray-400 z-40">
     <button id="tab-home" onclick="switchTab('tab-home')" class="flex flex-col items-center text-emerald-400">
         <i class="fas fa-house text-base"></i>
-        <span data-i18n="navHome">Home</span>
+        <span>Home</span>
     </button>
     <button id="tab-market" onclick="switchTab('tab-market')" class="flex flex-col items-center">
         <i class="fas fa-robot text-base"></i>
-        <span data-i18n="navMarket">Market</span>
+        <span>Market</span>
     </button>
     <button id="tab-team" onclick="switchTab('tab-team')" class="flex flex-col items-center">
         <i class="fas fa-users text-base"></i>
-        <span data-i18n="navTeam">Team</span>
+        <span>Team</span>
     </button>
     <button id="tab-wallet" onclick="switchTab('tab-wallet')" class="flex flex-col items-center">
         <i class="fas fa-wallet text-base"></i>
-        <span data-i18n="navAssets">Assets</span>
+        <span>Assets</span>
     </button>
     <button id="tab-profile" onclick="switchTab('tab-profile')" class="flex flex-col items-center">
         <i class="fas fa-user text-base"></i>
-        <span data-i18n="navProfile">Profile</span>
+        <span>Profile</span>
     </button>
 </div>
 
@@ -704,7 +649,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 let currentUser = null;
 let allRegisteredUsers = [];
 let withdrawRequests = [];
-let adminInterval = null;
 const ADMIN_PIN = "3112";
 
 const BIN_ID = "6ae13079ffd5d16053915188";
@@ -721,25 +665,6 @@ const MAIN_ADMIN_USER = {
     referrer: null,
     activeBots: [],
     balance: 12450.80
-};
-
-const translations = {
-    en: {
-        navHome: "Home", navMarket: "Market", navTeam: "Team", navAssets: "Assets", navProfile: "Profile",
-        goToMarket: "Go to Bot Market & License", bannerSub: "STABLE BOT PLATFORM", bannerTitle: "AZEL 60-DAY CYCLES",
-        bannerDesc: "Activate your once-in-a-lifetime $5 license, build your network across L1, L2, L3, and deploy trading bots for 60-day profitable cycles.",
-        recharge: "Recharge", withdraw: "Withdrawal", inviteFriends: "Invite Friends",
-        marketTitle: "Bot Market & License", marketSub: "Pay $5 license once, then activate your bot packages.",
-        licenseTitle: "Lifetime User License", licenseDesc: "Required once for platform access. Fee:", payLicenseBtn: "Pay $5",
-        statusUnlocked: "Status: Unlocked (Free)",
-        activateBot1: "Activate Bot 1", activateBot2: "Activate Bot 2", lockedBtn: "Locked",
-        teamTitle: "My Network Team", teamSub: "Track your referrals across 3 levels to unlock higher bot packages.",
-        line1: "Line 1 (L1)", line2: "Line 2 (L2)", line3: "Line 3 (L3)", directRef: "Direct Referrals (L1 Members)", noRef: "No direct referrals yet.",
-        assetsTitle: "Assets & Capital", availBalance: "Available Balance", frozenCap: "Frozen Capital (Active Bots)",
-        activeBotsTitle: "Active Bot Investments (60 Days)", noBots: "No active bot investments right now.",
-        upgradeBtn: "Upgrade", menuChangeEmail: "Change Email", menuLoginPass: "Login Password", menuTxPass: "Transaction Password",
-        menuFeedback: "Feedback", menuHelp: "Help Center", menuTerms: "User Terms", menuLang: "Switch Language", menuCache: "Clear Cache", logout: "Log Out"
-    }
 };
 
 window.addEventListener('DOMContentLoaded', function() {
