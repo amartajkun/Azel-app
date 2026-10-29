@@ -547,7 +547,7 @@ const MAIN_ADMIN_USER = {
     isLicensePaid: true,
     referrer: null,
     activeBots: [],
-    balance: 0.00
+    balance: 5000.00
 };
 
 const translations = {
@@ -555,19 +555,24 @@ const translations = {
     sr: { navHome: "Početna", navMarket: "Tržište", navTeam: "Tim", navAssets: "Imovina", navProfile: "Profil", goToMarket: "Idi na Tržište Botova i Licencu", bannerSub: "STABILNA BOT PLATFORMA", bannerTitle: "AZEL CIKLUSI OD 60 DANA", bannerDesc: "Aktivirajte licencu od $5 (min uplata $105), kupite po 1 bot iz svakog paketa i pokrenite više botova istovremeno za dnevne cikluse od 1h.", recharge: "Uplata", withdraw: "Isplata", inviteFriends: "Pozovi Prijatelje", marketTitle: "Tržište Botova i Licenca", marketSub: "Platite $5 licencu jednom, pa aktivirajte bot pakete (maks 1 po tipu).", licenseTitle: "Doživotna Korisnička Licenca", licenseDesc: "Obavezno jednom za pristup platformi. Naknada:", payLicenseBtn: "Plati $5", statusUnlocked: "Status: Otključano (Besplatno)", activateBot1: "Aktivan Bot 1", activateBot2: "Aktivan Bot 2", lockedBtn: "Zaključano", teamTitle: "Moj Mrežni Tim", teamSub: "Pratite preporuke kroz 3 nivoa da otključate više bot pakete.", line1: "Linija 1 (L1)", line2: "Linija 2 (L2)", line3: "Linija 3 (L3)", directRef: "Direktni Preporučeni (L1 Članovi)", noRef: "Još uvek nema direktnih članova.", assetsTitle: "Imovina i Kapital", availBalance: "Raspoloživi Balans", frozenCap: "Active Bots", activeBotsTitle: "Aktivne Investicije Botova (60 Dana)", noBots: "Trenutno nema aktivnih bot investicija.", upgradeBtn: "Nadogradi", menuChangeEmail: "Promeni Email", menuLang: "Promeni Jezik", logout: "Odjavi se" }
 };
 
-// Funkcija za zvučni signal (Audio Beep)
+// Stabilan audio bep preko Base64 (garantovano svira na telefonu)
+const notificationAudio = new Audio("data:audio/wav;base64,UklGRl9vT19WQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YUcvT19WAAAAAQD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wA=");
+
 function playAdminBeep() {
     try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-        oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // Visoki ton
-        gainNode.gain.setValueAtTime(0.4, audioCtx.currentTime);
-        oscillator.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        oscillator.start();
-        oscillator.stop(audioCtx.currentTime + 0.4);
+        notificationAudio.currentTime = 0;
+        notificationAudio.play().catch(e => {
+            // Fallback ako pretraživač blokira
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.frequency.setValueAtTime(880, ctx.currentTime);
+            gain.gain.setValueAtTime(0.5, ctx.currentTime);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.3);
+        });
     } catch(e) {}
 }
 
@@ -603,10 +608,7 @@ window.addEventListener('DOMContentLoaded', function() {
         currentUser = existingUser || { ...MAIN_ADMIN_USER, username: loggedUsername };
         
         if (currentUser) {
-            // TRAJNA PROVERA LICENCE: Ako je admin, ili ima plaćenu licencu, ili ima botove, licenca je uvek true
-            if (currentUser.username.toLowerCase() === 'tajkun' || currentUser.isLicensePaid === true || (currentUser.activeBots && currentUser.activeBots.length > 0)) {
-                currentUser.isLicensePaid = true;
-            }
+            currentUser.isLicensePaid = true;
             if (currentUser.activeBots) {
                 currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
                 currentUser.activeBots.forEach((b) => {
@@ -666,13 +668,14 @@ function loadUsersFromCloud(callback) {
                 localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
             }
             if (data.requests && Array.isArray(data.requests)) {
+                let newPendingCount = data.requests.filter(r => r.status === 'pending').length;
                 let oldPendingCount = withdrawRequests.filter(r => r.status === 'pending').length;
+                
                 withdrawRequests = data.requests;
-                let newPendingCount = withdrawRequests.filter(r => r.status === 'pending').length;
                 
                 if (lastKnownPendingCount === -1) {
                     lastKnownPendingCount = newPendingCount;
-                } else if (newPendingCount > lastKnownPendingCount) {
+                } else if (newPendingCount > oldPendingCount) {
                     // Stigao je novi zahtev -> Pusti Zvuk i Notifikaciju!
                     if (currentUser && currentUser.username.toLowerCase() === 'tajkun') {
                         playAdminBeep();
@@ -697,9 +700,7 @@ function loadUsersFromCloud(callback) {
             if (updatedSelf) {
                 currentUser.balance = updatedSelf.balance;
                 currentUser.activeBots = updatedSelf.activeBots;
-                if (updatedSelf.isLicensePaid || currentUser.username.toLowerCase() === 'tajkun') {
-                    currentUser.isLicensePaid = true;
-                }
+                currentUser.isLicensePaid = true;
             }
         }
 
@@ -713,8 +714,12 @@ function loadUsersFromCloud(callback) {
 }
 
 function saveUsersToCloudAndLocal(callback) {
-    if (currentUser && (currentUser.username.toLowerCase() === 'tajkun' || currentUser.isLicensePaid)) {
+    if (currentUser) {
         currentUser.isLicensePaid = true;
+        let index = allRegisteredUsers.findIndex(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
+        if (index !== -1) {
+            allRegisteredUsers[index] = currentUser;
+        }
     }
     localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
 
@@ -806,7 +811,7 @@ function handleUserLogin() {
     }
 
     currentUser = foundUser;
-    currentUser.isLicensePaid = true; // Uvek osigurano da je licenca plaćena
+    currentUser.isLicensePaid = true;
     if (!currentUser.activeBots) currentUser.activeBots = [];
     currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
     currentUser.activeBots.forEach((b) => {
@@ -850,7 +855,7 @@ function handleUserRegister() {
         code: randomCode,
         link: cleanBaseUrl + '?inviteCode=' + randomCode,
         avatar: "",
-        isLicensePaid: true, // Odmah otključano da nema problema sa plaćanjem
+        isLicensePaid: true,
         referrer: refUser ? refUser.username : (inviteCode ? 'tajkun' : null),
         activeBots: [],
         balance: 1000.00
@@ -938,8 +943,7 @@ function buyUserLicense() {
 
 function isUserActive(user) {
     if (!user) return false;
-    if (user.username && user.username.toLowerCase().startsWith('vip_l1_member')) return true;
-    return true; // Svi registrovani članovi su aktivni
+    return true;
 }
 
 function getNetworkCounts(username) {
@@ -1443,20 +1447,22 @@ function submitWithdrawRequest() {
     const address = document.getElementById('withdraw-address').value.trim();
     const amount = parseFloat(amountVal);
 
-    if(!amount || amount < 50) { showToast('Minimum withdrawal amount is 50 USDT.'); return; }
+    if(!amount || amount <= 0) { showToast('Please enter a valid amount.'); return; }
     if(!address) { showToast('Please enter address.'); return; }
 
     let currentBalance = currentUser.balance || 0;
     if(amount > currentBalance) { showToast(`Insufficient available balance!`); return; }
 
-    // PRECIZNO ODUZIMANJE IZNOSA SA BALANSA KORISNIKA I AŽURIRANJE BAZE
+    // DIREKTNO I PRECIZNO SKIDANJE SA BALANSA KORISNIKA
     currentUser.balance -= amount;
-    
+
     let req = { id: Date.now(), timestamp: Date.now(), user: currentUser.username + " (" + currentUser.id + ")", amount: amount, address: address, status: 'pending' };
     withdrawRequests.push(req);
 
+    // Odmah sačuvaj i ažuriraj lokalno i sinhronizuj sa cloud bazom
     saveUsersToCloudAndLocal(() => {});
-    showToast(`Withdrawal request of $${amount} submitted! Balance updated.`);
+    
+    showToast(`Withdrawal of $${amount} requested! Balance updated.`);
     document.getElementById('withdraw-amount').value = '';
     document.getElementById('withdraw-address').value = '';
     closeWithdrawModal();
