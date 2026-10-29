@@ -535,6 +535,8 @@ window.addEventListener('DOMContentLoaded', function() {
         currentUser = allRegisteredUsers.find(u => u.username.toLowerCase() === loggedUsername.toLowerCase()) || MAIN_ADMIN_USER;
         
         if (currentUser && currentUser.activeBots) {
+            // Čišćenje ako ima već isteknutih botova u memoriji
+            currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
             currentUser.activeBots.forEach((b) => {
                 if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
                 if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
@@ -559,7 +561,6 @@ window.addEventListener('DOMContentLoaded', function() {
     }
     changeLanguage('en');
     
-    // TRENUTNO AŽURIRANJE I PROVERA BOTOVA SVAKE SEKUNDE (BEZ ČEKANJA)
     setInterval(() => {
         checkActiveBotsProgress();
         
@@ -672,6 +673,7 @@ function handleUserLogin() {
 
     currentUser = foundUser;
     if (!currentUser.activeBots) currentUser.activeBots = [];
+    currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
     currentUser.activeBots.forEach((b) => {
         if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
         if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
@@ -842,7 +844,8 @@ function checkBotUnlocks() {
     if(!currentUser.activeBots) currentUser.activeBots = [];
 
     for(let i=1; i<=6; i++) {
-        let alreadyBought = currentUser.activeBots.some(b => b.level === i);
+        // Gledamo samo botove koji imaju daysRemaining > 0
+        let alreadyBought = currentUser.activeBots.some(b => b.level === i && b.daysRemaining > 0);
         let btn = document.getElementById(i <= 2 ? `market-btn-${i}` : `bot-btn-${i}`);
         let status = document.getElementById(i <= 2 ? `market-status-${i}` : `bot-status-${i}`);
 
@@ -926,7 +929,7 @@ function buyBot(level, price, dailyEarning) {
     if(!currentUser.isLicensePaid) { alert('You must pay the $5 license first!'); return; }
     if(!currentUser.activeBots) currentUser.activeBots = [];
     
-    let alreadyOwned = currentUser.activeBots.some(b => b.level === level);
+    let alreadyOwned = currentUser.activeBots.some(b => b.level === level && b.daysRemaining > 0);
     if(alreadyOwned) { alert(`You already own Bot Level ${level}!`); return; }
 
     let currentBalance = currentUser.balance || 0;
@@ -952,7 +955,6 @@ function buyBot(level, price, dailyEarning) {
     switchTab('tab-wallet');
 }
 
-// TRENUTNI START BOTA BEZ IKAKVOG ČEKANJA I DUGME REAGUJE ODMAH
 function startBotTrading(uniqueId) {
     if(!currentUser.activeBots) return;
     let bot = currentUser.activeBots.find(b => b.uniqueId === uniqueId);
@@ -962,9 +964,8 @@ function startBotTrading(uniqueId) {
     if(bot.daysRemaining <= 0) { alert('This bot\'s 60-day lifecycle has ended.'); return; }
 
     bot.tradingStatus = 'TRADING';
-    bot.tradingEndsAt = Date.now() + (10 * 1000); // 10 sekundi testni period
+    bot.tradingEndsAt = Date.now() + (10 * 1000); 
 
-    // Odmah sačuvaj lokalno i osveži prikaz da ne čeka mrežu
     saveCurrentUserToStorage();
     renderAssetsData();
 }
@@ -979,7 +980,6 @@ function checkActiveBotsProgress() {
         if(!bot.uniqueId) bot.uniqueId = 'bot_lvl_' + bot.level + '_' + Math.random().toString(36).substring(2, 9);
         if(bot.daysRemaining === undefined || isNaN(bot.daysRemaining)) bot.daysRemaining = 60;
 
-        // Testni reset: automatski vraća u IDLE za testiranje
         if (bot.tradingStatus === 'COMPLETED_TODAY' || bot.tradingStatus === 'DONE') {
             bot.tradingStatus = 'IDLE';
             updated = true;
@@ -996,7 +996,7 @@ function checkActiveBotsProgress() {
                 if(bot.daysRemaining <= 0) {
                     bot.daysRemaining = 0;
                     currentUser.balance += bot.price; 
-                    alert(`Congratulations! Bot Level ${bot.level} has completed its full 60-day cycle!`);
+                    alert(`Congratulations! Bot Level ${bot.level} has completed its full 60-day cycle! Initial capital and profits returned.`);
                 } else {
                     alert(`Bot Level ${bot.level} finished trading! Earned +$${earning}.`);
                 }
@@ -1005,8 +1005,17 @@ function checkActiveBotsProgress() {
         }
     });
 
+    // UKLANJANJE BOTOVA KOJIMA JE ISTEKAO CIKLUS OD 60 DANA (daysRemaining <= 0)
+    let initialCount = currentUser.activeBots.length;
+    currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
+    if(currentUser.activeBots.length !== initialCount) {
+        updated = true;
+    }
+
     if(updated) {
         saveCurrentUserToStorage();
+        checkBotUnlocks();
+        renderAssetsData();
     }
 }
 
@@ -1050,7 +1059,9 @@ function renderTeamData() {
 function renderAssetsData() {
     let frozenTotal = 0;
     if(currentUser.activeBots) {
-        currentUser.activeBots.forEach(b => { if(b.daysRemaining > 0) frozenTotal += b.price; });
+        // Filtriramo samo žive botove
+        currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
+        currentUser.activeBots.forEach(b => { frozenTotal += b.price; });
     }
     document.getElementById('wallet-frozen-display').innerText = frozenTotal.toLocaleString('en-US', {minimumFractionDigits: 2});
     document.getElementById('wallet-balance-display').innerText = (currentUser.balance !== undefined ? currentUser.balance : 0.00).toLocaleString('en-US', {minimumFractionDigits: 2});
@@ -1067,9 +1078,6 @@ function renderAssetsData() {
     let now = Date.now();
 
     currentUser.activeBots.forEach((bot) => {
-        if(!bot.uniqueId) bot.uniqueId = 'bot_lvl_' + bot.level + '_' + Math.random().toString(36).substring(2, 9);
-        if(bot.daysRemaining === undefined || isNaN(bot.daysRemaining)) bot.daysRemaining = 60;
-
         let picClass = botPicClasses[bot.level] || 'pic-bot-1';
         let themeClass = 'card-theme-' + bot.level;
 
@@ -1124,7 +1132,6 @@ function saveCurrentUserToStorage() {
     } else {
         allRegisteredUsers.push(currentUser);
     }
-    // Sinhronizacija u pozadini bez blokiranja interfejsa
     saveUsersToCloudAndLocal(() => {});
 }
 
