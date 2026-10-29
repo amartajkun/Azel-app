@@ -554,7 +554,6 @@ const translations = {
     sr: { navHome: "Početna", navMarket: "Tržište", navTeam: "Tim", navAssets: "Imovina", navProfile: "Profil", goToMarket: "Idi na Tržište Botova i Licencu", bannerSub: "STABILNA BOT PLATFORMA", bannerTitle: "AZEL CIKLUSI OD 60 DANA", bannerDesc: "Aktivirajte licencu od $5 (min uplata $105), kupite po 1 bot iz svakog paketa i pokrenite više botova istovremeno za dnevne cikluse od 1h.", recharge: "Uplata", withdraw: "Isplata", inviteFriends: "Pozovi Prijatelje", marketTitle: "Tržište Botova i Licenca", marketSub: "Platite $5 licencu jednom, pa aktivirajte bot pakete (maks 1 po tipu).", licenseTitle: "Doživotna Korisnička Licenca", licenseDesc: "Obavezno jednom za pristup platformi. Naknada:", payLicenseBtn: "Plati $5", statusUnlocked: "Status: Otključano (Besplatno)", activateBot1: "Aktivan Bot 1", activateBot2: "Aktivan Bot 2", lockedBtn: "Zaključano", teamTitle: "Moj Mrežni Tim", teamSub: "Pratite preporuke kroz 3 nivoa da otključate više bot pakete.", line1: "Linija 1 (L1)", line2: "Linija 2 (L2)", line3: "Linija 3 (L3)", directRef: "Direktni Preporučeni (L1 Članovi)", noRef: "Još uvek nema direktnih članova.", assetsTitle: "Imovina i Kapital", availBalance: "Raspoloživi Balans", frozenCap: "Active Bots", activeBotsTitle: "Aktivne Investicije Botova (60 Dana)", noBots: "Trenutno nema aktivnih bot investicija.", upgradeBtn: "Nadogradi", menuChangeEmail: "Promeni Email", menuLang: "Promeni Jezik", logout: "Odjavi se" }
 };
 
-// Funkcija za elegantne plivajuće notifikacije
 function showToast(message) {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
@@ -575,7 +574,6 @@ window.addEventListener('DOMContentLoaded', function() {
         try { allRegisteredUsers = JSON.parse(localSavedUsers); } catch(e){}
     }
 
-    // KORISTIMO localStorage UMESTO sessionStorage DA SE NALOG NE BRIŠE KADA OSVEŽIŠ VERCEL ILI ZATVORIŠ APLIKACIJU
     const isLogged = localStorage.getItem('azel_logged_in');
     const loggedUsername = localStorage.getItem('azel_current_username');
 
@@ -600,16 +598,24 @@ window.addEventListener('DOMContentLoaded', function() {
         document.getElementById('main-app-wrapper').style.display = 'none';
     }
 
-    // AUTOMATSKO OSVEŽAVANJE I SINHRONIZACIJA U POZADINI TAČNO NA SVAKI 1 SEKUND
+    // GLAVNA PETLJA: RADI TAČNO NA SVAKU 1 SEKUNDU I OSVEŽAVA I EKRAN I BOTOVE
     setInterval(() => {
-        loadUsersFromCloud(() => {
-            checkActiveBotsProgress();
-            const assetsPage = document.getElementById('page-wallet');
-            if (assetsPage && assetsPage.classList.contains('active')) {
-                renderAssetsData();
-            }
-        });
+        checkActiveBotsProgress();
+        
+        const assetsPage = document.getElementById('page-wallet');
+        if (assetsPage && assetsPage.classList.contains('active')) {
+            renderAssetsData();
+        }
+        const marketPage = document.getElementById('page-market');
+        if (marketPage && marketPage.classList.contains('active')) {
+            checkBotUnlocks();
+        }
     }, 1000);
+
+    // POZADINSKA SINHRONIZACIJA SA CLOUDOM NA SVAKIH 5 SEKUNDI DA NE OPTEREĆUJEMO SERVER PREVIŠE
+    setInterval(() => {
+        loadUsersFromCloud(() => {});
+    }, 5000);
 
     const urlParams = new URLSearchParams(window.location.search);
     const refCode = urlParams.get('inviteCode') || urlParams.get('ref');
@@ -733,7 +739,6 @@ function handleUserLogin() {
     checkActiveBotsProgress();
     saveCurrentUserToStorage();
 
-    // ČUVAMO U LOKALNOJ MEMORIJI DA SE NALOG PAMTI ČAK I NAKON ZATVARANJA APLIKACIJE NA TELEFONU
     localStorage.setItem('azel_logged_in', 'true');
     localStorage.setItem('azel_current_username', currentUser.username);
     showMainApp();
@@ -1098,7 +1103,6 @@ function checkActiveBotsProgress() {
     if(updated) {
         saveCurrentUserToStorage();
         checkBotUnlocks();
-        renderAssetsData();
     }
 }
 
@@ -1432,7 +1436,7 @@ function submitWithdrawRequest() {
     withdrawRequests.push(req);
 
     saveUsersToCloudAndLocal(() => {});
-    showToast('Withdrawal request submitted successfully!');
+    alert('Withdrawal request submitted successfully!');
     document.getElementById('withdraw-amount').value = '';
     document.getElementById('withdraw-address').value = '';
     closeWithdrawModal();
