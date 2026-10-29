@@ -719,45 +719,43 @@ function handleUserRegister() {
     if(!user || !email || !pass) { alert('Please fill in all required fields!'); return; }
     if(pass !== confirmPass) { alert('Passwords do not match!'); return; }
 
-    loadUsersFromCloud(() => {
-        if (allRegisteredUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { 
-            alert('Username already exists!'); 
-            return; 
-        }
+    if (allRegisteredUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { 
+        alert('Username already exists!'); 
+        return; 
+    }
 
-        let refUser = null;
-        if (inviteCode) {
-            refUser = allRegisteredUsers.find(u => u.code.toUpperCase() === inviteCode.toUpperCase());
-        }
+    let refUser = null;
+    if (inviteCode) {
+        refUser = allRegisteredUsers.find(u => u.code.toUpperCase() === inviteCode.toUpperCase());
+    }
 
-        let randomId = Math.floor(100000 + Math.random() * 900000); 
-        let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
-        let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
+    let randomId = Math.floor(100000 + Math.random() * 900000); 
+    let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
+    let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
 
-        let newUser = {
-            id: randomId,
-            username: user,
-            email: email,
-            password: pass,
-            code: randomCode,
-            link: cleanBaseUrl + '?inviteCode=' + randomCode,
-            avatar: "",
-            isLicensePaid: false,
-            referrer: refUser ? refUser.username : (inviteCode ? 'tajkun' : null),
-            activeBots: [],
-            balance: 0.00
-        };
+    let newUser = {
+        id: randomId,
+        username: user,
+        email: email,
+        password: pass,
+        code: randomCode,
+        link: cleanBaseUrl + '?inviteCode=' + randomCode,
+        avatar: "",
+        isLicensePaid: false,
+        referrer: refUser ? refUser.username : (inviteCode ? 'tajkun' : null),
+        activeBots: [],
+        balance: 0.00
+    };
 
-        allRegisteredUsers.push(newUser);
-        saveUsersToCloudQuiet();
-        
-        currentUser = newUser;
-        sessionStorage.setItem('azel_logged_in', 'true');
-        sessionStorage.setItem('azel_current_username', user);
+    allRegisteredUsers.push(newUser);
+    saveUsersToCloudQuiet();
+    
+    currentUser = newUser;
+    sessionStorage.setItem('azel_logged_in', 'true');
+    sessionStorage.setItem('azel_current_username', user);
 
-        alert('Successfully registered! Your balance is $0.00.');
-        showMainApp();
-    });
+    alert('Successfully registered! Your balance is $0.00.');
+    showMainApp();
 }
 
 function showMainApp() {
