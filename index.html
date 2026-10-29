@@ -323,7 +323,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     
     <div class="emerald-card p-4 rounded-2xl space-y-3">
         <h3 class="text-xs font-bold text-white border-b border-gray-800 pb-2" data-i18n="activeDirectRef">Active Direct Referrals (L1 Active Members)</h3>
-        <div id="team-l1-list" class="space-y-2 text-xs max-h-48 overflow-y-auto"><p class="text-gray-500 text-center py-2" data-i18n="noDirectRef">No active direct referrals yet.</p></div>
+        <div id="team-l1-active-list" class="space-y-2 text-xs max-h-48 overflow-y-auto"><p class="text-gray-500 text-center py-2" data-i18n="noDirectRef">No active direct referrals yet.</p></div>
     </div>
 
     <div class="emerald-card p-4 rounded-2xl space-y-3 border-amber-500/30">
@@ -485,7 +485,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             <button onclick="closeDepositModal()" class="text-gray-400 hover:text-white text-sm cursor-pointer"><i class="fas fa-times"></i></button>
         </div>
         
-        <!-- Tabs za mrežu -->
         <div class="flex bg-gray-900 p-1 rounded-xl border border-gray-800 text-xs font-bold">
             <button id="dep-tab-trc" onclick="switchDepositNetwork('trc20')" class="flex-1 py-1.5 rounded-lg bg-emerald-500 text-black transition cursor-pointer">TRC-20</button>
             <button id="dep-tab-bep" onclick="switchDepositNetwork('bep20')" class="flex-1 py-1.5 rounded-lg text-gray-400 transition cursor-pointer">BEP-20 (BSC)</button>
@@ -1145,7 +1144,7 @@ function handleUserLogin() {
                 isLicensePaid: false,
                 referrer: 'tajkun',
                 activeBots: [],
-                balance: 1000.00
+                balance: 0.00
             };
             allRegisteredUsers.push(foundUser);
         }
@@ -1160,6 +1159,7 @@ function handleUserLogin() {
     if (currentUser.username.toLowerCase() === 'tajkun') currentUser.isLicensePaid = true;
     if (!currentUser.withdrawPin) currentUser.withdrawPin = "";
     if (!currentUser.activeBots) currentUser.activeBots = [];
+    if (currentUser.balance === undefined) currentUser.balance = 0.00;
     currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
     currentUser.activeBots.forEach((b) => {
         if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
@@ -1208,7 +1208,7 @@ function handleUserRegister() {
         isLicensePaid: false,
         referrer: refUser ? refUser.username : (inviteCode ? 'tajkun' : null),
         activeBots: [],
-        balance: 1000.00
+        balance: 0.00
     };
 
     allRegisteredUsers.push(newUser);
@@ -1275,6 +1275,9 @@ function simulateUserDeposit() {
 
     if(currentUser.balance === undefined) currentUser.balance = 0;
     currentUser.balance += amt;
+    
+    // Ako uplati i ima referer, proveri da li je već postao aktivan (kupio licencu ili bot)
+    // Depozit samo stavlja sredstva, ali aktivnost člana se računa kada plati licencu ili bot paket.
     saveCurrentUserToStorage();
     updateAppUI();
     renderAssetsData();
@@ -1306,6 +1309,9 @@ function buyUserLicense() {
     currentUser.balance -= 5;
     currentUser.isLicensePaid = true;
     
+    // Dodeljivanje $1 bonusa preporučiocu (referrer-u) jer je član postao aktivan
+    checkAndGiveReferralBonus();
+
     saveCurrentUserToStorage();
     updateAppUI();
     renderAssetsData();
@@ -1315,7 +1321,20 @@ function buyUserLicense() {
 function isUserActive(user) {
     if (!user) return false;
     if (user.username && user.username.toLowerCase().startsWith('vip_l1_member')) return true;
-    return user.isLicensePaid === true;
+    return user.isLicensePaid === true || (user.activeBots && user.activeBots.length > 0);
+}
+
+function checkAndGiveReferralBonus() {
+    if (currentUser.referrer) {
+        let refUser = allRegisteredUsers.find(u => u.username.toLowerCase() === currentUser.referrer.toLowerCase());
+        if (refUser) {
+            // Proveri da li je već dobio bonus za ovog korisnika da se ne duplo knjiži
+            if (!currentUser.bonusGiven) {
+                refUser.balance = (refUser.balance || 0) + 1.00;
+                currentUser.bonusGiven = true;
+            }
+        }
+    }
 }
 
 function getNetworkCounts(username) {
@@ -1458,12 +1477,9 @@ function buyBot(level, price, dailyEarning) {
         lastTradedDate: ""
     });
 
-    // Provera da li ima referer da mu da $1 bonus ako je paket >= $100
-    if (price >= 100 && currentUser.referrer) {
-        let refUser = allRegisteredUsers.find(u => u.username.toLowerCase() === currentUser.referrer.toLowerCase());
-        if (refUser) {
-            refUser.balance = (refUser.balance || 0) + 1.00;
-        }
+    // Provera za bonus od $1 ako kupi bot paket >= 100$
+    if (price >= 100) {
+        checkAndGiveReferralBonus();
     }
 
     saveCurrentUserToStorage();
@@ -1567,7 +1583,7 @@ function renderTeamData() {
     document.getElementById('count-l2').innerText = net.l2Count;
     document.getElementById('count-l3').innerText = net.l3Count;
 
-    const l1List = document.getElementById('team-l1-list');
+    const l1List = document.getElementById('team-l1-active-list');
     if(net.l1Members.length === 0) {
         l1List.innerHTML = `<p class="text-gray-500 text-center py-2">${currentLangData.noDirectRef || "No active direct referrals yet."}</p>`;
     } else {
