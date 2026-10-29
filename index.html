@@ -559,20 +559,14 @@ window.addEventListener('DOMContentLoaded', function() {
     }
     changeLanguage('en');
     
+    // TRENUTNO AŽURIRANJE I PROVERA BOTOVA SVAKE SEKUNDE (BEZ ČEKANJA)
     setInterval(() => {
-        silentLoadUsersFromCloud(() => {
-            checkActiveBotsProgress();
-            
-            const teamPage = document.getElementById('page-team');
-            if (teamPage && teamPage.classList.contains('active')) {
-                renderTeamData();
-            }
-
-            const assetsPage = document.getElementById('page-wallet');
-            if (assetsPage && assetsPage.classList.contains('active')) {
-                renderAssetsData();
-            }
-        });
+        checkActiveBotsProgress();
+        
+        const assetsPage = document.getElementById('page-wallet');
+        if (assetsPage && assetsPage.classList.contains('active')) {
+            renderAssetsData();
+        }
     }, 1000);
 });
 
@@ -608,26 +602,6 @@ function loadUsersFromCloud(callback) {
         allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [MAIN_ADMIN_USER];
         if (callback) callback();
     });
-}
-
-function silentLoadUsersFromCloud(callback) {
-    fetch(SCRIPT_URL)
-    .then(res => res.json())
-    .then(data => {
-        if (data && data.users) {
-            allRegisteredUsers = Array.isArray(data.users) ? data.users : [];
-            withdrawRequests = Array.isArray(data.requests) ? data.requests : [];
-            localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
-        }
-        if (currentUser) {
-            let updatedSelf = allRegisteredUsers.find(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
-            if (updatedSelf) {
-                currentUser = updatedSelf;
-            }
-        }
-        if (callback) callback();
-    })
-    .catch(err => {});
 }
 
 function saveUsersToCloudAndLocal(callback) {
@@ -693,16 +667,8 @@ function handleUserLogin() {
     if(!user || !pass) { alert('Please enter username and password!'); return; }
 
     let foundUser = allRegisteredUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
-    
-    if (!foundUser) { 
-        alert('Account does not exist! Please register first.'); 
-        return; 
-    }
-
-    if (foundUser.password !== pass) {
-        alert('Incorrect password! Please try again.');
-        return; 
-    }
+    if (!foundUser) { alert('Account does not exist! Please register first.'); return; }
+    if (foundUser.password !== pass) { alert('Incorrect password! Please try again.'); return; }
 
     currentUser = foundUser;
     if (!currentUser.activeBots) currentUser.activeBots = [];
@@ -733,11 +699,7 @@ function handleUserRegister() {
         return; 
     }
 
-    let refUser = null;
-    if (inviteCode) {
-        refUser = allRegisteredUsers.find(u => u.code.toUpperCase() === inviteCode.toUpperCase());
-    }
-
+    let refUser = inviteCode ? allRegisteredUsers.find(u => u.code.toUpperCase() === inviteCode.toUpperCase()) : null;
     let randomId = Math.floor(100000 + Math.random() * 900000); 
     let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
     let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
@@ -757,7 +719,6 @@ function handleUserRegister() {
     };
 
     allRegisteredUsers.push(newUser);
-    
     currentUser = newUser;
     sessionStorage.setItem('azel_logged_in', 'true');
     sessionStorage.setItem('azel_current_username', user);
@@ -847,19 +808,15 @@ function buyUserLicense() {
 function isUserActive(user) {
     if (!user) return false;
     if (user.username && user.username.toLowerCase().startsWith('vip_l1_member')) return true;
-    
     let hasPaidLicense = user.isLicensePaid === true;
     let hasBot1Or2 = user.activeBots && user.activeBots.some(b => (b.level === 1 || b.level === 2) && b.daysRemaining > 0);
-    
     return hasPaidLicense && hasBot1Or2;
 }
 
 function getNetworkCounts(username) {
     let allL1 = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === username.toLowerCase());
-    
     let l1Members = allL1.filter(u => isUserActive(u));
     let inactiveL1Members = allL1.filter(u => !isUserActive(u));
-    
     let l1Count = l1Members.length;
 
     let l2Count = 0;
@@ -967,20 +924,13 @@ function lockBotUI(level, reqText) {
 
 function buyBot(level, price, dailyEarning) {
     if(!currentUser.isLicensePaid) { alert('You must pay the $5 license first!'); return; }
-    
     if(!currentUser.activeBots) currentUser.activeBots = [];
     
     let alreadyOwned = currentUser.activeBots.some(b => b.level === level);
-    if(alreadyOwned) {
-        alert(`You already own Bot Level ${level}! You can only purchase 1 of each bot package.`);
-        return;
-    }
+    if(alreadyOwned) { alert(`You already own Bot Level ${level}!`); return; }
 
     let currentBalance = currentUser.balance || 0;
-    if(currentBalance < price) {
-        alert(`Insufficient balance to purchase Bot ${level}! You need $${price}, but your available balance is $${currentBalance.toFixed(2)}. Please recharge.`);
-        return;
-    }
+    if(currentBalance < price) { alert(`Insufficient balance! You need $${price}.`); return; }
 
     currentUser.balance -= price;
     currentUser.isLicensePaid = true;
@@ -992,35 +942,29 @@ function buyBot(level, price, dailyEarning) {
         dailyEarning: dailyEarning, 
         daysRemaining: 60, 
         tradingStatus: 'IDLE', 
-        tradingEndsAt: 0,
-        lastTradedDate: ""
+        tradingEndsAt: 0
     });
 
     saveCurrentUserToStorage();
-    alert(`Bot ${level} ($${price}) successfully purchased! Your account is now fully active in the network.`);
+    alert(`Bot ${level} ($${price}) successfully purchased!`);
     renderAssetsData();
     checkBotUnlocks();
     switchTab('tab-wallet');
 }
 
+// TRENUTNI START BOTA BEZ IKAKVOG ČEKANJA I DUGME REAGUJE ODMAH
 function startBotTrading(uniqueId) {
     if(!currentUser.activeBots) return;
     let bot = currentUser.activeBots.find(b => b.uniqueId === uniqueId);
     if(!bot) return;
 
-    if(bot.tradingStatus === 'TRADING') {
-        alert('This specific bot is already trading for today!');
-        return;
-    }
-
-    if(bot.daysRemaining <= 0) {
-        alert('This bot\'s 60-day lifecycle has ended.');
-        return;
-    }
+    if(bot.tradingStatus === 'TRADING') return;
+    if(bot.daysRemaining <= 0) { alert('This bot\'s 60-day lifecycle has ended.'); return; }
 
     bot.tradingStatus = 'TRADING';
-    bot.tradingEndsAt = Date.now() + (10 * 1000); 
+    bot.tradingEndsAt = Date.now() + (10 * 1000); // 10 sekundi testni period
 
+    // Odmah sačuvaj lokalno i osveži prikaz da ne čeka mrežu
     saveCurrentUserToStorage();
     renderAssetsData();
 }
@@ -1035,7 +979,7 @@ function checkActiveBotsProgress() {
         if(!bot.uniqueId) bot.uniqueId = 'bot_lvl_' + bot.level + '_' + Math.random().toString(36).substring(2, 9);
         if(bot.daysRemaining === undefined || isNaN(bot.daysRemaining)) bot.daysRemaining = 60;
 
-        // TESTNI PERIOD: Vremenska blokada je uklonjena, botovi se mogu odmah resetovati u IDLE
+        // Testni reset: automatski vraća u IDLE za testiranje
         if (bot.tradingStatus === 'COMPLETED_TODAY' || bot.tradingStatus === 'DONE') {
             bot.tradingStatus = 'IDLE';
             updated = true;
@@ -1044,7 +988,6 @@ function checkActiveBotsProgress() {
         if(bot.tradingStatus === 'TRADING') {
             if(now >= bot.tradingEndsAt) {
                 bot.tradingStatus = 'COMPLETED_TODAY';
-                
                 bot.daysRemaining = Math.max(0, bot.daysRemaining - 1); 
                 
                 let earning = bot.dailyEarning;
@@ -1053,9 +996,9 @@ function checkActiveBotsProgress() {
                 if(bot.daysRemaining <= 0) {
                     bot.daysRemaining = 0;
                     currentUser.balance += bot.price; 
-                    alert(`Congratulations! Bot Level ${bot.level} has completed its full 60-day cycle! Initial capital and final profits returned.`);
+                    alert(`Congratulations! Bot Level ${bot.level} has completed its full 60-day cycle!`);
                 } else {
-                    alert(`Bot Level ${bot.level} finished trading! Earned +$${earning}. Days remaining: ${bot.daysRemaining}.`);
+                    alert(`Bot Level ${bot.level} finished trading! Earned +$${earning}.`);
                 }
                 updated = true;
             }
@@ -1080,7 +1023,7 @@ function renderTeamData() {
         let html = '';
         net.l1Members.forEach(m => {
             html += `<div class="bg-gray-900 p-2.5 rounded-xl border border-emerald-500/30 flex justify-between items-center">
-                <span class="text-white font-bold">${m.username} <span class="text-[9px] text-emerald-400 bg-emerald-950 px-1.5 py-0.5 rounded ml-1">Active (License + Bot)</span></span>
+                <span class="text-white font-bold">${m.username} <span class="text-[9px] text-emerald-400 bg-emerald-950 px-1.5 py-0.5 rounded ml-1">Active</span></span>
                 <span class="text-emerald-400 text-[10px]">ID: ${m.id}</span>
             </div>`;
         });
@@ -1095,7 +1038,7 @@ function renderTeamData() {
             let inHtml = '';
             net.inactiveL1Members.forEach(m => {
                 inHtml += `<div class="bg-gray-900 p-2.5 rounded-xl border border-amber-500/30 flex justify-between items-center">
-                    <span class="text-white font-bold">${m.username} <span class="text-[9px] text-amber-400 bg-amber-950 px-1.5 py-0.5 rounded ml-1">Inactive (Pending Bot/License)</span></span>
+                    <span class="text-white font-bold">${m.username} <span class="text-[9px] text-amber-400 bg-amber-950 px-1.5 py-0.5 rounded ml-1">Inactive</span></span>
                     <span class="text-amber-400 text-[10px]">ID: ${m.id}</span>
                 </div>`;
             });
@@ -1119,15 +1062,7 @@ function renderAssetsData() {
         return;
     }
 
-    const botPicClasses = {
-        1: 'pic-bot-1',
-        2: 'pic-bot-2',
-        3: 'pic-bot-3',
-        4: 'pic-bot-4',
-        5: 'pic-bot-5',
-        6: 'pic-bot-6'
-    };
-
+    const botPicClasses = { 1: 'pic-bot-1', 2: 'pic-bot-2', 3: 'pic-bot-3', 4: 'pic-bot-4', 5: 'pic-bot-5', 6: 'pic-bot-6' };
     let html = '';
     let now = Date.now();
 
@@ -1189,6 +1124,7 @@ function saveCurrentUserToStorage() {
     } else {
         allRegisteredUsers.push(currentUser);
     }
+    // Sinhronizacija u pozadini bez blokiranja interfejsa
     saveUsersToCloudAndLocal(() => {});
 }
 
@@ -1239,18 +1175,9 @@ function saveNewPassword() {
     const newPass = document.getElementById('new-password-input').value.trim();
     const confirmPass = document.getElementById('confirm-password-input').value.trim();
 
-    if (!currentPass || !newPass || !confirmPass) {
-        alert('Please fill in all password fields!');
-        return;
-    }
-    if (currentUser.password && currentUser.password !== currentPass) {
-        alert('Incorrect current password!');
-        return;
-    }
-    if (newPass !== confirmPass) {
-        alert('New passwords do not match!');
-        return;
-    }
+    if (!currentPass || !newPass || !confirmPass) { alert('Please fill in all password fields!'); return; }
+    if (currentUser.password && currentUser.password !== currentPass) { alert('Incorrect current password!'); return; }
+    if (newPass !== confirmPass) { alert('New passwords do not match!'); return; }
 
     currentUser.password = newPass;
     saveCurrentUserToStorage();
@@ -1272,13 +1199,9 @@ function changeLanguage(lang) {
 }
 
 function openAdminPinModal() {
-    if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') {
-        alert('Access denied. Admin only.');
-        return;
-    }
+    if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') { alert('Access denied.'); return; }
     document.getElementById('modal-admin-pin').style.display = 'flex';
 }
-
 function closeAdminPinModal() { document.getElementById('modal-admin-pin').style.display = 'none'; document.getElementById('admin-pin-input').value = ''; }
 
 function verifyAdminPin() {
@@ -1298,10 +1221,7 @@ function openAdminPanel() {
     document.getElementById('modal-admin-panel').style.display = 'flex';
     renderAdminWithdrawList();
 }
-
-function closeAdminPanel() { 
-    document.getElementById('modal-admin-panel').style.display = 'none'; 
-}
+function closeAdminPanel() { document.getElementById('modal-admin-panel').style.display = 'none'; }
 
 function formatDuration(ms) {
     if(ms <= 0) return "00h 00m 00s";
@@ -1328,15 +1248,13 @@ function renderAdminWithdrawList() {
 
     const now = Date.now();
     const DURATION_72H = 72 * 60 * 60 * 1000;
-
     let html = '';
+
     withdrawRequests.forEach((req, idx) => {
         let createdAt = req.timestamp || req.id;
         let elapsed = now - createdAt;
         let remaining = DURATION_72H - elapsed;
-
         let timeStatusHtml = '';
-        let approveBtnText = "Approve";
         let approveBtnColor = "bg-emerald-500 text-black";
 
         if (req.status === 'pending') {
@@ -1346,7 +1264,6 @@ function renderAdminWithdrawList() {
                         <span class="text-amber-400 font-bold"><i class="far fa-clock"></i> 72h Lock Active</span>
                         <span class="text-emerald-400 font-mono font-bold">${formatDuration(remaining)} remaining</span>
                     </div>
-                    <div class="text-[9px] text-gray-400">Time passed: <strong class="text-white">${formatPassedTime(elapsed)}</strong></div>
                 `;
             } else {
                 timeStatusHtml = `
@@ -1370,9 +1287,7 @@ function renderAdminWithdrawList() {
                 <div class="flex justify-between items-center pt-1 border-t border-gray-800/80">
                     <span class="text-amber-400 text-[10px] uppercase tracking-wider font-bold">Status: ${req.status}</span>
                     ${req.status === 'pending' ? `
-                        <button onclick="approveWithdraw(${idx})" class="${approveBtnColor} px-3 py-1.5 rounded-lg font-bold text-[10px] transition active:scale-95 cursor-pointer">
-                            ${approveBtnText}
-                        </button>
+                        <button onclick="approveWithdraw(${idx})" class="${approveBtnColor} px-3 py-1.5 rounded-lg font-bold text-[10px] transition active:scale-95 cursor-pointer">Approve</button>
                     ` : `<span class="text-emerald-400 font-bold text-[10px] bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded">Approved ✓</span>`}
                 </div>
             </div>
@@ -1385,9 +1300,7 @@ function approveWithdraw(idx) {
     if(withdrawRequests[idx]) {
         withdrawRequests[idx].status = 'approved';
         withdrawRequests[idx].approvedAt = Date.now();
-        saveUsersToCloudAndLocal(() => {
-            renderAdminWithdrawList();
-        });
+        saveUsersToCloudAndLocal(() => { renderAdminWithdrawList(); });
     }
 }
 
@@ -1407,26 +1320,14 @@ function submitWithdrawRequest() {
     if(!address) { alert('Please enter address.'); return; }
 
     let currentBalance = currentUser.balance || 0;
-    if(amount > currentBalance) {
-        alert(`Insufficient available balance! You want to withdraw $${amount}, but your available balance is $${currentBalance.toFixed(2)}.`);
-        return;
-    }
+    if(amount > currentBalance) { alert(`Insufficient available balance!`); return; }
 
     currentUser.balance -= amount;
-    
-    let req = { 
-        id: Date.now(), 
-        timestamp: Date.now(),
-        user: currentUser.username + " (" + currentUser.id + ")", 
-        amount: amount, 
-        address: address, 
-        status: 'pending' 
-    };
-    
+    let req = { id: Date.now(), timestamp: Date.now(), user: currentUser.username + " (" + currentUser.id + ")", amount: amount, address: address, status: 'pending' };
     withdrawRequests.push(req);
 
     saveUsersToCloudAndLocal(() => {});
-    alert('Withdrawal request submitted successfully! Amount deducted from balance. (72h processing window)');
+    alert('Withdrawal request submitted successfully!');
     document.getElementById('withdraw-amount').value = '';
     document.getElementById('withdraw-address').value = '';
     closeWithdrawModal();
