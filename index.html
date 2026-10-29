@@ -971,6 +971,33 @@ function startBotTrading(uniqueId) {
     renderAssetsData();
 }
 
+function collectBotEarnings(uniqueId) {
+    if(!currentUser.activeBots) return;
+    let bot = currentUser.activeBots.find(b => b.uniqueId === uniqueId);
+    if(!bot) return;
+
+    if(bot.tradingStatus !== 'READY_TO_COLLECT') return;
+
+    let nowDateObj = new Date();
+    let todayStr = nowDateObj.getFullYear() + '-' + (nowDateObj.getMonth() + 1) + '-' + nowDateObj.getDate();
+
+    let earning = bot.dailyEarning;
+    currentUser.balance = (currentUser.balance || 0) + earning;
+    bot.lastTradedDate = todayStr;
+    bot.daysRemaining = Math.max(0, bot.daysRemaining - 1);
+    
+    if(bot.daysRemaining <= 0) {
+        bot.daysRemaining = 0;
+        currentUser.balance += bot.price; 
+        alert(`Congratulations! Bot Level ${bot.level} has completed its full 60-day cycle! Initial capital and profits returned.`);
+    } else {
+        bot.tradingStatus = 'COMPLETED_TODAY';
+    }
+
+    saveCurrentUserToStorage();
+    renderAssetsData();
+}
+
 function checkActiveBotsProgress() {
     if(!currentUser || !currentUser.activeBots || currentUser.activeBots.length === 0) return;
 
@@ -995,28 +1022,14 @@ function checkActiveBotsProgress() {
             }
         }
 
-        if (bot.lastTradedDate && bot.lastTradedDate !== todayStr && isAfterResetTime && bot.tradingStatus !== 'TRADING') {
+        if (bot.lastTradedDate && bot.lastTradedDate !== todayStr && isAfterResetTime && bot.tradingStatus !== 'TRADING' && bot.tradingStatus !== 'READY_TO_COLLECT') {
             bot.tradingStatus = 'IDLE';
             updated = true;
         }
 
         if(bot.tradingStatus === 'TRADING') {
             if(now >= bot.tradingEndsAt) {
-                bot.tradingStatus = 'COMPLETED_TODAY';
-                bot.lastTradedDate = todayStr;
-                
-                bot.daysRemaining = Math.max(0, bot.daysRemaining - 1); 
-                
-                let earning = bot.dailyEarning;
-                currentUser.balance = (currentUser.balance || 0) + earning; 
-
-                if(bot.daysRemaining <= 0) {
-                    bot.daysRemaining = 0;
-                    currentUser.balance += bot.price; 
-                    alert(`Congratulations! Bot Level ${bot.level} has completed its full 60-day cycle! Initial capital and profits returned.`);
-                } else {
-                    alert(`Bot Level ${bot.level} finished trading! Earned +$${earning}. Days remaining: ${bot.daysRemaining}.`);
-                }
+                bot.tradingStatus = 'READY_TO_COLLECT'; // Čeka klik na COLLECT
                 updated = true;
             }
         }
@@ -1092,12 +1105,10 @@ function renderAssetsData() {
     let html = '';
     let now = Date.now();
 
-    // Računanje vremena do sledećeg reseta (01:00 posle ponoći)
     let nowDateObj = new Date();
     let resetTime = new Date(nowDateObj);
-    resetTime.setHours(1, 0, 0, 0); // 01:00:00 danas
+    resetTime.setHours(1, 0, 0, 0);
     if (nowDateObj.getHours() >= 1) {
-        // Ako je već prošlo 1 sat posle ponoći, reset je sutra u 01:00
         resetTime.setDate(resetTime.getDate() + 1);
     }
     let msUntilReset = resetTime.getTime() - now;
@@ -1127,6 +1138,11 @@ function renderAssetsData() {
             btnText = `Trading (${sLeft}s)`;
             btnColor = "bg-amber-500 text-black cursor-wait";
             statusDisplay = `Trading session active`;
+        } else if(bot.tradingStatus === 'READY_TO_COLLECT') {
+            btnText = "COLLECT +$" + bot.dailyEarning;
+            btnColor = "bg-amber-400 hover:bg-amber-300 text-black font-extrabold animate-pulse shadow-lg shadow-amber-500/30";
+            btnAction = `onclick="collectBotEarnings('${bot.uniqueId}')"`;
+            statusDisplay = `Trading completed! Collect profit.`;
         } else if(isCompletedToday) {
             btnText = `Ready in ${countdownStr}`;
             btnColor = "bg-gray-800 text-gray-400 cursor-not-allowed text-[10px]";
