@@ -135,7 +135,14 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             </div>
             <div>
                 <label class="text-[10px] text-emerald-400 font-bold mb-1 block" data-i18n="emailLabel">Email Address</label>
-                <input type="email" id="reg-email-input" placeholder="Enter email..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
+                <div class="flex gap-2">
+                    <input type="email" id="reg-email-input" placeholder="Enter email..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
+                    <button type="button" onclick="sendRegEmailCode()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-2 rounded-xl text-[10px] shrink-0 cursor-pointer">Get Code</button>
+                </div>
+            </div>
+            <div>
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block" data-i18n="emailCodeLabel">Email Verification Code</label>
+                <input type="text" id="reg-email-code-input" placeholder="Enter 4-digit code..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white tracking-widest font-mono">
             </div>
             <div>
                 <label class="text-[10px] text-emerald-400 font-bold mb-1 block" data-i18n="inviteCodeLabel">Invitation Code (Optional)</label>
@@ -162,6 +169,9 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <span class="text-xl font-bold tracking-wider text-emerald-400">AZEL</span>
 </div>
 <div class="flex space-x-3 text-gray-400 text-lg relative items-center">
+<button onclick="openSupportModal()" class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 px-2.5 py-1.5 rounded-lg text-[10px] font-bold items-center gap-1.5 cursor-pointer flex">
+    <i class="fas fa-headset"></i> <span data-i18n="supportBtn">Support</span>
+</button>
 <button id="admin-header-btn" onclick="openAdminPinModal()" class="bg-amber-500/20 text-amber-400 border border-amber-500/40 px-2.5 py-1.5 rounded-lg text-[10px] font-bold items-center gap-1.5 relative cursor-pointer flex" style="display: none;">
     <i class="fas fa-shield-halved"></i> <span data-i18n="adminBtnText">Admin</span>
     <span id="admin-header-badge" class="bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.2 rounded-full hidden">0</span>
@@ -368,7 +378,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
         <div onclick="openChangeWithdrawPinModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
-            <div class="flex items-center space-x-3"><i class="fas fa-key text-emerald-400 text-sm w-4 text-center"></i><span class="text-white font-medium" data-i18n="menuChangeWithdrawPin">Change Withdrawal PIN</span></div>
+            <div class="flex items-center space-x-3"><i class="fas fa-key text-emerald-400 text-sm w-4 text-center"></i><span class="text-white font-medium" data-i18n="menuChangeWithdrawPin">Withdrawal PIN / Password</span></div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
         <div onclick="openLanguageModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
@@ -380,6 +390,26 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 </div>
 
 <!-- MODALI -->
+<div id="modal-support" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-sm space-y-4 bg-[#07090e] border border-emerald-500/30">
+        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
+            <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2"><i class="fas fa-headset"></i> <span data-i18n="supportTitle">Customer Support</span></h3>
+            <button onclick="closeSupportModal()" class="text-gray-400 hover:text-white text-sm cursor-pointer"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="space-y-3 text-xs">
+            <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-1">
+                <div class="text-emerald-400 font-bold">AZEL Official Support</div>
+                <p class="text-gray-300">Need assistance with deposits, withdrawals, or bots? Send us a message below or contact our Telegram channel.</p>
+            </div>
+            <div>
+                <label class="text-[10px] text-gray-400 block mb-1" data-i18n="supportMsgLabel">Your Message:</label>
+                <textarea id="support-msg-input" rows="3" placeholder="Describe your issue..." class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white resize-none"></textarea>
+            </div>
+            <button onclick="sendSupportMessage()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black py-2.5 rounded-xl text-xs font-bold cursor-pointer" data-i18n="sendSupportBtn">Send Message</button>
+        </div>
+    </div>
+</div>
+
 <div id="modal-change-email" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
     <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-4 bg-[#07090e] border border-emerald-500/30">
         <h3 class="text-sm font-bold text-emerald-400" data-i18n="menuChangeEmail">Change Email Address</h3>
@@ -415,14 +445,18 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 
 <div id="modal-change-withdraw-pin" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
     <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-3 bg-[#07090e] border border-emerald-500/30 text-xs">
-        <h3 class="text-sm font-bold text-emerald-400 mb-1" data-i18n="menuChangeWithdrawPin">Change Withdrawal PIN</h3>
+        <h3 class="text-sm font-bold text-emerald-400 mb-1" id="pin-modal-title" data-i18n="menuChangeWithdrawPin">Withdrawal PIN / Password</h3>
+        <div id="pin-old-box">
+            <label class="text-[10px] text-gray-400 block mb-1" data-i18n="currentPinLabel">Current PIN (leave blank if creating):</label>
+            <input type="password" id="current-withdraw-pin-input" maxlength="4" placeholder="****" class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white text-center tracking-widest">
+        </div>
         <div>
             <label class="text-[10px] text-gray-400 block mb-1" data-i18n="newPinLabel">New 4-Digit Withdrawal PIN:</label>
             <input type="password" id="new-withdraw-pin-input" maxlength="4" placeholder="e.g. 1234" class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white tracking-widest text-center">
         </div>
         <div class="flex space-x-2 pt-2">
             <button onclick="closeChangeWithdrawPinModal()" class="w-1/2 bg-gray-800 text-gray-300 py-2 rounded-lg font-bold cursor-pointer" data-i18n="cancelBtn">Cancel</button>
-            <button onclick="saveNewWithdrawPin()" class="w-1/2 bg-emerald-500 text-black py-2 rounded-lg font-bold cursor-pointer" data-i18n="updateBtn">Update</button>
+            <button onclick="saveNewWithdrawPin()" class="w-1/2 bg-emerald-500 text-black py-2 rounded-lg font-bold cursor-pointer" data-i18n="updateBtn">Update / Set</button>
         </div>
     </div>
 </div>
@@ -450,12 +484,19 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2"><i class="fas fa-wallet"></i> <span data-i18n="depositTitle">USDT Deposit</span></h3>
             <button onclick="closeDepositModal()" class="text-gray-400 hover:text-white text-sm cursor-pointer"><i class="fas fa-times"></i></button>
         </div>
+        
+        <!-- Tabs za mrežu -->
+        <div class="flex bg-gray-900 p-1 rounded-xl border border-gray-800 text-xs font-bold">
+            <button id="dep-tab-trc" onclick="switchDepositNetwork('trc20')" class="flex-1 py-1.5 rounded-lg bg-emerald-500 text-black transition cursor-pointer">TRC-20</button>
+            <button id="dep-tab-bep" onclick="switchDepositNetwork('bep20')" class="flex-1 py-1.5 rounded-lg text-gray-400 transition cursor-pointer">BEP-20 (BSC)</button>
+        </div>
+
         <div class="bg-gray-950/80 p-3 rounded-xl border border-gray-800 text-center space-y-2">
-            <div class="flex justify-center"><img src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk" alt="QR" class="w-28 h-28 border-2 border-emerald-500/40 rounded-lg p-1 bg-white"></div>
-            <div class="text-[10px] text-emerald-400 font-bold" data-i18n="trcAddress">TRC-20 Address</div>
+            <div class="flex justify-center"><img id="deposit-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk" alt="QR" class="w-28 h-28 border-2 border-emerald-500/40 rounded-lg p-1 bg-white"></div>
+            <div class="text-[10px] text-emerald-400 font-bold" id="deposit-network-label">TRC-20 Address</div>
             <div class="flex items-center justify-between bg-gray-900 p-2 rounded-lg border border-gray-800">
-                <span class="text-[10px] font-mono text-emerald-300 truncate mr-2">TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk</span>
-                <button onclick="navigator.clipboard.writeText('TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk').then(()=>showToast('Address copied!'))" class="bg-emerald-500 text-black px-2 py-1 rounded text-[10px] font-bold cursor-pointer" data-i18n="copyBtn">Copy</button>
+                <span class="text-[10px] font-mono text-emerald-300 truncate mr-2" id="deposit-address-text">TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk</span>
+                <button onclick="copyDepositAddress()" class="bg-emerald-500 text-black px-2 py-1 rounded text-[10px] font-bold cursor-pointer" data-i18n="copyBtn">Copy</button>
             </div>
             <div class="pt-2 border-t border-gray-800 text-left">
                 <label class="text-[10px] text-gray-400 block mb-1 font-bold" data-i18n="simDepositLabel">Simulate Deposit Amount ($):</label>
@@ -485,7 +526,14 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
                 <input type="text" id="withdraw-address" placeholder="Enter address..." class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white font-mono text-[11px]">
             </div>
             <div>
-                <label class="text-[10px] text-emerald-400 font-bold mb-1 block" data-i18n="withdrawPinLabel">Withdrawal PIN / Password:</label>
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block" data-i18n="emailCodeWithdrawLabel">Email Verification Code:</label>
+                <div class="flex gap-2">
+                    <input type="text" id="withdraw-email-code" placeholder="4-digit code" class="w-full bg-gray-900 border border-emerald-500/40 p-2.5 rounded-lg text-white font-mono text-center tracking-widest">
+                    <button type="button" onclick="sendWithdrawEmailCode()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-2 rounded-xl text-[10px] shrink-0 cursor-pointer">Get Code</button>
+                </div>
+            </div>
+            <div>
+                <label class="text-[10px] text-emerald-400 font-bold mb-1 block" data-i18n="withdrawPinLabel">Transaction PIN / Password:</label>
                 <input type="password" id="withdraw-pin-input" maxlength="4" placeholder="Enter 4-digit PIN..." class="w-full bg-gray-900 border border-emerald-500/40 p-2.5 rounded-lg text-white text-center tracking-widest">
             </div>
         </div>
@@ -500,7 +548,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             <button onclick="closeInviteModal()" class="text-gray-400 hover:text-white text-base cursor-pointer"><i class="fas fa-times"></i></button>
         </div>
         <div class="invite-gradient-card p-4 rounded-2xl text-white space-y-3 text-center">
-            <p class="text-[11px] font-bold text-emerald-100" data-i18n="inviteDesc">Grow your L1, L2, L3 lines to unlock Bot 3, 4, 5 & 6!</p>
+            <p class="text-[11px] font-bold text-emerald-100" data-i18n="inviteDesc">Grow your L1, L2, L3 lines to unlock Bot 3, 4, 5 & 6! Earn $1 for each direct active referral.</p>
             <div onclick="navigator.clipboard.writeText(currentUser ? currentUser.code : '').then(()=>showToast('Code copied!'))" class="bg-black/30 p-2.5 rounded-xl border border-white/10 flex justify-between items-center cursor-pointer">
                 <span class="text-[11px] text-emerald-200" data-i18n="inviteCodeText">Invitation code</span>
                 <span id="modal-code-display" class="font-mono font-bold text-white text-xs bg-emerald-500/30 px-2 py-0.5 rounded">...</span>
@@ -554,6 +602,8 @@ let allRegisteredUsers = [];
 let withdrawRequests = [];
 const ADMIN_PIN = "3112";
 let lastKnownPendingCount = -1;
+let simulatedRegCode = "";
+let simulatedWithdrawCode = "";
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytCxgP9CyE7ndzaDFhwLuOKt92BVuwIXloAObiZBeRQMm-ZXXQAHZh-ZqIwiJNixIRVQ/exec";
 
@@ -594,20 +644,23 @@ const translations = {
         inactiveMembers: "Inactive / Pending Members (Not Counted in L1 yet)", noInactive: "No inactive members.",
         assetsTitle: "Assets & Capital", availBalance: "Available Balance", activeBots: "Active Bots",
         activeBotInvestments: "Active Bot Investments (60 Days)", noBots: "No active bot investments right now.",
-        menuChangeEmail: "Change Email", menuChangePassword: "Change Password", menuChangeWithdrawPin: "Change Withdrawal PIN",
+        menuChangeEmail: "Change Email", menuChangePassword: "Change Password", menuChangeWithdrawPin: "Withdrawal PIN / Password",
         menuLang: "Switch Language", logout: "Log Out", cancelBtn: "Cancel", updateBtn: "Update",
         currentPassLabel: "Current Password:", newPassLabel: "New Password:", confirmNewPassLabel: "Confirm New Password:",
-        newPinLabel: "New 4-Digit Withdrawal PIN:", selectLangTitle: "Select Language", closeBtn: "Close",
+        newPinLabel: "New 4-Digit Withdrawal PIN:", currentPinLabel: "Current PIN (leave blank if creating):",
+        selectLangTitle: "Select Language", closeBtn: "Close",
         depositTitle: "USDT Deposit", trcAddress: "TRC-20 Address", copyBtn: "Copy", simDepositLabel: "Simulate Deposit Amount ($):",
         simulateBtn: "Simulate", withdrawReqTitle: "Withdrawal Request", amountUsdtLabel: "Amount (USDT):",
-        cryptoAddrLabel: "Crypto Address:", withdrawPinLabel: "Withdrawal PIN / Password:", confirmWithdrawBtn: "Confirm Withdrawal",
-        inviteTitle: "Invite Friends & Build Network", inviteDesc: "Grow your L1, L2, L3 lines to unlock Bot 3, 4, 5 & 6!",
+        cryptoAddrLabel: "Crypto Address:", withdrawPinLabel: "Transaction PIN / Password:", emailCodeWithdrawLabel: "Email Verification Code:",
+        confirmWithdrawBtn: "Confirm Withdrawal", inviteTitle: "Invite Friends & Build Network",
+        inviteDesc: "Grow your L1, L2, L3 lines to unlock Bot 3, 4, 5 & 6! Earn $1 for each direct active referral.",
         inviteCodeText: "Invitation code", inviteLinkLabel: "Invitation Link", copyInviteLinkBtn: "Copy invitation link",
         adminSecPin: "Admin Security PIN", confirmBtn: "Confirm", adminPanelTitle: "Admin Panel (Withdrawals)",
         loadingReq: "Loading requests...", closePanelBtn: "Close Panel", authSub: "Bot Investment & Network Platform",
         loginBtn: "Log In", regBtn: "Register", usernameLabel: "Username", passwordLabel: "Password",
-        emailLabel: "Email Address", inviteCodeLabel: "Invitation Code (Optional)", confirmPasswordLabel: "Confirm Password",
-        loginAction: "Log In", regAction: "Register", adminBtnText: "Admin"
+        emailLabel: "Email Address", emailCodeLabel: "Email Verification Code", inviteCodeLabel: "Invitation Code (Optional)",
+        confirmPasswordLabel: "Confirm Password", loginAction: "Log In", regAction: "Register", adminBtnText: "Admin",
+        supportBtn: "Support", supportTitle: "Customer Support", supportMsgLabel: "Your Message:", sendSupportBtn: "Send Message"
     },
     sr: {
         navHome: "Početna", navMarket: "Tržište", navTeam: "Tim", navAssets: "Imovina", navProfile: "Profil",
@@ -630,20 +683,23 @@ const translations = {
         inactiveMembers: "Neaktivni / Članovi na čekanju", noInactive: "Nema neaktivnih članova.",
         assetsTitle: "Imovina i Kapital", availBalance: "Raspoloživi Balans", activeBots: "Aktivni Botovi",
         activeBotInvestments: "Aktivne Investicije Botova (60 Dana)", noBots: "Trenutno nema aktivnih bot investicija.",
-        menuChangeEmail: "Promeni Email", menuChangePassword: "Promeni Lozinku", menuChangeWithdrawPin: "Promeni PIN za Isplatu",
+        menuChangeEmail: "Promeni Email", menuChangePassword: "Promeni Lozinku", menuChangeWithdrawPin: "PIN za Isplatu / Lozinka",
         menuLang: "Promeni Jezik", logout: "Odjavi se", cancelBtn: "Otkaži", updateBtn: "Ažuriraj",
         currentPassLabel: "Trenutna Lozinka:", newPassLabel: "Nova Lozinka:", confirmNewPassLabel: "Potvrdi Novu Lozinku:",
-        newPinLabel: "Novi 4-cifreni PIN za isplatu:", selectLangTitle: "Izaberi Jezik", closeBtn: "Zatvori",
+        newPinLabel: "Novi 4-cifreni PIN za isplatu:", currentPinLabel: "Trenutni PIN (ostavite prazno ako kreirate):",
+        selectLangTitle: "Izaberi Jezik", closeBtn: "Zatvori",
         depositTitle: "USDT Uplata", trcAddress: "TRC-20 Adresa", copyBtn: "Kopiraj", simDepositLabel: "Simuliraj iznos uplate ($):",
         simulateBtn: "Simuliraj", withdrawReqTitle: "Zahtev za Isplatu", amountUsdtLabel: "Iznos (USDT):",
-        cryptoAddrLabel: "Kripto Adresa:", withdrawPinLabel: "PIN za Isplatu / Lozinka:", confirmWithdrawBtn: "Potvrdi Isplatu",
-        inviteTitle: "Pozovi Prijatelje i Izgradi Mrežu", inviteDesc: "Razvijajte L1, L2, L3 linije da otključate Bot 3, 4, 5 i 6!",
+        cryptoAddrLabel: "Kripto Adresa:", withdrawPinLabel: "Transakcioni PIN / Lozinka:", emailCodeWithdrawLabel: "Kod za potvrdu (Email):",
+        confirmWithdrawBtn: "Potvrdi Isplatu", inviteTitle: "Pozovi Prijatelje i Izgradi Mrežu",
+        inviteDesc: "Razvijajte L1, L2, L3 linije da otključate Bot 3, 4, 5 i 6! Zaradite $1 za svakog aktivnog direktnog člana.",
         inviteCodeText: "Kod za poziv", inviteLinkLabel: "Link za poziv", copyInviteLinkBtn: "Kopiraj link za poziv",
         adminSecPin: "Admin Sigurnosni PIN", confirmBtn: "Potvrdi", adminPanelTitle: "Admin Panel (Isplate)",
         loadingReq: "Učitavanje zahteva...", closePanelBtn: "Zatvori Panel", authSub: "Bot Investiciona i Mrežna Platforma",
         loginBtn: "Prijava", regBtn: "Registracija", usernameLabel: "Korisničko ime", passwordLabel: "Lozinka",
-        emailLabel: "Email Adresa", inviteCodeLabel: "Kod za poziv (Opcionalno)", confirmPasswordLabel: "Potvrdi Lozinku",
-        loginAction: "Prijavi se", regAction: "Registruj se", adminBtnText: "Admin"
+        emailLabel: "Email Adresa", emailCodeLabel: "Email Verifikacioni Kod", inviteCodeLabel: "Kod za poziv (Opcionalno)",
+        confirmPasswordLabel: "Potvrdi Lozinku", loginAction: "Prijavi se", regAction: "Registruj se", adminBtnText: "Admin",
+        supportBtn: "Podrška", supportTitle: "Korisnička Podrška", supportMsgLabel: "Vaša poruka:", sendSupportBtn: "Pošalji poruku"
     },
     mk: {
         navHome: "Почетна", navMarket: "Пазар", navTeam: "Тим", navAssets: "Имот", navProfile: "Профил",
@@ -666,20 +722,23 @@ const translations = {
         inactiveMembers: "Неактивни / Членови на чекање", noInactive: "Нема неактивни членови.",
         assetsTitle: "Имот и Капитал", availBalance: "Расположив Биланс", activeBots: "Активни Ботови",
         activeBotInvestments: "Активни Инвестиции на Ботови (60 Дена)", noBots: "Моментално нема активни бот инвестиции.",
-        menuChangeEmail: "Промени Е-пошта", menuChangePassword: "Промени Лозинка", menuChangeWithdrawPin: "Промени ПИН за Исплата",
+        menuChangeEmail: "Промени Е-пошта", menuChangePassword: "Промени Лозинка", menuChangeWithdrawPin: "ПИН за Исплата / Лозинка",
         menuLang: "Промени Јазик", logout: "Одјави се", cancelBtn: "Откажи", updateBtn: "Ажурирај",
         currentPassLabel: "Тековна Лозинка:", newPassLabel: "Нова Лозинка:", confirmNewPassLabel: "Потврди Нова Лозинка:",
-        newPinLabel: "Нов 4-цифрен ПИН за исплата:", selectLangTitle: "Избери Јазик", closeBtn: "Затвори",
+        newPinLabel: "Нов 4-цифрен ПИН за исплата:", currentPinLabel: "Тековен ПИН (оставете празно ако креирате):",
+        selectLangTitle: "Избери Јазик", closeBtn: "Затвори",
         depositTitle: "USDT Уплата", trcAddress: "TRC-20 Адреса", copyBtn: "Копирај", simDepositLabel: "Симулирај износ на уплата ($):",
         simulateBtn: "Симулирај", withdrawReqTitle: "Барање за Исплата", amountUsdtLabel: "Износ (USDT):",
-        cryptoAddrLabel: "Крипто Адреса:", withdrawPinLabel: "ПИН за Исплата / Лозинка:", confirmWithdrawBtn: "Потврди Исплата",
-        inviteTitle: "Покани Пријатели и Изгради Мрежа", inviteDesc: "Развијте ги L1, L2, L3 линиите за да отклучите Бот 3, 4, 5 и 6!",
+        cryptoAddrLabel: "Крипто Адреса:", withdrawPinLabel: "Трансакциски ПИН / Лозинка:", emailCodeWithdrawLabel: "Код за потврда (Email):",
+        confirmWithdrawBtn: "Потврди Исплата", inviteTitle: "Покани Пријатели и Изгради Мрежа",
+        inviteDesc: "Развијте ги L1, L2, L3 линиите за да отклучите Бот 3, 4, 5 и 6! Заработете $1 за секој директен активен член.",
         inviteCodeText: "Код за покана", inviteLinkLabel: "Линк за покана", copyInviteLinkBtn: "Копирај линк за покана",
         adminSecPin: "Админ Сигурносен ПИН", confirmBtn: "Потврди", adminPanelTitle: "Админ Панел (Исплати)",
         loadingReq: "Вчитување барања...", closePanelBtn: "Затвори Панел", authSub: "Бот Инвестициона и Мрежна Платформа",
         loginBtn: "Најава", regBtn: "Регистрација", usernameLabel: "Корисничко име", passwordLabel: "Лозинка",
-        emailLabel: "Е-пошта Адреса", inviteCodeLabel: "Код за покана (Опционално)", confirmPasswordLabel: "Потврди Лозинка",
-        loginAction: "Најави се", regAction: "Регистрирај се", adminBtnText: "Админ"
+        emailLabel: "Е-пошта Адреса", emailCodeLabel: "Верификационен код (Email)", inviteCodeLabel: "Код за покана (Опционално)",
+        confirmPasswordLabel: "Потврди Лозинка", loginAction: "Најави се", regAction: "Регистрирај се", adminBtnText: "Админ",
+        supportBtn: "Поддршка", supportTitle: "Корисничка Поддршка", supportMsgLabel: "Ваша порака:", sendSupportBtn: "Испрати порака"
     },
     sl: {
         navHome: "Domov", navMarket: "Trg", navTeam: "Ekipa", navAssets: "Sredstva", navProfile: "Profil",
@@ -700,18 +759,19 @@ const translations = {
         activeDirectRef: "Aktivni napoteni", noDirectRef: "Ni napotenih.", inactiveMembers: "Neaktivni člani", noInactive: "Ni neaktivnih.",
         assetsTitle: "Sredstva", availBalance: "Razpoložljivo stanje", activeBots: "Aktivni boti",
         activeBotInvestments: "Aktivne naložbe", noBots: "Ni naložb.", menuChangeEmail: "Spremeni e-pošto",
-        menuChangePassword: "Spremeni geslo", menuChangeWithdrawPin: "Spremeni PIN za izplačilo", menuLang: "Spremeni jezik",
+        menuChangePassword: "Spremeni geslo", menuChangeWithdrawPin: "PIN za izplačilo / Geslo", menuLang: "Spremeni jezik",
         logout: "Odjava", cancelBtn: "Prekliči", updateBtn: "Posodobi", currentPassLabel: "Trenutno geslo:",
-        newPassLabel: "Novo geslo:", confirmNewPassLabel: "Potrdi geslo:", newPinLabel: "Nov 4-mestni PIN:",
+        newPassLabel: "Novo geslo:", confirmNewPassLabel: "Potrdi geslo:", newPinLabel: "Nov 4-mestni PIN:", currentPinLabel: "Trenutni PIN:",
         selectLangTitle: "Izberi jezik", closeBtn: "Zapri", depositTitle: "USDT Polog", trcAddress: "TRC-20 Naslov",
         copyBtn: "Kopiraj", simDepositLabel: "Simuliraj znesek ($):", simulateBtn: "Simuliraj", withdrawReqTitle: "Zahteva za izplačilo",
-        amountUsdtLabel: "Znesek (USDT):", cryptoAddrLabel: "Kripto naslov:", withdrawPinLabel: "PIN za izplačilo:",
+        amountUsdtLabel: "Znesek (USDT):", cryptoAddrLabel: "Kripto naslov:", withdrawPinLabel: "Transakcijski PIN:", emailCodeWithdrawLabel: "Email koda:",
         confirmWithdrawBtn: "Potrdi izplačilo", inviteTitle: "Povabi prijatelje", inviteDesc: "Zgradite svojo mrežo!",
         inviteCodeText: "Koda", inviteLinkLabel: "Povezava", copyInviteLinkBtn: "Kopiraj povezavo", adminSecPin: "Admin PIN",
         confirmBtn: "Potrdi", adminPanelTitle: "Admin plošča", loadingReq: "Nalaganje...", closePanelBtn: "Zapri",
         authSub: "Platforma", loginBtn: "Prijava", regBtn: "Registracija", usernameLabel: "Uporabniško ime",
-        passwordLabel: "Geslo", emailLabel: "E-pošta", inviteCodeLabel: "Koda za povabilo", confirmPasswordLabel: "Potrdi geslo",
-        loginAction: "Prijava", regAction: "Registracija", adminBtnText: "Admin"
+        passwordLabel: "Geslo", emailLabel: "E-pošta", emailCodeLabel: "Email koda", inviteCodeLabel: "Koda za povabilo", confirmPasswordLabel: "Potrdi geslo",
+        loginAction: "Prijava", regAction: "Registracija", adminBtnText: "Admin",
+        supportBtn: "Podpora", supportTitle: "Podpora uporabnikom", supportMsgLabel: "Vaše sporočilo:", sendSupportBtn: "Pošlji sporočilo"
     },
     es: {
         navHome: "Inicio", navMarket: "Mercado", navTeam: "Equipo", navAssets: "Activos", navProfile: "Perfil",
@@ -730,17 +790,18 @@ const translations = {
         activeDirectRef: "Referidos directos", noDirectRef: "Sin referidos.", inactiveMembers: "Inactivos", noInactive: "Sin inactivos.",
         assetsTitle: "Activos", availBalance: "Saldo disponible", activeBots: "Bots activos", activeBotInvestments: "Inversiones",
         noBots: "Sin inversiones.", menuChangeEmail: "Cambiar email", menuChangePassword: "Cambiar contraseña",
-        menuChangeWithdrawPin: "Cambiar PIN de retiro", menuLang: "Idioma", logout: "Salir", cancelBtn: "Cancelar", updateBtn: "Actualizar",
+        menuChangeWithdrawPin: "PIN de retiro", menuLang: "Idioma", logout: "Salir", cancelBtn: "Cancelar", updateBtn: "Actualizar",
         currentPassLabel: "Contraseña actual:", newPassLabel: "Nueva contraseña:", confirmNewPassLabel: "Confirmar contraseña:",
-        newPinLabel: "Nuevo PIN de 4 dígitos:", selectLangTitle: "Seleccionar idioma", closeBtn: "Cerrar", depositTitle: "Depósito USDT",
-        trcAddress: "Dirección TRC-20", copyBtn: "Copiar", simDepositLabel: "Simular depósito ($):", simulateBtn: "Simular",
+        newPinLabel: "Nuevo PIN:", currentPinLabel: "PIN actual:", selectLangTitle: "Seleccionar idioma", closeBtn: "Cerrar",
+        depositTitle: "Depósito USDT", trcAddress: "Dirección TRC-20", copyBtn: "Copia", simDepositLabel: "Simular depósito ($):", simulateBtn: "Simular",
         withdrawReqTitle: "Solicitud de retiro", amountUsdtLabel: "Monto (USDT):", cryptoAddrLabel: "Dirección cripto:",
-        withdrawPinLabel: "PIN de retiro:", confirmWithdrawBtn: "Confirmar retiro", inviteTitle: "Invitar amigos",
-        inviteDesc: "¡Haz crecer tu red!", inviteCodeText: "Código", inviteLinkLabel: "Enlace", copyInviteLinkBtn: "Copiar enlace",
-        adminSecPin: "PIN de Admin", confirmBtn: "Confirmar", adminPanelTitle: "Panel de Admin", loadingReq: "Cargando...",
-        closePanelBtn: "Cerrar", authSub: "Plataforma de inversión", loginBtn: "Iniciar sesión", regBtn: "Registrarse",
-        usernameLabel: "Usuario", passwordLabel: "Contraseña", emailLabel: "Correo", inviteCodeLabel: "Código de invitación",
-        confirmPasswordLabel: "Confirmar contraseña", loginAction: "Iniciar sesión", regAction: "Registrarse", adminBtnText: "Admin"
+        withdrawPinLabel: "PIN de transacción:", emailCodeWithdrawLabel: "Código de email:", confirmWithdrawBtn: "Confirmar retiro",
+        inviteTitle: "Invitar amigos", inviteDesc: "¡Haz crecer tu red!", inviteCodeText: "Código", inviteLinkLabel: "Enlace",
+        copyInviteLinkBtn: "Copiar enlace", adminSecPin: "PIN de Admin", confirmBtn: "Confirmar", adminPanelTitle: "Panel de Admin",
+        loadingReq: "Cargando...", closePanelBtn: "Cerrar", authSub: "Plataforma de inversión", loginBtn: "Iniciar sesión",
+        regBtn: "Registrarse", usernameLabel: "Usuario", passwordLabel: "Contraseña", emailLabel: "Correo", emailCodeLabel: "Código email",
+        inviteCodeLabel: "Código de invitación", confirmPasswordLabel: "Confirmar contraseña", loginAction: "Iniciar sesión",
+        regAction: "Registrarse", adminBtnText: "Admin", supportBtn: "Soporte", supportTitle: "Soporte", supportMsgLabel: "Mensaje:", sendSupportBtn: "Enviar"
     },
     ru: {
         navHome: "Главная", navMarket: "Рынок", navTeam: "Команда", navAssets: "Активы", navProfile: "Профиль",
@@ -759,17 +820,18 @@ const translations = {
         activeDirectRef: "Активные рефералы", noDirectRef: "Нет рефералов.", inactiveMembers: "Неактивные", noInactive: "Нет.",
         assetsTitle: "Активы", availBalance: "Доступный баланс", activeBots: "Активные боты", activeBotInvestments: "Инвестиции ботов",
         noBots: "Нет инвестиций.", menuChangeEmail: "Изменить email", menuChangePassword: "Изменить пароль",
-        menuChangeWithdrawPin: "Изменить PIN вывода", menuLang: "Язык", logout: "Выйти", cancelBtn: "Отмена", updateBtn: "Обновить",
+        menuChangeWithdrawPin: "PIN вывода", menuLang: "Язык", logout: "Выйти", cancelBtn: "Отмена", updateBtn: "Обновить",
         currentPassLabel: "Текущий пароль:", newPassLabel: "Новый пароль:", confirmNewPassLabel: "Подтвердите пароль:",
-        newPinLabel: "Новый 4-значный PIN:", selectLangTitle: "Выберите язык", closeBtn: "Закрыть", depositTitle: "Депозит USDT",
-        trcAddress: "Адрес TRC-20", copyBtn: "Копировать", simDepositLabel: "Симулировать депозит ($):", simulateBtn: "Симулировать",
+        newPinLabel: "Новый PIN:", currentPinLabel: "Текущий PIN:", selectLangTitle: "Выберите язык", closeBtn: "Закрыть",
+        depositTitle: "Депозит USDT", trcAddress: "Адрес TRC-20", copyBtn: "Копировать", simDepositLabel: "Симулировать депозит ($):", simulateBtn: "Симулировать",
         withdrawReqTitle: "Запрос на вывод", amountUsdtLabel: "Сумма (USDT):", cryptoAddrLabel: "Крипто-адрес:",
-        withdrawPinLabel: "PIN вывода:", confirmWithdrawBtn: "Подтвердить вывод", inviteTitle: "Пригласить друзей",
-        inviteDesc: "Развивайте сеть!", inviteCodeText: "Код", inviteLinkLabel: "Ссылка", copyInviteLinkBtn: "Копировать ссылку",
-        adminSecPin: "PIN Администратора", confirmBtn: "Подтвердить", adminPanelTitle: "Панель администратора",
+        withdrawPinLabel: "PIN транзакции:", emailCodeWithdrawLabel: "Код из email:", confirmWithdrawBtn: "Подтвердить вывод",
+        inviteTitle: "Пригласить друзей", inviteDesc: "Развивайте сеть!", inviteCodeText: "Код", inviteLinkLabel: "Ссылка",
+        copyInviteLinkBtn: "Копировать ссылку", adminSecPin: "PIN Администратора", confirmBtn: "Подтвердить", adminPanelTitle: "Панель администратора",
         loadingReq: "Загрузка...", closePanelBtn: "Закрыть", authSub: "Платформа", loginBtn: "Вход", regBtn: "Регистрация",
-        usernameLabel: "Имя пользователя", passwordLabel: "Пароль", emailLabel: "Email", inviteCodeLabel: "Код приглашения",
-        confirmPasswordLabel: "Подтвердите пароль", loginAction: "Войти", regAction: "Зарегистрироваться", adminBtnText: "Админ"
+        usernameLabel: "Имя пользователя", passwordLabel: "Пароль", emailLabel: "Email", emailCodeLabel: "Код из email",
+        inviteCodeLabel: "Код приглашения", confirmPasswordLabel: "Подтвердите пароль", loginAction: "Войти", regAction: "Зарегистрироваться",
+        adminBtnText: "Админ", supportBtn: "Поддержка", supportTitle: "Поддержка", supportMsgLabel: "Сообщение:", sendSupportBtn: "Отправить"
     },
     el: {
         navHome: "Αρχική", navMarket: "Αγορά", navTeam: "Ομάδα", navAssets: "Περιουσιακά", navProfile: "Проφίλ",
@@ -788,17 +850,18 @@ const translations = {
         activeDirectRef: "Ενεργές παραπομπές", noDirectRef: "Κανμία παραπομπή.", inactiveMembers: "Ανενεργά μέλη", noInactive: "Κανένα.",
         assetsTitle: "Περιουσιακά", availBalance: "Διαθέσιμο Υπόλοιπο", activeBots: "Ενεργά Bot", activeBotInvestments: "Επενδύσεις",
         noBots: "Χωρίς επενδύσεις.", menuChangeEmail: "Αλλαγή Email", menuChangePassword: "Аλλαγή κωδικού",
-        menuChangeWithdrawPin: "Аλλαγή PIN ανάληψης", menuLang: "Γλώσσα", logout: "Αποσύνδεση", cancelBtn: "Άκυρο", updateBtn: "Ενημέρωση",
+        menuChangeWithdrawPin: "PIN ανάληψης", menuLang: "Γλώσσα", logout: "Αποσύνδεση", cancelBtn: "Άκυρο", updateBtn: "Ενημέρωση",
         currentPassLabel: "Τρέχων κωδικός:", newPassLabel: "Νέος κωδικός:", confirmNewPassLabel: "Επιβεβαίωση κωδικού:",
-        newPinLabel: "Νέο PIN 4 ψηφίων:", selectLangTitle: "Επιλογή γλώσσας", closeBtn: "Кλείσιμο", depositTitle: "Каτάθεση USDT",
-        trcAddress: "Диεύθυνση TRC-20", copyBtn: "Αντιγραφή", simDepositLabel: "Симул. κατάθεσης ($):", simulateBtn: "Симул.",
+        newPinLabel: "Νέο PIN:", currentPinLabel: "Τρέχων PIN:", selectLangTitle: "Επιλογή γλώσσας", closeBtn: "Кλείσιμο",
+        depositTitle: "Каτάθεση USDT", trcAddress: "Диεύθυνση TRC-20", copyBtn: "Αντιγραφή", simDepositLabel: "Симул. κατάθεσης ($):", simulateBtn: "Симул.",
         withdrawReqTitle: "Αίτηση ανάληψης", amountUsdtLabel: "Поσό (USDT):", cryptoAddrLabel: "Крипто διεύθυνση:",
-        withdrawPinLabel: "PIN ανάληψης:", confirmWithdrawBtn: "Επιβεβαίωση ανάληψης", inviteTitle: "Πρόσκληση φίλων",
-        inviteDesc: "Аναπτύξτε το δίκτυό σας!", inviteCodeText: "Κωδικός", inviteLinkLabel: "Σύνδεσμος", copyInviteLinkBtn: "Аντιγραφή συνδέσμου",
-        adminSecPin: "PIN Admin", confirmBtn: "Επιβεβαίωση", adminPanelTitle: "Пίνακας Admin", loadingReq: "Фόρτωση...",
-        closePanelBtn: "Кλείσιμο", authSub: "Платформа", loginBtn: "Сύνδεση", regBtn: "Еγγραφή", usernameLabel: "Όνομα χρήστη",
-        passwordLabel: "Кωδικός", emailLabel: "Email", inviteCodeLabel: "Кωδικός πρόσκλησης", confirmPasswordLabel: "Еπιβεβαίωση κωδικού",
-        loginAction: "Сύνδεση", regAction: "Еγγραφή", adminBtnText: "Admin"
+        withdrawPinLabel: "PIN συναλλαγής:", emailCodeWithdrawLabel: "Κωδικός email:", confirmWithdrawBtn: "Επιβεβαίωση ανάληψης",
+        inviteTitle: "Πρόσκληση φίλων", inviteDesc: "Аναπτύξτε το δίκτυό σας!", inviteCodeText: "Κωδικός", inviteLinkLabel: "Σύνδεσμος",
+        copyInviteLinkBtn: "Аντιγραφή συνδέσμου", adminSecPin: "PIN Admin", confirmBtn: "Επιβεβαίωση", adminPanelTitle: "Пίνακας Admin",
+        loadingReq: "Фόρτωση...", closePanelBtn: "Кλείσιμο", authSub: "Платформа", loginBtn: "Сύνδεση", regBtn: "Еγγραφή",
+        usernameLabel: "Όνομα χρήστη", passwordLabel: "Кωδικός", emailLabel: "Email", emailCodeLabel: "Κωδικός email",
+        inviteCodeLabel: "Кωδικός πρόσκλησης", confirmPasswordLabel: "Еπιβεβαίωση κωδικού", loginAction: "Сύνδεση", regAction: "Еγγραφή",
+        adminBtnText: "Admin", supportBtn: "Υποστήριξη", supportTitle: "Υποστήριξη", supportMsgLabel: "Μήνυμα:", sendSupportBtn: "Αποστολή"
     },
     it: {
         navHome: "Home", navMarket: "Mercato", navTeam: "Team", navAssets: "Asset", navProfile: "Profilo",
@@ -817,18 +880,19 @@ const translations = {
         activeDirectRef: "Referral diretti attivi", noDirectRef: "Nessun referral.", inactiveMembers: "Membri inattivi",
         noInactive: "Nessun inattivo.", assetsTitle: "Asset", availBalance: "Saldo disponibile", activeBots: "Bot attivi",
         activeBotInvestments: "Investimenti bot", noBots: "Nessun investimento attivo.", menuChangeEmail: "Cambia email",
-        menuChangePassword: "Cambia password", menuChangeWithdrawPin: "Cambia PIN di prelievo", menuLang: "Cambia lingua",
+        menuChangePassword: "Cambia password", menuChangeWithdrawPin: "PIN di prelievo", menuLang: "Cambia lingua",
         logout: "Disconnetti", cancelBtn: "Annulla", updateBtn: "Aggiorna", currentPassLabel: "Password attuale:",
-        newPassLabel: "Nuova password:", confirmNewPassLabel: "Conferma password:", newPinLabel: "Nuovo PIN di 4 cifre:",
+        newPassLabel: "Nuova password:", confirmNewPassLabel: "Conferma password:", newPinLabel: "Nuovo PIN:", currentPinLabel: "PIN attuale:",
         selectLangTitle: "Seleziona lingua", closeBtn: "Chiudi", depositTitle: "Deposito USDT", trcAddress: "Indirizzo TRC-20",
         copyBtn: "Copia", simDepositLabel: "Simula importo deposito ($):", simulateBtn: "Simula", withdrawReqTitle: "Richiesta di prelievo",
-        amountUsdtLabel: "Importo (USDT):", cryptoAddrLabel: "Indirizzo cripto:", withdrawPinLabel: "PIN di prelievo:",
-        confirmWithdrawBtn: "Conferma prelievo", inviteTitle: "Invita amici", inviteDesc: "Fai crescere la tua rete!",
-        inviteCodeText: "Codice", inviteLinkLabel: "Link", copyInviteLinkBtn: "Copia link", adminSecPin: "PIN Admin",
-        confirmBtn: "Conferma", adminPanelTitle: "Pannello Admin", loadingReq: "Caricamento...", closePanelBtn: "Chiudi",
-        authSub: "Piattaforma di investimento", loginBtn: "Accedi", regBtn: "Registrati", usernameLabel: "Nome utente",
-        passwordLabel: "Password", emailLabel: "Email", inviteCodeLabel: "Codice invito", confirmPasswordLabel: "Conferma password",
-        loginAction: "Accedi", regAction: "Registrati", adminBtnText: "Admin"
+        amountUsdtLabel: "Importo (USDT):", cryptoAddrLabel: "Indirizzo cripto:", withdrawPinLabel: "PIN di transazione:",
+        emailCodeWithdrawLabel: "Codice email:", confirmWithdrawBtn: "Conferma prelievo", inviteTitle: "Invita amici",
+        inviteDesc: "Fai crescere la tua rete!", inviteCodeText: "Codice", inviteLinkLabel: "Link", copyInviteLinkBtn: "Copia link",
+        adminSecPin: "PIN Admin", confirmBtn: "Conferma", adminPanelTitle: "Pannello Admin", loadingReq: "Caricamento...",
+        closePanelBtn: "Chiudi", authSub: "Piattaforma di investimento", loginBtn: "Accedi", regBtn: "Registrati",
+        usernameLabel: "Nome utente", passwordLabel: "Password", emailLabel: "Email", emailCodeLabel: "Codice email",
+        inviteCodeLabel: "Codice invito", confirmPasswordLabel: "Conferma password", loginAction: "Accedi", regAction: "Registrati",
+        adminBtnText: "Admin", supportBtn: "Supporto", supportTitle: "Supporto", supportMsgLabel: "Messaggio:", sendSupportBtn: "Invia"
     }
 };
 
@@ -881,7 +945,6 @@ window.addEventListener('DOMContentLoaded', function() {
         
         if (currentUser) {
             if (currentUser.username.toLowerCase() === 'tajkun') currentUser.isLicensePaid = true;
-            if (!currentUser.withdrawPin) currentUser.withdrawPin = "1234";
             if (currentUser.activeBots) {
                 currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
                 currentUser.activeBots.forEach((b) => {
@@ -971,7 +1034,7 @@ function loadUsersFromCloud(callback) {
                 currentUser.balance = updatedSelf.balance;
                 currentUser.activeBots = updatedSelf.activeBots;
                 currentUser.avatar = updatedSelf.avatar;
-                currentUser.withdrawPin = updatedSelf.withdrawPin || "1234";
+                currentUser.withdrawPin = updatedSelf.withdrawPin || "";
                 if (updatedSelf.isLicensePaid) currentUser.isLicensePaid = true;
             }
         }
@@ -1049,6 +1112,16 @@ function switchAuthTab(tab) {
     document.getElementById('tab-reg-btn').className = !isLogin ? 'flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-500 text-black transition' : 'flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 transition';
 }
 
+function sendRegEmailCode() {
+    let email = document.getElementById('reg-email-input').value.trim();
+    if(!email || !email.includes('@')) {
+        showToast('Please enter a valid email address first!');
+        return;
+    }
+    simulatedRegCode = Math.floor(1000 + Math.random() * 9000).toString();
+    showToast(`📩 [Simulated Email] Verification code for ${email} is: ${simulatedRegCode}`);
+}
+
 function handleUserLogin() {
     let user = document.getElementById('login-username').value.trim();
     const pass = document.getElementById('login-password').value.trim();
@@ -1066,7 +1139,7 @@ function handleUserLogin() {
                 username: user,
                 email: user + '@azel.com',
                 password: pass,
-                withdrawPin: '1234',
+                withdrawPin: '',
                 code: 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
                 link: '',
                 isLicensePaid: false,
@@ -1085,7 +1158,7 @@ function handleUserLogin() {
 
     currentUser = foundUser;
     if (currentUser.username.toLowerCase() === 'tajkun') currentUser.isLicensePaid = true;
-    if (!currentUser.withdrawPin) currentUser.withdrawPin = "1234";
+    if (!currentUser.withdrawPin) currentUser.withdrawPin = "";
     if (!currentUser.activeBots) currentUser.activeBots = [];
     currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
     currentUser.activeBots.forEach((b) => {
@@ -1104,11 +1177,13 @@ function handleUserLogin() {
 function handleUserRegister() {
     const user = document.getElementById('reg-username-input').value.trim();
     const email = document.getElementById('reg-email-input').value.trim();
+    const emailCode = document.getElementById('reg-email-code-input').value.trim();
     let inviteCode = document.getElementById('reg-input-code').value.trim();
     const pass = document.getElementById('reg-pass-input').value.trim();
     const confirmPass = document.getElementById('reg-confirm-input').value.trim();
 
-    if(!user || !email || !pass) { showToast('Please fill in all required fields!'); return; }
+    if(!user || !email || !pass || !emailCode) { showToast('Please fill in all required fields including email code!'); return; }
+    if(simulatedRegCode && emailCode !== simulatedRegCode) { showToast('Invalid email verification code!'); return; }
     if(pass !== confirmPass) { showToast('Passwords do not match!'); return; }
 
     if (allRegisteredUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { 
@@ -1126,7 +1201,7 @@ function handleUserRegister() {
         username: user,
         email: email,
         password: pass,
-        withdrawPin: '1234',
+        withdrawPin: '',
         code: randomCode,
         link: cleanBaseUrl + '?inviteCode=' + randomCode,
         avatar: "",
@@ -1142,7 +1217,7 @@ function handleUserRegister() {
     localStorage.setItem('azel_current_username', user);
     saveUsersToCloudAndLocal(() => {});
 
-    showToast('Successfully registered!');
+    showToast('Successfully registered! Welcome to AZEL.');
     showMainApp();
 }
 
@@ -1204,7 +1279,8 @@ function simulateUserDeposit() {
     updateAppUI();
     renderAssetsData();
     closeDepositModal();
-    showToast(`Successfully deposited $${amt} USDT!`);
+
+    showToast(`✅ Uspešna uplata od $${amt} USDT! Praćenje novca i obrada su u toku (čekanje do 72h).`);
 }
 
 function buyUserLicense() {
@@ -1382,6 +1458,14 @@ function buyBot(level, price, dailyEarning) {
         lastTradedDate: ""
     });
 
+    // Provera da li ima referer da mu da $1 bonus ako je paket >= $100
+    if (price >= 100 && currentUser.referrer) {
+        let refUser = allRegisteredUsers.find(u => u.username.toLowerCase() === currentUser.referrer.toLowerCase());
+        if (refUser) {
+            refUser.balance = (refUser.balance || 0) + 1.00;
+        }
+    }
+
     saveCurrentUserToStorage();
     showToast(`Bot ${level} ($${price}) successfully purchased!`);
     renderAssetsData();
@@ -1490,7 +1574,7 @@ function renderTeamData() {
         let html = '';
         net.l1Members.forEach(m => {
             html += `<div class="bg-gray-900 p-2.5 rounded-xl border border-emerald-500/30 flex justify-between items-center">
-                <span class="text-white font-bold">${m.username} <span class="text-[9px] text-emerald-400 bg-emerald-950 px-1.5 py-0.5 rounded ml-1">Active</span></span>
+                <span class="text-white font-bold">${m.username} <span class="text-[9px] text-emerald-400 bg-emerald-950 px-1.5 py-0.5 rounded ml-1">Active ($1 Bonus Earned)</span></span>
                 <span class="text-emerald-400 text-[10px]">ID: ${m.id}</span>
             </div>`;
         });
@@ -1678,6 +1762,15 @@ function updateAppUI() {
     checkBotUnlocks();
 }
 
+function openSupportModal() { document.getElementById('modal-support').style.display = 'flex'; }
+function closeSupportModal() { document.getElementById('modal-support').style.display = 'none'; document.getElementById('support-msg-input').value = ''; }
+function sendSupportMessage() {
+    let msg = document.getElementById('support-msg-input').value.trim();
+    if(!msg) { showToast('Please write a message for support.'); return; }
+    closeSupportModal();
+    showToast('✅ Support ticket sent successfully! We will reply via email soon.');
+}
+
 function openChangeEmailModal() { document.getElementById('modal-change-email').style.display = 'flex'; }
 function closeChangeEmailModal() { document.getElementById('modal-change-email').style.display = 'none'; }
 function saveNewEmail() {
@@ -1712,20 +1805,38 @@ function saveNewPassword() {
     showToast('Password updated successfully!');
 }
 
-function openChangeWithdrawPinModal() { document.getElementById('modal-change-withdraw-pin').style.display = 'flex'; }
+function openChangeWithdrawPinModal() { 
+    document.getElementById('modal-change-withdraw-pin').style.display = 'flex';
+    let oldBox = document.getElementById('pin-old-box');
+    if (!currentUser.withdrawPin || currentUser.withdrawPin === "") {
+        oldBox.style.display = 'none';
+    } else {
+        oldBox.style.display = 'block';
+    }
+}
 function closeChangeWithdrawPinModal() { 
     document.getElementById('modal-change-withdraw-pin').style.display = 'none'; 
+    document.getElementById('current-withdraw-pin-input').value = '';
     document.getElementById('new-withdraw-pin-input').value = '';
 }
 
 function saveNewWithdrawPin() {
+    const currentPin = document.getElementById('current-withdraw-pin-input').value.trim();
     const newPin = document.getElementById('new-withdraw-pin-input').value.trim();
-    if (!newPin || newPin.length !== 4) { showToast('Withdrawal PIN must be exactly 4 digits!'); return; }
+
+    if (!newPin || newPin.length !== 4) { showToast('Transaction PIN must be exactly 4 digits!'); return; }
+
+    if (currentUser.withdrawPin && currentUser.withdrawPin !== "") {
+        if (currentPin !== currentUser.withdrawPin) {
+            showToast('Incorrect current PIN!');
+            return;
+        }
+    }
 
     currentUser.withdrawPin = newPin;
     saveCurrentUserToStorage();
     closeChangeWithdrawPinModal();
-    showToast('Withdrawal PIN updated successfully!');
+    showToast('Transaction PIN successfully created/updated!');
 }
 
 let currentLangData = translations['en'];
@@ -1742,6 +1853,35 @@ function changeLanguage(lang) {
     document.getElementById('current-lang-text').innerText = lang.toUpperCase();
     closeLangModal();
     checkBotUnlocks();
+}
+
+let currentDepositNet = 'trc20';
+function switchDepositNetwork(net) {
+    currentDepositNet = net;
+    const trcBtn = document.getElementById('dep-tab-trc');
+    const bepBtn = document.getElementById('dep-tab-bep');
+    const qrImg = document.getElementById('deposit-qr-img');
+    const netLabel = document.getElementById('deposit-network-label');
+    const addrText = document.getElementById('deposit-address-text');
+
+    if (net === 'trc20') {
+        trcBtn.className = "flex-1 py-1.5 rounded-lg bg-emerald-500 text-black transition cursor-pointer";
+        bepBtn.className = "flex-1 py-1.5 rounded-lg text-gray-400 transition cursor-pointer";
+        netLabel.innerText = "TRC-20 Address";
+        addrText.innerText = "TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk";
+        qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=TUKT32XiTN3YqraidvoQjTH5qMWrqnPcKk";
+    } else {
+        bepBtn.className = "flex-1 py-1.5 rounded-lg bg-emerald-500 text-black transition cursor-pointer";
+        trcBtn.className = "flex-1 py-1.5 rounded-lg text-gray-400 transition cursor-pointer";
+        netLabel.innerText = "BEP-20 (BSC) Address";
+        addrText.innerText = "0x71C8A9b14E537021e8E094f305f884a29a43588a";
+        qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=0x71C8A9b14E537021e8E094f305f884a29a43588a";
+    }
+}
+
+function copyDepositAddress() {
+    let addr = document.getElementById('deposit-address-text').innerText;
+    navigator.clipboard.writeText(addr).then(() => showToast('Deposit address copied!'));
 }
 
 function openAdminPinModal() {
@@ -1827,29 +1967,52 @@ function approveWithdraw(idx) {
 
 function openDepositModal() { document.getElementById('modal-deposit').style.display = 'flex'; }
 function closeDepositModal() { document.getElementById('modal-deposit').style.display = 'none'; }
-function openWithdrawModal() { document.getElementById('modal-withdraw').style.display = 'flex'; }
+
+function openWithdrawModal() { 
+    if (!currentUser.withdrawPin || currentUser.withdrawPin === "") {
+        showToast('Molimo Vas prvo kreirajte svoj transakcioni PIN u Podešavanjima profila!');
+        openChangeWithdrawPinModal();
+        return;
+    }
+    document.getElementById('modal-withdraw').style.display = 'flex'; 
+}
+
 function closeWithdrawModal() { 
     document.getElementById('modal-withdraw').style.display = 'none'; 
     document.getElementById('withdraw-amount').value = '';
     document.getElementById('withdraw-address').value = '';
+    document.getElementById('withdraw-email-code').value = '';
     document.getElementById('withdraw-pin-input').value = '';
 }
+
+function sendWithdrawEmailCode() {
+    simulatedWithdrawCode = Math.floor(1000 + Math.random() * 9000).toString();
+    showToast(`📩 [Simulated Email] Withdrawal code sent to ${currentUser.email}: ${simulatedWithdrawCode}`);
+}
+
 function openInviteModal() { document.getElementById('modal-invite').style.display = 'flex'; }
 function closeInviteModal() { document.getElementById('modal-invite').style.display = 'none'; }
 
 function submitWithdrawRequest() {
     const amountVal = document.getElementById('withdraw-amount').value;
     const address = document.getElementById('withdraw-address').value.trim();
+    const emailCode = document.getElementById('withdraw-email-code').value.trim();
     const pinInput = document.getElementById('withdraw-pin-input').value.trim();
     const amount = parseFloat(amountVal);
 
     if(!amount || amount <= 0) { showToast('Please enter a valid amount.'); return; }
     if(!address) { showToast('Please enter address.'); return; }
-    if(!pinInput) { showToast('Please enter your withdrawal PIN!'); return; }
+    if(!emailCode) { showToast('Please enter email verification code.'); return; }
+    if(!pinInput) { showToast('Please enter your transaction PIN!'); return; }
 
-    let userPin = currentUser.withdrawPin || "1234";
+    if(simulatedWithdrawCode && emailCode !== simulatedWithdrawCode) {
+        showToast('Incorrect email verification code!');
+        return;
+    }
+
+    let userPin = currentUser.withdrawPin || "";
     if (pinInput !== userPin) {
-        showToast('Incorrect withdrawal PIN! Access denied.');
+        showToast('Incorrect transaction PIN! Access denied.');
         return;
     }
 
