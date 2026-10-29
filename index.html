@@ -575,8 +575,9 @@ window.addEventListener('DOMContentLoaded', function() {
         try { allRegisteredUsers = JSON.parse(localSavedUsers); } catch(e){}
     }
 
-    const isLogged = sessionStorage.getItem('azel_logged_in');
-    const loggedUsername = sessionStorage.getItem('azel_current_username');
+    // KORISTIMO localStorage UMESTO sessionStorage DA SE NALOG NE BRIŠE KADA OSVEŽIŠ VERCEL ILI ZATVORIŠ APLIKACIJU
+    const isLogged = localStorage.getItem('azel_logged_in');
+    const loggedUsername = localStorage.getItem('azel_current_username');
 
     if (isLogged === 'true' && loggedUsername) {
         let existingUser = allRegisteredUsers.find(u => u.username.toLowerCase() === loggedUsername.toLowerCase());
@@ -599,7 +600,7 @@ window.addEventListener('DOMContentLoaded', function() {
         document.getElementById('main-app-wrapper').style.display = 'none';
     }
 
-    // Automatska sinhronizacija i update u pozadini NA SVAKI 1 SEKUND (bez izbacivanja iz naloga!)
+    // AUTOMATSKO OSVEŽAVANJE I SINHRONIZACIJA U POZADINI TAČNO NA SVAKI 1 SEKUND
     setInterval(() => {
         loadUsersFromCloud(() => {
             checkActiveBotsProgress();
@@ -732,8 +733,9 @@ function handleUserLogin() {
     checkActiveBotsProgress();
     saveCurrentUserToStorage();
 
-    sessionStorage.setItem('azel_logged_in', 'true');
-    sessionStorage.setItem('azel_current_username', currentUser.username);
+    // ČUVAMO U LOKALNOJ MEMORIJI DA SE NALOG PAMTI ČAK I NAKON ZATVARANJA APLIKACIJE NA TELEFONU
+    localStorage.setItem('azel_logged_in', 'true');
+    localStorage.setItem('azel_current_username', currentUser.username);
     showMainApp();
 }
 
@@ -773,8 +775,8 @@ function handleUserRegister() {
 
     allRegisteredUsers.push(newUser);
     currentUser = newUser;
-    sessionStorage.setItem('azel_logged_in', 'true');
-    sessionStorage.setItem('azel_current_username', user);
+    localStorage.setItem('azel_logged_in', 'true');
+    localStorage.setItem('azel_current_username', user);
     saveUsersToCloudAndLocal(() => {});
 
     showToast('Successfully registered! Account is pending activation.');
@@ -796,8 +798,8 @@ function showMainApp() {
 }
 
 function handleUserLogout() {
-    sessionStorage.removeItem('azel_logged_in');
-    sessionStorage.removeItem('azel_current_username');
+    localStorage.removeItem('azel_logged_in');
+    localStorage.removeItem('azel_current_username');
     document.getElementById('main-app-wrapper').style.display = 'none';
     document.getElementById('auth-screen').style.display = 'flex';
 }
