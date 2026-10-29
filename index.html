@@ -599,7 +599,7 @@ window.addEventListener('DOMContentLoaded', function() {
         document.getElementById('main-app-wrapper').style.display = 'none';
     }
 
-    // Automatska sinhronizacija i update u pozadini svakih 5 sekundi (bez izbacivanja korisnika iz naloga!)
+    // Automatska sinhronizacija i update u pozadini NA SVAKI 1 SEKUND (bez izbacivanja iz naloga!)
     setInterval(() => {
         loadUsersFromCloud(() => {
             checkActiveBotsProgress();
@@ -608,7 +608,7 @@ window.addEventListener('DOMContentLoaded', function() {
                 renderAssetsData();
             }
         });
-    }, 5000);
+    }, 1000);
 
     const urlParams = new URLSearchParams(window.location.search);
     const refCode = urlParams.get('inviteCode') || urlParams.get('ref');
@@ -641,7 +641,6 @@ function loadUsersFromCloud(callback) {
         if (currentUser) {
             let updatedSelf = allRegisteredUsers.find(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
             if (updatedSelf) {
-                // Ažuriramo podatke trenutnog korisnika u pozadini bez resetovanja sesije
                 currentUser.balance = updatedSelf.balance;
                 currentUser.activeBots = updatedSelf.activeBots;
                 currentUser.isLicensePaid = updatedSelf.isLicensePaid;
@@ -1082,7 +1081,6 @@ function checkActiveBotsProgress() {
         if(bot.tradingStatus === 'TRADING') {
             if(now >= bot.tradingEndsAt) {
                 bot.tradingStatus = 'READY_TO_COLLECT';
-                // Ovde iskače lepa plivajuća notifikacija umesto starog alert-a!
                 showToast(`🤖 Bot Level ${bot.level} finished trading! Profit +$${bot.dailyEarning} is ready to collect.`);
                 updated = true;
             }
