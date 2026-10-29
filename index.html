@@ -535,13 +535,13 @@ window.addEventListener('DOMContentLoaded', function() {
         currentUser = allRegisteredUsers.find(u => u.username.toLowerCase() === loggedUsername.toLowerCase()) || MAIN_ADMIN_USER;
         
         if (currentUser && currentUser.activeBots) {
-            // Čišćenje ako ima već isteknutih botova u memoriji
             currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
             currentUser.activeBots.forEach((b) => {
                 if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
                 if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
                 if (!b.tradingStatus) b.tradingStatus = 'IDLE';
             });
+            checkActiveBotsProgress();
             saveCurrentUserToStorage();
         }
 
@@ -679,6 +679,7 @@ function handleUserLogin() {
         if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
         if (!b.tradingStatus) b.tradingStatus = 'IDLE';
     });
+    checkActiveBotsProgress();
     saveCurrentUserToStorage();
 
     sessionStorage.setItem('azel_logged_in', 'true');
@@ -844,7 +845,6 @@ function checkBotUnlocks() {
     if(!currentUser.activeBots) currentUser.activeBots = [];
 
     for(let i=1; i<=6; i++) {
-        // Gledamo samo botove koji imaju daysRemaining > 0
         let alreadyBought = currentUser.activeBots.some(b => b.level === i && b.daysRemaining > 0);
         let btn = document.getElementById(i <= 2 ? `market-btn-${i}` : `bot-btn-${i}`);
         let status = document.getElementById(i <= 2 ? `market-status-${i}` : `bot-status-${i}`);
@@ -945,7 +945,8 @@ function buyBot(level, price, dailyEarning) {
         dailyEarning: dailyEarning, 
         daysRemaining: 60, 
         tradingStatus: 'IDLE', 
-        tradingEndsAt: 0
+        tradingEndsAt: 0,
+        lastTradedDate: ""
     });
 
     saveCurrentUserToStorage();
@@ -964,23 +965,42 @@ function startBotTrading(uniqueId) {
     if(bot.daysRemaining <= 0) { alert('This bot\'s 60-day lifecycle has ended.'); return; }
 
     bot.tradingStatus = 'TRADING';
-    bot.tradingEndsAt = Date.now() + (10 * 1000); 
+    bot.tradingEndsAt = Date.now() + (10 * 1000); // 10 sekundi testni period
 
     saveCurrentUserToStorage();
     renderAssetsData();
 }
 
+// AUTOMATSKI RESET BOTOVA U 01:00 UJUTRU / NAVEČER
 function checkActiveBotsProgress() {
     if(!currentUser || !currentUser.activeBots || currentUser.activeBots.length === 0) return;
 
     let now = Date.now();
+    let nowDateObj = new Date();
+    let currentHour = nowDateObj.getHours();
+    let currentMinute = nowDateObj.getMinutes();
+    
+    // Format dana za praćenje poslednjeg tradinga (npr. "2026-10-29")
+    let todayStr = nowDateObj.getFullYear() + '-' + (nowDateObj.getMonth() + 1) + '-' + nowDateObj.getDate();
+
     let updated = false;
+
+    // USLOV ZA RESET: Da li je prošlo 01:00 sat (1h ujutru/navečer)
+    let isAfterResetTime = (currentHour > 1) || (currentHour === 1 && currentMinute >= 0);
 
     currentUser.activeBots.forEach(bot => {
         if(!bot.uniqueId) bot.uniqueId = 'bot_lvl_' + bot.level + '_' + Math.random().toString(36).substring(2, 9);
         if(bot.daysRemaining === undefined || isNaN(bot.daysRemaining)) bot.daysRemaining = 60;
 
+        // Ako je bot juče završio sesiju, a sada je posle 01:00 i novi je dan -> vraćamo u IDLE
         if (bot.tradingStatus === 'COMPLETED_TODAY' || bot.tradingStatus === 'DONE') {
+            if (bot.lastTradedDate !== todayStr && isAfterResetTime) {
+                bot.tradingStatus = 'IDLE';
+                updated = true;
+            }
+        }
+
+        if (bot.lastTradedDate && bot.lastTradedDate !== todayStr && isAfterResetTime && bot.tradingStatus !== 'TRADING') {
             bot.tradingStatus = 'IDLE';
             updated = true;
         }
@@ -988,6 +1008,8 @@ function checkActiveBotsProgress() {
         if(bot.tradingStatus === 'TRADING') {
             if(now >= bot.tradingEndsAt) {
                 bot.tradingStatus = 'COMPLETED_TODAY';
+                bot.lastTradedDate = todayStr; // Zapisujemo da je za danas odradio
+                
                 bot.daysRemaining = Math.max(0, bot.daysRemaining - 1); 
                 
                 let earning = bot.dailyEarning;
@@ -998,14 +1020,14 @@ function checkActiveBotsProgress() {
                     currentUser.balance += bot.price; 
                     alert(`Congratulations! Bot Level ${bot.level} has completed its full 60-day cycle! Initial capital and profits returned.`);
                 } else {
-                    alert(`Bot Level ${bot.level} finished trading! Earned +$${earning}.`);
+                    alert(`Bot Level ${bot.level} finished trading! Earned +$${earning}. Days remaining: ${bot.daysRemaining}.`);
                 }
                 updated = true;
             }
         }
     });
 
-    // UKLANJANJE BOTOVA KOJIMA JE ISTEKAO CIKLUS OD 60 DANA (daysRemaining <= 0)
+    // Uklanjanje botova kojima je istekao ciklus (daysRemaining <= 0)
     let initialCount = currentUser.activeBots.length;
     currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
     if(currentUser.activeBots.length !== initialCount) {
@@ -1059,7 +1081,6 @@ function renderTeamData() {
 function renderAssetsData() {
     let frozenTotal = 0;
     if(currentUser.activeBots) {
-        // Filtriramo samo žive botove
         currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
         currentUser.activeBots.forEach(b => { frozenTotal += b.price; });
     }
@@ -1094,9 +1115,10 @@ function renderAssetsData() {
             btnColor = "bg-amber-500 text-black cursor-wait";
             statusDisplay = `Trading session active`;
         } else if(bot.tradingStatus === 'COMPLETED_TODAY' || bot.tradingStatus === 'DONE') {
-            btnText = "Start bot";
-            btnColor = "bg-emerald-500 hover:bg-emerald-400 text-black";
-            statusDisplay = `Ready for next session!`;
+            btnText = "Come back tomorrow";
+            btnColor = "bg-gray-800 text-gray-400 cursor-not-allowed";
+            btnAction = "";
+            statusDisplay = `Completed for today. Reset at 01:00`;
         }
 
         document.getElementById('active-bots-header-title').innerText = `Active Bot Investments (${bot.daysRemaining} Days Remaining)`;
