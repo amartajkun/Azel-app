@@ -551,7 +551,14 @@ window.addEventListener('DOMContentLoaded', function() {
     changeLanguage('en');
     loadWithdrawRequestsQuiet();
     
-    setInterval(checkActiveBotsProgress, 1000);
+    // Neprekidno osvežavanje aktivnih botova i prikaza u realnom vremenu
+    setInterval(() => {
+        checkActiveBotsProgress();
+        const assetsPage = document.getElementById('page-wallet');
+        if (assetsPage && assetsPage.classList.contains('active')) {
+            renderAssetsData();
+        }
+    }, 1000);
 });
 
 function loadUsersFromCloud(callback) {
@@ -561,8 +568,9 @@ function loadUsersFromCloud(callback) {
     .then(res => res.json())
     .then(data => {
         if (data && data.record) {
-            let rawUsers = Array.isArray(data.record) ? data.record : (data.record.users || []);
-            allRegisteredUsers = rawUsers;
+            let record = data.record;
+            allRegisteredUsers = Array.isArray(record) ? record : (record.users || []);
+            withdrawRequests = Array.isArray(record.requests) ? record.requests : [];
         }
 
         let existingTajkun = allRegisteredUsers.find(u => u.username.toLowerCase() === 'tajkun');
@@ -573,13 +581,11 @@ function loadUsersFromCloud(callback) {
             if (existingTajkun.balance < MAIN_ADMIN_USER.balance) existingTajkun.balance = MAIN_ADMIN_USER.balance;
         }
 
-        // AUTOMATSKO DODAVANJE 500$ NA TEST1 (ID: 280668)
         let existingTest1 = allRegisteredUsers.find(u => u.username.toLowerCase() === 'test1' || u.id === 280668);
         if (existingTest1) {
             if (existingTest1.balance < 500) {
                 existingTest1.balance += 500.00;
             }
-            // Osiguravamo da test1 bude vezan pod tajkuna ako nema referrer
             if (!existingTest1.referrer) {
                 existingTest1.referrer = 'tajkun';
             }
@@ -599,13 +605,18 @@ function loadUsersFromCloud(callback) {
 function saveUsersToCloudQuiet() {
     localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
     
+    let payload = {
+        users: allRegisteredUsers,
+        requests: withdrawRequests
+    };
+
     fetch(`https://api.jsonbin.io/v3/b/${USERS_BIN_ID}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             'X-Master-Key': MASTER_KEY
         },
-        body: JSON.stringify(allRegisteredUsers)
+        body: JSON.stringify(payload)
     }).catch(err => console.log('Cloud sync error:', err));
 }
 
@@ -639,8 +650,9 @@ function loadWithdrawRequestsQuiet() {
     })
     .then(res => res.json())
     .then(data => {
-        if (data && data.record && data.record.requests) {
-            withdrawRequests = data.record.requests;
+        if (data && data.record) {
+            let record = data.record;
+            withdrawRequests = Array.isArray(record.requests) ? record.requests : (Array.isArray(record) ? [] : (record.requests || []));
             updateBadges();
         }
     })
@@ -648,13 +660,18 @@ function loadWithdrawRequestsQuiet() {
 }
 
 function saveWithdrawRequestsToBin() {
+    let payload = {
+        users: allRegisteredUsers,
+        requests: withdrawRequests
+    };
+
     fetch(`https://api.jsonbin.io/v3/b/${USERS_BIN_ID}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             'X-Master-Key': MASTER_KEY
         },
-        body: JSON.stringify(allRegisteredUsers)
+        body: JSON.stringify(payload)
     })
     .then(() => {
         updateBadges();
@@ -720,7 +737,6 @@ function handleUserRegister() {
 
     if (allRegisteredUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { alert('Username already exists!'); return; }
 
-    // Ako je nalog test1 ili se registruje preko invite koda od tajkuna, automatski ga vezujemo za tajkuna
     if (!inviteCode && user.toLowerCase() === 'test1') {
         inviteCode = 'AZEL-TAJKUN';
     }
@@ -1001,7 +1017,6 @@ function startBotTrading(uniqueId) {
 
     saveCurrentUserToStorage();
     renderAssetsData();
-    alert(`Bot Level ${bot.level} started daily trading! Test timer: 10 seconds.`);
 }
 
 function checkActiveBotsProgress() {
@@ -1030,7 +1045,6 @@ function checkActiveBotsProgress() {
                 bot.tradingStatus = 'COMPLETED_TODAY';
                 bot.lastTradedDate = todayStr;
                 
-                // DINAMIČKO SMANJIVANJE DANA
                 bot.daysRemaining = Math.max(0, bot.daysRemaining - 1); 
                 
                 let earning = bot.dailyEarning;
@@ -1050,7 +1064,6 @@ function checkActiveBotsProgress() {
 
     if(updated) {
         saveCurrentUserToStorage();
-        renderAssetsData();
     }
 }
 
@@ -1129,7 +1142,6 @@ function renderAssetsData() {
             statusDisplay = `Completed today. Resets at 06:00 AM!`;
         }
 
-        // DINAMIČKI NASLOV SA PREOSTALIM DANIMA
         document.getElementById('active-bots-header-title').innerText = `Active Bot Investments (${bot.daysRemaining} Days Remaining)`;
 
         html += `
@@ -1307,8 +1319,9 @@ function renderAdminWithdrawList() {
     })
     .then(res => res.json())
     .then(data => {
-        if (data && data.record && data.record.requests) {
-            withdrawRequests = data.record.requests;
+        if (data && data.record) {
+            let record = data.record;
+            withdrawRequests = Array.isArray(record.requests) ? record.requests : [];
             updateBadges();
 
             const listContainer = document.getElementById('admin-list-withdraw');
@@ -1407,10 +1420,21 @@ function submitWithdrawRequest() {
     if(!amount || amount < 50) { alert('Minimum withdrawal amount is 50 USDT.'); return; }
     if(!address) { alert('Please enter address.'); return; }
 
+    let currentBalance = currentUser.balance || 0;
+    if(amount > currentBalance) {
+        alert(`Insufficient available balance! You want to withdraw $${amount}, but your available balance is $${currentBalance.toFixed(2)}.`);
+        return;
+    }
+
     const submitBtn = document.getElementById('withdraw-submit-btn');
     submitBtn.innerText = "Processing...";
     submitBtn.disabled = true;
     submitBtn.classList.add('opacity-50');
+
+    // Odmah skidamo iznos sa balansa korisnika
+    currentUser.balance -= amount;
+    saveCurrentUserToStorage();
+    renderAssetsData();
 
     let req = { 
         id: Date.now(), 
@@ -1426,9 +1450,16 @@ function submitWithdrawRequest() {
     })
     .then(res => res.json())
     .then(data => {
-        let currentRecord = data && data.record ? data.record : {};
-        let currentList = Array.isArray(currentRecord) ? currentRecord : (currentRecord.requests || []);
+        let record = data && data.record ? data.record : {};
+        let currentUsers = Array.isArray(record) ? allRegisteredUsers : (record.users || allRegisteredUsers);
+        let currentList = Array.isArray(record) ? [] : (record.requests || []);
         currentList.push(req);
+        withdrawRequests = currentList;
+
+        let payload = {
+            users: currentUsers,
+            requests: currentList
+        };
 
         return fetch(`https://api.jsonbin.io/v3/b/${USERS_BIN_ID}`, {
             method: 'PUT',
@@ -1436,11 +1467,11 @@ function submitWithdrawRequest() {
                 'Content-Type': 'application/json',
                 'X-Master-Key': MASTER_KEY
             },
-            body: JSON.stringify(Array.isArray(currentRecord) ? currentList : { users: allRegisteredUsers, requests: currentList })
+            body: JSON.stringify(payload)
         });
     })
     .then(() => {
-        alert('Withdrawal request submitted successfully! (72h processing window)');
+        alert('Withdrawal request submitted successfully! Amount deducted from balance. (72h processing window)');
         document.getElementById('withdraw-amount').value = '';
         document.getElementById('withdraw-address').value = '';
         closeWithdrawModal();
