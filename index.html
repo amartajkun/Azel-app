@@ -1008,14 +1008,6 @@ function startBotTrading(uniqueId) {
     let bot = currentUser.activeBots.find(b => b.uniqueId === uniqueId);
     if(!bot) return;
 
-    let now = new Date();
-    let todayStr = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
-
-    if(bot.lastTradedDate === todayStr) {
-        alert('This bot has already finished today\'s trading session. Come back tomorrow after 14:15!');
-        return;
-    }
-
     if(bot.tradingStatus === 'TRADING') {
         alert('This specific bot is already trading for today!');
         return;
@@ -1037,28 +1029,14 @@ function checkActiveBotsProgress() {
     if(!currentUser || !currentUser.activeBots || currentUser.activeBots.length === 0) return;
 
     let now = Date.now();
-    let nowDateObj = new Date();
-    let todayStr = nowDateObj.getFullYear() + '-' + (nowDateObj.getMonth() + 1) + '-' + nowDateObj.getDate();
-    let currentHour = nowDateObj.getHours();
-    let currentMinute = nowDateObj.getMinutes();
-
     let updated = false;
 
     currentUser.activeBots.forEach(bot => {
         if(!bot.uniqueId) bot.uniqueId = 'bot_lvl_' + bot.level + '_' + Math.random().toString(36).substring(2, 9);
         if(bot.daysRemaining === undefined || isNaN(bot.daysRemaining)) bot.daysRemaining = 60;
 
-        // PRIVREMENI USLOV TESTIRANJA: Resetuje se posle 14:15 časova
-        let isAfterResetTime = (currentHour > 14) || (currentHour === 14 && currentMinute >= 15);
-
+        // TESTNI PERIOD: Vremenska blokada je uklonjena, botovi se mogu odmah resetovati u IDLE
         if (bot.tradingStatus === 'COMPLETED_TODAY' || bot.tradingStatus === 'DONE') {
-            if (bot.lastTradedDate !== todayStr && isAfterResetTime) {
-                bot.tradingStatus = 'IDLE';
-                updated = true;
-            }
-        }
-
-        if (bot.lastTradedDate && bot.lastTradedDate !== todayStr && isAfterResetTime && bot.tradingStatus !== 'TRADING') {
             bot.tradingStatus = 'IDLE';
             updated = true;
         }
@@ -1066,7 +1044,6 @@ function checkActiveBotsProgress() {
         if(bot.tradingStatus === 'TRADING') {
             if(now >= bot.tradingEndsAt) {
                 bot.tradingStatus = 'COMPLETED_TODAY';
-                bot.lastTradedDate = todayStr;
                 
                 bot.daysRemaining = Math.max(0, bot.daysRemaining - 1); 
                 
@@ -1153,8 +1130,6 @@ function renderAssetsData() {
 
     let html = '';
     let now = Date.now();
-    let nowDateObj = new Date();
-    let todayStr = nowDateObj.getFullYear() + '-' + (nowDateObj.getMonth() + 1) + '-' + nowDateObj.getDate();
 
     currentUser.activeBots.forEach((bot) => {
         if(!bot.uniqueId) bot.uniqueId = 'bot_lvl_' + bot.level + '_' + Math.random().toString(36).substring(2, 9);
@@ -1175,10 +1150,10 @@ function renderAssetsData() {
             btnText = `Trading (${sLeft}s)`;
             btnColor = "bg-amber-500 text-black cursor-wait";
             statusDisplay = `Trading session active`;
-        } else if(bot.tradingStatus === 'COMPLETED_TODAY' || bot.lastTradedDate === todayStr) {
-            btnText = "Done Today ✓";
-            btnColor = "bg-gray-800 text-gray-400 cursor-not-allowed";
-            statusDisplay = `Completed today. Resets at 14:15!`;
+        } else if(bot.tradingStatus === 'COMPLETED_TODAY' || bot.tradingStatus === 'DONE') {
+            btnText = "Start bot";
+            btnColor = "bg-emerald-500 hover:bg-emerald-400 text-black";
+            statusDisplay = `Ready for next session!`;
         }
 
         document.getElementById('active-bots-header-title').innerText = `Active Bot Investments (${bot.daysRemaining} Days Remaining)`;
