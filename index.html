@@ -523,28 +523,35 @@ const translations = {
 };
 
 window.addEventListener('DOMContentLoaded', function() {
-    loadUsersFromCloud(() => {
-        const isLogged = sessionStorage.getItem('azel_logged_in');
-        const loggedUsername = sessionStorage.getItem('azel_current_username');
+    // BRZO UČITAVANJE IZ LOKALNE MEMORIJE BEZ ČEKANJA NA DILEJ SERVERA
+    let localSavedUsers = localStorage.getItem('azel_registered_users');
+    if (localSavedUsers) {
+        try { allRegisteredUsers = JSON.parse(localSavedUsers); } catch(e){}
+    }
 
-        if (isLogged === 'true' && loggedUsername) {
-            currentUser = allRegisteredUsers.find(u => u.username.toLowerCase() === loggedUsername.toLowerCase()) || MAIN_ADMIN_USER;
-            
-            if (currentUser && currentUser.activeBots) {
-                currentUser.activeBots.forEach((b) => {
-                    if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
-                    if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
-                    if (!b.tradingStatus) b.tradingStatus = 'IDLE';
-                });
-                saveCurrentUserToStorage();
-            }
+    const isLogged = sessionStorage.getItem('azel_logged_in');
+    const loggedUsername = sessionStorage.getItem('azel_current_username');
 
-            showMainApp();
-        } else {
-            document.getElementById('auth-screen').style.display = 'flex';
-            document.getElementById('main-app-wrapper').style.display = 'none';
+    if (isLogged === 'true' && loggedUsername) {
+        currentUser = allRegisteredUsers.find(u => u.username.toLowerCase() === loggedUsername.toLowerCase()) || MAIN_ADMIN_USER;
+        
+        if (currentUser && currentUser.activeBots) {
+            currentUser.activeBots.forEach((b) => {
+                if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
+                if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
+                if (!b.tradingStatus) b.tradingStatus = 'IDLE';
+            });
+            saveCurrentUserToStorage();
         }
-    });
+
+        showMainApp();
+    } else {
+        document.getElementById('auth-screen').style.display = 'flex';
+        document.getElementById('main-app-wrapper').style.display = 'none';
+    }
+
+    // U pozadini sinhronizuj sa cloud-om da uvek bude sve sveže
+    loadUsersFromCloud(() => {});
 
     const urlParams = new URLSearchParams(window.location.search);
     const refCode = urlParams.get('inviteCode') || urlParams.get('ref');
@@ -554,7 +561,7 @@ window.addEventListener('DOMContentLoaded', function() {
     }
     changeLanguage('en');
     
-    // AUTOMATSKO OSVEŽAVANJE SVAKE SEKUNDE (Cloud sync + Tim + Botovi)
+    // TIHA SINKRONIZACIJA U POZADINI SVAKE SEKUNDE
     setInterval(() => {
         silentLoadUsersFromCloud(() => {
             checkActiveBotsProgress();
@@ -579,6 +586,7 @@ function loadUsersFromCloud(callback) {
         if (data && data.users) {
             allRegisteredUsers = Array.isArray(data.users) ? data.users : [];
             withdrawRequests = Array.isArray(data.requests) ? data.requests : [];
+            localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
         }
 
         let existingTajkun = allRegisteredUsers.find(u => u.username.toLowerCase() === 'tajkun');
@@ -600,7 +608,6 @@ function loadUsersFromCloud(callback) {
         if (callback) callback();
     })
     .catch(err => {
-        console.log('Cloud load error:', err);
         allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [MAIN_ADMIN_USER];
         if (callback) callback();
     });
@@ -613,6 +620,7 @@ function silentLoadUsersFromCloud(callback) {
         if (data && data.users) {
             allRegisteredUsers = Array.isArray(data.users) ? data.users : [];
             withdrawRequests = Array.isArray(data.requests) ? data.requests : [];
+            localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
         }
         if (currentUser) {
             let updatedSelf = allRegisteredUsers.find(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
@@ -626,6 +634,8 @@ function silentLoadUsersFromCloud(callback) {
 }
 
 function saveUsersToCloudAndLocal(callback) {
+    localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
+
     let payload = {
         action: "save",
         sheet: "Users",
@@ -641,12 +651,9 @@ function saveUsersToCloudAndLocal(callback) {
     })
     .then(res => res.json())
     .then(data => {
-        localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
         if (callback) callback(true);
     })
     .catch(err => {
-        console.log('Cloud sync error, saving locally:', err);
-        localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
         if (callback) callback(false);
     });
 }
@@ -688,32 +695,31 @@ function handleUserLogin() {
     const pass = document.getElementById('login-password').value.trim();
     if(!user || !pass) { alert('Please enter username and password!'); return; }
 
-    loadUsersFromCloud(() => {
-        let foundUser = allRegisteredUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
-        
-        if (!foundUser) { 
-            alert('Account does not exist! Please register first.'); 
-            return; 
-        }
+    // TRENUTNI LOGIN BEZ ČEKANJA (KORISTI LOKALNU MEMORIJU)
+    let foundUser = allRegisteredUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
+    
+    if (!foundUser) { 
+        alert('Account does not exist! Please register first.'); 
+        return; 
+    }
 
-        if (foundUser.password !== pass) {
-            alert('Incorrect password! Please try again.');
-            return; 
-        }
+    if (foundUser.password !== pass) {
+        alert('Incorrect password! Please try again.');
+        return; 
+    }
 
-        currentUser = foundUser;
-        if (!currentUser.activeBots) currentUser.activeBots = [];
-        currentUser.activeBots.forEach((b) => {
-            if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
-            if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
-            if (!b.tradingStatus) b.tradingStatus = 'IDLE';
-        });
-        saveCurrentUserToStorage();
-
-        sessionStorage.setItem('azel_logged_in', 'true');
-        sessionStorage.setItem('azel_current_username', currentUser.username);
-        showMainApp();
+    currentUser = foundUser;
+    if (!currentUser.activeBots) currentUser.activeBots = [];
+    currentUser.activeBots.forEach((b) => {
+        if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
+        if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
+        if (!b.tradingStatus) b.tradingStatus = 'IDLE';
     });
+    saveCurrentUserToStorage();
+
+    sessionStorage.setItem('azel_logged_in', 'true');
+    sessionStorage.setItem('azel_current_username', currentUser.username);
+    showMainApp();
 }
 
 function handleUserRegister() {
@@ -726,46 +732,44 @@ function handleUserRegister() {
     if(!user || !email || !pass) { alert('Please fill in all required fields!'); return; }
     if(pass !== confirmPass) { alert('Passwords do not match!'); return; }
 
-    loadUsersFromCloud(() => {
-        if (allRegisteredUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { 
-            alert('Username already exists!'); 
-            return; 
-        }
+    if (allRegisteredUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { 
+        alert('Username already exists!'); 
+        return; 
+    }
 
-        let refUser = null;
-        if (inviteCode) {
-            refUser = allRegisteredUsers.find(u => u.code.toUpperCase() === inviteCode.toUpperCase());
-        }
+    let refUser = null;
+    if (inviteCode) {
+        refUser = allRegisteredUsers.find(u => u.code.toUpperCase() === inviteCode.toUpperCase());
+    }
 
-        let randomId = Math.floor(100000 + Math.random() * 900000); 
-        let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
-        let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
+    let randomId = Math.floor(100000 + Math.random() * 900000); 
+    let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
+    let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
 
-        let newUser = {
-            id: randomId,
-            username: user,
-            email: email,
-            password: pass,
-            code: randomCode,
-            link: cleanBaseUrl + '?inviteCode=' + randomCode,
-            avatar: "",
-            isLicensePaid: false,
-            referrer: refUser ? refUser.username : (inviteCode ? 'tajkun' : null),
-            activeBots: [],
-            balance: 0.00
-        };
+    let newUser = {
+        id: randomId,
+        username: user,
+        email: email,
+        password: pass,
+        code: randomCode,
+        link: cleanBaseUrl + '?inviteCode=' + randomCode,
+        avatar: "",
+        isLicensePaid: false,
+        referrer: refUser ? refUser.username : (inviteCode ? 'tajkun' : null),
+        activeBots: [],
+        balance: 0.00
+    };
 
-        allRegisteredUsers.push(newUser);
-        
-        saveUsersToCloudAndLocal((success) => {
-            currentUser = newUser;
-            sessionStorage.setItem('azel_logged_in', 'true');
-            sessionStorage.setItem('azel_current_username', user);
+    allRegisteredUsers.push(newUser);
+    
+    // TRENUTNI UPIS I ULAZ BEZ DILEJA
+    currentUser = newUser;
+    sessionStorage.setItem('azel_logged_in', 'true');
+    sessionStorage.setItem('azel_current_username', user);
+    saveUsersToCloudAndLocal(() => {});
 
-            alert('Successfully registered! Account is pending activation.');
-            showMainApp();
-        });
-    });
+    alert('Successfully registered! Account is pending activation.');
+    showMainApp();
 }
 
 function showMainApp() {
@@ -1060,7 +1064,6 @@ function checkActiveBotsProgress() {
             updated = true;
         }
 
-        // ISPRAVLJENO: Sigurna provera završetka trgovanja bez prekidanja i vraćanja unazad
         if(bot.tradingStatus === 'TRADING') {
             if(now >= bot.tradingEndsAt) {
                 bot.tradingStatus = 'COMPLETED_TODAY';
@@ -1206,15 +1209,14 @@ function renderAssetsData() {
 }
 
 function saveCurrentUserToStorage() {
-    loadUsersFromCloud(() => {
-        let index = allRegisteredUsers.findIndex(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
-        if (index !== -1) {
-            allRegisteredUsers[index] = currentUser;
-        } else {
-            allRegisteredUsers.push(currentUser);
-        }
-        saveUsersToCloudAndLocal(() => {});
-    });
+    let index = allRegisteredUsers.findIndex(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
+    if (index !== -1) {
+        allRegisteredUsers[index] = currentUser;
+    } else {
+        allRegisteredUsers.push(currentUser);
+    }
+    // TRENUTNI UPIS U POZADINI BEZ ČEKANJA
+    saveUsersToCloudAndLocal(() => {});
 }
 
 function updateAppUI() {
@@ -1450,13 +1452,13 @@ function submitWithdrawRequest() {
     
     withdrawRequests.push(req);
 
-    saveUsersToCloudAndLocal((success) => {
-        alert('Withdrawal request submitted successfully! Amount deducted from balance. (72h processing window)');
-        document.getElementById('withdraw-amount').value = '';
-        document.getElementById('withdraw-address').value = '';
-        closeWithdrawModal();
-        renderAssetsData();
-    });
+    // TRENUTNA POTVRDA ISPLATE BEZ ČEKANJA SERVERA
+    saveUsersToCloudAndLocal(() => {});
+    alert('Withdrawal request submitted successfully! Amount deducted from balance. (72h processing window)');
+    document.getElementById('withdraw-amount').value = '';
+    document.getElementById('withdraw-address').value = '';
+    closeWithdrawModal();
+    renderAssetsData();
 }
 </script>
 </body>
