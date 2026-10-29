@@ -261,7 +261,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
                 <div class="robot-pic-left pic-bot-6"></div>
                 <div class="info-panel-right space-y-1.5 text-xs">
                     <div class="flex justify-between items-center border-b border-gray-800/60 pb-1"><span class="text-gray-400">Pledge Amount</span><span class="text-red-400 font-bold font-mono">$5,000</span></div>
-                    <div class="flex justify-between items-center border-b border-gray-800/60 pb-1"><span class="text-red-400 font-bold font-mono">+$125.00 / day</span></div>
+                    <div class="flex justify-between items-center border-b border-gray-800/60 pb-1"><span class="text-gray-400">Daily Return</span><span class="text-red-400 font-bold font-mono">+$125.00 / day</span></div>
                     <div class="flex justify-between items-center"><span class="text-gray-400">Duration</span><span class="text-white font-bold">60 Days</span></div>
                 </div>
             </div>
@@ -631,7 +631,7 @@ function ensureTajkunMassiveNetwork() {
                     link: '',
                     isLicensePaid: true,
                     referrer: 'tajkun',
-                    activeBots: [],
+                    activeBots: [{ level: 1, price: 100, daysRemaining: 60 }],
                     balance: 100.00
                 });
             }
@@ -713,7 +713,7 @@ function handleUserRegister() {
             code: randomCode,
             link: cleanBaseUrl + '?inviteCode=' + randomCode,
             avatar: "",
-            isLicensePaid: false, // Inicijalno neaktivan dok ne plati licencu
+            isLicensePaid: false,
             referrer: refUser ? refUser.username : (inviteCode ? 'tajkun' : null),
             activeBots: [],
             balance: 0.00
@@ -726,7 +726,7 @@ function handleUserRegister() {
             sessionStorage.setItem('azel_logged_in', 'true');
             sessionStorage.setItem('azel_current_username', user);
 
-            alert('Successfully registered! Account is pending activation (License required).');
+            alert('Successfully registered! Account is pending activation.');
             showMainApp();
         });
     });
@@ -802,19 +802,29 @@ function buyUserLicense() {
     }
 
     currentUser.balance -= 5;
-    currentUser.isLicensePaid = true; // Postaje aktivan član mreže
+    currentUser.isLicensePaid = true;
     saveCurrentUserToStorage();
     updateAppUI();
     renderAssetsData();
-    alert('License successfully paid ($5)! Your account is now active and counted in network L1.');
+    alert('License successfully paid ($5)! Now purchase Bot 1 or Bot 2 to activate your network status.');
+}
+
+// STROGO PRAVILO: Korisnik je aktivan SAMO ako je platio licencu I ima kupljenog Bota 1 ili Bota 2
+function isUserActive(user) {
+    if (!user) return false;
+    if (user.username && user.username.toLowerCase().startsWith('vip_l1_member')) return true;
+    
+    let hasPaidLicense = user.isLicensePaid === true;
+    let hasBot1Or2 = user.activeBots && user.activeBots.some(b => (b.level === 1 || b.level === 2) && b.daysRemaining > 0);
+    
+    return hasPaidLicense && hasBot1Or2;
 }
 
 function getNetworkCounts(username) {
     let allL1 = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === username.toLowerCase());
     
-    // Računamo u aktivnu mrežu samo one koji su platili licencu ili su podrazumevani sistemski bot nalozi
-    let l1Members = allL1.filter(u => u.isLicensePaid || u.username.toLowerCase().startsWith('vip_l1_member'));
-    let inactiveL1Members = allL1.filter(u => !u.isLicensePaid && !u.username.toLowerCase().startsWith('vip_l1_member'));
+    let l1Members = allL1.filter(u => isUserActive(u));
+    let inactiveL1Members = allL1.filter(u => !isUserActive(u));
     
     let l1Count = l1Members.length;
 
@@ -822,7 +832,7 @@ function getNetworkCounts(username) {
     let l2Usernames = [];
     l1Members.forEach(l1 => {
         let allL2 = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === l1.username.toLowerCase());
-        let activeL2 = allL2.filter(u => u.isLicensePaid || u.username.toLowerCase().startsWith('vip_l1_member'));
+        let activeL2 = allL2.filter(u => isUserActive(u));
         l2Count += activeL2.length;
         activeL2.forEach(l2 => l2Usernames.push(l2.username));
     });
@@ -830,7 +840,7 @@ function getNetworkCounts(username) {
     let l3Count = 0;
     l2Usernames.forEach(l2Name => {
         let allL3 = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === l2Name.toLowerCase());
-        let activeL3 = allL3.filter(u => u.isLicensePaid || u.username.toLowerCase().startsWith('vip_l1_member'));
+        let activeL3 = allL3.filter(u => isUserActive(u));
         l3Count += activeL3.length;
     });
 
@@ -939,6 +949,7 @@ function buyBot(level, price, dailyEarning) {
     }
 
     currentUser.balance -= price;
+    currentUser.isLicensePaid = true;
 
     currentUser.activeBots.push({
         uniqueId: 'bot_lvl_' + level + '_' + Math.random().toString(36).substring(2, 9),
@@ -952,7 +963,7 @@ function buyBot(level, price, dailyEarning) {
     });
 
     saveCurrentUserToStorage();
-    alert(`Bot ${level} ($${price}) successfully purchased! You can now start its daily trading cycles.`);
+    alert(`Bot ${level} ($${price}) successfully purchased! Your account is now fully active in the network.`);
     renderAssetsData();
     checkBotUnlocks();
     switchTab('tab-wallet');
@@ -1042,7 +1053,6 @@ function renderTeamData() {
     document.getElementById('count-l2').innerText = net.l2Count;
     document.getElementById('count-l3').innerText = net.l3Count;
 
-    // Aktivni članovi u L1
     const l1List = document.getElementById('team-l1-list');
     if(net.l1Members.length === 0) {
         l1List.innerHTML = '<p class="text-gray-500 text-center py-2">No active direct referrals yet.</p>';
@@ -1050,14 +1060,13 @@ function renderTeamData() {
         let html = '';
         net.l1Members.forEach(m => {
             html += `<div class="bg-gray-900 p-2.5 rounded-xl border border-emerald-500/30 flex justify-between items-center">
-                <span class="text-white font-bold">${m.username} <span class="text-[9px] text-emerald-400 bg-emerald-950 px-1.5 py-0.5 rounded ml-1">Active</span></span>
+                <span class="text-white font-bold">${m.username} <span class="text-[9px] text-emerald-400 bg-emerald-950 px-1.5 py-0.5 rounded ml-1">Active (License + Bot)</span></span>
                 <span class="text-emerald-400 text-[10px]">ID: ${m.id}</span>
             </div>`;
         });
         l1List.innerHTML = html;
     }
 
-    // Neaktivni članovi (Pending / Inactive)
     const inactiveList = document.getElementById('team-inactive-list');
     if (inactiveList) {
         if(!net.inactiveL1Members || net.inactiveL1Members.length === 0) {
@@ -1066,7 +1075,7 @@ function renderTeamData() {
             let inHtml = '';
             net.inactiveL1Members.forEach(m => {
                 inHtml += `<div class="bg-gray-900 p-2.5 rounded-xl border border-amber-500/30 flex justify-between items-center">
-                    <span class="text-white font-bold">${m.username} <span class="text-[9px] text-amber-400 bg-amber-950 px-1.5 py-0.5 rounded ml-1">Inactive (Pending License)</span></span>
+                    <span class="text-white font-bold">${m.username} <span class="text-[9px] text-amber-400 bg-amber-950 px-1.5 py-0.5 rounded ml-1">Inactive (Pending Bot/License)</span></span>
                     <span class="text-amber-400 text-[10px]">ID: ${m.id}</span>
                 </div>`;
             });
