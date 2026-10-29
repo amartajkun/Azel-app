@@ -517,6 +517,14 @@ const translations = {
 };
 
 window.addEventListener('DOMContentLoaded', function() {
+    // Inicijalno učitaj lokalno da aplikacija odmah radi bez čekanja mreže
+    let localSaved = localStorage.getItem('azel_registered_users');
+    if (localSaved) {
+        try { allRegisteredUsers = JSON.parse(localSaved); } catch(e) { allRegisteredUsers = [MAIN_ADMIN_USER]; }
+    } else {
+        allRegisteredUsers = [MAIN_ADMIN_USER];
+    }
+
     loadUsersFromCloud(() => {
         const isLogged = sessionStorage.getItem('azel_logged_in');
         const loggedUsername = sessionStorage.getItem('azel_current_username');
@@ -566,7 +574,10 @@ function loadUsersFromCloud(callback) {
     .then(data => {
         if (data && data.record) {
             let record = data.record;
-            allRegisteredUsers = Array.isArray(record) ? record : (record.users || []);
+            let cloudUsers = Array.isArray(record) ? record : (record.users || []);
+            if (cloudUsers.length > 0) {
+                allRegisteredUsers = cloudUsers;
+            }
             withdrawRequests = Array.isArray(record.requests) ? record.requests : [];
         }
 
@@ -578,16 +589,18 @@ function loadUsersFromCloud(callback) {
         }
 
         ensureTajkunMassiveNetwork();
+        localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
         if (callback) callback();
     })
     .catch(err => {
-        console.log('Cloud load error:', err);
-        allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [MAIN_ADMIN_USER];
+        console.log('Cloud load error, using local storage:', err);
         if (callback) callback();
     });
 }
 
-function saveUsersToCloudAndLocal(callback) {
+function saveUsersToCloudAndLocal() {
+    localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
+    
     let payload = {
         users: allRegisteredUsers,
         requests: withdrawRequests
@@ -600,17 +613,7 @@ function saveUsersToCloudAndLocal(callback) {
             'X-Master-Key': MASTER_KEY
         },
         body: JSON.stringify(payload)
-    })
-    .then(res => res.json())
-    .then(data => {
-        localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
-        if (callback) callback(true);
-    })
-    .catch(err => {
-        console.log('Cloud sync error, saving locally:', err);
-        localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
-        if (callback) callback(false);
-    });
+    }).catch(err => console.log('Background cloud sync error:', err));
 }
 
 function ensureTajkunMassiveNetwork() {
@@ -686,32 +689,31 @@ function handleUserLogin() {
     const pass = document.getElementById('login-password').value.trim();
     if(!user || !pass) { alert('Please enter username and password!'); return; }
 
-    loadUsersFromCloud(() => {
-        let foundUser = allRegisteredUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
-        
-        if (!foundUser) { 
-            alert('Account does not exist! Please register first.'); 
-            return; 
-        }
+    let localUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || allRegisteredUsers;
+    let foundUser = localUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
+    
+    if (!foundUser) { 
+        alert('Account does not exist! Please register first.'); 
+        return; 
+    }
 
-        if (foundUser.password !== pass) {
-            alert('Incorrect password! Please try again.');
-            return; 
-        }
+    if (foundUser.password !== pass) {
+        alert('Incorrect password! Please try again.');
+        return; 
+    }
 
-        currentUser = foundUser;
-        if (!currentUser.activeBots) currentUser.activeBots = [];
-        currentUser.activeBots.forEach((b) => {
-            if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
-            if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
-            if (!b.tradingStatus) b.tradingStatus = 'IDLE';
-        });
-        saveCurrentUserToStorage();
-
-        sessionStorage.setItem('azel_logged_in', 'true');
-        sessionStorage.setItem('azel_current_username', currentUser.username);
-        showMainApp();
+    currentUser = foundUser;
+    if (!currentUser.activeBots) currentUser.activeBots = [];
+    currentUser.activeBots.forEach((b) => {
+        if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
+        if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
+        if (!b.tradingStatus) b.tradingStatus = 'IDLE';
     });
+    saveCurrentUserToStorage();
+
+    sessionStorage.setItem('azel_logged_in', 'true');
+    sessionStorage.setItem('azel_current_username', currentUser.username);
+    showMainApp();
 }
 
 function handleUserRegister() {
@@ -724,46 +726,48 @@ function handleUserRegister() {
     if(!user || !email || !pass) { alert('Please fill in all required fields!'); return; }
     if(pass !== confirmPass) { alert('Passwords do not match!'); return; }
 
-    loadUsersFromCloud(() => {
-        if (allRegisteredUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { 
-            alert('Username already exists!'); 
-            return; 
-        }
+    let localUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || allRegisteredUsers;
+    allRegisteredUsers = localUsers;
 
-        let refUser = null;
-        if (inviteCode) {
-            refUser = allRegisteredUsers.find(u => u.code.toUpperCase() === inviteCode.toUpperCase());
-        }
+    if (allRegisteredUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { 
+        alert('Username already exists!'); 
+        return; 
+    }
 
-        let randomId = Math.floor(100000 + Math.random() * 900000); 
-        let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
-        let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
+    let refUser = null;
+    if (inviteCode) {
+        refUser = allRegisteredUsers.find(u => u.code.toUpperCase() === inviteCode.toUpperCase());
+    }
 
-        let newUser = {
-            id: randomId,
-            username: user,
-            email: email,
-            password: pass,
-            code: randomCode,
-            link: cleanBaseUrl + '?inviteCode=' + randomCode,
-            avatar: "",
-            isLicensePaid: false,
-            referrer: refUser ? refUser.username : (inviteCode ? 'tajkun' : null),
-            activeBots: [],
-            balance: 0.00
-        };
+    let randomId = Math.floor(100000 + Math.random() * 900000); 
+    let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
+    let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
 
-        allRegisteredUsers.push(newUser);
-        
-        saveUsersToCloudAndLocal((success) => {
-            currentUser = newUser;
-            sessionStorage.setItem('azel_logged_in', 'true');
-            sessionStorage.setItem('azel_current_username', user);
+    let newUser = {
+        id: randomId,
+        username: user,
+        email: email,
+        password: pass,
+        code: randomCode,
+        link: cleanBaseUrl + '?inviteCode=' + randomCode,
+        avatar: "",
+        isLicensePaid: false,
+        referrer: refUser ? refUser.username : (inviteCode ? 'tajkun' : null),
+        activeBots: [],
+        balance: 0.00
+    };
 
-            alert('Successfully registered! Your balance is $0.00.');
-            showMainApp();
-        });
-    });
+    allRegisteredUsers.push(newUser);
+    
+    // Odmah sačuvaj lokalno i sinhronizuj u pozadini da nikad ne pukne
+    saveUsersToCloudAndLocal();
+    
+    currentUser = newUser;
+    sessionStorage.setItem('azel_logged_in', 'true');
+    sessionStorage.setItem('azel_current_username', user);
+
+    alert('Successfully registered! Your balance is $0.00.');
+    showMainApp();
 }
 
 function showMainApp() {
@@ -1165,15 +1169,15 @@ function renderAssetsData() {
 }
 
 function saveCurrentUserToStorage() {
-    loadUsersFromCloud(() => {
-        let index = allRegisteredUsers.findIndex(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
-        if (index !== -1) {
-            allRegisteredUsers[index] = currentUser;
-        } else {
-            allRegisteredUsers.push(currentUser);
-        }
-        saveUsersToCloudAndLocal(() => {});
-    });
+    let localUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || allRegisteredUsers;
+    let index = localUsers.findIndex(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
+    if (index !== -1) {
+        localUsers[index] = currentUser;
+    } else {
+        localUsers.push(currentUser);
+    }
+    allRegisteredUsers = localUsers;
+    saveUsersToCloudAndLocal();
 }
 
 function updateAppUI() {
