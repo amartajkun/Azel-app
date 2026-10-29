@@ -532,7 +532,7 @@ let currentUser = null;
 let allRegisteredUsers = [];
 let withdrawRequests = [];
 const ADMIN_PIN = "3112";
-let lastKnownPendingCount = 0;
+let lastKnownPendingCount = -1;
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytCxgP9CyE7ndzaDFhwLuOKt92BVuwIXloAObiZBeRQMm-ZXXQAHZh-ZqIwiJNixIRVQ/exec";
 
@@ -552,7 +552,7 @@ const MAIN_ADMIN_USER = {
 
 const translations = {
     en: { navHome: "Home", navMarket: "Market", navTeam: "Team", navAssets: "Assets", navProfile: "Profile", goToMarket: "Go to Bot Market & License", bannerSub: "STABLE BOT PLATFORM", bannerTitle: "AZEL 60-DAY CYCLES", bannerDesc: "Activate your $5 license (min deposit $105), buy 1 of each bot package, and run multiple bots simultaneously for daily 1h trading cycles.", recharge: "Recharge", withdraw: "Withdrawal", inviteFriends: "Invite Friends", marketTitle: "Bot Market & License", marketSub: "Pay $5 license once, then activate your bot packages (max 1 of each).", licenseTitle: "Lifetime User License", licenseDesc: "Required once for platform access. Fee:", payLicenseBtn: "Pay $5", statusUnlocked: "Status: Unlocked (Free)", activateBot1: "Activate Bot 1", activateBot2: "Activate Bot 2", lockedBtn: "Locked", teamTitle: "My Network Team", teamSub: "Track your referrals across 3 levels to unlock higher bot packages.", line1: "Line 1 (L1)", line2: "Line 2 (L2)", line3: "Line 3 (L3)", directRef: "Direct Referrals (L1 Members)", noRef: "No direct referrals yet.", assetsTitle: "Assets & Capital", availBalance: "Available Balance", frozenCap: "Active Bots", activeBotsTitle: "Active Bot Investments (60 Days)", noBots: "No active bot investments right now.", upgradeBtn: "Upgrade", menuChangeEmail: "Change Email", menuLang: "Switch Language", logout: "Log Out" },
-    sr: { navHome: "Početna", navMarket: "Tržište", navTeam: "Tim", navAssets: "Imovina", navProfile: "Profil", goToMarket: "Idi na Tržište Botova i Licencu", bannerSub: "STABILNA BOT PLATFORMA", bannerTitle: "AZEL CIKLUSI OD 60 DANA", bannerDesc: "Aktivirajte licencu od $5 (min uplata $105), kupite po 1 bot iz svakog paketa i pokrenite više botova istovremeno za dnevne cikluse od 1h.", recharge: "Uplata", withdraw: "Isplata", inviteFriends: "Pozovi Prijatelje", marketTitle: "Tržište Botova i Licenca", marketSub: "Platite $5 licencu jednom, pa aktivirajte bot pakete (maks 1 po tipu).", licenseTitle: "Doživotna Korisnička Licenca", licenseDesc: "Obavezno jednom za pristup platformi. Naknada:", payLicenseBtn: "Plati $5", statusUnlocked: "Status: Otključano (Besplatno)", activateBot1: "Aktivan Bot 1", activateBot2: "Aktivan Bot 2", lockedBtn: "Zaključano", teamTitle: "Moj Mrežni Tim", teamSub: "Pratite preporuke kroz 3 nivoa da otključate više bot pakete.", line1: "Linija 1 (L1)", line2: "Linija 2 (L2)", line3: "Linija 3 (L3)", directRef: "Direktni Preporučeni (L1 Članovi)", noRef: "Još uvek nema direktnih članova.", assetsTitle: "Imovina i Kapital", availBalance: "Raspoloživi Balans", frozenCap: "Active Bots", activeBotsTitle: "Aktivne Investicije Botova (60 Dana)", noNotes: "Trenutno nema aktivnih bot investicija.", upgradeBtn: "Nadogradi", menuChangeEmail: "Promeni Email", menuLang: "Promeni Jezik", logout: "Odjavi se" }
+    sr: { navHome: "Početna", navMarket: "Tržište", navTeam: "Tim", navAssets: "Imovina", navProfile: "Profil", goToMarket: "Idi na Tržište Botova i Licencu", bannerSub: "STABILNA BOT PLATFORMA", bannerTitle: "AZEL CIKLUSI OD 60 DANA", bannerDesc: "Aktivirajte licencu od $5 (min uplata $105), kupite po 1 bot iz svakog paketa i pokrenite više botova istovremeno za dnevne cikluse od 1h.", recharge: "Uplata", withdraw: "Isplata", inviteFriends: "Pozovi Prijatelje", marketTitle: "Tržište Botova i Licenca", marketSub: "Platite $5 licencu jednom, pa aktivirajte bot pakete (maks 1 po tipu).", licenseTitle: "Doživotna Korisnička Licenca", licenseDesc: "Obavezno jednom za pristup platformi. Naknada:", payLicenseBtn: "Plati $5", statusUnlocked: "Status: Otključano (Besplatno)", activateBot1: "Aktivan Bot 1", activateBot2: "Aktivan Bot 2", lockedBtn: "Zaključano", teamTitle: "Moj Mrežni Tim", teamSub: "Pratite preporuke kroz 3 nivoa da otključate više bot pakete.", line1: "Linija 1 (L1)", line2: "Linija 2 (L2)", line3: "Linija 3 (L3)", directRef: "Direktni Preporučeni (L1 Članovi)", noRef: "Još uvek nema direktnih članova.", assetsTitle: "Imovina i Kapital", availBalance: "Raspoloživi Balans", frozenCap: "Active Bots", activeBotsTitle: "Aktivne Investicije Botova (60 Dana)", noBots: "Trenutno nema aktivnih bot investicija.", upgradeBtn: "Nadogradi", menuChangeEmail: "Promeni Email", menuLang: "Promeni Jezik", logout: "Odjavi se" }
 };
 
 // Funkcija za zvučni signal (Audio Beep)
@@ -563,11 +563,11 @@ function playAdminBeep() {
         const gainNode = audioCtx.createGain();
         oscillator.type = 'sine';
         oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // Visoki ton
-        gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gainNode.gain.setValueAtTime(0.4, audioCtx.currentTime);
         oscillator.connect(gainNode);
         gainNode.connect(audioCtx.destination);
         oscillator.start();
-        oscillator.stop(audioCtx.currentTime + 0.3); // Traje 0.3 sekunde
+        oscillator.stop(audioCtx.currentTime + 0.4);
     } catch(e) {}
 }
 
@@ -603,8 +603,9 @@ window.addEventListener('DOMContentLoaded', function() {
         currentUser = existingUser || { ...MAIN_ADMIN_USER, username: loggedUsername };
         
         if (currentUser) {
-            if (currentUser.isLicensePaid === undefined) {
-                currentUser.isLicensePaid = (currentUser.activeBots && currentUser.activeBots.length > 0) || currentUser.username.toLowerCase() === 'tajkun';
+            // TRAJNA PROVERA LICENCE: Ako je admin, ili ima plaćenu licencu, ili ima botove, licenca je uvek true
+            if (currentUser.username.toLowerCase() === 'tajkun' || currentUser.isLicensePaid === true || (currentUser.activeBots && currentUser.activeBots.length > 0)) {
+                currentUser.isLicensePaid = true;
             }
             if (currentUser.activeBots) {
                 currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
@@ -669,10 +670,17 @@ function loadUsersFromCloud(callback) {
                 withdrawRequests = data.requests;
                 let newPendingCount = withdrawRequests.filter(r => r.status === 'pending').length;
                 
-                // Ako je admin ulogovan i stigao je Novi Zahtev -> Pusti Zvuk i Notifikaciju!
-                if (currentUser && currentUser.username.toLowerCase() === 'tajkun' && newPendingCount > oldPendingCount) {
-                    playAdminBeep();
-                    showToast('🔔 Novi zahtev za isplatu je stigao!');
+                if (lastKnownPendingCount === -1) {
+                    lastKnownPendingCount = newPendingCount;
+                } else if (newPendingCount > lastKnownPendingCount) {
+                    // Stigao je novi zahtev -> Pusti Zvuk i Notifikaciju!
+                    if (currentUser && currentUser.username.toLowerCase() === 'tajkun') {
+                        playAdminBeep();
+                        showToast('🔔 Novi zahtev za isplatu je stigao!');
+                    }
+                    lastKnownPendingCount = newPendingCount;
+                } else {
+                    lastKnownPendingCount = newPendingCount;
                 }
             }
         }
@@ -689,7 +697,9 @@ function loadUsersFromCloud(callback) {
             if (updatedSelf) {
                 currentUser.balance = updatedSelf.balance;
                 currentUser.activeBots = updatedSelf.activeBots;
-                if (updatedSelf.isLicensePaid) currentUser.isLicensePaid = true;
+                if (updatedSelf.isLicensePaid || currentUser.username.toLowerCase() === 'tajkun') {
+                    currentUser.isLicensePaid = true;
+                }
             }
         }
 
@@ -703,6 +713,9 @@ function loadUsersFromCloud(callback) {
 }
 
 function saveUsersToCloudAndLocal(callback) {
+    if (currentUser && (currentUser.username.toLowerCase() === 'tajkun' || currentUser.isLicensePaid)) {
+        currentUser.isLicensePaid = true;
+    }
     localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
 
     let payload = {
@@ -793,7 +806,7 @@ function handleUserLogin() {
     }
 
     currentUser = foundUser;
-    if (currentUser.isLicensePaid === undefined) currentUser.isLicensePaid = true;
+    currentUser.isLicensePaid = true; // Uvek osigurano da je licenca plaćena
     if (!currentUser.activeBots) currentUser.activeBots = [];
     currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
     currentUser.activeBots.forEach((b) => {
@@ -837,7 +850,7 @@ function handleUserRegister() {
         code: randomCode,
         link: cleanBaseUrl + '?inviteCode=' + randomCode,
         avatar: "",
-        isLicensePaid: false,
+        isLicensePaid: true, // Odmah otključano da nema problema sa plaćanjem
         referrer: refUser ? refUser.username : (inviteCode ? 'tajkun' : null),
         activeBots: [],
         balance: 1000.00
@@ -907,6 +920,7 @@ function simulateUserDeposit() {
 
     if(currentUser.balance === undefined) currentUser.balance = 0;
     currentUser.balance += amt;
+    currentUser.isLicensePaid = true;
     saveCurrentUserToStorage();
     updateAppUI();
     renderAssetsData();
@@ -915,28 +929,17 @@ function simulateUserDeposit() {
 }
 
 function buyUserLicense() {
-    if(currentUser.isLicensePaid) { showToast('License is already paid!'); return; }
-    
-    let currentBalance = currentUser.balance || 0;
-    if(currentBalance < 105) {
-        showToast(`Insufficient balance! Minimum deposit required is $105.`);
-        return;
-    }
-
-    currentUser.balance -= 5;
     currentUser.isLicensePaid = true;
     saveCurrentUserToStorage();
     updateAppUI();
     renderAssetsData();
-    showToast('License successfully paid ($5)!');
+    showToast('License successfully paid / activated!');
 }
 
 function isUserActive(user) {
     if (!user) return false;
     if (user.username && user.username.toLowerCase().startsWith('vip_l1_member')) return true;
-    let hasPaidLicense = user.isLicensePaid === true;
-    let hasBot1Or2 = user.activeBots && user.activeBots.some(b => (b.level === 1 || b.level === 2) && b.daysRemaining > 0);
-    return hasPaidLicense && hasBot1Or2;
+    return true; // Svi registrovani članovi su aktivni
 }
 
 function getNetworkCounts(username) {
@@ -986,38 +989,17 @@ function checkBotUnlocks() {
         }
 
         if(i <= 2) {
-            if(currentUser.isLicensePaid) {
-                if(btn) {
-                    btn.disabled = false;
-                    btn.className = (i === 1 ? "bg-emerald-500 hover:bg-emerald-400 text-black" : "bg-blue-500 hover:bg-blue-400 text-black") + " font-bold px-4 py-2 rounded-xl text-xs shadow-md transition cursor-pointer";
-                    btn.innerText = `Activate Bot ${i}`;
-                }
-                if(status) {
-                    status.innerText = "Status: Unlocked (Max 1)";
-                    status.className = "text-[10px] text-emerald-400 font-bold";
-                }
-            } else {
-                if(btn) {
-                    btn.disabled = true;
-                    btn.className = "bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed";
-                    btn.innerText = "Locked (Pay License)";
-                }
+            if(btn) {
+                btn.disabled = false;
+                btn.className = (i === 1 ? "bg-emerald-500 hover:bg-emerald-400 text-black" : "bg-blue-500 hover:bg-blue-400 text-black") + " font-bold px-4 py-2 rounded-xl text-xs shadow-md transition cursor-pointer";
+                btn.innerText = `Activate Bot ${i}`;
+            }
+            if(status) {
+                status.innerText = "Status: Unlocked (Max 1)";
+                status.className = "text-[10px] text-emerald-400 font-bold";
             }
         } else {
-            if(!currentUser.isLicensePaid) {
-                lockBotUI(i, "Requirement: Pay $5 License first");
-                continue;
-            }
-            let net = getNetworkCounts(currentUser.username);
-            if(i === 3) {
-                if(net.l1Count >= 5) unlockBotUI(3); else lockBotUI(3, `Requirement: ${net.l1Count}/5 active in L1`);
-            } else if(i === 4) {
-                if(net.l1Count >= 10 && net.l2Count >= 5) unlockBotUI(4); else lockBotUI(4, `Requirement: 10 active L1 & 5 active L2`);
-            } else if(i === 5) {
-                if(net.l1Count >= 20 && net.l2Count >= 15 && net.l3Count >= 5) unlockBotUI(5); else lockBotUI(5, `Requirement: 20 L1, 15 L2, 5 L3`);
-            } else if(i === 6) {
-                if(net.l1Count >= 50 && net.l2Count >= 30 && net.l3Count >= 20) unlockBotUI(6); else lockBotUI(6, `Requirement: 50 L1, 30 L2, 20 L3`);
-            }
+            unlockBotUI(i);
         }
     }
 }
@@ -1037,19 +1019,7 @@ function unlockBotUI(level) {
     status.className = "text-[10px] text-emerald-400 font-bold";
 }
 
-function lockBotUI(level, reqText) {
-    const btn = document.getElementById(`bot-btn-${level}`);
-    const status = document.getElementById(`bot-status-${level}`);
-    if(!btn) return;
-    btn.disabled = true;
-    btn.className = "bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed";
-    btn.innerText = "Locked";
-    status.innerText = reqText;
-    status.className = "text-[10px] text-amber-400 font-bold";
-}
-
 function buyBot(level, price, dailyEarning) {
-    if(!currentUser.isLicensePaid) { showToast('You must pay the $5 license first!'); return; }
     if(!currentUser.activeBots) currentUser.activeBots = [];
     
     let alreadyOwned = currentUser.activeBots.some(b => b.level === level && b.daysRemaining > 0);
@@ -1144,11 +1114,6 @@ function checkActiveBotsProgress() {
                 bot.tradingStatus = 'IDLE';
                 updated = true;
             }
-        }
-
-        if (bot.lastTradedDate && bot.lastTradedDate !== todayStr && isAfterResetTime && bot.tradingStatus !== 'TRADING' && bot.tradingStatus !== 'READY_TO_COLLECT') {
-            bot.tradingStatus = 'IDLE';
-            updated = true;
         }
 
         if(bot.tradingStatus === 'TRADING') {
@@ -1302,9 +1267,7 @@ function renderAssetsData() {
 
 function saveCurrentUserToStorage() {
     if (!currentUser) return;
-    if (currentUser.username.toLowerCase() === 'tajkun' || (currentUser.activeBots && currentUser.activeBots.length > 0)) {
-        currentUser.isLicensePaid = true;
-    }
+    currentUser.isLicensePaid = true;
     let index = allRegisteredUsers.findIndex(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
     if (index !== -1) {
         allRegisteredUsers[index] = currentUser;
@@ -1316,6 +1279,7 @@ function saveCurrentUserToStorage() {
 
 function updateAppUI() {
     if(!currentUser) currentUser = MAIN_ADMIN_USER;
+    currentUser.isLicensePaid = true;
     document.getElementById('profile-id-display').innerText = currentUser.id;
     document.getElementById('profile-username-display').innerText = currentUser.username;
     document.getElementById('profile-code-display').innerText = "Invitation code: " + currentUser.code;
@@ -1331,10 +1295,10 @@ function updateAppUI() {
         adminBtn.style.display = 'none';
     }
 
-    if(currentUser.isLicensePaid || (currentUser.activeBots && currentUser.activeBots.length > 0)) {
-        currentUser.isLicensePaid = true;
-        document.getElementById('buy-license-btn').innerText = "Paid ✓";
-        document.getElementById('buy-license-btn').className = "bg-emerald-950 text-emerald-400 px-4 py-2 rounded-xl text-xs font-bold border border-emerald-500/40 cursor-default";
+    const licenseBtn = document.getElementById('buy-license-btn');
+    if(licenseBtn) {
+        licenseBtn.innerText = "Paid ✓";
+        licenseBtn.className = "bg-emerald-950 text-emerald-400 px-4 py-2 rounded-xl text-xs font-bold border border-emerald-500/40 cursor-default";
     }
     checkBotUnlocks();
 }
@@ -1485,7 +1449,7 @@ function submitWithdrawRequest() {
     let currentBalance = currentUser.balance || 0;
     if(amount > currentBalance) { showToast(`Insufficient available balance!`); return; }
 
-    // TAČNO ODUZIMANJE IZNOSA SA BALANSA KORISNIKA
+    // PRECIZNO ODUZIMANJE IZNOSA SA BALANSA KORISNIKA I AŽURIRANJE BAZE
     currentUser.balance -= amount;
     
     let req = { id: Date.now(), timestamp: Date.now(), user: currentUser.username + " (" + currentUser.id + ")", amount: amount, address: address, status: 'pending' };
