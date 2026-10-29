@@ -498,7 +498,6 @@ let withdrawRequests = [];
 let adminInterval = null;
 const ADMIN_PIN = "3112";
 
-// Koristimo poseban JSONBin slot za bazu korisnika da bi radilo svuda sinhronizovano
 const USERS_BIN_ID = "6ae13079ffd5d16053915188"; 
 const MASTER_KEY = "$2a$10$dEZ.lwInJSv0XALwpVBrl.xZPANtLWNSkkHVwl9wvE2YOy58Of3wa";
 
@@ -564,7 +563,6 @@ function loadUsersFromCloud(callback) {
     .then(res => res.json())
     .then(data => {
         if (data && data.record) {
-            // Podržavamo i ako je objekat sa korisnicima ili direktno lista
             let rawUsers = Array.isArray(data.record) ? data.record : (data.record.users || []);
             allRegisteredUsers = rawUsers;
         }
@@ -575,6 +573,14 @@ function loadUsersFromCloud(callback) {
         } else {
             if (!existingTajkun.password) existingTajkun.password = MAIN_ADMIN_USER.password;
             if (existingTajkun.balance < MAIN_ADMIN_USER.balance) existingTajkun.balance = MAIN_ADMIN_USER.balance;
+        }
+
+        // AUTOMATSKO DODAVANJE 105$ NA TEST1 (ID: 280668) ZA TESTIRANJE
+        let existingTest1 = allRegisteredUsers.find(u => u.username.toLowerCase() === 'test1' || u.id === 280668);
+        if (existingTest1) {
+            if (existingTest1.balance < 105) {
+                existingTest1.balance = 105.00;
+            }
         }
 
         ensureTajkunMassiveNetwork();
@@ -589,7 +595,6 @@ function loadUsersFromCloud(callback) {
 }
 
 function saveUsersToCloudQuiet() {
-    // Čuvamo i lokalno i u JSONBin-u da uvek bude sinhronizovano
     localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
     
     fetch(`https://api.jsonbin.io/v3/b/${USERS_BIN_ID}`, {
@@ -641,7 +646,6 @@ function loadWithdrawRequestsQuiet() {
 }
 
 function saveWithdrawRequestsToBin() {
-    // Čuvamo zajedno sa korisnicima ili nezavisno
     fetch(`https://api.jsonbin.io/v3/b/${USERS_BIN_ID}`, {
         method: 'PUT',
         headers: {
@@ -680,7 +684,7 @@ function handleUserLogin() {
 
         if (foundUser.password !== pass) {
             alert('Incorrect password! Please try again.');
-            return;
+            return; 
         }
 
         currentUser = foundUser;
@@ -976,7 +980,7 @@ function startBotTrading(uniqueId) {
     }
 
     if(bot.tradingStatus === 'TRADING') {
-        alert('This specific bot is already trading for today (1-hour session in progress)!');
+        alert('This specific bot is already trading for today!');
         return;
     }
 
@@ -986,11 +990,13 @@ function startBotTrading(uniqueId) {
     }
 
     bot.tradingStatus = 'TRADING';
-    bot.tradingEndsAt = Date.now() + (60 * 60 * 1000); // 1 sat
+    
+    // SKRAĆENO NA 10 SEKUNDI RADI BRZOG TESTIRANJA UMANJIVANJA DANA!
+    bot.tradingEndsAt = Date.now() + (10 * 1000); 
 
     saveCurrentUserToStorage();
     renderAssetsData();
-    alert(`Bot Level ${bot.level} started daily trading! It will trade for 1 hour.`);
+    alert(`Bot Level ${bot.level} started daily trading! Test timer: 10 seconds.`);
 }
 
 function checkActiveBotsProgress() {
@@ -1007,7 +1013,6 @@ function checkActiveBotsProgress() {
         if(!bot.uniqueId) bot.uniqueId = 'bot_lvl_' + bot.level + '_' + Math.random().toString(36).substring(2, 9);
         if(bot.daysRemaining === undefined || isNaN(bot.daysRemaining)) bot.daysRemaining = 60;
 
-        // Automatsko resetovanje statusa posle 6 ujutru za sledeći dan
         if(bot.lastTradedDate && bot.lastTradedDate !== todayStr && currentHour >= 6) {
             if(bot.tradingStatus === 'COMPLETED_TODAY') {
                 bot.tradingStatus = 'IDLE';
@@ -1020,8 +1025,8 @@ function checkActiveBotsProgress() {
                 bot.tradingStatus = 'COMPLETED_TODAY';
                 bot.lastTradedDate = todayStr;
                 
-                // PRECIZNO SMANJIVANJE DANA ZA 1
-                bot.daysRemaining -= 1; 
+                // POUZDANO SMANJIVANJE DANA
+                bot.daysRemaining = Math.max(0, bot.daysRemaining - 1); 
                 
                 let earning = bot.dailyEarning;
                 currentUser.balance = (currentUser.balance || 0) + earning; 
@@ -1031,7 +1036,7 @@ function checkActiveBotsProgress() {
                     currentUser.balance += bot.price; 
                     alert(`Congratulations! Bot Level ${bot.level} has completed its full 60-day cycle! Initial capital and final profits returned.`);
                 } else {
-                    alert(`Bot Level ${bot.level} finished today's 1-hour session! Earned +$${earning}. Days remaining: ${bot.daysRemaining}.`);
+                    alert(`Bot Level ${bot.level} finished trading! Earned +$${earning}. Days remaining: ${bot.daysRemaining}.`);
                 }
                 updated = true;
             }
@@ -1110,9 +1115,9 @@ function renderAssetsData() {
             if(timeLeft < 0) timeLeft = 0;
             let mLeft = Math.floor(timeLeft / 60000);
             let sLeft = Math.floor((timeLeft % 60000) / 1000);
-            btnText = `Trading (${mLeft}m ${sLeft < 10 ? '0':''}${sLeft}s)`;
+            btnText = `Trading (${sLeft}s)`;
             btnColor = "bg-amber-500 text-black cursor-wait";
-            statusDisplay = `Trading session active (1h)`;
+            statusDisplay = `Trading session active`;
         } else if(bot.tradingStatus === 'COMPLETED_TODAY' || bot.lastTradedDate === todayStr) {
             btnText = "Done Today ✓";
             btnColor = "bg-gray-800 text-gray-400 cursor-not-allowed";
