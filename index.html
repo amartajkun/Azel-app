@@ -498,7 +498,8 @@ let withdrawRequests = [];
 let adminInterval = null;
 const ADMIN_PIN = "3112";
 
-const BIN_ID = "6ae13079ffd5d16053915188";
+// Koristimo poseban JSONBin slot za bazu korisnika da bi radilo svuda sinhronizovano
+const USERS_BIN_ID = "6ae13079ffd5d16053915188"; 
 const MASTER_KEY = "$2a$10$dEZ.lwInJSv0XALwpVBrl.xZPANtLWNSkkHVwl9wvE2YOy58Of3wa";
 
 const MAIN_ADMIN_USER = {
@@ -521,43 +522,28 @@ const translations = {
 };
 
 window.addEventListener('DOMContentLoaded', function() {
-    allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
-    let existingTajkun = allRegisteredUsers.find(u => u.username.toLowerCase() === 'tajkun');
-    if (!existingTajkun) {
-        allRegisteredUsers.push(MAIN_ADMIN_USER);
-        localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
-    } else {
-        if (!existingTajkun.password) {
-            existingTajkun.password = MAIN_ADMIN_USER.password;
+    loadUsersFromCloud(() => {
+        const isLogged = sessionStorage.getItem('azel_logged_in');
+        const loggedUsername = sessionStorage.getItem('azel_current_username');
+
+        if (isLogged === 'true' && loggedUsername) {
+            currentUser = allRegisteredUsers.find(u => u.username.toLowerCase() === loggedUsername.toLowerCase()) || MAIN_ADMIN_USER;
+            
+            if (currentUser && currentUser.activeBots) {
+                currentUser.activeBots.forEach((b) => {
+                    if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
+                    if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
+                    if (!b.tradingStatus) b.tradingStatus = 'IDLE';
+                });
+                saveCurrentUserToStorage();
+            }
+
+            showMainApp();
+        } else {
+            document.getElementById('auth-screen').style.display = 'flex';
+            document.getElementById('main-app-wrapper').style.display = 'none';
         }
-        if (existingTajkun.balance < MAIN_ADMIN_USER.balance) {
-            existingTajkun.balance = MAIN_ADMIN_USER.balance;
-        }
-        localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
-    }
-
-    ensureTajkunMassiveNetwork();
-
-    const isLogged = sessionStorage.getItem('azel_logged_in');
-    const loggedUsername = sessionStorage.getItem('azel_current_username');
-
-    if (isLogged === 'true' && loggedUsername) {
-        currentUser = allRegisteredUsers.find(u => u.username.toLowerCase() === loggedUsername.toLowerCase()) || MAIN_ADMIN_USER;
-        
-        if (currentUser && currentUser.activeBots) {
-            currentUser.activeBots.forEach((b) => {
-                if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
-                if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
-                if (!b.tradingStatus) b.tradingStatus = 'IDLE';
-            });
-            saveCurrentUserToStorage();
-        }
-
-        showMainApp();
-    } else {
-        document.getElementById('auth-screen').style.display = 'flex';
-        document.getElementById('main-app-wrapper').style.display = 'none';
-    }
+    });
 
     const urlParams = new URLSearchParams(window.location.search);
     const refCode = urlParams.get('inviteCode') || urlParams.get('ref');
@@ -571,9 +557,52 @@ window.addEventListener('DOMContentLoaded', function() {
     setInterval(checkActiveBotsProgress, 1000);
 });
 
-function ensureTajkunMassiveNetwork() {
-    allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
+function loadUsersFromCloud(callback) {
+    fetch(`https://api.jsonbin.io/v3/b/${USERS_BIN_ID}/latest`, {
+        headers: { 'X-Master-Key': MASTER_KEY }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data && data.record) {
+            // Podržavamo i ako je objekat sa korisnicima ili direktno lista
+            let rawUsers = Array.isArray(data.record) ? data.record : (data.record.users || []);
+            allRegisteredUsers = rawUsers;
+        }
+
+        let existingTajkun = allRegisteredUsers.find(u => u.username.toLowerCase() === 'tajkun');
+        if (!existingTajkun) {
+            allRegisteredUsers.push(MAIN_ADMIN_USER);
+        } else {
+            if (!existingTajkun.password) existingTajkun.password = MAIN_ADMIN_USER.password;
+            if (existingTajkun.balance < MAIN_ADMIN_USER.balance) existingTajkun.balance = MAIN_ADMIN_USER.balance;
+        }
+
+        ensureTajkunMassiveNetwork();
+        saveUsersToCloudQuiet();
+        if (callback) callback();
+    })
+    .catch(err => {
+        console.log('Cloud load error, falling back to localStorage:', err);
+        allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [MAIN_ADMIN_USER];
+        if (callback) callback();
+    });
+}
+
+function saveUsersToCloudQuiet() {
+    // Čuvamo i lokalno i u JSONBin-u da uvek bude sinhronizovano
+    localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
     
+    fetch(`https://api.jsonbin.io/v3/b/${USERS_BIN_ID}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': MASTER_KEY
+        },
+        body: JSON.stringify(allRegisteredUsers)
+    }).catch(err => console.log('Cloud sync error:', err));
+}
+
+function ensureTajkunMassiveNetwork() {
     let currentL1 = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === 'tajkun');
     if (currentL1.length < 51) {
         let neededL1 = 51 - currentL1.length;
@@ -594,93 +623,17 @@ function ensureTajkunMassiveNetwork() {
                 });
             }
         }
-        localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
-        allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
-    }
-
-    let refreshedL1 = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === 'tajkun');
-
-    let allL2 = [];
-    refreshedL1.forEach(l1 => {
-        let l2s = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === l1.username.toLowerCase());
-        allL2.push(...l2s);
-    });
-
-    if (allL2.length < 35 && refreshedL1.length > 0) {
-        let neededL2 = 35 - allL2.length;
-        let addedL2 = 0;
-        for (let i = 0; i < refreshedL1.length && addedL2 < neededL2; i++) {
-            let parentL1 = refreshedL1[i].username;
-            for (let j = 1; j <= 2 && addedL2 < neededL2; j++) {
-                let fakeL2Name = 'vip_l2_' + (allL2.length + addedL2 + 1);
-                if (!allRegisteredUsers.some(u => u.username.toLowerCase() === fakeL2Name.toLowerCase())) {
-                    allRegisteredUsers.push({
-                        id: 850000 + addedL2,
-                        username: fakeL2Name,
-                        email: fakeL2Name + '@azel.com',
-                        password: 'password123',
-                        code: 'AZEL-L2-' + addedL2,
-                        link: '',
-                        isLicensePaid: true,
-                        referrer: parentL1,
-                        activeBots: [],
-                        balance: 100.00
-                    });
-                    addedL2++;
-                }
-            }
-        }
-        localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
-        allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
-    }
-
-    let refreshedL1_again = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === 'tajkun');
-    let refreshedL2 = [];
-    refreshedL1_again.forEach(l1 => {
-        let l2s = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === l1.username.toLowerCase());
-        refreshedL2.push(...l2s);
-    });
-
-    let allL3 = [];
-    refreshedL2.forEach(l2 => {
-        let l3s = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === l2.username.toLowerCase());
-        allL3.push(...l3s);
-    });
-
-    if (allL3.length < 30 && refreshedL2.length > 0) {
-        let neededL3 = 30 - allL3.length;
-        let addedL3 = 0;
-        for (let i = 0; i < refreshedL2.length && addedL3 < neededL3; i++) {
-            let parentL2 = refreshedL2[i].username;
-            let fakeL3Name = 'vip_l3_' + (allL3.length + addedL3 + 1);
-            if (!allRegisteredUsers.some(u => u.username.toLowerCase() === fakeL3Name.toLowerCase())) {
-                allRegisteredUsers.push({
-                    id: 750000 + addedL3,
-                    username: fakeL3Name,
-                    email: fakeL3Name + '@azel.com',
-                    password: 'password123',
-                    code: 'AZEL-L3-' + addedL3,
-                    link: '',
-                    isLicensePaid: true,
-                    referrer: parentL2,
-                    activeBots: [],
-                    balance: 100.00
-                });
-                addedL3++;
-            }
-        }
-        localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
     }
 }
 
 function loadWithdrawRequestsQuiet() {
-    fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+    fetch(`https://api.jsonbin.io/v3/b/${USERS_BIN_ID}/latest`, {
         headers: { 'X-Master-Key': MASTER_KEY }
     })
     .then(res => res.json())
     .then(data => {
-        if (data && data.record) {
-            withdrawRequests = Array.isArray(data.record) ? data.record : (data.record.requests || []);
+        if (data && data.record && data.record.requests) {
+            withdrawRequests = data.record.requests;
             updateBadges();
         }
     })
@@ -688,15 +641,15 @@ function loadWithdrawRequestsQuiet() {
 }
 
 function saveWithdrawRequestsToBin() {
-    fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+    // Čuvamo zajedno sa korisnicima ili nezavisno
+    fetch(`https://api.jsonbin.io/v3/b/${USERS_BIN_ID}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             'X-Master-Key': MASTER_KEY
         },
-        body: JSON.stringify(withdrawRequests)
+        body: JSON.stringify(allRegisteredUsers)
     })
-    .then(res => res.json())
     .then(() => {
         updateBadges();
         renderAdminWithdrawList();
@@ -717,35 +670,36 @@ function handleUserLogin() {
     const pass = document.getElementById('login-password').value.trim();
     if(!user || !pass) { alert('Please enter username and password!'); return; }
 
-    allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
-    let foundUser = allRegisteredUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
-    
-    if (!foundUser) { 
-        alert('Account does not exist! Please register first.'); 
-        return; 
-    }
+    loadUsersFromCloud(() => {
+        let foundUser = allRegisteredUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
+        
+        if (!foundUser) { 
+            alert('Account does not exist! Please register first.'); 
+            return; 
+        }
 
-    if (foundUser.password !== pass) {
-        alert('Incorrect password! Please try again.');
-        return;
-    }
+        if (foundUser.password !== pass) {
+            alert('Incorrect password! Please try again.');
+            return;
+        }
 
-    currentUser = foundUser;
-    if (currentUser.username.toLowerCase() === 'tajkun' && currentUser.balance < MAIN_ADMIN_USER.balance) {
-        currentUser.balance = MAIN_ADMIN_USER.balance;
-    }
+        currentUser = foundUser;
+        if (currentUser.username.toLowerCase() === 'tajkun' && currentUser.balance < MAIN_ADMIN_USER.balance) {
+            currentUser.balance = MAIN_ADMIN_USER.balance;
+        }
 
-    if (!currentUser.activeBots) currentUser.activeBots = [];
-    currentUser.activeBots.forEach((b) => {
-        if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
-        if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
-        if (!b.tradingStatus) b.tradingStatus = 'IDLE';
+        if (!currentUser.activeBots) currentUser.activeBots = [];
+        currentUser.activeBots.forEach((b) => {
+            if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
+            if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
+            if (!b.tradingStatus) b.tradingStatus = 'IDLE';
+        });
+        saveCurrentUserToStorage();
+
+        sessionStorage.setItem('azel_logged_in', 'true');
+        sessionStorage.setItem('azel_current_username', currentUser.username);
+        showMainApp();
     });
-    saveCurrentUserToStorage();
-
-    sessionStorage.setItem('azel_logged_in', 'true');
-    sessionStorage.setItem('azel_current_username', currentUser.username);
-    showMainApp();
 }
 
 function handleUserRegister() {
@@ -758,14 +712,13 @@ function handleUserRegister() {
     if(!user || !email || !pass) { alert('Please fill in all required fields!'); return; }
     if(pass !== confirmPass) { alert('Passwords do not match!'); return; }
 
-    allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
     if (allRegisteredUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { alert('Username already exists!'); return; }
 
     let randomId = Math.floor(100000 + Math.random() * 900000); 
     let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
     let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
 
-    currentUser = {
+    let newUser = {
         id: randomId,
         username: user,
         email: email,
@@ -779,9 +732,10 @@ function handleUserRegister() {
         balance: 0.00
     };
 
-    allRegisteredUsers.push(currentUser);
-    localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
+    allRegisteredUsers.push(newUser);
+    saveUsersToCloudQuiet();
     
+    currentUser = newUser;
     sessionStorage.setItem('azel_logged_in', 'true');
     sessionStorage.setItem('azel_current_username', user);
 
@@ -867,7 +821,6 @@ function buyUserLicense() {
 }
 
 function getNetworkCounts(username) {
-    allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
     let l1Members = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === username.toLowerCase());
     let l1Count = l1Members.length;
 
@@ -1017,7 +970,6 @@ function startBotTrading(uniqueId) {
     let now = new Date();
     let todayStr = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
 
-    // Provera da li je već odradio svoje za danas (posle 6 ujutru)
     if(bot.lastTradedDate === todayStr) {
         alert('This bot has already finished today\'s trading session. Come back tomorrow after 06:00 AM!');
         return;
@@ -1055,7 +1007,7 @@ function checkActiveBotsProgress() {
         if(!bot.uniqueId) bot.uniqueId = 'bot_lvl_' + bot.level + '_' + Math.random().toString(36).substring(2, 9);
         if(bot.daysRemaining === undefined || isNaN(bot.daysRemaining)) bot.daysRemaining = 60;
 
-        // Resetovanje statusa automatski posle 6 ujutru ako je novi dan
+        // Automatsko resetovanje statusa posle 6 ujutru za sledeći dan
         if(bot.lastTradedDate && bot.lastTradedDate !== todayStr && currentHour >= 6) {
             if(bot.tradingStatus === 'COMPLETED_TODAY') {
                 bot.tradingStatus = 'IDLE';
@@ -1068,7 +1020,7 @@ function checkActiveBotsProgress() {
                 bot.tradingStatus = 'COMPLETED_TODAY';
                 bot.lastTradedDate = todayStr;
                 
-                // USPEŠNO SMANJIVANJE DANA ZA 1
+                // PRECIZNO SMANJIVANJE DANA ZA 1
                 bot.daysRemaining -= 1; 
                 
                 let earning = bot.dailyEarning;
@@ -1192,9 +1144,13 @@ function renderAssetsData() {
 }
 
 function saveCurrentUserToStorage() {
-    allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [];
-    allRegisteredUsers = allRegisteredUsers.map(u => u.username.toLowerCase() === currentUser.username.toLowerCase() ? currentUser : u);
-    localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
+    let index = allRegisteredUsers.findIndex(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
+    if (index !== -1) {
+        allRegisteredUsers[index] = currentUser;
+    } else {
+        allRegisteredUsers.push(currentUser);
+    }
+    saveUsersToCloudQuiet();
 }
 
 function updateAppUI() {
@@ -1261,7 +1217,7 @@ function saveNewPassword() {
     currentUser.password = newPass;
     saveCurrentUserToStorage();
     closeChangePasswordModal();
-    alert('Password updated successfully!');
+    alert('Password updated successfully across all devices!');
 }
 
 function openLanguageModal() { document.getElementById('modal-lang').style.display = 'flex'; }
@@ -1333,13 +1289,13 @@ function formatPassedTime(ms) {
 }
 
 function renderAdminWithdrawList() {
-    fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+    fetch(`https://api.jsonbin.io/v3/b/${USERS_BIN_ID}/latest`, {
         headers: { 'X-Master-Key': MASTER_KEY }
     })
     .then(res => res.json())
     .then(data => {
-        if (data && data.record) {
-            withdrawRequests = Array.isArray(data.record) ? data.record : (data.record.requests || []);
+        if (data && data.record && data.record.requests) {
+            withdrawRequests = data.record.requests;
             updateBadges();
 
             const listContainer = document.getElementById('admin-list-withdraw');
@@ -1452,24 +1408,22 @@ function submitWithdrawRequest() {
         status: 'pending' 
     };
     
-    fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+    fetch(`https://api.jsonbin.io/v3/b/${USERS_BIN_ID}/latest`, {
         headers: { 'X-Master-Key': MASTER_KEY }
     })
     .then(res => res.json())
     .then(data => {
-        let currentList = [];
-        if (data && data.record) {
-            currentList = Array.isArray(data.record) ? data.record : (data.record.requests || []);
-        }
+        let currentRecord = data && data.record ? data.record : {};
+        let currentList = Array.isArray(currentRecord) ? currentRecord : (currentRecord.requests || []);
         currentList.push(req);
 
-        return fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+        return fetch(`https://api.jsonbin.io/v3/b/${USERS_BIN_ID}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'X-Master-Key': MASTER_KEY
             },
-            body: JSON.stringify(currentList)
+            body: JSON.stringify(Array.isArray(currentRecord) ? currentList : { users: allRegisteredUsers, requests: currentList })
         });
     })
     .then(() => {
