@@ -189,7 +189,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
                 <i class="fas fa-robot text-emerald-300"></i>
             </div>
         </div>
-        <p class="text-[11px] text-gray-200 leading-relaxed" data-i18n="bannerDesc">Activate your $5 license (min deposit $105), buy 1 of each bot package, and run multiple bots simultaneously for daily 1h trading cycles.</p>
+        <p class="text-[11px] text-gray-200 leading-relaxed" data-i18n="bannerDesc">Activate your bot packages, and run multiple bots simultaneously for daily 1h trading cycles.</p>
     </div>
     <div class="grid grid-cols-3 gap-2 text-center">
         <button onclick="openDepositModal()" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition cursor-pointer">
@@ -209,16 +209,11 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 
 <!-- MARKET PAGE -->
 <div id="page-market" class="page-content p-4 space-y-4">
-    <h2 class="text-lg font-bold text-emerald-400 mb-1" data-i18n="marketTitle">Bot Market & License</h2>
-    <p class="text-xs text-gray-400 mb-3" data-i18n="marketSub">Pay $5 license once, then activate your bot packages (max 1 of each).</p>
+    <h2 class="text-lg font-bold text-emerald-400 mb-1" data-i18n="marketTitle">Bot Market</h2>
+    <p class="text-xs text-gray-400 mb-3" data-i18n="marketSub">Activate your bot packages (max 1 of each).</p>
 
-    <div id="license-card-box" class="emerald-card p-4 rounded-2xl flex justify-between items-center bg-emerald-950/20 border-emerald-500/40">
-        <div>
-            <h3 class="text-sm font-bold text-white" data-i18n="licenseTitle">Lifetime User License</h3>
-            <p class="text-[11px] text-gray-400"><span data-i18n="licenseDesc">Required once for platform access. Fee:</span> <span class="text-emerald-400 font-bold">$5.00</span></p>
-        </div>
-        <button id="buy-license-btn" onclick="buyUserLicense()" class="bg-emerald-500 text-black px-4 py-2 rounded-xl text-xs font-bold shadow-lg cursor-pointer" data-i18n="payLicenseBtn">Pay $5</button>
-    </div>
+    <!-- LICENCA KARTICA JE SKRIVENA DA SE VIŠE NE PRIKAZUJE -->
+    <div id="license-card-box" style="display: none;"></div>
 
     <div class="space-y-4" id="bots-market-container">
         <!-- BOT 1 -->
@@ -258,7 +253,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
                     <div class="flex justify-between items-center"><span class="text-gray-400">Duration</span><span class="text-white font-bold">60 Days</span></div>
                 </div>
             </div>
-            <div class="flex justify-between items-center pt-1 border-t border-gray-800"><span id="bot-status-3" class="text-[10px] text-amber-400 font-bold">Requirement: 5 active members in L1</span><button id="bot-btn-3" onclick="buyBot(3, 500, 12.50)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed">Locked</button></div>
+            <div class="flex justify-between items-center pt-1 border-t border-gray-800"><span id="bot-status-3" class="text-[10px] text-amber-400 font-bold">Requirement: Unlocked</span><button id="bot-btn-3" onclick="buyBot(3, 500, 12.50)" class="bg-purple-500 text-black font-bold px-4 py-2 rounded-xl text-xs cursor-pointer">Activate Bot 3</button></div>
         </div>
         <!-- BOT 4 -->
         <div class="bot-box-card card-theme-4" id="bot-card-4">
@@ -271,7 +266,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
                     <div class="flex justify-between items-center"><span class="text-gray-400">Duration</span><span class="text-white font-bold">60 Days</span></div>
                 </div>
             </div>
-            <div class="flex justify-between items-center pt-1 border-t border-gray-800"><span id="bot-status-4" class="text-[10px] text-amber-400 font-bold">Requirement: 10 in L1 + 5 in L2</span><button id="bot-btn-4" onclick="buyBot(4, 1000, 25.00)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed">Locked</button></div>
+            <div class="flex justify-between items-center pt-1 border-t border-gray-800"><span id="bot-status-4" class="text-[10px] text-amber-400 font-bold">Requirement: Unlocked</span><button id="bot-btn-4" onclick="buyBot(4, 1000, 25.00)" class="bg-pink-500 text-black font-bold px-4 py-2 rounded-xl text-xs cursor-pointer">Activate Bot 4</button></div>
         </div>
         <!-- BOT 5 -->
         <div class="bot-box-card card-theme-5" id="bot-card-5">
@@ -284,7 +279,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
                     <div class="flex justify-between items-center"><span class="text-gray-400">Duration</span><span class="text-white font-bold">60 Days</span></div>
                 </div>
             </div>
-            <div class="flex justify-between items-center pt-1 border-t border-gray-800"><span id="bot-status-5" class="text-[10px] text-amber-400 font-bold">Requirement: 20 in L1 + 15 in L2 + 5 in L3</span><button id="bot-btn-5" onclick="buyBot(5, 2500, 62.50)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed">Locked</button></div>
+            <div class="flex justify-between items-center pt-1 border-t border-gray-800"><span id="bot-status-5" class="text-[10px] text-amber-400 font-bold">Requirement: Unlocked</span><button id="bot-btn-5" onclick="buyBot(5, 2500, 62.50)" class="bg-orange-500 text-black font-bold px-4 py-2 rounded-xl text-xs cursor-pointer">Activate Bot 5</button></div>
         </div>
         <!-- BOT 6 -->
         <div class="bot-box-card card-theme-6" id="bot-card-6">
@@ -297,7 +292,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
                     <div class="flex justify-between items-center"><span class="text-gray-400">Duration</span><span class="text-white font-bold">60 Days</span></div>
                 </div>
             </div>
-            <div class="flex justify-between items-center pt-1 border-t border-gray-800"><span id="bot-status-6" class="text-[10px] text-amber-400 font-bold">Requirement: 50 in L1 + 30 in L2 + 20 in L3</span><button id="bot-btn-6" onclick="buyBot(6, 5000, 125.00)" class="bg-gray-800 text-gray-400 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed">Locked</button></div>
+            <div class="flex justify-between items-center pt-1 border-t border-gray-800"><span id="bot-status-6" class="text-[10px] text-amber-400 font-bold">Requirement: Unlocked</span><button id="bot-btn-6" onclick="buyBot(6, 5000, 125.00)" class="bg-red-500 text-white font-bold px-4 py-2 rounded-xl text-xs cursor-pointer">Activate Bot 6</button></div>
         </div>
     </div>
 </div>
@@ -305,23 +300,15 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <!-- TEAM PAGE -->
 <div id="page-team" class="page-content p-4 space-y-4">
     <h2 class="text-lg font-bold text-emerald-400 mb-1" data-i18n="teamTitle">My Network Team</h2>
-    <p class="text-xs text-gray-400 mb-3" data-i18n="teamSub">Track your referrals across 3 levels to unlock higher bot packages.</p>
+    <p class="text-xs text-gray-400 mb-3" data-i18n="teamSub">Track your referrals across 3 levels.</p>
     <div class="grid grid-cols-3 gap-2 text-center">
         <div class="emerald-card p-3 rounded-xl"><div class="text-[10px] text-gray-400" data-i18n="line1">Line 1 (L1)</div><div id="count-l1" class="text-lg font-bold text-emerald-400">0</div></div>
         <div class="emerald-card p-3 rounded-xl"><div class="text-[10px] text-gray-400" data-i18n="line2">Line 2 (L2)</div><div id="count-l2" class="text-lg font-bold text-emerald-400">0</div></div>
         <div class="emerald-card p-3 rounded-xl"><div class="text-[10px] text-gray-400" data-i18n="line3">Line 3 (L3)</div><div id="count-l3" class="text-lg font-bold text-emerald-400">0</div></div>
     </div>
-    
-    <!-- Active Direct Referrals -->
     <div class="emerald-card p-4 rounded-2xl space-y-3">
-        <h3 class="text-xs font-bold text-white border-b border-gray-800 pb-2">Active Direct Referrals (L1 Active Members)</h3>
+        <h3 class="text-xs font-bold text-white border-b border-gray-800 pb-2">Active Direct Referrals</h3>
         <div id="team-l1-list" class="space-y-2 text-xs max-h-48 overflow-y-auto"><p class="text-gray-500 text-center py-2">No active direct referrals yet.</p></div>
-    </div>
-
-    <!-- Inactive / Pending Members -->
-    <div class="emerald-card p-4 rounded-2xl space-y-3 border-amber-500/30">
-        <h3 class="text-xs font-bold text-amber-400 border-b border-gray-800 pb-2">Inactive / Pending Members (Not Counted in L1 yet)</h3>
-        <div id="team-inactive-list" class="space-y-2 text-xs max-h-48 overflow-y-auto"><p class="text-gray-500 text-center py-2">No inactive members.</p></div>
     </div>
 </div>
 
@@ -354,10 +341,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             </div>
         </div>
         <i class="fas fa-star text-emerald-400 text-lg"></i>
-    </div>
-    <div class="emerald-card p-3 rounded-xl flex justify-between items-center">
-        <div class="flex items-center space-x-2"><i class="fas fa-crown text-emerald-400 text-sm"></i><span class="text-[11px] text-gray-300">VIP Channel VIP0</span></div>
-        <button class="bg-emerald-400 text-black px-3 py-1 rounded-full text-[10px] font-bold cursor-pointer" data-i18n="upgradeBtn">Upgrade</button>
     </div>
     <div class="emerald-card rounded-2xl divide-y divide-gray-800/60 text-xs">
         <div onclick="openChangeEmailModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
@@ -551,28 +534,26 @@ const MAIN_ADMIN_USER = {
 };
 
 const translations = {
-    en: { navHome: "Home", navMarket: "Market", navTeam: "Team", navAssets: "Assets", navProfile: "Profile", goToMarket: "Go to Bot Market & License", bannerSub: "STABLE BOT PLATFORM", bannerTitle: "AZEL 60-DAY CYCLES", bannerDesc: "Activate your $5 license (min deposit $105), buy 1 of each bot package, and run multiple bots simultaneously for daily 1h trading cycles.", recharge: "Recharge", withdraw: "Withdrawal", inviteFriends: "Invite Friends", marketTitle: "Bot Market & License", marketSub: "Pay $5 license once, then activate your bot packages (max 1 of each).", licenseTitle: "Lifetime User License", licenseDesc: "Required once for platform access. Fee:", payLicenseBtn: "Pay $5", statusUnlocked: "Status: Unlocked (Free)", activateBot1: "Activate Bot 1", activateBot2: "Activate Bot 2", lockedBtn: "Locked", teamTitle: "My Network Team", teamSub: "Track your referrals across 3 levels to unlock higher bot packages.", line1: "Line 1 (L1)", line2: "Line 2 (L2)", line3: "Line 3 (L3)", directRef: "Direct Referrals (L1 Members)", noRef: "No direct referrals yet.", assetsTitle: "Assets & Capital", availBalance: "Available Balance", frozenCap: "Active Bots", activeBotsTitle: "Active Bot Investments (60 Days)", noBots: "No active bot investments right now.", upgradeBtn: "Upgrade", menuChangeEmail: "Change Email", menuLang: "Switch Language", logout: "Log Out" },
-    sr: { navHome: "Početna", navMarket: "Tržište", navTeam: "Tim", navAssets: "Imovina", navProfile: "Profil", goToMarket: "Idi na Tržište Botova i Licencu", bannerSub: "STABILNA BOT PLATFORMA", bannerTitle: "AZEL CIKLUSI OD 60 DANA", bannerDesc: "Aktivirajte licencu od $5 (min uplata $105), kupite po 1 bot iz svakog paketa i pokrenite više botova istovremeno za dnevne cikluse od 1h.", recharge: "Uplata", withdraw: "Isplata", inviteFriends: "Pozovi Prijatelje", marketTitle: "Tržište Botova i Licenca", marketSub: "Platite $5 licencu jednom, pa aktivirajte bot pakete (maks 1 po tipu).", licenseTitle: "Doživotna Korisnička Licenca", licenseDesc: "Obavezno jednom za pristup platformi. Naknada:", payLicenseBtn: "Plati $5", statusUnlocked: "Status: Otključano (Besplatno)", activateBot1: "Aktivan Bot 1", activateBot2: "Aktivan Bot 2", lockedBtn: "Zaključano", teamTitle: "Moj Mrežni Tim", teamSub: "Pratite preporuke kroz 3 nivoa da otključate više bot pakete.", line1: "Linija 1 (L1)", line2: "Linija 2 (L2)", line3: "Linija 3 (L3)", directRef: "Direktni Preporučeni (L1 Članovi)", noRef: "Još uvek nema direktnih članova.", assetsTitle: "Imovina i Kapital", availBalance: "Raspoloživi Balans", frozenCap: "Active Bots", activeBotsTitle: "Aktivne Investicije Botova (60 Dana)", noBots: "Trenutno nema aktivnih bot investicija.", upgradeBtn: "Nadogradi", menuChangeEmail: "Promeni Email", menuLang: "Promeni Jezik", logout: "Odjavi se" }
+    en: { navHome: "Home", navMarket: "Market", navTeam: "Team", navAssets: "Assets", navProfile: "Profile", goToMarket: "Go to Bot Market", bannerSub: "STABLE BOT PLATFORM", bannerTitle: "AZEL 60-DAY CYCLES", bannerDesc: "Activate your bot packages and run multiple bots simultaneously for daily 1h trading cycles.", recharge: "Recharge", withdraw: "Withdrawal", inviteFriends: "Invite Friends", marketTitle: "Bot Market", marketSub: "Activate your bot packages (max 1 of each).", teamTitle: "My Network Team", teamSub: "Track your referrals across 3 levels.", line1: "Line 1 (L1)", line2: "Line 2 (L2)", line3: "Line 3 (L3)", assetsTitle: "Assets & Capital", availBalance: "Available Balance", frozenCap: "Active Bots", activeBotsTitle: "Active Bot Investments (60 Days)", noBots: "No active bot investments right now.", upgradeBtn: "Upgrade", menuChangeEmail: "Change Email", menuLang: "Switch Language", logout: "Log Out" },
+    sr: { navHome: "Početna", navMarket: "Tržište", navTeam: "Tim", navAssets: "Imovina", navProfile: "Profil", goToMarket: "Idi na Tržište Botova", bannerSub: "STABILNA BOT PLATFORMA", bannerTitle: "AZEL CIKLUSI OD 60 DANA", bannerDesc: "Aktivirajte bot pakete i pokrenite više botova istovremeno za dnevne cikluse od 1h.", recharge: "Uplata", withdraw: "Isplata", inviteFriends: "Pozovi Prijatelje", marketTitle: "Tržište Botova", marketSub: "Aktivirajte bot pakete (maks 1 po tipu).", teamTitle: "Moj Mrežni Tim", teamSub: "Pratite preporuke kroz 3 nivoa.", line1: "Linija 1 (L1)", line2: "Linija 2 (L2)", line3: "Linija 3 (L3)", assetsTitle: "Imovina i Kapital", availBalance: "Raspoloživi Balans", frozenCap: "Active Bots", activeBotsTitle: "Aktivne Investicije Botova (60 Dana)", noBots: "Trenutno nema aktivnih bot investicija.", upgradeBtn: "Nadogradi", menuChangeEmail: "Promeni Email", menuLang: "Promeni Jezik", logout: "Odjavi se" }
 };
 
-// Stabilan audio bep preko Base64 (garantovano svira na telefonu)
-const notificationAudio = new Audio("data:audio/wav;base64,UklGRl9vT19WQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YUcvT19WAAAAAQD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wD//wA=");
-
+// 100% pouzdan zvučni alarm preko Web Audio API sintisajzera
 function playAdminBeep() {
     try {
-        notificationAudio.currentTime = 0;
-        notificationAudio.play().catch(e => {
-            // Fallback ako pretraživač blokira
-            const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.frequency.setValueAtTime(880, ctx.currentTime);
-            gain.gain.setValueAtTime(0.5, ctx.currentTime);
-            osc.start();
-            osc.stop(ctx.currentTime + 0.3);
-        });
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime); // Visoki ton
+        gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
     } catch(e) {}
 }
 
@@ -933,14 +914,6 @@ function simulateUserDeposit() {
     showToast(`Successfully deposited $${amt} USDT!`);
 }
 
-function buyUserLicense() {
-    currentUser.isLicensePaid = true;
-    saveCurrentUserToStorage();
-    updateAppUI();
-    renderAssetsData();
-    showToast('License successfully paid / activated!');
-}
-
 function isUserActive(user) {
     if (!user) return false;
     return true;
@@ -992,35 +965,22 @@ function checkBotUnlocks() {
             continue;
         }
 
-        if(i <= 2) {
-            if(btn) {
-                btn.disabled = false;
-                btn.className = (i === 1 ? "bg-emerald-500 hover:bg-emerald-400 text-black" : "bg-blue-500 hover:bg-blue-400 text-black") + " font-bold px-4 py-2 rounded-xl text-xs shadow-md transition cursor-pointer";
-                btn.innerText = `Activate Bot ${i}`;
-            }
-            if(status) {
-                status.innerText = "Status: Unlocked (Max 1)";
-                status.className = "text-[10px] text-emerald-400 font-bold";
-            }
-        } else {
-            unlockBotUI(i);
+        if(btn) {
+            btn.disabled = false;
+            let colorClass = i === 1 ? "bg-emerald-500 hover:bg-emerald-400 text-black" :
+                             i === 2 ? "bg-blue-500 hover:bg-blue-400 text-black" :
+                             i === 3 ? "bg-purple-500 hover:bg-purple-400 text-black" :
+                             i === 4 ? "bg-pink-500 hover:bg-pink-400 text-black" :
+                             i === 5 ? "bg-orange-500 hover:bg-orange-400 text-black" :
+                             "bg-red-500 hover:bg-red-400 text-white animate-pulse";
+            btn.className = `${colorClass} font-bold px-4 py-2 rounded-xl text-xs shadow-md transition cursor-pointer`;
+            btn.innerText = `Activate Bot ${i}`;
+        }
+        if(status) {
+            status.innerText = "Status: Unlocked ✓";
+            status.className = "text-[10px] text-emerald-400 font-bold";
         }
     }
-}
-
-function unlockBotUI(level) {
-    const btn = document.getElementById(`bot-btn-${level}`);
-    const status = document.getElementById(`bot-status-${level}`);
-    if(!btn) return;
-    btn.disabled = false;
-    let colorClass = level === 3 ? "bg-purple-500 hover:bg-purple-400 text-black shadow-purple-500/20" :
-                     level === 4 ? "bg-pink-500 hover:bg-pink-400 text-black shadow-pink-500/20" :
-                     level === 5 ? "bg-orange-500 hover:bg-orange-400 text-black shadow-orange-500/20" :
-                     "bg-red-500 hover:bg-red-400 text-white shadow-red-500/30 animate-pulse";
-    btn.className = `${colorClass} font-bold px-4 py-2 rounded-xl text-xs shadow-md transition cursor-pointer`;
-    btn.innerText = `Activate Bot ${level}`;
-    status.innerText = "Status: Unlocked ✓";
-    status.className = "text-[10px] text-emerald-400 font-bold";
 }
 
 function buyBot(level, price, dailyEarning) {
@@ -1160,22 +1120,6 @@ function renderTeamData() {
         });
         l1List.innerHTML = html;
     }
-
-    const inactiveList = document.getElementById('team-inactive-list');
-    if (inactiveList) {
-        if(!net.inactiveL1Members || net.inactiveL1Members.length === 0) {
-            inactiveList.innerHTML = '<p class="text-gray-500 text-center py-2">No inactive members.</p>';
-        } else {
-            let inHtml = '';
-            net.inactiveL1Members.forEach(m => {
-                inHtml += `<div class="bg-gray-900 p-2.5 rounded-xl border border-amber-500/30 flex justify-between items-center">
-                    <span class="text-white font-bold">${m.username} <span class="text-[9px] text-amber-400 bg-amber-950 px-1.5 py-0.5 rounded ml-1">Inactive</span></span>
-                    <span class="text-amber-400 text-[10px]">ID: ${m.id}</span>
-                </div>`;
-            });
-            inactiveList.innerHTML = inHtml;
-        }
-    }
 }
 
 function renderAssetsData() {
@@ -1299,11 +1243,6 @@ function updateAppUI() {
         adminBtn.style.display = 'none';
     }
 
-    const licenseBtn = document.getElementById('buy-license-btn');
-    if(licenseBtn) {
-        licenseBtn.innerText = "Paid ✓";
-        licenseBtn.className = "bg-emerald-950 text-emerald-400 px-4 py-2 rounded-xl text-xs font-bold border border-emerald-500/40 cursor-default";
-    }
     checkBotUnlocks();
 }
 
@@ -1453,15 +1392,13 @@ function submitWithdrawRequest() {
     let currentBalance = currentUser.balance || 0;
     if(amount > currentBalance) { showToast(`Insufficient available balance!`); return; }
 
-    // DIREKTNO I PRECIZNO SKIDANJE SA BALANSA KORISNIKA
+    // DIREKTNO ODUZIMANJE SA BALANSA KORISNIKA
     currentUser.balance -= amount;
 
     let req = { id: Date.now(), timestamp: Date.now(), user: currentUser.username + " (" + currentUser.id + ")", amount: amount, address: address, status: 'pending' };
     withdrawRequests.push(req);
 
-    // Odmah sačuvaj i ažuriraj lokalno i sinhronizuj sa cloud bazom
     saveUsersToCloudAndLocal(() => {});
-    
     showToast(`Withdrawal of $${amount} requested! Balance updated.`);
     document.getElementById('withdraw-amount').value = '';
     document.getElementById('withdraw-address').value = '';
