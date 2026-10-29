@@ -69,6 +69,26 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     flex-grow: 1;
 }
 
+/* NOVI PROFESIONALNI ASSETS CARD DIZAJN */
+.assets-hero-card {
+    background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #0d1117 100%);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border-radius: 1.25rem;
+    position: relative;
+    overflow: hidden;
+}
+.assets-hero-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, transparent 70%);
+    pointer-events: none;
+}
+
 #toast-container {
     position: fixed;
     top: 20px;
@@ -169,6 +189,9 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <span class="text-xl font-bold tracking-wider text-emerald-400">AZEL</span>
 </div>
 <div class="flex space-x-3 text-gray-400 text-lg relative items-center">
+<button onclick="requestNotificationPermission()" class="bg-gray-800 text-emerald-400 border border-emerald-500/30 px-2 py-1.5 rounded-lg text-[10px] font-bold items-center gap-1 cursor-pointer flex" title="Enable Phone Notifications">
+    <i class="fas fa-bell"></i>
+</button>
 <button onclick="openSupportModal()" class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 px-2.5 py-1.5 rounded-lg text-[10px] font-bold items-center gap-1.5 cursor-pointer flex relative">
     <i class="fas fa-headset"></i> <span data-i18n="supportBtn">Support</span>
     <span id="support-unread-badge" class="bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.2 rounded-full hidden">0</span>
@@ -188,6 +211,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     <div class="flex justify-center mb-2">
         <button onclick="switchTab('tab-market')" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-sm shadow-lg shadow-emerald-500/25 transition cursor-pointer" data-i18n="goToMarket">Go to Bot Market & License</button>
     </div>
+    
     <div class="gradient-banner p-4 rounded-2xl relative overflow-hidden space-y-2 text-white">
         <div class="flex justify-between items-start">
             <div class="space-y-1">
@@ -200,6 +224,39 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         </div>
         <p class="text-[11px] text-gray-200 leading-relaxed" data-i18n="bannerDesc">Activate your $5 license, buy bot packages, and run multiple bots simultaneously for daily 1h trading cycles.</p>
     </div>
+
+    <!-- FIRMA I SERTIFIKAT SEKCIJA NA HOME PANELU -->
+    <div class="emerald-card p-4 rounded-2xl space-y-3">
+        <div class="flex justify-between items-center">
+            <h3 class="text-xs font-extrabold text-emerald-400 tracking-wider flex items-center gap-1.5">
+                <i class="fas fa-building-shield"></i> AZEL GLOBAL HQ & TEAM
+            </h3>
+            <span class="text-[9px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/30">Verified Corp</span>
+        </div>
+        <p class="text-[11px] text-gray-300">Take a glimpse inside our corporate trading hall, team operations, and view our official government accreditation certificate.</p>
+        
+        <!-- Slike sale i ljudi -->
+        <div class="grid grid-cols-2 gap-2">
+            <div onclick="openCompanyPhotoModal('hall')" class="relative h-28 rounded-xl overflow-hidden border border-emerald-500/30 cursor-pointer group">
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=500&q=80" alt="Trading Hall" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent flex items-end p-2">
+                    <span class="text-[10px] font-bold text-white"><i class="fas fa-users-viewfinder text-emerald-400"></i> Operations Hall</span>
+                </div>
+            </div>
+            <div onclick="openCompanyPhotoModal('meeting')" class="relative h-28 rounded-xl overflow-hidden border border-emerald-500/30 cursor-pointer group">
+                <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=500&q=80" alt="Meeting Room" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent flex items-end p-2">
+                    <span class="text-[10px] font-bold text-white"><i class="fas fa-handshake text-emerald-400"></i> AZEL Presentation</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dugme za Sertifikat -->
+        <button onclick="openCertificateModal()" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 cursor-pointer">
+            <i class="fas fa-certificate text-amber-300 text-sm"></i> View Official Company Certificate
+        </button>
+    </div>
+
     <div class="grid grid-cols-3 gap-2 text-center">
         <button onclick="openDepositModal()" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition cursor-pointer">
             <i class="fas fa-qrcode text-emerald-400 text-lg"></i>
@@ -333,19 +390,39 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </div>
 </div>
 
-<!-- WALLET PAGE -->
+<!-- WALLET PAGE (NOVI PROFESIONALNI DIZAJN ZA ASSETS & CAPITAL) -->
 <div id="page-wallet" class="page-content p-4 space-y-4">
-    <h2 class="text-lg font-bold text-emerald-400 mb-2" data-i18n="assetsTitle">Assets & Capital</h2>
-    <div class="emerald-card p-4 rounded-2xl space-y-3">
-        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
-            <span class="text-sm font-bold text-white" data-i18n="availBalance">Available Balance</span>
-            <span class="text-sm text-emerald-400 font-bold">$<span id="wallet-balance-display">0.00</span></span>
+    <h2 class="text-lg font-bold text-emerald-400 mb-1" data-i18n="assetsTitle">Assets & Capital</h2>
+    <p class="text-xs text-gray-400 mb-2">Manage your liquid funds and running AI bot assets in real-time.</p>
+
+    <!-- NOVI PROFESIONALNI GLAVNI PROZOR ZA BALANCE I BOT INVESTICIJE -->
+    <div class="assets-hero-card p-5 space-y-4">
+        <div class="flex justify-between items-start border-b border-white/10 pb-3">
+            <div>
+                <span class="text-[10px] tracking-widest uppercase text-emerald-400 font-extrabold block" data-i18n="availBalance">Available Balance</span>
+                <div class="text-3xl font-extrabold text-white mt-1 font-mono tracking-tight">$<span id="wallet-balance-display">0.00</span></div>
+            </div>
+            <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shadow-lg">
+                <i class="fas fa-wallet text-base"></i>
+            </div>
         </div>
-        <div class="flex justify-between items-center">
-            <span class="text-xs text-gray-400" data-i18n="activeBots">Active Bots</span>
-            <span class="text-xs text-amber-400 font-bold">$<span id="wallet-frozen-display">0.00</span></span>
+
+        <div class="flex justify-between items-center pt-1">
+            <div class="space-y-0.5">
+                <span class="text-[10px] text-gray-400 uppercase tracking-wider block" data-i18n="activeBots">Active Bots Frozen Capital</span>
+                <div class="text-lg font-bold text-amber-400 font-mono">$<span id="wallet-frozen-display">0.00</span></div>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="openDepositModal()" class="bg-emerald-500 hover:bg-emerald-400 text-black px-3 py-1.5 rounded-xl text-[11px] font-bold shadow transition cursor-pointer">
+                    <i class="fas fa-plus mr-1"></i> Add
+                </button>
+                <button onclick="openWithdrawModal()" class="bg-gray-800 hover:bg-gray-700 text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-xl text-[11px] font-bold transition cursor-pointer">
+                    <i class="fas fa-arrow-up mr-1"></i> Send
+                </button>
+            </div>
         </div>
     </div>
+
     <h3 id="active-bots-header-title" class="text-sm font-bold text-white pt-2" data-i18n="activeBotInvestments">Active Bot Investments (60 Days)</h3>
     <div id="active-bots-container" class="space-y-3"><p class="text-xs text-gray-500 text-center py-4" data-i18n="noBots">No active bot investments right now.</p></div>
 </div>
@@ -391,6 +468,43 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 </div>
 
 <!-- MODALI -->
+<!-- MODAL ZA SERTIFIKAT FIRME -->
+<div id="modal-certificate" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50 overflow-y-auto">
+    <div class="emerald-card p-5 rounded-3xl w-full max-w-sm space-y-4 bg-[#07090e] border border-emerald-500/50 relative my-auto">
+        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
+            <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2"><i class="fas fa-certificate text-amber-300"></i> Official Corporate Certificate</h3>
+            <button onclick="closeCertificateModal()" class="text-gray-400 hover:text-white text-base cursor-pointer"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="bg-gray-950 p-3 rounded-xl border border-emerald-500/30 text-center space-y-3">
+            <div class="border-4 border-amber-500/40 p-3 rounded-xl bg-gradient-to-b from-gray-900 to-black space-y-2">
+                <div class="w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto text-xl font-bold border border-amber-500/40">AZ</div>
+                <h4 class="text-xs font-extrabold text-amber-300 uppercase tracking-widest">Certificate of Incorporation</h4>
+                <p class="text-[10px] text-gray-300 leading-relaxed">This is to certify that <strong class="text-emerald-400">AZEL GLOBAL TECHNOLOGIES INC.</strong> is duly registered and authorized to operate automated AI financial bot trading networks and global digital asset services under international regulation standards.</p>
+                <div class="pt-2 border-t border-gray-800 flex justify-between text-[9px] text-gray-400">
+                    <span>Reg. No: #AZ-998271-2026</span>
+                    <span class="text-emerald-400 font-bold">Status: Active & Verified ✓</span>
+                </div>
+            </div>
+        </div>
+        <button onclick="closeCertificateModal()" class="w-full bg-emerald-500 text-black font-bold py-2.5 rounded-xl text-xs cursor-pointer">Close Certificate</button>
+    </div>
+</div>
+
+<!-- MODAL ZA SLIKE FIRME / SALE -->
+<div id="modal-company-photo" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
+    <div class="emerald-card p-5 rounded-3xl w-full max-w-sm space-y-3 bg-[#07090e] border border-emerald-500/40 text-center">
+        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
+            <h3 id="company-photo-title" class="text-sm font-bold text-emerald-400">AZEL Operations Hall</h3>
+            <button onclick="closeCompanyPhotoModal()" class="text-gray-400 hover:text-white text-base cursor-pointer"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="rounded-xl overflow-hidden border border-emerald-500/30 h-56">
+            <img id="company-photo-img" src="" alt="Company Photo" class="w-full h-full object-cover">
+        </div>
+        <p id="company-photo-desc" class="text-[11px] text-gray-300 leading-relaxed">Our dedicated professionals managing automated hourly crypto bot simulations and trading cycles in our Skopje & international hubs.</p>
+        <button onclick="closeCompanyPhotoModal()" class="w-full bg-gray-800 text-gray-300 py-2 rounded-xl text-xs font-bold cursor-pointer">Close</button>
+    </div>
+</div>
+
 <div id="modal-support" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
     <div class="emerald-card p-5 rounded-2xl w-full max-w-sm space-y-4 bg-[#07090e] border border-emerald-500/30 max-h-[85vh] flex flex-col">
         <div class="flex justify-between items-center border-b border-gray-800 pb-2 shrink-0">
@@ -578,7 +692,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             <button onclick="closeAdminPanel()" class="text-gray-400 hover:text-white text-sm cursor-pointer"><i class="fas fa-times"></i></button>
         </div>
 
-        <!-- Admin Tabovi: Withdrawals / Support -->
         <div class="flex bg-gray-900 p-1 rounded-xl border border-gray-800 text-xs font-bold shrink-0">
             <button id="admin-tab-withdraw-btn" onclick="switchAdminTab('withdraw')" class="flex-1 py-1.5 rounded-lg bg-amber-500 text-black transition cursor-pointer">Isplate (Withdrawals)</button>
             <button id="admin-tab-support-btn" onclick="switchAdminTab('support')" class="flex-1 py-1.5 rounded-lg text-gray-400 transition cursor-pointer">Support Tiketi</button>
@@ -636,7 +749,7 @@ const MAIN_ADMIN_USER = {
     balance: 5000.00
 };
 
-// Višejezične notifikacije (Glavni je EN, a podržani su i ostali jezici)
+// Višejezične notifikacije
 const notifTranslations = {
     en: {
         newWithdrawReq: "🔔 New withdrawal request has arrived!",
@@ -802,8 +915,6 @@ const notifTranslations = {
 function getNotifText(key, params = {}) {
     let langDict = notifTranslations[currentAppLang] || notifTranslations['en'];
     let text = langDict[key] || notifTranslations['en'][key] || key;
-    
-    // Zamena parametara u tekstu (npr. {level}, {price}, {earning})
     Object.keys(params).forEach(p => {
         text = text.replace(new RegExp(`\\{${p}\\}`, 'g'), params[p]);
     });
@@ -927,162 +1038,61 @@ const translations = {
         emailLabel: "Е-пошта Адреса", emailCodeLabel: "Верификационен код (Email)", inviteCodeLabel: "Код за покана (Опционално)",
         confirmPasswordLabel: "Потврди Лозинка", loginAction: "Најави се", regAction: "Регистрирај се", adminBtnText: "Админ",
         supportBtn: "Поддршка", supportTitle: "Корисничка Поддршка", supportMsgLabel: "Ваша порака:", sendSupportBtn: "Испрати порака"
-    },
-    sl: {
-        navHome: "Domov", navMarket: "Trg", navTeam: "Ekipa", navAssets: "Sredstva", navProfile: "Profil",
-        goToMarket: "Pojdi na trg botov", bannerSub: "STABILNA PLATFORMA BOT", bannerTitle: "AZEL 60-DNEVNI CIKLI",
-        bannerDesc: "Aktivirajte svojo licenco, kupite pakete botov in izvajajte cikle.",
-        recharge: "Polog", withdraw: "Izplačilo", inviteFriends: "Povabi prijatelje",
-        marketTitle: "Trg botov", marketSub: "Aktivirajte pakete botov.",
-        licenseTitle: "Doživljenjska licenca", licenseDesc: "Zahtevano enkrat. Pristojbina:", payLicenseBtn: "Plačaj $5",
-        vipStrategy: "VIP Strategija", pledgeAmt: "Znesek vložka", dailyReturn: "Dnevni donos", duration: "Trajanje", durationDays: "60 Dni",
-        statusUnlocked: "Status: Odklenjeno", statusUnlockedSimple: "Status: Odklenjeno ✓", statusAlreadyPurchased: "Status: Že kupljeno ✓",
-        activateBot1: "Aktiviraj bota 1", activateBot2: "Aktiviraj bota 2", lockedBtn: "Zaklenjeno",
-        reqLicenseFirst: "Pogoj: Najprej plačajte licenco $5",
-        reqBot3: "Pogoj: {count}/5 aktivnih članov v L1",
-        reqBot4: "Pogoj: 10 aktivnih L1 in 5 aktivnih L2",
-        reqBot5: "Pogoj: 20 L1, 15 L2, 5 L3",
-        reqBot6: "Pogoj: 50 L1, 30 L2, 20 L3",
-        teamTitle: "Moja ekipa", teamSub: "Spremljajte napotitve.", line1: "Linija 1 (L1)", line2: "Linija 2 (L2)", line3: "Linija 3 (L3)",
-        activeDirectRef: "Aktivni napoteni", noDirectRef: "Ni napotenih.", inactiveMembers: "Neaktivni člani", noInactive: "Ni neaktivnih.",
-        assetsTitle: "Sredstva", availBalance: "Razpoložljivo stanje", activeBots: "Aktivni boti",
-        activeBotInvestments: "Aktivne naložbe", noBots: "Ni naložb.", menuChangeEmail: "Spremeni e-pošto",
-        menuChangePassword: "Spremeni geslo", menuChangeWithdrawPin: "PIN za izplačilo / Geslo", menuLang: "Spremeni jezik",
-        logout: "Odjava", cancelBtn: "Prekliči", updateBtn: "Posodobi", currentPassLabel: "Trenutno geslo:",
-        newPassLabel: "Novo geslo:", confirmNewPassLabel: "Potrdi geslo:", newPinLabel: "Nov 4-mestni PIN:", currentPinLabel: "Trenutni PIN:",
-        selectLangTitle: "Izberi jezik", closeBtn: "Zapri", depositTitle: "USDT Polog", trcAddress: "TRC-20 Naslov",
-        copyBtn: "Kopiraj", simDepositLabel: "Simuliraj znesek ($):", simulateBtn: "Simuliraj", withdrawReqTitle: "Zahteva za izplačilo",
-        amountUsdtLabel: "Znesek (USDT):", cryptoAddrLabel: "Kripto naslov:", withdrawPinLabel: "Transakcijski PIN:", emailCodeWithdrawLabel: "Email koda:",
-        confirmWithdrawBtn: "Potrdi izplačilo", inviteTitle: "Povabi prijatelje", inviteDesc: "Zgradite svojo mrežo!",
-        inviteCodeText: "Koda", inviteLinkLabel: "Povezava", copyInviteLinkBtn: "Kopiraj povezavo", adminSecPin: "Admin PIN",
-        confirmBtn: "Potrdi", adminPanelTitle: "Admin plošča", loadingReq: "Nalaganje...", closePanelBtn: "Zapri",
-        authSub: "Platforma", loginBtn: "Prijava", regBtn: "Registracija", usernameLabel: "Uporabniško ime",
-        passwordLabel: "Geslo", emailLabel: "E-pošta", emailCodeLabel: "Email koda", inviteCodeLabel: "Koda za povabilo", confirmPasswordLabel: "Potrdi geslo",
-        loginAction: "Prijava", regAction: "Registracija", adminBtnText: "Admin",
-        supportBtn: "Podpora", supportTitle: "Podpora uporabnikom", supportMsgLabel: "Vaše sporočilo:", sendSupportBtn: "Pošlji sporočilo"
-    },
-    es: {
-        navHome: "Inicio", navMarket: "Mercado", navTeam: "Equipo", navAssets: "Activos", navProfile: "Perfil",
-        goToMarket: "Ir al mercado de bots", bannerSub: "PLATAFORMA ESTABLE", bannerTitle: "CICLOS DE 60 DÍAS",
-        bannerDesc: "Activa tu licencia y opera con bots.", recharge: "Recargar", withdraw: "Retirar", inviteFriends: "Invitar",
-        marketTitle: "Mercado de bots", marketSub: "Activa tus paquetes de bots.", licenseTitle: "Licencia de usuario",
-        licenseDesc: "Tarifa:", payLicenseBtn: "Pagar $5", vipStrategy: "Estrategia VIP", pledgeAmt: "Monto", dailyReturn: "Retorno",
-        duration: "Duración", durationDays: "60 Días", statusUnlocked: "Desbloqueado", statusUnlockedSimple: "Desbloqueado ✓", statusAlreadyPurchased: "Ya comprado ✓",
-        activateBot1: "Activar Bot 1", activateBot2: "Activar Bot 2", lockedBtn: "Bloqueado",
-        reqLicenseFirst: "Requisito: Pagar licencia de $5",
-        reqBot3: "Requisito: {count}/5 activos en L1",
-        reqBot4: "Requisito: 10 L1 y 5 L2 activos",
-        reqBot5: "Requisito: 20 L1, 15 L2, 5 L3",
-        reqBot6: "Requisito: 50 L1, 30 L2, 20 L3",
-        teamTitle: "Equipo de red", teamSub: "Sigue tus referidos.", line1: "Línea 1", line2: "Línea 2", line3: "Línea 3",
-        activeDirectRef: "Referidos directos", noDirectRef: "Sin referidos.", inactiveMembers: "Inactivos", noInactive: "Sin inactivos.",
-        assetsTitle: "Activos", availBalance: "Saldo disponible", activeBots: "Bots activos", activeBotInvestments: "Inversiones",
-        noBots: "Sin inversiones.", menuChangeEmail: "Cambiar email", menuChangePassword: "Cambiar contraseña",
-        menuChangeWithdrawPin: "PIN de retiro", menuLang: "Idioma", logout: "Salir", cancelBtn: "Cancelar", updateBtn: "Actualizar",
-        currentPassLabel: "Contraseña actual:", newPassLabel: "Nueva contraseña:", confirmNewPassLabel: "Confirmar contraseña:",
-        newPinLabel: "Nuevo PIN:", currentPINLabel: "PIN actual:", selectLangTitle: "Seleccionar idioma", closeBtn: "Cerrar",
-        depositTitle: "Depósito USDT", trcAddress: "Dirección TRC-20", copyBtn: "Copia", simDepositLabel: "Simular depósito ($):", simulateBtn: "Simular",
-        withdrawReqTitle: "Solicitud de retiro", amountUsdtLabel: "Monto (USDT):", cryptoAddrLabel: "Dirección cripto:",
-        withdrawPinLabel: "PIN de transacción:", emailCodeWithdrawLabel: "Código de email:", confirmWithdrawBtn: "Confirmar retiro",
-        inviteTitle: "Invitar amigos", inviteDesc: "¡Haz crecer tu red!", inviteCodeText: "Código", inviteLinkLabel: "Enlace",
-        copyInviteLinkBtn: "Copiar enlace", adminSecPin: "PIN de Admin", confirmBtn: "Confirmar", adminPanelTitle: "Panel de Admin",
-        loadingReq: "Cargando...", closePanelBtn: "Cerrar", authSub: "Plataforma de inversión", loginBtn: "Iniciar sesión",
-        regBtn: "Registrarse", usernameLabel: "Usuario", passwordLabel: "Contraseña", emailLabel: "Correo", emailCodeLabel: "Código email",
-        inviteCodeLabel: "Código de invitación", confirmPasswordLabel: "Confirmar contraseña", loginAction: "Iniciar sesión",
-        regAction: "Registrarse", adminBtnText: "Admin", supportBtn: "Soporte", supportTitle: "Soporte", supportMsgLabel: "Mensaje:", sendSupportBtn: "Enviar"
-    },
-    ru: {
-        navHome: "Главная", navMarket: "Рынок", navTeam: "Команда", navAssets: "Активы", navProfile: "Профиль",
-        goToMarket: "Перейти на рынок ботов", bannerSub: "СТАБИЛЬНАЯ ПЛАТФОРМА", bannerTitle: "ЦИКЛЫ 60 ДНЕЙ",
-        bannerDesc: "Активируйте лицензию и запускайте ботов.", recharge: "Пополнить", withdraw: "Вывод", inviteFriends: "Пригласить",
-        marketTitle: "Рынок ботов", marketSub: "Активируйте пакеты ботов.", licenseTitle: "Лицензия пользователя",
-        licenseDesc: "Сбор:", payLicenseBtn: "Оплатить $5", vipStrategy: "VIP Стратегия", pledgeAmt: "Сумма вклада",
-        dailyReturn: "Доход", duration: "Срок", durationDays: "60 Дней", statusUnlocked: "Разблокировано", statusUnlockedSimple: "Разблокировано ✓", statusAlreadyPurchased: "Куплено ✓",
-        activateBot1: "Активировать Бота 1", activateBot2: "Активировать Бота 2", lockedBtn: "Заблокировано",
-        reqLicenseFirst: "Требование: Сначала оплатите лицензию $5",
-        reqBot3: "Требование: {count}/5 активных в L1",
-        reqBot4: "Требование: 10 L1 и 5 L2 активных",
-        reqBot5: "Требование: 20 L1, 15 L2, 5 L3",
-        reqBot6: "Требование: 50 L1, 30 L2, 20 L3",
-        teamTeam: "Команда сети", teamSub: "Отслеживайте рефералов.", line1: "Линия 1", line2: "Линия 2", line3: "Линия 3",
-        activeDirectRef: "Активные рефералы", noDirectRef: "Нет рефералов.", inactiveMembers: "Неактивные", noInactive: "Нет.",
-        assetsTitle: "Активы", availBalance: "Доступный баланс", activeBots: "Активные боты", activeBotInvestments: "Инвестиции ботов",
-        noBots: "Нет инвестиций.", menuChangeEmail: "Изменить email", menuChangePassword: "Изменить пароль",
-        menuChangeWithdrawPin: "PIN вывода", menuLang: "Язык", logout: "Выйти", cancelBtn: "Отмена", updateBtn: "Обновить",
-        currentPassLabel: "Текущий пароль:", newPassLabel: "Новый пароль:", confirmNewPassLabel: "Подтвердите пароль:",
-        newPinLabel: "Новый PIN:", currentPinLabel: "Текущий PIN:", selectLangTitle: "Выберите язык", closeBtn: "Закрыть",
-        depositTitle: "Депозит USDT", trcAddress: "Адрес TRC-20", copyBtn: "Копировать", simDepositLabel: "Симулировать депозит ($):", simulateBtn: "Симулировать",
-        withdrawReqTitle: "Запрос на вывод", amountUsdtLabel: "Сумма (USDT):", cryptoAddrLabel: "Крипто-адрес:",
-        withdrawPinLabel: "PIN транзакции:", emailCodeWithdrawLabel: "Код из email:", confirmWithdrawBtn: "Подтвердить вывод",
-        inviteTitle: "Пригласить друзей", inviteDesc: "Развивайте сеть!", inviteCodeText: "Код", inviteLinkLabel: "Ссылка",
-        copyInviteLinkBtn: "Копировать ссылку", adminSecPin: "PIN Администратора", confirmBtn: "Подтвердить", adminPanelTitle: "Панель администратора",
-        loadingReq: "Загрузка...", closePanelBtn: "Закрыть", authSub: "Платформа", loginBtn: "Вход", regBtn: "Регистрация",
-        usernameLabel: "Имя пользователя", passwordLabel: "Пароль", emailLabel: "Email", emailCodeLabel: "Код из email",
-        inviteCodeLabel: "Код приглашения", confirmPasswordLabel: "Подтвердите пароль", loginAction: "Войти", regAction: "Зарегистрироваться",
-        adminBtnText: "Админ", supportBtn: "Поддержка", supportTitle: "Поддержка", supportMsgLabel: "Сообщение:", sendSupportBtn: "Отправить"
-    },
-    el: {
-        navHome: "Αρχική", navMarket: "Αγορά", navTeam: "Ομάδα", navAssets: "Περιουσιακά", navProfile: "Проφίλ",
-        goToMarket: "Μετάβαση στην αγορά", bannerSub: "ΣΤΑΘΕΡΗ ΠΛΑΤΦΟΡΜΑ", bannerTitle: "ΚΥΚΛΟΙ 60 ΗΜΕΡΩΝ",
-        bannerDesc: "Ενεργοποιήστε την άδεια.", recharge: "Φόρτιση", withdraw: "Ανάληψη", inviteFriends: "Πρόσκληση",
-        marketTitle: "Αγορά bot", marketSub: "Ενεργοποιήστε τα πακέτα.", licenseTitle: "Άδεια χρήστη",
-        licenseDesc: "Τέλος:", payLicenseBtn: "Πληρωμή $5", vipStrategy: "VIP Στρατηγική", pledgeAmt: "Ποσό",
-        dailyReturn: "Ημερήσια απόδοση", duration: "Διάρκεια", durationDays: "60 Ημέρες", statusUnlocked: "Ξεκλειδωμένο", statusUnlockedSimple: "Ξεκλειδωμένο ✓", statusAlreadyPurchased: "Αγορασμένο ✓",
-        activateBot1: "Ενεργοποίηση Bot 1", activateBot2: "Ενεργοποίηση Bot 2", lockedBtn: "Κλειδωμένο",
-        reqLicenseFirst: "Απαίτηση: Πληρώστε την άδεια $5",
-        reqBot3: "Απαίτηση: {count}/5 ενεργά μέλη στο L1",
-        reqBot4: "Απαίτηση: 10 L1 & 5 L2 ενεργά",
-        reqBot5: "Απαίτηση: 20 L1, 15 L2, 5 L3",
-        reqBot6: "Απαίτηση: 50 L1, 30 L2, 20 L3",
-        teamTitle: "Ομάδα δικτύου", teamSub: "Παρακολουθήστε τις παραπομπές.", line1: "Γραμμή 1", line2: "Γραμμή 2", line3: "Γραμμή 3",
-        activeDirectRef: "Ενεργές παραπομπές", noDirectRef: "Κανμία παραπομπή.", inactiveMembers: "Ανενεργά μέλη", noInactive: "Κανένα.",
-        assetsTitle: "Περιουσιακά", availBalance: "Διαθέσιμο Υπόλοιπο", activeBots: "Ενεργά Bot", activeBotInvestments: "Επενδύσεις",
-        noBots: "Χωρίς επενδύσεις.", menuChangeEmail: "Αλλαγή Email", menuChangePassword: "Аλλαγή κωδικού",
-        menuChangeWithdrawPin: "PIN ανάληψης", menuLang: "Γλώσσα", logout: "Αποσύνδεση", cancelBtn: "Άκυρο", updateBtn: "Ενημέρωση",
-        currentPassLabel: "Τρέχων κωδικός:", newPassLabel: "Νέος κωδικός:", confirmNewPassLabel: "Επιβεβαίωση κωδικού:",
-        newPinLabel: "Νέο PIN:", currentPinLabel: "Τρέχων PIN:", selectLangTitle: "Επιλογή γλώσσας", closeBtn: "Кλείσιμο",
-        depositTitle: "Каτάθεση USDT", trcAddress: "Диεύθυνση TRC-20", copyBtn: "Αντιγραφή", simDepositLabel: "Симул. κατάθεσης ($):", simulateBtn: "Симул.",
-        withdrawReqTitle: "Αίτηση ανάληψης", amountUsdtLabel: "Поσό (USDT):", cryptoAddrLabel: "Крипто διεύθυνση:",
-        withdrawPinLabel: "PIN συναλλαγής:", emailCodeWithdrawLabel: "Κωδικός email:", confirmWithdrawBtn: "Επιβεβαίωση ανάληψης",
-        inviteTitle: "Πρόσκληση φίλων", inviteDesc: "Аναπτύξτε το δίκτυό σας!", inviteCodeText: "Κωδικός", inviteLinkLabel: "Σύνδεσμος",
-        copyInviteLinkBtn: "Аντιγραφή συνδέσμου", adminSecPin: "PIN Admin", confirmBtn: "Επιβεβαίωση", adminPanelTitle: "Пίνακας Admin",
-        loadingReq: "Фόρτωση...", closePanelBtn: "Кλείσιμο", authSub: "Платформа", loginBtn: "Сύνδεση", regBtn: "Еγγραφή",
-        usernameLabel: "Όνομα χρήστη", passwordLabel: "Кωδικός", emailLabel: "Email", emailCodeLabel: "Κωδικός email",
-        inviteCodeLabel: "Кωδικός πρόσκλησης", confirmPasswordLabel: "Еπιβεβαίωση κωδικού", loginAction: "Сύνδεση", regAction: "Еγγραφή",
-        adminBtnText: "Admin", supportBtn: "Υποστήριξη", supportTitle: "Υποστήριξη", supportMsgLabel: "Μήνυμα:", sendSupportBtn: "Αποστολή"
-    },
-    it: {
-        navHome: "Home", navMarket: "Mercato", navTeam: "Team", navAssets: "Asset", navProfile: "Profilo",
-        goToMarket: "Vai al mercato dei bot", bannerSub: "PIATTAFORMA STABILE", bannerTitle: "CICLI DI 60 GIORNI",
-        bannerDesc: "Attiva la tua licenza e avvia i bot.", recharge: "Ricarica", withdraw: "Prelievo", inviteFriends: "Invita",
-        marketTitle: "Mercato dei bot", marketSub: "Attiva i tuoi pacchetti di bot.", licenseTitle: "Licenza utente",
-        licenseDesc: "Costo:", payLicenseBtn: "Paga $5", vipStrategy: "Strategia VIP", pledgeAmt: "Importo",
-        dailyReturn: "Ritorno giornaliero", duration: "Durata", durationDays: "60 Giorni", statusUnlocked: "Sbloccato", statusUnlockedSimple: "Sbloccato ✓", statusAlreadyPurchased: "Già acquistato ✓",
-        activateBot1: "Attiva Bot 1", activateBot2: "Attiva Bot 2", lockedBtn: "Bloccato",
-        reqLicenseFirst: "Requisito: Paga prima la licenza da $5",
-        reqBot3: "Requisito: {count}/5 membri attivi in L1",
-        reqBot4: "Requisito: 10 attivi in L1 e 5 in L2",
-        reqBot5: "Requisito: 20 L1, 15 L2, 5 L3",
-        reqBot6: "Requisito: 50 L1, 30 L2, 20 L3",
-        teamTitle: "Team di rete", teamSub: "Segui i tuoi referral.", line1: "Linea 1", line2: "Linea 2", line3: "Linea 3",
-        activeDirectRef: "Referral diretti attivi", noDirectRef: "Nessun referral.", inactiveMembers: "Membri inattivi",
-        noInactive: "Nessun inattivo.", assetsTitle: "Asset", availBalance: "Saldo disponibile", activeBots: "Bot attivi",
-        activeBotInvestments: "Investimenti bot", noBots: "Nessun investimento attivo.", menuChangeEmail: "Cambia email",
-        menuChangePassword: "Cambia password", menuChangeWithdrawPin: "PIN di prelievo", menuLang: "Cambia lingua",
-        logout: "Disconnetti", cancelBtn: "Annulla", updateBtn: "Aggiorna", currentPassLabel: "Password attuale:",
-        newPassLabel: "Nuova password:", confirmNewPassLabel: "Conferma password:", newPinLabel: "Nuovo PIN:", currentPinLabel: "PIN attuale:",
-        selectLangTitle: "Seleziona lingua", closeBtn: "Chiudi", depositTitle: "Deposito USDT", trcAddress: "Indirizzo TRC-20",
-        copyBtn: "Copia", simDepositLabel: "Simula importo deposito ($):", simulateBtn: "Simula", withdrawReqTitle: "Richiesta di prelievo",
-        amountUsdtLabel: "Importo (USDT):", cryptoAddrLabel: "Indirizzo cripto:", withdrawPinLabel: "PIN di transazione:",
-        emailCodeWithdrawLabel: "Codice email:", confirmWithdrawBtn: "Conferma prelievo", inviteTitle: "Invita amici",
-        inviteDesc: "Fai crescere la tua rete!", inviteCodeText: "Codice", inviteLinkLabel: "Link", copyInviteLinkBtn: "Copia link",
-        adminSecPin: "PIN Admin", confirmBtn: "Conferma", adminPanelTitle: "Pannello Admin", loadingReq: "Caricamento...",
-        closePanelBtn: "Chiudi", authSub: "Piattaforma di investimento", loginBtn: "Accedi", regBtn: "Registrati",
-        usernameLabel: "Nome utente", passwordLabel: "Password", emailLabel: "Email", emailCodeLabel: "Codice email",
-        inviteCodeLabel: "Codice invito", confirmPasswordLabel: "Conferma password", loginAction: "Accedi", regAction: "Registrati",
-        adminBtnText: "Admin", supportBtn: "Supporto", supportTitle: "Supporto", supportMsgLabel: "Messaggio:", sendSupportBtn: "Invia"
     }
 };
+
+// Funkcija za prave sistemske notifikacije na telefonu
+function requestNotificationPermission() {
+    if (!("Notification" in window)) {
+        showToast("This browser does not support desktop/phone notifications.");
+        return;
+    }
+    Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+            showToast("🔔 Phone push notifications enabled successfully!");
+            new Notification("AZEL App", {
+                body: "Notifications are now active for your account.",
+                icon: "https://cdn-icons-png.flaticon.com/512/2921/2921222.png"
+            });
+        } else {
+            showToast("Notification permission denied.");
+        }
+    });
+}
+
+function sendNativePushNotification(title, bodyText) {
+    showToast(bodyText); // Uvek prikazuje ugrađeni toast
+    if ("Notification" in window && Notification.permission === "granted") {
+        try {
+            new Notification(title, {
+                body: bodyText,
+                icon: "https://cdn-icons-png.flaticon.com/512/2921/2921222.png"
+            });
+        } catch(e) {}
+    }
+}
+
+function openCertificateModal() { document.getElementById('modal-certificate').style.display = 'flex'; }
+function closeCertificateModal() { document.getElementById('modal-certificate').style.display = 'none'; }
+
+function openCompanyPhotoModal(type) {
+    const modal = document.getElementById('modal-company-photo');
+    const title = document.getElementById('company-photo-title');
+    const img = document.getElementById('company-photo-img');
+    const desc = document.getElementById('company-photo-desc');
+
+    if (type === 'hall') {
+        title.innerText = "AZEL Operations & Trading Hall";
+        img.src = "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80";
+        desc.innerText = "Our main executive and algorithmic trading monitoring hall where engineers and agents supervise high-frequency 1h bot cycles.";
+    } else {
+        title.innerText = "AZEL Global Presentation & Conference";
+        img.src = "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80";
+        desc.innerText = "Live interactive sessions showcasing the AZEL ecosystem, network partnership tiers, and financial returns to investors.";
+    }
+    modal.style.display = 'flex';
+}
+function closeCompanyPhotoModal() { document.getElementById('modal-company-photo').style.display = 'none'; }
 
 function playAdminBeep() {
     try {
@@ -1201,7 +1211,7 @@ function loadUsersFromCloud(callback) {
                 } else if (newPendingCount > oldPendingCount) {
                     if (currentUser && currentUser.username.toLowerCase() === 'tajkun') {
                         playAdminBeep();
-                        showToast(getNotifText('newWithdrawReq'));
+                        sendNativePushNotification("AZEL Admin Alert", getNotifText('newWithdrawReq'));
                     }
                     lastKnownPendingCount = newPendingCount;
                 } else {
@@ -1217,7 +1227,7 @@ function loadUsersFromCloud(callback) {
 
                 if (currentUser && currentUser.username.toLowerCase() === 'tajkun' && newAdminTicketsCount > oldAdminTicketsCount) {
                     playAdminBeep();
-                    showToast(getNotifText('newSupportMsg'));
+                    sendNativePushNotification("AZEL Support", getNotifText('newSupportMsg'));
                 }
 
                 if (currentUser && currentUser.username.toLowerCase() !== 'tajkun') {
@@ -1225,7 +1235,7 @@ function loadUsersFromCloud(callback) {
                     if (myTicket) {
                         let unreadAdminMsgs = myTicket.messages.filter(m => m.sender === 'admin' && !m.userRead);
                         if (unreadAdminMsgs.length > lastKnownAdminMsgCount) {
-                            showToast(getNotifText('adminReply'));
+                            sendNativePushNotification("AZEL Support Reply", getNotifText('adminReply'));
                             lastKnownAdminMsgCount = unreadAdminMsgs.length;
                         } else if (unreadAdminMsgs.length === 0) {
                             lastKnownAdminMsgCount = 0;
@@ -1331,17 +1341,17 @@ function switchAuthTab(tab) {
 function sendRegEmailCode() {
     let email = document.getElementById('reg-email-input').value.trim();
     if(!email || !email.includes('@')) {
-        showToast(getNotifText('validEmail'));
+        sendNativePushNotification("AZEL Auth", getNotifText('validEmail'));
         return;
     }
     simulatedRegCode = Math.floor(1000 + Math.random() * 9000).toString();
-    showToast(`📩 [Simulated Email] Verification code for ${email} is: ${simulatedRegCode}`);
+    sendNativePushNotification("AZEL Email Code", `Verification code for ${email} is: ${simulatedRegCode}`);
 }
 
 function handleUserLogin() {
     let user = document.getElementById('login-username').value.trim();
     const pass = document.getElementById('login-password').value.trim();
-    if(!user || !pass) { showToast(getNotifText('enterUserPass')); return; }
+    if(!user || !pass) { sendNativePushNotification("AZEL Login", getNotifText('enterUserPass')); return; }
 
     let foundUser = allRegisteredUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
     
@@ -1368,7 +1378,7 @@ function handleUserLogin() {
     }
 
     if (foundUser.password && foundUser.password !== pass && user.toLowerCase() !== 'tajkun') {
-        showToast(getNotifText('incorrectPass'));
+        sendNativePushNotification("AZEL Login", getNotifText('incorrectPass'));
         return;
     }
 
@@ -1399,12 +1409,12 @@ function handleUserRegister() {
     const pass = document.getElementById('reg-pass-input').value.trim();
     const confirmPass = document.getElementById('reg-confirm-input').value.trim();
 
-    if(!user || !email || !pass || !emailCode) { showToast(getNotifText('fillAllFields')); return; }
-    if(simulatedRegCode && emailCode !== simulatedRegCode) { showToast(getNotifText('invalidEmailCode')); return; }
-    if(pass !== confirmPass) { showToast(getNotifText('passMismatch')); return; }
+    if(!user || !email || !pass || !emailCode) { sendNativePushNotification("AZEL Register", getNotifText('fillAllFields')); return; }
+    if(simulatedRegCode && emailCode !== simulatedRegCode) { sendNativePushNotification("AZEL Register", getNotifText('invalidEmailCode')); return; }
+    if(pass !== confirmPass) { sendNativePushNotification("AZEL Register", getNotifText('passMismatch')); return; }
 
     if (allRegisteredUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { 
-        showToast(getNotifText('usernameExists')); 
+        sendNativePushNotification("AZEL Register", getNotifText('usernameExists')); 
         return; 
     }
 
@@ -1434,7 +1444,7 @@ function handleUserRegister() {
     localStorage.setItem('azel_current_username', user);
     saveUsersToCloudAndLocal(() => {});
 
-    showToast(getNotifText('regSuccess'));
+    sendNativePushNotification("AZEL Welcome", getNotifText('regSuccess'));
     showMainApp();
 }
 
@@ -1488,7 +1498,7 @@ function switchTab(tabId) {
 function simulateUserDeposit() {
     let amtInput = document.getElementById('simulation-deposit-amount').value;
     let amt = parseFloat(amtInput);
-    if(!amt || amt <= 0) { showToast(getNotifText('enterValidDep')); return; }
+    if(!amt || amt <= 0) { sendNativePushNotification("AZEL Deposit", getNotifText('enterValidDep')); return; }
 
     if(currentUser.balance === undefined) currentUser.balance = 0;
     currentUser.balance += amt;
@@ -1498,7 +1508,7 @@ function simulateUserDeposit() {
     renderAssetsData();
     closeDepositModal();
 
-    showToast(getNotifText('simDeposit', { amt: amt }));
+    sendNativePushNotification("AZEL Deposit Confirmed", getNotifText('simDeposit', { amt: amt }));
 }
 
 function buyUserLicense() {
@@ -1506,18 +1516,18 @@ function buyUserLicense() {
         currentUser.isLicensePaid = true;
         saveCurrentUserToStorage();
         updateAppUI();
-        showToast(getNotifText('licenseAlreadyActive'));
+        sendNativePushNotification("AZEL License", getNotifText('licenseAlreadyActive'));
         return;
     }
 
     if (currentUser.isLicensePaid) {
-        showToast(getNotifText('licenseAlreadyPaid'));
+        sendNativePushNotification("AZEL License", getNotifText('licenseAlreadyPaid'));
         return;
     }
 
     let currentBalance = currentUser.balance || 0;
     if (currentBalance < 5) {
-        showToast(getNotifText('insufficientBalanceLicense'));
+        sendNativePushNotification("AZEL License", getNotifText('insufficientBalanceLicense'));
         return;
     }
 
@@ -1529,7 +1539,7 @@ function buyUserLicense() {
     saveCurrentUserToStorage();
     updateAppUI();
     renderAssetsData();
-    showToast(getNotifText('licensePaid'));
+    sendNativePushNotification("AZEL License Activated", getNotifText('licensePaid'));
 }
 
 function isUserActive(user) {
@@ -1670,16 +1680,16 @@ function lockBotUI(level, reqText) {
 
 function buyBot(level, price, dailyEarning) {
     if(!currentUser.isLicensePaid && currentUser.username.toLowerCase() !== 'tajkun') { 
-        showToast(getNotifText('payLicenseFirst')); 
+        sendNativePushNotification("AZEL Bot Market", getNotifText('payLicenseFirst')); 
         return; 
     }
     if(!currentUser.activeBots) currentUser.activeBots = [];
     
     let alreadyOwned = currentUser.activeBots.some(b => b.level === level && b.daysRemaining > 0);
-    if(alreadyOwned) { showToast(getNotifText('alreadyOwnBot', { level: level })); return; }
+    if(alreadyOwned) { sendNativePushNotification("AZEL Bot Market", getNotifText('alreadyOwnBot', { level: level })); return; }
 
     let currentBalance = currentUser.balance || 0;
-    if(currentBalance < price) { showToast(getNotifText('insufficientBalance', { price: price })); return; }
+    if(currentBalance < price) { sendNativePushNotification("AZEL Bot Market", getNotifText('insufficientBalance', { price: price })); return; }
 
     currentUser.balance -= price;
 
@@ -1699,7 +1709,7 @@ function buyBot(level, price, dailyEarning) {
     }
 
     saveCurrentUserToStorage();
-    showToast(getNotifText('botPurchased', { level: level, price: price }));
+    sendNativePushNotification("AZEL Bot Activated", getNotifText('botPurchased', { level: level, price: price }));
     renderAssetsData();
     checkBotUnlocks();
     switchTab('tab-wallet');
@@ -1711,7 +1721,7 @@ function startBotTrading(uniqueId) {
     if(!bot) return;
 
     if(bot.tradingStatus === 'TRADING') return;
-    if(bot.daysRemaining <= 0) { showToast(getNotifText('lifecycleEnded')); return; }
+    if(bot.daysRemaining <= 0) { sendNativePushNotification("AZEL Bot", getNotifText('lifecycleEnded')); return; }
 
     bot.tradingStatus = 'TRADING';
     bot.tradingEndsAt = Date.now() + (10 * 1000);
@@ -1738,10 +1748,10 @@ function collectBotEarnings(uniqueId) {
     if(bot.daysRemaining <= 0) {
         bot.daysRemaining = 0;
         currentUser.balance += bot.price; 
-        showToast(getNotifText('cycleCompleted', { level: bot.level }));
+        sendNativePushNotification("AZEL Bot Cycle Complete", getNotifText('cycleCompleted', { level: bot.level }));
     } else {
         bot.tradingStatus = 'COMPLETED_TODAY';
-        showToast(getNotifText('collectedProfit', { earning: earning }));
+        sendNativePushNotification("AZEL Profit Collected", getNotifText('collectedProfit', { earning: earning }));
     }
 
     saveCurrentUserToStorage();
@@ -1775,7 +1785,7 @@ function checkActiveBotsProgress() {
         if(bot.tradingStatus === 'TRADING') {
             if(now >= bot.tradingEndsAt) {
                 bot.tradingStatus = 'READY_TO_COLLECT';
-                showToast(getNotifText('botFinished', { level: bot.level, earning: bot.dailyEarning }));
+                sendNativePushNotification("AZEL Bot Ready", getNotifText('botFinished', { level: bot.level, earning: bot.dailyEarning }));
                 updated = true;
             }
         }
@@ -1947,7 +1957,7 @@ function handleAvatarChange(event) {
         currentUser.avatar = e.target.result;
         saveCurrentUserToStorage();
         updateAppUI();
-        showToast('Profile picture updated successfully!');
+        sendNativePushNotification("AZEL Profile", "Profile picture updated successfully!");
     };
     reader.readAsDataURL(file);
 }
@@ -2016,7 +2026,7 @@ function closeSupportModal() {
 
 function sendSupportMessage() {
     let msg = document.getElementById('support-msg-input').value.trim();
-    if(!msg) { showToast(getNotifText('writeMessage')); return; }
+    if(!msg) { sendNativePushNotification("AZEL Support", getNotifText('writeMessage')); return; }
 
     let ticket = supportTickets.find(t => t.username.toLowerCase() === currentUser.username.toLowerCase());
     if(!ticket) {
@@ -2039,7 +2049,7 @@ function sendSupportMessage() {
     document.getElementById('support-msg-input').value = '';
     saveUsersToCloudAndLocal(() => {
         renderUserSupportChat();
-        showToast(getNotifText('msgSent'));
+        sendNativePushNotification("AZEL Support", getNotifText('msgSent'));
     });
 }
 
@@ -2105,11 +2115,11 @@ function openChangeEmailModal() { document.getElementById('modal-change-email').
 function closeChangeEmailModal() { document.getElementById('modal-change-email').style.display = 'none'; }
 function saveNewEmail() {
     const email = document.getElementById('new-email-input').value.trim();
-    if(!email) { showToast(getNotifText('validEmailOnly')); return; }
+    if(!email) { sendNativePushNotification("AZEL Profile", getNotifText('validEmailOnly')); return; }
     currentUser.email = email;
     saveCurrentUserToStorage();
     closeChangeEmailModal();
-    showToast(getNotifText('emailUpdated'));
+    sendNativePushNotification("AZEL Profile", getNotifText('emailUpdated'));
 }
 
 function openChangePasswordModal() { document.getElementById('modal-change-password').style.display = 'flex'; }
@@ -2125,14 +2135,14 @@ function saveNewPassword() {
     const newPass = document.getElementById('new-password-input').value.trim();
     const confirmPass = document.getElementById('confirm-password-input').value.trim();
 
-    if (!currentPass || !newPass || !confirmPass) { showToast(getNotifText('fillAllPass')); return; }
-    if (currentUser.password && currentUser.password !== currentPass) { showToast(getNotifText('incorrectCurrentPass')); return; }
-    if (newPass !== confirmPass) { showToast(getNotifText('passMismatchNew')); return; }
+    if (!currentPass || !newPass || !confirmPass) { sendNativePushNotification("AZEL Profile", getNotifText('fillAllPass')); return; }
+    if (currentUser.password && currentUser.password !== currentPass) { sendNativePushNotification("AZEL Profile", getNotifText('incorrectCurrentPass')); return; }
+    if (newPass !== confirmPass) { sendNativePushNotification("AZEL Profile", getNotifText('passMismatchNew')); return; }
 
     currentUser.password = newPass;
     saveCurrentUserToStorage();
     closeChangePasswordModal();
-    showToast(getNotifText('passUpdated'));
+    sendNativePushNotification("AZEL Profile", getNotifText('passUpdated'));
 }
 
 function openChangeWithdrawPinModal() { 
@@ -2154,11 +2164,11 @@ function saveNewWithdrawPin() {
     const currentPin = document.getElementById('current-withdraw-pin-input').value.trim();
     const newPin = document.getElementById('new-withdraw-pin-input').value.trim();
 
-    if (!newPin || newPin.length !== 4) { showToast(getNotifText('pinLength')); return; }
+    if (!newPin || newPin.length !== 4) { sendNativePushNotification("AZEL PIN", getNotifText('pinLength')); return; }
 
     if (currentUser.withdrawPin && currentUser.withdrawPin !== "") {
         if (currentPin !== currentUser.withdrawPin) {
-            showToast(getNotifText('incorrectPin'));
+            sendNativePushNotification("AZEL PIN", getNotifText('incorrectPin'));
             return;
         }
     }
@@ -2166,7 +2176,7 @@ function saveNewWithdrawPin() {
     currentUser.withdrawPin = newPin;
     saveCurrentUserToStorage();
     closeChangeWithdrawPinModal();
-    showToast(getNotifText('pinUpdated'));
+    sendNativePushNotification("AZEL PIN", getNotifText('pinUpdated'));
 }
 
 function openLanguageModal() { document.getElementById('modal-lang').style.display = 'flex'; }
@@ -2210,11 +2220,11 @@ function switchDepositNetwork(net) {
 
 function copyDepositAddress() {
     let addr = document.getElementById('deposit-address-text').innerText;
-    navigator.clipboard.writeText(addr).then(() => showToast(getNotifText('linkCopied')));
+    navigator.clipboard.writeText(addr).then(() => sendNativePushNotification("AZEL Deposit", getNotifText('linkCopied')));
 }
 
 function openAdminPinModal() {
-    if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') { showToast(getNotifText('accessDenied')); return; }
+    if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') { sendNativePushNotification("AZEL Admin", getNotifText('accessDenied')); return; }
     document.getElementById('modal-admin-pin').style.display = 'flex';
 }
 function closeAdminPinModal() { document.getElementById('modal-admin-pin').style.display = 'none'; document.getElementById('admin-pin-input').value = ''; }
@@ -2226,7 +2236,7 @@ function verifyAdminPin() {
         closeAdminPinModal();
         openAdminPanel();
     } else {
-        showToast(getNotifText('incorrectAdminPin'));
+        sendNativePushNotification("AZEL Admin", getNotifText('incorrectAdminPin'));
         document.getElementById('admin-pin-input').value = '';
     }
 }
@@ -2357,7 +2367,7 @@ function sendAdminReply(ticketIdx) {
     if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') return;
     let input = document.getElementById(`admin-reply-input-${ticketIdx}`);
     let replyText = input.value.trim();
-    if(!replyText) { showToast('Type a reply first!'); return; }
+    if(!replyText) { sendNativePushNotification("AZEL Admin", 'Type a reply first!'); return; }
 
     let ticket = supportTickets[ticketIdx];
     if(!ticket) return;
@@ -2374,7 +2384,7 @@ function sendAdminReply(ticketIdx) {
     saveUsersToCloudAndLocal(() => {
         renderAdminSupportList();
         updateAdminBadge();
-        showToast(getNotifText('replySent'));
+        sendNativePushNotification("AZEL Admin", getNotifText('replySent'));
     });
 }
 
@@ -2385,7 +2395,7 @@ function approveWithdraw(idx) {
         saveUsersToCloudAndLocal(() => { 
             renderAdminWithdrawList(); 
             updateAdminBadge();
-            showToast(getNotifText('withdrawApproved'));
+            sendNativePushNotification("AZEL Withdrawal", getNotifText('withdrawApproved'));
         });
     }
 }
@@ -2395,7 +2405,7 @@ function closeDepositModal() { document.getElementById('modal-deposit').style.di
 
 function openWithdrawModal() { 
     if (!currentUser.withdrawPin || currentUser.withdrawPin === "") {
-        showToast(getNotifText('createPinFirst'));
+        sendNativePushNotification("AZEL Withdrawal", getNotifText('createPinFirst'));
         openChangeWithdrawPinModal();
         return;
     }
@@ -2412,7 +2422,7 @@ function closeWithdrawModal() {
 
 function sendWithdrawEmailCode() {
     simulatedWithdrawCode = Math.floor(1000 + Math.random() * 9000).toString();
-    showToast(`📩 [Simulated Email] Withdrawal code sent to ${currentUser.email}: ${simulatedWithdrawCode}`);
+    sendNativePushNotification("AZEL Withdrawal Code", `Withdrawal code sent to ${currentUser.email}: ${simulatedWithdrawCode}`);
 }
 
 function openInviteModal() { document.getElementById('modal-invite').style.display = 'flex'; }
@@ -2425,24 +2435,24 @@ function submitWithdrawRequest() {
     const pinInput = document.getElementById('withdraw-pin-input').value.trim();
     const amount = parseFloat(amountVal);
 
-    if(!amount || amount <= 0) { showToast(getNotifText('validAmount')); return; }
-    if(!address) { showToast(getNotifText('enterAddress')); return; }
-    if(!emailCode) { showToast(getNotifText('enterEmailCode')); return; }
-    if(!pinInput) { showToast(getNotifText('enterTxPin')); return; }
+    if(!amount || amount <= 0) { sendNativePushNotification("AZEL Withdrawal", getNotifText('validAmount')); return; }
+    if(!address) { sendNativePushNotification("AZEL Withdrawal", getNotifText('enterAddress')); return; }
+    if(!emailCode) { sendNativePushNotification("AZEL Withdrawal", getNotifText('enterEmailCode')); return; }
+    if(!pinInput) { sendNativePushNotification("AZEL Withdrawal", getNotifText('enterTxPin')); return; }
 
     if(simulatedWithdrawCode && emailCode !== simulatedWithdrawCode) {
-        showToast(getNotifText('incorrectEmailCode'));
+        sendNativePushNotification("AZEL Withdrawal", getNotifText('incorrectEmailCode'));
         return;
     }
 
     let userPin = currentUser.withdrawPin || "";
     if (pinInput !== userPin) {
-        showToast(getNotifText('incorrectTxPin'));
+        sendNativePushNotification("AZEL Withdrawal", getNotifText('incorrectTxPin'));
         return;
     }
 
     let currentBalance = currentUser.balance || 0;
-    if(amount > currentBalance) { showToast(getNotifText('insufficientAvailBal')); return; }
+    if(amount > currentBalance) { sendNativePushNotification("AZEL Withdrawal", getNotifText('insufficientAvailBal')); return; }
 
     currentUser.balance -= amount;
 
@@ -2450,7 +2460,7 @@ function submitWithdrawRequest() {
     withdrawRequests.push(req);
 
     saveUsersToCloudAndLocal(() => {});
-    showToast(getNotifText('withdrawRequested', { amount: amount }));
+    sendNativePushNotification("AZEL Withdrawal Requested", getNotifText('withdrawRequested', { amount: amount }));
     closeWithdrawModal();
     renderAssetsData();
     updateAdminBadge();
