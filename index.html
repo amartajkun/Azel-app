@@ -343,7 +343,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <div id="page-profile" class="page-content p-4 space-y-4">
     <div class="flex items-center justify-between">
         <div class="flex items-center space-x-3">
-            <!-- KLIK NA SLIKU / AVATAR DA SE PROMENI -->
             <div onclick="triggerAvatarUpload()" class="w-14 h-14 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center relative overflow-hidden shadow-lg cursor-pointer group" title="Click to change profile picture">
                 <span id="profile-initial" class="text-2xl font-bold text-emerald-400 group-hover:opacity-30 transition">A</span>
                 <img id="profile-avatar-img" src="" alt="Avatar" class="absolute inset-0 w-full h-full object-cover hidden">
@@ -358,8 +357,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         </div>
         <i class="fas fa-star text-emerald-400 text-lg"></i>
     </div>
-    
-    <!-- VIP KARTICA JE UKLONJENA PO ŽELJI -->
 
     <div class="emerald-card rounded-2xl divide-y divide-gray-800/60 text-xs">
         <div onclick="openChangeEmailModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
@@ -370,7 +367,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             <div class="flex items-center space-x-3"><i class="fas fa-lock text-emerald-400 text-sm w-4 text-center"></i><span class="text-white font-medium" data-i18n="menuChangePassword">Change Password</span></div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
-        <!-- DODATO ZA MENJANJE TRANSAKCIONOG PASSWORDA -->
         <div onclick="openChangeWithdrawPinModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3"><i class="fas fa-key text-emerald-400 text-sm w-4 text-center"></i><span class="text-white font-medium" data-i18n="menuChangeWithdrawPin">Change Withdrawal PIN</span></div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
@@ -417,7 +413,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </div>
 </div>
 
-<!-- MODAL ZA PROMENU TRANSAKCIONOG PIN-A -->
 <div id="modal-change-withdraw-pin" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
     <div class="emerald-card p-5 rounded-2xl w-full max-w-xs space-y-3 bg-[#07090e] border border-emerald-500/30 text-xs">
         <h3 class="text-sm font-bold text-emerald-400 mb-1" data-i18n="menuChangeWithdrawPin">Change Withdrawal PIN</h3>
@@ -474,7 +469,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </div>
 </div>
 
-<!-- MODAL ZA POVLAČENJE SA TRAŽENJEM TRANSAKCIONOG PASSWORD-A -->
 <div id="modal-withdraw" class="fixed inset-0 bg-black/85 hidden items-center justify-center p-4 z-50">
     <div class="emerald-card p-5 rounded-2xl w-full max-w-sm space-y-4 bg-[#07090e] border border-emerald-500/30">
         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
@@ -578,7 +572,6 @@ const MAIN_ADMIN_USER = {
     balance: 5000.00
 };
 
-// SVEOBHUHVATNI PREVODI ZA SVE JEZIKE
 const translations = {
     en: {
         navHome: "Home", navMarket: "Market", navTeam: "Team", navAssets: "Assets", navProfile: "Profile",
@@ -744,7 +737,7 @@ const translations = {
         confirmPasswordLabel: "Подтвердите пароль", loginAction: "Войти", regAction: "Зарегистрироваться", adminBtnText: "Админ"
     },
     el: {
-        navHome: "Αρχική", navMarket: "Аγορά", navTeam: "Ομάδα", navAssets: "Περιουσιακά", navProfile: "Проφίλ",
+        navHome: "Αρχική", navMarket: "Αγορά", navTeam: "Ομάδα", navAssets: "Περιουσιακά", navProfile: "Проφίλ",
         goToMarket: "Μετάβαση στην αγορά", bannerSub: "ΣΤΑΘΕΡΗ ΠΛΑΤΦΟΡΜΑ", bannerTitle: "ΚΥΚΛΟΙ 60 ΗΜΕΡΩΝ",
         bannerDesc: "Ενεργοποιήστε την άδεια.", recharge: "Φόρτιση", withdraw: "Ανάληψη", inviteFriends: "Πρόσκληση",
         marketTitle: "Αγορά bot", marketSub: "Ενεργοποιήστε τα πακέτα.", licenseTitle: "Άδεια χρήστη",
@@ -794,7 +787,6 @@ const translations = {
     }
 };
 
-// 100% pouzdan zvučni alarm preko Web Audio API sintisajzera
 function playAdminBeep() {
     try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -820,7 +812,7 @@ function showToast(message) {
         <div class="flex-1 font-medium">${message}</div>
     `;
     container.appendChild(toast);
-    setTimeout => {
+    setTimeout(() => {
         toast.remove();
     }, 5000);
 }
@@ -1575,7 +1567,6 @@ function saveCurrentUserToStorage() {
     saveUsersToCloudAndLocal(() => {});
 }
 
-// UPRAVLJANJE SLIKOM PROFILA (AVATAR)
 function triggerAvatarUpload() {
     document.getElementById('avatar-file-input').click();
 }
@@ -1603,7 +1594,6 @@ function updateAppUI() {
     document.getElementById('modal-link-display').innerText = currentUser.link;
     document.getElementById('profile-initial').innerText = currentUser.username.charAt(0).toUpperCase();
 
-    // PRIKAZ SLIKE PROFILA AKO POSTOJI
     const avatarImg = document.getElementById('profile-avatar-img');
     const initialSpan = document.getElementById('profile-initial');
     if (currentUser.avatar && currentUser.avatar.trim() !== '') {
@@ -1673,7 +1663,6 @@ function saveNewPassword() {
     showToast('Password updated successfully!');
 }
 
-// UPRAVLJANJE TRANSAKCIONIM PIN-OM
 function openChangeWithdrawPinModal() { document.getElementById('modal-change-withdraw-pin').style.display = 'flex'; }
 function closeChangeWithdrawPinModal() { 
     document.getElementById('modal-change-withdraw-pin').style.display = 'none'; 
@@ -1798,7 +1787,6 @@ function closeWithdrawModal() {
 function openInviteModal() { document.getElementById('modal-invite').style.display = 'flex'; }
 function closeInviteModal() { document.getElementById('modal-invite').style.display = 'none'; }
 
-// PROVERA TRANSAKCIONOG PIN-A PRI ISPLATI
 function submitWithdrawRequest() {
     const amountVal = document.getElementById('withdraw-amount').value;
     const address = document.getElementById('withdraw-address').value.trim();
