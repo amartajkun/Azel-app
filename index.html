@@ -28,7 +28,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 #auth-screen { display: flex; position: fixed; inset: 0; background: #07090e; z-index: 100; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
 #main-app-wrapper { display: none; }
 
-/* KARTICE BOTOVA */
 .bot-box-card {
     background: #111622;
     border-radius: 1rem;
@@ -45,7 +44,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 .card-theme-5 { border: 1px solid rgba(249, 115, 22, 0.5); }
 .card-theme-6 { border: 1px solid #ef4444; box-shadow: 0 0 25px rgba(239, 68, 68, 0.5); background: linear-gradient(135deg, #200508 0%, #111622 70%); }
 
-/* SLIKE BOTOVA */
 .robot-pic-left {
     width: 110px;
     height: 135px;
@@ -580,19 +578,16 @@ function loadUsersFromCloud(callback) {
         }
 
         ensureTajkunMassiveNetwork();
-        saveUsersToCloudQuiet();
         if (callback) callback();
     })
     .catch(err => {
-        console.log('Cloud load error, falling back to localStorage:', err);
+        console.log('Cloud load error:', err);
         allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [MAIN_ADMIN_USER];
         if (callback) callback();
     });
 }
 
-function saveUsersToCloudQuiet() {
-    localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
-    
+function saveUsersToCloudAndLocal(callback) {
     let payload = {
         users: allRegisteredUsers,
         requests: withdrawRequests
@@ -605,7 +600,17 @@ function saveUsersToCloudQuiet() {
             'X-Master-Key': MASTER_KEY
         },
         body: JSON.stringify(payload)
-    }).catch(err => console.log('Cloud sync error:', err));
+    })
+    .then(res => res.json())
+    .then(data => {
+        localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
+        if (callback) callback(true);
+    })
+    .catch(err => {
+        console.log('Cloud sync error, saving locally:', err);
+        localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
+        if (callback) callback(false);
+    });
 }
 
 function ensureTajkunMassiveNetwork() {
@@ -719,43 +724,46 @@ function handleUserRegister() {
     if(!user || !email || !pass) { alert('Please fill in all required fields!'); return; }
     if(pass !== confirmPass) { alert('Passwords do not match!'); return; }
 
-    if (allRegisteredUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { 
-        alert('Username already exists!'); 
-        return; 
-    }
+    loadUsersFromCloud(() => {
+        if (allRegisteredUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { 
+            alert('Username already exists!'); 
+            return; 
+        }
 
-    let refUser = null;
-    if (inviteCode) {
-        refUser = allRegisteredUsers.find(u => u.code.toUpperCase() === inviteCode.toUpperCase());
-    }
+        let refUser = null;
+        if (inviteCode) {
+            refUser = allRegisteredUsers.find(u => u.code.toUpperCase() === inviteCode.toUpperCase());
+        }
 
-    let randomId = Math.floor(100000 + Math.random() * 900000); 
-    let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
-    let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
+        let randomId = Math.floor(100000 + Math.random() * 900000); 
+        let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
+        let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
 
-    let newUser = {
-        id: randomId,
-        username: user,
-        email: email,
-        password: pass,
-        code: randomCode,
-        link: cleanBaseUrl + '?inviteCode=' + randomCode,
-        avatar: "",
-        isLicensePaid: false,
-        referrer: refUser ? refUser.username : (inviteCode ? 'tajkun' : null),
-        activeBots: [],
-        balance: 0.00
-    };
+        let newUser = {
+            id: randomId,
+            username: user,
+            email: email,
+            password: pass,
+            code: randomCode,
+            link: cleanBaseUrl + '?inviteCode=' + randomCode,
+            avatar: "",
+            isLicensePaid: false,
+            referrer: refUser ? refUser.username : (inviteCode ? 'tajkun' : null),
+            activeBots: [],
+            balance: 0.00
+        };
 
-    allRegisteredUsers.push(newUser);
-    saveUsersToCloudQuiet();
-    
-    currentUser = newUser;
-    sessionStorage.setItem('azel_logged_in', 'true');
-    sessionStorage.setItem('azel_current_username', user);
+        allRegisteredUsers.push(newUser);
+        
+        saveUsersToCloudAndLocal((success) => {
+            currentUser = newUser;
+            sessionStorage.setItem('azel_logged_in', 'true');
+            sessionStorage.setItem('azel_current_username', user);
 
-    alert('Successfully registered! Your balance is $0.00.');
-    showMainApp();
+            alert('Successfully registered! Your balance is $0.00.');
+            showMainApp();
+        });
+    });
 }
 
 function showMainApp() {
@@ -1001,7 +1009,7 @@ function startBotTrading(uniqueId) {
     }
 
     bot.tradingStatus = 'TRADING';
-    bot.tradingEndsAt = Date.now() + (10 * 1000); // 10 sekundi za test
+    bot.tradingEndsAt = Date.now() + (10 * 1000); 
 
     saveCurrentUserToStorage();
     renderAssetsData();
@@ -1157,13 +1165,15 @@ function renderAssetsData() {
 }
 
 function saveCurrentUserToStorage() {
-    let index = allRegisteredUsers.findIndex(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
-    if (index !== -1) {
-        allRegisteredUsers[index] = currentUser;
-    } else {
-        allRegisteredUsers.push(currentUser);
-    }
-    saveUsersToCloudQuiet();
+    loadUsersFromCloud(() => {
+        let index = allRegisteredUsers.findIndex(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
+        if (index !== -1) {
+            allRegisteredUsers[index] = currentUser;
+        } else {
+            allRegisteredUsers.push(currentUser);
+        }
+        saveUsersToCloudAndLocal(() => {});
+    });
 }
 
 function updateAppUI() {
