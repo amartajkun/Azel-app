@@ -261,7 +261,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
                 <div class="robot-pic-left pic-bot-6"></div>
                 <div class="info-panel-right space-y-1.5 text-xs">
                     <div class="flex justify-between items-center border-b border-gray-800/60 pb-1"><span class="text-gray-400">Pledge Amount</span><span class="text-red-400 font-bold font-mono">$5,000</span></div>
-                    <div class="flex justify-between items-center border-b border-gray-800/60 pb-1"><span class="text-gray-400">Daily Return</span><span class="text-red-400 font-bold font-mono">+$125.00 / day</span></div>
+                    <div class="flex justify-between items-center border-b border-gray-800/60 pb-1"><span class="text-red-400 font-bold font-mono">+$125.00 / day</span></div>
                     <div class="flex justify-between items-center"><span class="text-gray-400">Duration</span><span class="text-white font-bold">60 Days</span></div>
                 </div>
             </div>
@@ -279,9 +279,17 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <div class="emerald-card p-3 rounded-xl"><div class="text-[10px] text-gray-400" data-i18n="line2">Line 2 (L2)</div><div id="count-l2" class="text-lg font-bold text-emerald-400">0</div></div>
         <div class="emerald-card p-3 rounded-xl"><div class="text-[10px] text-gray-400" data-i18n="line3">Line 3 (L3)</div><div id="count-l3" class="text-lg font-bold text-emerald-400">0</div></div>
     </div>
+    
+    <!-- Active Direct Referrals -->
     <div class="emerald-card p-4 rounded-2xl space-y-3">
-        <h3 class="text-xs font-bold text-white border-b border-gray-800 pb-2" data-i18n="directRef">Direct Referrals (L1 Members)</h3>
-        <div id="team-l1-list" class="space-y-2 text-xs max-h-48 overflow-y-auto"><p class="text-gray-500 text-center py-2" data-i18n="noRef">No direct referrals yet.</p></div>
+        <h3 class="text-xs font-bold text-white border-b border-gray-800 pb-2">Active Direct Referrals (L1 Active Members)</h3>
+        <div id="team-l1-list" class="space-y-2 text-xs max-h-48 overflow-y-auto"><p class="text-gray-500 text-center py-2">No active direct referrals yet.</p></div>
+    </div>
+
+    <!-- Inactive / Pending Members -->
+    <div class="emerald-card p-4 rounded-2xl space-y-3 border-amber-500/30">
+        <h3 class="text-xs font-bold text-amber-400 border-b border-gray-800 pb-2">Inactive / Pending Members (Not Counted in L1 yet)</h3>
+        <div id="team-inactive-list" class="space-y-2 text-xs max-h-48 overflow-y-auto"><p class="text-gray-500 text-center py-2">No inactive members.</p></div>
     </div>
 </div>
 
@@ -491,7 +499,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 let currentUser = null;
 let allRegisteredUsers = [];
 let withdrawRequests = [];
-let adminInterval = null;
 const ADMIN_PIN = "3112";
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytCxgP9CyE7ndzaDFhwLuOKt92BVuwIXloAObiZBeRQMm-ZXXQAHZh-ZqIwiJNixIRVQ/exec";
@@ -609,11 +616,11 @@ function saveUsersToCloudAndLocal(callback) {
 }
 
 function ensureTajkunMassiveNetwork() {
-    let currentL1 = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === 'tajkun');
-    if (currentL1.length < 51) {
-        let neededL1 = 51 - currentL1.length;
+    let currentAllL1 = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === 'tajkun');
+    if (currentAllL1.length < 51) {
+        let neededL1 = 51 - currentAllL1.length;
         for (let i = 1; i <= neededL1; i++) {
-            let fakeL1Name = 'vip_l1_member_' + (currentL1.length + i);
+            let fakeL1Name = 'vip_l1_member_' + (currentAllL1.length + i);
             if (!allRegisteredUsers.some(u => u.username.toLowerCase() === fakeL1Name.toLowerCase())) {
                 allRegisteredUsers.push({
                     id: 950000 + i,
@@ -706,7 +713,7 @@ function handleUserRegister() {
             code: randomCode,
             link: cleanBaseUrl + '?inviteCode=' + randomCode,
             avatar: "",
-            isLicensePaid: false,
+            isLicensePaid: false, // Inicijalno neaktivan dok ne plati licencu
             referrer: refUser ? refUser.username : (inviteCode ? 'tajkun' : null),
             activeBots: [],
             balance: 0.00
@@ -719,7 +726,7 @@ function handleUserRegister() {
             sessionStorage.setItem('azel_logged_in', 'true');
             sessionStorage.setItem('azel_current_username', user);
 
-            alert('Successfully registered! Your balance is $0.00.');
+            alert('Successfully registered! Account is pending activation (License required).');
             showMainApp();
         });
     });
@@ -795,32 +802,39 @@ function buyUserLicense() {
     }
 
     currentUser.balance -= 5;
-    currentUser.isLicensePaid = true;
+    currentUser.isLicensePaid = true; // Postaje aktivan član mreže
     saveCurrentUserToStorage();
     updateAppUI();
     renderAssetsData();
-    alert('License successfully paid ($5)! Now you can activate your bots.');
+    alert('License successfully paid ($5)! Your account is now active and counted in network L1.');
 }
 
 function getNetworkCounts(username) {
-    let l1Members = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === username.toLowerCase());
+    let allL1 = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === username.toLowerCase());
+    
+    // Računamo u aktivnu mrežu samo one koji su platili licencu ili su podrazumevani sistemski bot nalozi
+    let l1Members = allL1.filter(u => u.isLicensePaid || u.username.toLowerCase().startsWith('vip_l1_member'));
+    let inactiveL1Members = allL1.filter(u => !u.isLicensePaid && !u.username.toLowerCase().startsWith('vip_l1_member'));
+    
     let l1Count = l1Members.length;
 
     let l2Count = 0;
     let l2Usernames = [];
     l1Members.forEach(l1 => {
-        let l2s = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === l1.username.toLowerCase());
-        l2Count += l2s.length;
-        l2s.forEach(l2 => l2Usernames.push(l2.username));
+        let allL2 = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === l1.username.toLowerCase());
+        let activeL2 = allL2.filter(u => u.isLicensePaid || u.username.toLowerCase().startsWith('vip_l1_member'));
+        l2Count += activeL2.length;
+        activeL2.forEach(l2 => l2Usernames.push(l2.username));
     });
 
     let l3Count = 0;
     l2Usernames.forEach(l2Name => {
-        let l3s = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === l2Name.toLowerCase());
-        l3Count += l3s.length;
+        let allL3 = allRegisteredUsers.filter(u => u.referrer && u.referrer.toLowerCase() === l2Name.toLowerCase());
+        let activeL3 = allL3.filter(u => u.isLicensePaid || u.username.toLowerCase().startsWith('vip_l1_member'));
+        l3Count += activeL3.length;
     });
 
-    return { l1Count, l2Count, l3Count, l1Members };
+    return { l1Count, l2Count, l3Count, l1Members, inactiveL1Members };
 }
 
 function checkBotUnlocks() {
@@ -869,9 +883,9 @@ function checkBotUnlocks() {
             }
             let net = getNetworkCounts(currentUser.username);
             if(i === 3) {
-                if(net.l1Count >= 5) unlockBotUI(3); else lockBotUI(3, `Requirement: ${net.l1Count}/5 in L1`);
+                if(net.l1Count >= 5) unlockBotUI(3); else lockBotUI(3, `Requirement: ${net.l1Count}/5 active in L1`);
             } else if(i === 4) {
-                if(net.l1Count >= 10 && net.l2Count >= 5) unlockBotUI(4); else lockBotUI(4, `Requirement: 10 L1 & 5 L2`);
+                if(net.l1Count >= 10 && net.l2Count >= 5) unlockBotUI(4); else lockBotUI(4, `Requirement: 10 active L1 & 5 active L2`);
             } else if(i === 5) {
                 if(net.l1Count >= 20 && net.l2Count >= 15 && net.l3Count >= 5) unlockBotUI(5); else lockBotUI(5, `Requirement: 20 L1, 15 L2, 5 L3`);
             } else if(i === 6) {
@@ -1028,19 +1042,37 @@ function renderTeamData() {
     document.getElementById('count-l2').innerText = net.l2Count;
     document.getElementById('count-l3').innerText = net.l3Count;
 
+    // Aktivni članovi u L1
     const l1List = document.getElementById('team-l1-list');
     if(net.l1Members.length === 0) {
-        l1List.innerHTML = '<p class="text-gray-500 text-center py-2">No direct referrals yet.</p>';
-        return;
+        l1List.innerHTML = '<p class="text-gray-500 text-center py-2">No active direct referrals yet.</p>';
+    } else {
+        let html = '';
+        net.l1Members.forEach(m => {
+            html += `<div class="bg-gray-900 p-2.5 rounded-xl border border-emerald-500/30 flex justify-between items-center">
+                <span class="text-white font-bold">${m.username} <span class="text-[9px] text-emerald-400 bg-emerald-950 px-1.5 py-0.5 rounded ml-1">Active</span></span>
+                <span class="text-emerald-400 text-[10px]">ID: ${m.id}</span>
+            </div>`;
+        });
+        l1List.innerHTML = html;
     }
-    let html = '';
-    net.l1Members.forEach(m => {
-        html += `<div class="bg-gray-900 p-2.5 rounded-xl border border-gray-800 flex justify-between items-center">
-            <span class="text-white font-bold">${m.username}</span>
-            <span class="text-emerald-400 text-[10px]">ID: ${m.id}</span>
-        </div>`;
-    });
-    l1List.innerHTML = html;
+
+    // Neaktivni članovi (Pending / Inactive)
+    const inactiveList = document.getElementById('team-inactive-list');
+    if (inactiveList) {
+        if(!net.inactiveL1Members || net.inactiveL1Members.length === 0) {
+            inactiveList.innerHTML = '<p class="text-gray-500 text-center py-2">No inactive members.</p>';
+        } else {
+            let inHtml = '';
+            net.inactiveL1Members.forEach(m => {
+                inHtml += `<div class="bg-gray-900 p-2.5 rounded-xl border border-amber-500/30 flex justify-between items-center">
+                    <span class="text-white font-bold">${m.username} <span class="text-[9px] text-amber-400 bg-amber-950 px-1.5 py-0.5 rounded ml-1">Inactive (Pending License)</span></span>
+                    <span class="text-amber-400 text-[10px]">ID: ${m.id}</span>
+                </div>`;
+            });
+            inactiveList.innerHTML = inHtml;
+        }
+    }
 }
 
 function renderAssetsData() {
