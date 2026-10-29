@@ -69,7 +69,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     flex-grow: 1;
 }
 
-/* NOVI PROFESIONALNI ASSETS CARD DIZAJN */
 .assets-hero-card {
     background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #0d1117 100%);
     border: 1px solid rgba(16, 185, 129, 0.35);
@@ -77,16 +76,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     border-radius: 1.25rem;
     position: relative;
     overflow: hidden;
-}
-.assets-hero-card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 150px;
-    height: 150px;
-    background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, transparent 70%);
-    pointer-events: none;
 }
 
 #toast-container {
@@ -189,8 +178,8 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <span class="text-xl font-bold tracking-wider text-emerald-400">AZEL</span>
 </div>
 <div class="flex space-x-3 text-gray-400 text-lg relative items-center">
-<button onclick="requestNotificationPermission()" class="bg-gray-800 text-emerald-400 border border-emerald-500/30 px-2 py-1.5 rounded-lg text-[10px] font-bold items-center gap-1 cursor-pointer flex" title="Enable Phone Notifications">
-    <i class="fas fa-bell"></i>
+<button onclick="requestNotificationPermission()" class="bg-gray-800 text-emerald-400 border border-emerald-500/30 px-2.5 py-1.5 rounded-lg text-[10px] font-bold items-center gap-1.5 cursor-pointer flex" title="Enable Phone Notifications">
+    <i class="fas fa-bell"></i> Push On
 </button>
 <button onclick="openSupportModal()" class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 px-2.5 py-1.5 rounded-lg text-[10px] font-bold items-center gap-1.5 cursor-pointer flex relative">
     <i class="fas fa-headset"></i> <span data-i18n="supportBtn">Support</span>
@@ -225,33 +214,32 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <p class="text-[11px] text-gray-200 leading-relaxed" data-i18n="bannerDesc">Activate your $5 license, buy bot packages, and run multiple bots simultaneously for daily 1h trading cycles.</p>
     </div>
 
-    <!-- FIRMA I SERTIFIKAT SEKCIJA NA HOME PANELU -->
+    <!-- OZBILJNE KANCELARIJSKE SLIKE I SERTIFIKAT -->
     <div class="emerald-card p-4 rounded-2xl space-y-3">
         <div class="flex justify-between items-center">
             <h3 class="text-xs font-extrabold text-emerald-400 tracking-wider flex items-center gap-1.5">
-                <i class="fas fa-building-shield"></i> AZEL GLOBAL HQ & TEAM
+                <i class="fas fa-building"></i> AZEL CORPORATE HEADQUARTERS
             </h3>
             <span class="text-[9px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/30">Verified Corp</span>
         </div>
-        <p class="text-[11px] text-gray-300">Take a glimpse inside our corporate trading hall, team operations, and view our official government accreditation certificate.</p>
+        <p class="text-[11px] text-gray-300">Explore our professional corporate office environments, IT control desks, and view our official accreditation certificate.</p>
         
-        <!-- Slike sale i ljudi -->
+        <!-- Ozbiljnije kancelarijske slike -->
         <div class="grid grid-cols-2 gap-2">
-            <div onclick="openCompanyPhotoModal('hall')" class="relative h-28 rounded-xl overflow-hidden border border-emerald-500/30 cursor-pointer group">
-                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=500&q=80" alt="Trading Hall" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <div onclick="openCompanyPhotoModal('office')" class="relative h-28 rounded-xl overflow-hidden border border-emerald-500/30 cursor-pointer group">
+                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=500&q=80" alt="Corporate Office" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent flex items-end p-2">
-                    <span class="text-[10px] font-bold text-white"><i class="fas fa-users-viewfinder text-emerald-400"></i> Operations Hall</span>
+                    <span class="text-[10px] font-bold text-white"><i class="fas fa-laptop-code text-emerald-400"></i> Executive Offices</span>
                 </div>
             </div>
-            <div onclick="openCompanyPhotoModal('meeting')" class="relative h-28 rounded-xl overflow-hidden border border-emerald-500/30 cursor-pointer group">
-                <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=500&q=80" alt="Meeting Room" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <div onclick="openCompanyPhotoModal('trading')" class="relative h-28 rounded-xl overflow-hidden border border-emerald-500/30 cursor-pointer group">
+                <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=500&q=80" alt="Trading Floor" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent flex items-end p-2">
-                    <span class="text-[10px] font-bold text-white"><i class="fas fa-handshake text-emerald-400"></i> AZEL Presentation</span>
+                    <span class="text-[10px] font-bold text-white"><i class="fas fa-chart-line text-emerald-400"></i> IT Control Desk</span>
                 </div>
             </div>
         </div>
 
-        <!-- Dugme za Sertifikat -->
         <button onclick="openCertificateModal()" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 cursor-pointer">
             <i class="fas fa-certificate text-amber-300 text-sm"></i> View Official Company Certificate
         </button>
@@ -390,12 +378,11 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </div>
 </div>
 
-<!-- WALLET PAGE (NOVI PROFESIONALNI DIZAJN ZA ASSETS & CAPITAL) -->
+<!-- WALLET PAGE -->
 <div id="page-wallet" class="page-content p-4 space-y-4">
     <h2 class="text-lg font-bold text-emerald-400 mb-1" data-i18n="assetsTitle">Assets & Capital</h2>
     <p class="text-xs text-gray-400 mb-2">Manage your liquid funds and running AI bot assets in real-time.</p>
 
-    <!-- NOVI PROFESIONALNI GLAVNI PROZOR ZA BALANCE I BOT INVESTICIJE -->
     <div class="assets-hero-card p-5 space-y-4">
         <div class="flex justify-between items-start border-b border-white/10 pb-3">
             <div>
@@ -490,17 +477,17 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </div>
 </div>
 
-<!-- MODAL ZA SLIKE FIRME / SALE -->
+<!-- MODAL ZA KANCELARIJSKE SLIKE -->
 <div id="modal-company-photo" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
     <div class="emerald-card p-5 rounded-3xl w-full max-w-sm space-y-3 bg-[#07090e] border border-emerald-500/40 text-center">
         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
-            <h3 id="company-photo-title" class="text-sm font-bold text-emerald-400">AZEL Operations Hall</h3>
+            <h3 id="company-photo-title" class="text-sm font-bold text-emerald-400">AZEL Corporate Office</h3>
             <button onclick="closeCompanyPhotoModal()" class="text-gray-400 hover:text-white text-base cursor-pointer"><i class="fas fa-times"></i></button>
         </div>
         <div class="rounded-xl overflow-hidden border border-emerald-500/30 h-56">
-            <img id="company-photo-img" src="" alt="Company Photo" class="w-full h-full object-cover">
+            <img id="company-photo-img" src="" alt="Office Photo" class="w-full h-full object-cover">
         </div>
-        <p id="company-photo-desc" class="text-[11px] text-gray-300 leading-relaxed">Our dedicated professionals managing automated hourly crypto bot simulations and trading cycles in our Skopje & international hubs.</p>
+        <p id="company-photo-desc" class="text-[11px] text-gray-300 leading-relaxed">Our executive headquarters and automated IT control center managing high-frequency trading bots.</p>
         <button onclick="closeCompanyPhotoModal()" class="w-full bg-gray-800 text-gray-300 py-2 rounded-xl text-xs font-bold cursor-pointer">Close</button>
     </div>
 </div>
@@ -685,16 +672,18 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </div>
 </div>
 
+<!-- ADMIN PANEL SA NOVIM TABOM ZA SVE REGISTROVANE ČLANOVE -->
 <div id="modal-admin-panel" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
-    <div class="emerald-card p-5 rounded-2xl w-full max-w-md space-y-4 bg-[#07090e] border border-emerald-500/50 max-h-[85vh] flex flex-col">
+    <div class="emerald-card p-5 rounded-2xl w-full max-w-lg space-y-4 bg-[#07090e] border border-emerald-500/50 max-h-[85vh] flex flex-col">
         <div class="flex justify-between items-center border-b border-gray-800 pb-3 shrink-0">
             <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2"><i class="fas fa-tasks"></i> <span data-i18n="adminPanelTitle">Admin Panel</span></h3>
             <button onclick="closeAdminPanel()" class="text-gray-400 hover:text-white text-sm cursor-pointer"><i class="fas fa-times"></i></button>
         </div>
 
-        <div class="flex bg-gray-900 p-1 rounded-xl border border-gray-800 text-xs font-bold shrink-0">
-            <button id="admin-tab-withdraw-btn" onclick="switchAdminTab('withdraw')" class="flex-1 py-1.5 rounded-lg bg-amber-500 text-black transition cursor-pointer">Isplate (Withdrawals)</button>
-            <button id="admin-tab-support-btn" onclick="switchAdminTab('support')" class="flex-1 py-1.5 rounded-lg text-gray-400 transition cursor-pointer">Support Tiketi</button>
+        <div class="flex bg-gray-900 p-1 rounded-xl border border-gray-800 text-[11px] font-bold shrink-0">
+            <button id="admin-tab-withdraw-btn" onclick="switchAdminTab('withdraw')" class="flex-1 py-1.5 rounded-lg bg-amber-500 text-black transition cursor-pointer">Isplate</button>
+            <button id="admin-tab-support-btn" onclick="switchAdminTab('support')" class="flex-1 py-1.5 rounded-lg text-gray-400 transition cursor-pointer">Support</button>
+            <button id="admin-tab-users-btn" onclick="switchAdminTab('users')" class="flex-1 py-1.5 rounded-lg text-gray-400 transition cursor-pointer">Svi Članovi</button>
         </div>
 
         <div id="admin-section-withdraw" class="space-y-3 overflow-y-auto pr-1 grow text-xs">
@@ -703,6 +692,14 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 
         <div id="admin-section-support" class="space-y-3 overflow-y-auto pr-1 grow text-xs" style="display: none;">
             <div id="admin-list-support" class="space-y-3"><p class="text-gray-400 text-center py-4">No support tickets.</p></div>
+        </div>
+
+        <!-- NOVI ADMIN PROZOR ZA PREGLED SVIH REGISTROVANIH ČLANOVA -->
+        <div id="admin-section-users" class="space-y-2 overflow-y-auto pr-1 grow text-xs" style="display: none;">
+            <div class="text-[11px] text-emerald-400 font-bold mb-1">Registered Members Database (<span id="admin-total-users-count">0</span>)</div>
+            <div id="admin-list-users" class="space-y-2">
+                <p class="text-gray-400 text-center py-4">Loading users...</p>
+            </div>
         </div>
 
         <button onclick="closeAdminPanel()" class="w-full bg-gray-800 text-gray-300 py-2.5 rounded-xl text-xs font-bold shrink-0 mt-2 cursor-pointer" data-i18n="closePanelBtn">Close Panel</button>
@@ -727,6 +724,7 @@ let supportTickets = [];
 const ADMIN_PIN = "3112";
 let lastKnownPendingCount = -1;
 let lastKnownSupportCount = -1;
+let lastKnownUsersCount = -1;
 let lastKnownAdminMsgCount = 0; 
 let simulatedRegCode = "";
 let simulatedWithdrawCode = "";
@@ -749,11 +747,12 @@ const MAIN_ADMIN_USER = {
     balance: 5000.00
 };
 
-// Višejezične notifikacije
+// Sve glavne notifikacije na engleskom jeziku
 const notifTranslations = {
     en: {
         newWithdrawReq: "🔔 New withdrawal request has arrived!",
         newSupportMsg: "💬 New support message from user!",
+        newMemberRegistered: "👤 New member has registered on AZEL!",
         adminReply: "💬 You have received a reply from AZEL Support!",
         codeCopied: "Code copied!",
         linkCopied: "Link copied!",
@@ -803,118 +802,11 @@ const notifTranslations = {
         incorrectTxPin: "Incorrect transaction PIN! Access denied.",
         insufficientAvailBal: "Insufficient available balance!",
         withdrawRequested: "Withdrawal of ${amount} requested! Balance updated."
-    },
-    sr: {
-        newWithdrawReq: "🔔 Novi zahtev za isplatu je stigao!",
-        newSupportMsg: "💬 Nova poruka u Support-u od korisnika!",
-        adminReply: "💬 Dobili ste odgovor od AZEL Support-a!",
-        codeCopied: "Kod je kopiran!",
-        linkCopied: "Link je kopiran!",
-        validEmail: "Unesite validnu email adresu!",
-        enterUserPass: "Unesite korisničko ime i lozinku!",
-        incorrectPass: "Pogrešna lozinka! Pokušajte ponovo.",
-        usernameExists: "Korisničko ime već postoji!",
-        regSuccess: "Uspešna registracija! Dobrodošli u AZEL.",
-        fillAllFields: "Popunite sva polja uključujući email kod!",
-        invalidEmailCode: "Nevažeći verifikacioni kod!",
-        passMismatch: "Lozinke se ne podudaraju!",
-        payLicenseFirst: "Prvo morate platiti licencu od $5!",
-        alreadyOwnBot: "Već posedujete Bot Nivo {level}!",
-        insufficientBalance: "Nedovoljan balans! Potrebno je ${price}.",
-        botPurchased: "Bot {level} (${price}) uspešno kupljen!",
-        lifecycleEnded: "60-dnevni ciklus ovog bota je završen.",
-        botFinished: "🤖 Bot Nivo {level} je završio trgovanje! Profit +${earning} je spreman za preuzimanje.",
-        cycleCompleted: "Bot Nivo {level} završio 60-dnevni ciklus! Capital vraćen.",
-        collectedProfit: "Uspešno preuzeto +${earning}!",
-        licenseAlreadyActive: "Licenca je već aktivna za Admina!",
-        licenseAlreadyPaid: "Licenca je već plaćena!",
-        insufficientBalanceLicense: "Nedovoljan balans! Potrebno je bar $5 za licencu.",
-        licensePaid: "Licenca uspešno plaćena ($5)! Tržište botova otključano.",
-        writeMessage: "Napišite poruku.",
-        msgSent: "Poruka poslata AZEL Podršci!",
-        validEmailOnly: "Unesite validan email.",
-        emailUpdated: "Email uspešno ažuriran!",
-        fillAllPass: "Popunite sva polja!",
-        incorrectCurrentPass: "Pogrešna trenutna lozinka!",
-        passMismatchNew: "Nova lozinka se ne poklapa!",
-        passUpdated: "Lozinka uspešno ažurirana!",
-        pinLength: "PIN mora imati tačno 4 cifre!",
-        incorrectPin: "Pogrešan trenutni PIN!",
-        pinUpdated: "PIN uspešno kreiran/ažuriran!",
-        enterValidDep: "Unesite validan iznos uplate!",
-        simDeposit: "✅ Uspešna uplata od ${amt} USDT! Praćenje i obrada u toku (do 72h).",
-        accessDenied: "Pristup odbijen.",
-        incorrectAdminPin: "Pogrešan PIN!",
-        replySent: "Odgovor uspešno poslat korisniku!",
-        withdrawApproved: "Isplata uspešno odobrena!",
-        createPinFirst: "Prvo kreirajte transakcioni PIN u podešavanjima profila!",
-        validAmount: "Unesite validan iznos.",
-        enterAddress: "Unesite adresu.",
-        enterEmailCode: "Unesite email verifikacioni kod.",
-        enterTxPin: "Unesite transakcioni PIN!",
-        incorrectEmailCode: "Pogrešan email verifikacioni kod!",
-        incorrectTxPin: "Pogrešan transakcioni PIN! Pristup odbijen.",
-        insufficientAvailBal: "Nedovoljan raspoloživi balans!",
-        withdrawRequested: "Zahtev za isplatu od ${amount} je poslat!"
-    },
-    mk: {
-        newWithdrawReq: "🔔 Ново барање за исплата е пристигнато!",
-        newSupportMsg: "💬 Нова порака во Support од корисник!",
-        adminReply: "💬 Добивте одговор од AZEL Support!",
-        codeCopied: "Кодот е копиран!",
-        linkCopied: "Линкот е копиран!",
-        validEmail: "Внесете валидна е-пошта адреса!",
-        enterUserPass: "Внесете корисничко име и лозинка!",
-        incorrectPass: "Грешна лозинка! Обидете се повторно.",
-        usernameExists: "Корисничкото име веќе постои!",
-        regSuccess: "Успешна регистрација! Добредојдовте во AZEL.",
-        fillAllFields: "Пополнете ги сите полиња вклучувајќи го кодот!",
-        invalidEmailCode: "Невалиден верификационен код!",
-        passMismatch: "Лозинките не се совпаѓаат!",
-        payLicenseFirst: "Прво мора да ја платите лиценцата од $5!",
-        alreadyOwnBot: "Веќе поседувате Бот Ниво {level}!",
-        insufficientBalance: "Недоволен баланс! Потребни се ${price}.",
-        botPurchased: "Бот {level} (${price}) успешно купен!",
-        lifecycleEnded: "60-дневниот циклус на овој бот е завршен.",
-        botFinished: "🤖 Бот Ниво {level} заврши со тргување! Профит +${earning} е подготвен.",
-        cycleCompleted: "Бот Ниво {level} заврши 60-дневен циклус! Капиталот е вратен.",
-        collectedProfit: "Успешно подигнато +${earning}!",
-        licenseAlreadyActive: "Лиценцата е веќе активна за Админ!",
-        licenseAlreadyPaid: "Лиценцата е веќе платена!",
-        insufficientBalanceLicense: "Недоволен баланс! Потребни се барем $5 за лиценца.",
-        licensePaid: "Лиценцата е успешно платена ($5)! Пазарот на ботови е отклучен.",
-        writeMessage: "Напишете порака.",
-        msgSent: "Пораката е испратена до AZEL Поддршка!",
-        validEmailOnly: "Внесете валидна е-пошта.",
-        emailUpdated: "Е-поштата е успешно ажурирана!",
-        fillAllPass: "Пополнете ги сите полиња!",
-        incorrectCurrentPass: "Грешна тековна лозинка!",
-        passMismatchNew: "Новите лозинки не се совпаѓаат!",
-        passUpdated: "Лозинката е успешно ажурирана!",
-        pinLength: "ПИН-от мора да има точно 4 цифри!",
-        incorrectPin: "Грешен тековен ПИН!",
-        pinUpdated: "ПИН-от е успешно креиран/ажуриран!",
-        enterValidDep: "Внесете валиден износ на уплата!",
-        simDeposit: "✅ Успешна уплата од ${amt} USDT! Следење и обработка во тек (до 72h).",
-        accessDenied: "Пристапот е одбиен.",
-        incorrectAdminPin: "Грешен ПИН!",
-        replySent: "Одговорот е успешно испратен до корисникот!",
-        withdrawApproved: "Исплатата е успешно одобрена!",
-        createPinFirst: "Прво креирајте го вашиот трансакциски ПИН во профилот!",
-        validAmount: "Внесете валиден износ.",
-        enterAddress: "Внесете адреса.",
-        enterEmailCode: "Внесете го верификациониот код.",
-        enterTxPin: "Внесете го трансакцискиот ПИН!",
-        incorrectEmailCode: "Грешен верификационен код!",
-        incorrectTxPin: "Грешен трансакциски ПИН! Пристап одбиен.",
-        insufficientAvailBal: "Недоволен расположив баланс!",
-        withdrawRequested: "Барање за исплата од ${amount} е поднесено!"
     }
 };
 
 function getNotifText(key, params = {}) {
-    let langDict = notifTranslations[currentAppLang] || notifTranslations['en'];
-    let text = langDict[key] || notifTranslations['en'][key] || key;
+    let text = notifTranslations['en'][key] || key;
     Object.keys(params).forEach(p => {
         text = text.replace(new RegExp(`\\{${p}\\}`, 'g'), params[p]);
     });
@@ -1041,17 +933,16 @@ const translations = {
     }
 };
 
-// Funkcija za prave sistemske notifikacije na telefonu
 function requestNotificationPermission() {
     if (!("Notification" in window)) {
-        showToast("This browser does not support desktop/phone notifications.");
+        showToast("This browser does not support notifications.");
         return;
     }
     Notification.requestPermission().then(permission => {
         if (permission === "granted") {
-            showToast("🔔 Phone push notifications enabled successfully!");
+            showToast("🔔 Push notifications enabled successfully!");
             new Notification("AZEL App", {
-                body: "Notifications are now active for your account.",
+                body: "Notifications are active and running in background.",
                 icon: "https://cdn-icons-png.flaticon.com/512/2921/2921222.png"
             });
         } else {
@@ -1061,7 +952,7 @@ function requestNotificationPermission() {
 }
 
 function sendNativePushNotification(title, bodyText) {
-    showToast(bodyText); // Uvek prikazuje ugrađeni toast
+    showToast(bodyText);
     if ("Notification" in window && Notification.permission === "granted") {
         try {
             new Notification(title, {
@@ -1081,14 +972,14 @@ function openCompanyPhotoModal(type) {
     const img = document.getElementById('company-photo-img');
     const desc = document.getElementById('company-photo-desc');
 
-    if (type === 'hall') {
-        title.innerText = "AZEL Operations & Trading Hall";
-        img.src = "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80";
-        desc.innerText = "Our main executive and algorithmic trading monitoring hall where engineers and agents supervise high-frequency 1h bot cycles.";
+    if (type === 'office') {
+        title.innerText = "AZEL Executive Headquarters";
+        img.src = "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80";
+        desc.innerText = "Our main corporate offices where global strategy, partner relations, and network growth are managed.";
     } else {
-        title.innerText = "AZEL Global Presentation & Conference";
-        img.src = "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80";
-        desc.innerText = "Live interactive sessions showcasing the AZEL ecosystem, network partnership tiers, and financial returns to investors.";
+        title.innerText = "AZEL IT Control Desk & Trading Floor";
+        img.src = "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80";
+        desc.innerText = "High-performance servers and automated bot infrastructure executing 1h financial trading cycles 24/7.";
     }
     modal.style.display = 'flex';
 }
@@ -1197,9 +1088,17 @@ function loadUsersFromCloud(callback) {
         if (data && data.users) {
             let cloudUsers = Array.isArray(data.users) ? data.users : [];
             if (cloudUsers.length > 0) {
+                let oldUsersCount = allRegisteredUsers.length;
                 allRegisteredUsers = cloudUsers;
                 localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
+
+                if (currentUser && currentUser.username.toLowerCase() === 'tajkun' && allRegisteredUsers.length > oldUsersCount) {
+                    let newestUser = allRegisteredUsers[allRegisteredUsers.length - 1];
+                    playAdminBeep();
+                    sendNativePushNotification("AZEL Admin Registration Alert", `👤 New member registered: ${newestUser.username} (ID: ${newestUser.id})`);
+                }
             }
+
             if (data.requests && Array.isArray(data.requests)) {
                 let newPendingCount = data.requests.filter(r => r.status === 'pending').length;
                 let oldPendingCount = withdrawRequests.filter(r => r.status === 'pending').length;
@@ -1211,13 +1110,14 @@ function loadUsersFromCloud(callback) {
                 } else if (newPendingCount > oldPendingCount) {
                     if (currentUser && currentUser.username.toLowerCase() === 'tajkun') {
                         playAdminBeep();
-                        sendNativePushNotification("AZEL Admin Alert", getNotifText('newWithdrawReq'));
+                        sendNativePushNotification("AZEL Admin Withdrawal Alert", getNotifText('newWithdrawReq'));
                     }
                     lastKnownPendingCount = newPendingCount;
                 } else {
                     lastKnownPendingCount = newPendingCount;
                 }
             }
+
             if (data.supportTickets && Array.isArray(data.supportTickets)) {
                 let newTickets = data.supportTickets;
                 let oldAdminTicketsCount = supportTickets.filter(t => t.messages.some(m => m.sender === 'user' && !m.read)).length;
@@ -1227,7 +1127,7 @@ function loadUsersFromCloud(callback) {
 
                 if (currentUser && currentUser.username.toLowerCase() === 'tajkun' && newAdminTicketsCount > oldAdminTicketsCount) {
                     playAdminBeep();
-                    sendNativePushNotification("AZEL Support", getNotifText('newSupportMsg'));
+                    sendNativePushNotification("AZEL Admin Support Alert", getNotifText('newSupportMsg'));
                 }
 
                 if (currentUser && currentUser.username.toLowerCase() !== 'tajkun') {
@@ -1374,6 +1274,10 @@ function handleUserLogin() {
                 balance: 0.00
             };
             allRegisteredUsers.push(foundUser);
+
+            // Notifikacija adminu za novu registraciju
+            playAdminBeep();
+            sendNativePushNotification("AZEL Admin Registration Alert", `👤 New member registered: ${user} (ID: ${foundUser.id})`);
         }
     }
 
@@ -1443,6 +1347,15 @@ function handleUserRegister() {
     localStorage.setItem('azel_logged_in', 'true');
     localStorage.setItem('azel_current_username', user);
     saveUsersToCloudAndLocal(() => {});
+
+    // Obaveštenje za novu registraciju preko linka
+    if (refUser) {
+        sendNativePushNotification("AZEL Referral", `🎉 A new member registered via your link: ${user}!`);
+    }
+
+    // Obaveštenje adminu (tajkun)
+    playAdminBeep();
+    sendNativePushNotification("AZEL Admin Registration Alert", `👤 New member registered on app: ${user} (ID: ${randomId})`);
 
     sendNativePushNotification("AZEL Welcome", getNotifText('regSuccess'));
     showMainApp();
@@ -1539,7 +1452,15 @@ function buyUserLicense() {
     saveCurrentUserToStorage();
     updateAppUI();
     renderAssetsData();
+
+    // Notifikacija članu i sponzoru da je postao aktivan
     sendNativePushNotification("AZEL License Activated", getNotifText('licensePaid'));
+    if (currentUser.referrer) {
+        let sponsor = allRegisteredUsers.find(u => u.username.toLowerCase() === currentUser.referrer.toLowerCase());
+        if (sponsor) {
+            sendNativePushNotification("AZEL Network Member Active", `🌟 Your direct referral ${currentUser.username} just became an active member!`);
+        }
+    }
 }
 
 function isUserActive(user) {
@@ -1587,7 +1508,6 @@ function getNetworkCounts(username) {
 
 function checkBotUnlocks() {
     if(!currentUser.activeBots) currentUser.activeBots = [];
-
     let currentLangData = translations[currentAppLang] || translations['en'];
 
     for(let i=1; i<=6; i++) {
@@ -2247,27 +2167,36 @@ function openAdminPanel() {
     switchAdminTab('withdraw');
     renderAdminWithdrawList();
     renderAdminSupportList();
+    renderAdminUsersList();
 }
 function closeAdminPanel() { document.getElementById('modal-admin-panel').style.display = 'none'; }
 
 function switchAdminTab(tab) {
     const wBtn = document.getElementById('admin-tab-withdraw-btn');
     const sBtn = document.getElementById('admin-tab-support-btn');
+    const uBtn = document.getElementById('admin-tab-users-btn');
     const wSec = document.getElementById('admin-section-withdraw');
     const sSec = document.getElementById('admin-section-support');
+    const uSec = document.getElementById('admin-section-users');
 
     if (tab === 'withdraw') {
         wBtn.className = "flex-1 py-1.5 rounded-lg bg-amber-500 text-black transition cursor-pointer";
         sBtn.className = "flex-1 py-1.5 rounded-lg text-gray-400 transition cursor-pointer";
-        wSec.style.display = 'block';
-        sSec.style.display = 'none';
+        uBtn.className = "flex-1 py-1.5 rounded-lg text-gray-400 transition cursor-pointer";
+        wSec.style.display = 'block'; sSec.style.display = 'none'; uSec.style.display = 'none';
         renderAdminWithdrawList();
-    } else {
+    } else if (tab === 'support') {
         sBtn.className = "flex-1 py-1.5 rounded-lg bg-amber-500 text-black transition cursor-pointer";
         wBtn.className = "flex-1 py-1.5 rounded-lg text-gray-400 transition cursor-pointer";
-        sSec.style.display = 'block';
-        wSec.style.display = 'none';
+        uBtn.className = "flex-1 py-1.5 rounded-lg text-gray-400 transition cursor-pointer";
+        sSec.style.display = 'block'; wSec.style.display = 'none'; uSec.style.display = 'none';
         renderAdminSupportList();
+    } else {
+        uBtn.className = "flex-1 py-1.5 rounded-lg bg-amber-500 text-black transition cursor-pointer";
+        wBtn.className = "flex-1 py-1.5 rounded-lg text-gray-400 transition cursor-pointer";
+        sBtn.className = "flex-1 py-1.5 rounded-lg text-gray-400 transition cursor-pointer";
+        uSec.style.display = 'block'; wSec.style.display = 'none'; sSec.style.display = 'none';
+        renderAdminUsersList();
     }
 }
 
@@ -2330,7 +2259,6 @@ function renderAdminSupportList() {
 
     let html = '';
     supportTickets.forEach((ticket, idx) => {
-        let lastMsg = ticket.messages[ticket.messages.length - 1];
         let hasUnread = ticket.messages.some(m => m.sender === 'user' && !m.read);
 
         html += `
@@ -2356,6 +2284,43 @@ function renderAdminSupportList() {
                 <div class="flex gap-2 pt-1">
                     <input type="text" id="admin-reply-input-${idx}" placeholder="Type reply as Admin..." class="w-full bg-black/60 border border-gray-700 p-2 rounded-lg text-white text-xs">
                     <button onclick="sendAdminReply(${idx})" class="bg-amber-500 hover:bg-amber-400 text-black px-3 py-2 rounded-lg font-bold text-xs shrink-0 cursor-pointer">Reply</button>
+                </div>
+            </div>
+        `;
+    });
+    listContainer.innerHTML = html;
+}
+
+// NOVI PROZOR ZA PREGLED SVIH REGISTROVANIh ČLANOVA
+function renderAdminUsersList() {
+    const listContainer = document.getElementById('admin-list-users');
+    document.getElementById('admin-total-users-count').innerText = allRegisteredUsers.length;
+
+    if (!allRegisteredUsers || allRegisteredUsers.length === 0) {
+        listContainer.innerHTML = `<p class="text-gray-400 text-center py-4">No registered users.</p>`;
+        return;
+    }
+
+    let html = '';
+    allRegisteredUsers.forEach(u => {
+        let balance = u.balance !== undefined ? u.balance : 0.00;
+        let activeBotsCount = u.activeBots ? u.activeBots.filter(b => b.daysRemaining > 0).length : 0;
+        let isPaid = u.isLicensePaid ? '<span class="text-emerald-400 bg-emerald-950 px-1.5 py-0.5 rounded text-[9px]">License Paid ✓</span>' : '<span class="text-amber-400 bg-amber-950 px-1.5 py-0.5 rounded text-[9px]">Unpaid</span>';
+
+        html += `
+            <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-1.5">
+                <div class="flex justify-between items-center">
+                    <span class="text-white font-bold text-xs">👤 ${u.username}</span>
+                    <span class="text-emerald-400 font-mono font-bold">$${balance.toFixed(2)}</span>
+                </div>
+                <div class="flex justify-between items-center text-[10px] text-gray-400">
+                    <span>ID: <strong class="text-gray-200">${u.id}</strong></span>
+                    <span>Email: ${u.email || 'N/A'}</span>
+                </div>
+                <div class="flex justify-between items-center pt-1 border-t border-gray-800 text-[10px]">
+                    <span>Active Bots: <strong class="text-amber-400">${activeBotsCount}</strong></span>
+                    <span>Referrer: ${u.referrer || 'None (Direct)'}</span>
+                    ${isPaid}
                 </div>
             </div>
         `;
@@ -2460,6 +2425,8 @@ function submitWithdrawRequest() {
     withdrawRequests.push(req);
 
     saveUsersToCloudAndLocal(() => {});
+    playAdminBeep();
+    sendNativePushNotification("AZEL Admin Withdrawal Alert", `🔔 New withdrawal request of $${amount} from ${currentUser.username}!`);
     sendNativePushNotification("AZEL Withdrawal Requested", getNotifText('withdrawRequested', { amount: amount }));
     closeWithdrawModal();
     renderAssetsData();
