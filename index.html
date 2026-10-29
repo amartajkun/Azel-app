@@ -545,7 +545,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         </div>
         <div class="invite-gradient-card p-4 rounded-2xl text-white space-y-3 text-center">
             <p class="text-[11px] font-bold text-emerald-100" data-i18n="inviteDesc">Grow your L1, L2, L3 lines to unlock Bot 3, 4, 5 & 6! Earn $1 for each direct active referral.</p>
-            <div onclick="navigator.clipboard.writeText(currentUser ? currentUser.code : '').then(()=>showToast('Code copied!'))" class="bg-black/30 p-2.5 rounded-xl border border-white/10 flex justify-between items-center cursor-pointer">
+            <div onclick="navigator.clipboard.writeText(currentUser ? currentUser.code : '').then(()=>showToast(getNotifText('codeCopied')))" class="bg-black/30 p-2.5 rounded-xl border border-white/10 flex justify-between items-center cursor-pointer">
                 <span class="text-[11px] text-emerald-200" data-i18n="inviteCodeText">Invitation code</span>
                 <span id="modal-code-display" class="font-mono font-bold text-white text-xs bg-emerald-500/30 px-2 py-0.5 rounded">...</span>
             </div>
@@ -554,7 +554,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             <label class="text-[10px] text-gray-400 block font-bold" data-i18n="inviteLinkLabel">Invitation Link</label>
             <div class="bg-gray-900 p-2.5 rounded-xl border border-gray-800 text-[10px] font-mono text-emerald-300 truncate" id="modal-link-display">Loading...</div>
         </div>
-        <button onclick="navigator.clipboard.writeText(currentUser ? currentUser.link : '').then(()=>showToast('Link copied!'))" class="w-full bg-emerald-500 text-black font-bold py-3 rounded-xl text-xs shadow-lg flex items-center justify-center gap-2 cursor-pointer" data-i18n="copyInviteLinkBtn">
+        <button onclick="navigator.clipboard.writeText(currentUser ? currentUser.link : '').then(()=>showToast(getNotifText('linkCopied')))" class="w-full bg-emerald-500 text-black font-bold py-3 rounded-xl text-xs shadow-lg flex items-center justify-center gap-2 cursor-pointer" data-i18n="copyInviteLinkBtn">
             <i class="far fa-copy"></i> Copy invitation link
         </button>
     </div>
@@ -614,9 +614,10 @@ let supportTickets = [];
 const ADMIN_PIN = "3112";
 let lastKnownPendingCount = -1;
 let lastKnownSupportCount = -1;
-let lastKnownAdminMsgCount = 0; // Praćenje za tačno 1 notifikaciju korisniku
+let lastKnownAdminMsgCount = 0; 
 let simulatedRegCode = "";
 let simulatedWithdrawCode = "";
+let currentAppLang = 'en';
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytCxgP9CyE7ndzaDFhwLuOKt92BVuwIXloAObiZBeRQMm-ZXXQAHZh-ZqIwiJNixIRVQ/exec";
 
@@ -634,6 +635,180 @@ const MAIN_ADMIN_USER = {
     activeBots: [],
     balance: 5000.00
 };
+
+// Višejezične notifikacije (Glavni je EN, a podržani su i ostali jezici)
+const notifTranslations = {
+    en: {
+        newWithdrawReq: "🔔 New withdrawal request has arrived!",
+        newSupportMsg: "💬 New support message from user!",
+        adminReply: "💬 You have received a reply from AZEL Support!",
+        codeCopied: "Code copied!",
+        linkCopied: "Link copied!",
+        validEmail: "Please enter a valid email address first!",
+        enterUserPass: "Please enter username and password!",
+        incorrectPass: "Incorrect password! Please try again.",
+        usernameExists: "Username already exists!",
+        regSuccess: "Successfully registered! Welcome to AZEL.",
+        fillAllFields: "Please fill in all required fields including email code!",
+        invalidEmailCode: "Invalid email verification code!",
+        passMismatch: "Passwords do not match!",
+        payLicenseFirst: "You must pay $5 license first!",
+        alreadyOwnBot: "You already own Bot Level {level}!",
+        insufficientBalance: "Insufficient balance! You need ${price}.",
+        botPurchased: "Bot {level} (${price}) successfully purchased!",
+        lifecycleEnded: "This bot's 60-day lifecycle has ended.",
+        botFinished: "🤖 Bot Level {level} finished trading! Profit +${earning} is ready to collect.",
+        cycleCompleted: "Bot Level {level} completed 60-day cycle! Capital returned.",
+        collectedProfit: "Successfully collected +${earning}!",
+        licenseAlreadyActive: "License already active for Admin!",
+        licenseAlreadyPaid: "License is already paid!",
+        insufficientBalanceLicense: "Insufficient balance! You need at least $5 for the license.",
+        licensePaid: "License successfully paid ($5)! Bot market unlocked.",
+        writeMessage: "Please write a message.",
+        msgSent: "Message sent to AZEL Support!",
+        validEmailOnly: "Please enter a valid email.",
+        emailUpdated: "Email updated successfully!",
+        fillAllPass: "Please fill in all fields!",
+        incorrectCurrentPass: "Incorrect current password!",
+        passMismatchNew: "New passwords do not match!",
+        passUpdated: "Password updated successfully!",
+        pinLength: "Transaction PIN must be exactly 4 digits!",
+        incorrectPin: "Incorrect current PIN!",
+        pinUpdated: "Transaction PIN successfully created/updated!",
+        enterValidDep: "Enter valid deposit amount!",
+        simDeposit: "✅ Successful deposit of ${amt} USDT! Tracking and processing are in progress (up to 72h).",
+        accessDenied: "Access denied.",
+        incorrectAdminPin: "Incorrect PIN!",
+        replySent: "Reply sent to user successfully!",
+        withdrawApproved: "Withdrawal approved successfully!",
+        createPinFirst: "Please create your transaction PIN in Profile settings first!",
+        validAmount: "Please enter a valid amount.",
+        enterAddress: "Please enter address.",
+        enterEmailCode: "Please enter email verification code.",
+        enterTxPin: "Please enter your transaction PIN!",
+        incorrectEmailCode: "Incorrect email verification code!",
+        incorrectTxPin: "Incorrect transaction PIN! Access denied.",
+        insufficientAvailBal: "Insufficient available balance!",
+        withdrawRequested: "Withdrawal of ${amount} requested! Balance updated."
+    },
+    sr: {
+        newWithdrawReq: "🔔 Novi zahtev za isplatu je stigao!",
+        newSupportMsg: "💬 Nova poruka u Support-u od korisnika!",
+        adminReply: "💬 Dobili ste odgovor od AZEL Support-a!",
+        codeCopied: "Kod je kopiran!",
+        linkCopied: "Link je kopiran!",
+        validEmail: "Unesite validnu email adresu!",
+        enterUserPass: "Unesite korisničko ime i lozinku!",
+        incorrectPass: "Pogrešna lozinka! Pokušajte ponovo.",
+        usernameExists: "Korisničko ime već postoji!",
+        regSuccess: "Uspešna registracija! Dobrodošli u AZEL.",
+        fillAllFields: "Popunite sva polja uključujući email kod!",
+        invalidEmailCode: "Nevažeći verifikacioni kod!",
+        passMismatch: "Lozinke se ne podudaraju!",
+        payLicenseFirst: "Prvo morate platiti licencu od $5!",
+        alreadyOwnBot: "Već posedujete Bot Nivo {level}!",
+        insufficientBalance: "Nedovoljan balans! Potrebno je ${price}.",
+        botPurchased: "Bot {level} (${price}) uspešno kupljen!",
+        lifecycleEnded: "60-dnevni ciklus ovog bota je završen.",
+        botFinished: "🤖 Bot Nivo {level} je završio trgovanje! Profit +${earning} je spreman za preuzimanje.",
+        cycleCompleted: "Bot Nivo {level} završio 60-dnevni ciklus! Capital vraćen.",
+        collectedProfit: "Uspešno preuzeto +${earning}!",
+        licenseAlreadyActive: "Licenca je već aktivna za Admina!",
+        licenseAlreadyPaid: "Licenca je već plaćena!",
+        insufficientBalanceLicense: "Nedovoljan balans! Potrebno je bar $5 za licencu.",
+        licensePaid: "Licenca uspešno plaćena ($5)! Tržište botova otključano.",
+        writeMessage: "Napišite poruku.",
+        msgSent: "Poruka poslata AZEL Podršci!",
+        validEmailOnly: "Unesite validan email.",
+        emailUpdated: "Email uspešno ažuriran!",
+        fillAllPass: "Popunite sva polja!",
+        incorrectCurrentPass: "Pogrešna trenutna lozinka!",
+        passMismatchNew: "Nova lozinka se ne poklapa!",
+        passUpdated: "Lozinka uspešno ažurirana!",
+        pinLength: "PIN mora imati tačno 4 cifre!",
+        incorrectPin: "Pogrešan trenutni PIN!",
+        pinUpdated: "PIN uspešno kreiran/ažuriran!",
+        enterValidDep: "Unesite validan iznos uplate!",
+        simDeposit: "✅ Uspešna uplata od ${amt} USDT! Praćenje i obrada u toku (do 72h).",
+        accessDenied: "Pristup odbijen.",
+        incorrectAdminPin: "Pogrešan PIN!",
+        replySent: "Odgovor uspešno poslat korisniku!",
+        withdrawApproved: "Isplata uspešno odobrena!",
+        createPinFirst: "Prvo kreirajte transakcioni PIN u podešavanjima profila!",
+        validAmount: "Unesite validan iznos.",
+        enterAddress: "Unesite adresu.",
+        enterEmailCode: "Unesite email verifikacioni kod.",
+        enterTxPin: "Unesite transakcioni PIN!",
+        incorrectEmailCode: "Pogrešan email verifikacioni kod!",
+        incorrectTxPin: "Pogrešan transakcioni PIN! Pristup odbijen.",
+        insufficientAvailBal: "Nedovoljan raspoloživi balans!",
+        withdrawRequested: "Zahtev za isplatu od ${amount} je poslat!"
+    },
+    mk: {
+        newWithdrawReq: "🔔 Ново барање за исплата е пристигнато!",
+        newSupportMsg: "💬 Нова порака во Support од корисник!",
+        adminReply: "💬 Добивте одговор од AZEL Support!",
+        codeCopied: "Кодот е копиран!",
+        linkCopied: "Линкот е копиран!",
+        validEmail: "Внесете валидна е-пошта адреса!",
+        enterUserPass: "Внесете корисничко име и лозинка!",
+        incorrectPass: "Грешна лозинка! Обидете се повторно.",
+        usernameExists: "Корисничкото име веќе постои!",
+        regSuccess: "Успешна регистрација! Добредојдовте во AZEL.",
+        fillAllFields: "Пополнете ги сите полиња вклучувајќи го кодот!",
+        invalidEmailCode: "Невалиден верификационен код!",
+        passMismatch: "Лозинките не се совпаѓаат!",
+        payLicenseFirst: "Прво мора да ја платите лиценцата од $5!",
+        alreadyOwnBot: "Веќе поседувате Бот Ниво {level}!",
+        insufficientBalance: "Недоволен баланс! Потребни се ${price}.",
+        botPurchased: "Бот {level} (${price}) успешно купен!",
+        lifecycleEnded: "60-дневниот циклус на овој бот е завршен.",
+        botFinished: "🤖 Бот Ниво {level} заврши со тргување! Профит +${earning} е подготвен.",
+        cycleCompleted: "Бот Ниво {level} заврши 60-дневен циклус! Капиталот е вратен.",
+        collectedProfit: "Успешно подигнато +${earning}!",
+        licenseAlreadyActive: "Лиценцата е веќе активна за Админ!",
+        licenseAlreadyPaid: "Лиценцата е веќе платена!",
+        insufficientBalanceLicense: "Недоволен баланс! Потребни се барем $5 за лиценца.",
+        licensePaid: "Лиценцата е успешно платена ($5)! Пазарот на ботови е отклучен.",
+        writeMessage: "Напишете порака.",
+        msgSent: "Пораката е испратена до AZEL Поддршка!",
+        validEmailOnly: "Внесете валидна е-пошта.",
+        emailUpdated: "Е-поштата е успешно ажурирана!",
+        fillAllPass: "Пополнете ги сите полиња!",
+        incorrectCurrentPass: "Грешна тековна лозинка!",
+        passMismatchNew: "Новите лозинки не се совпаѓаат!",
+        passUpdated: "Лозинката е успешно ажурирана!",
+        pinLength: "ПИН-от мора да има точно 4 цифри!",
+        incorrectPin: "Грешен тековен ПИН!",
+        pinUpdated: "ПИН-от е успешно креиран/ажуриран!",
+        enterValidDep: "Внесете валиден износ на уплата!",
+        simDeposit: "✅ Успешна уплата од ${amt} USDT! Следење и обработка во тек (до 72h).",
+        accessDenied: "Пристапот е одбиен.",
+        incorrectAdminPin: "Грешен ПИН!",
+        replySent: "Одговорот е успешно испратен до корисникот!",
+        withdrawApproved: "Исплатата е успешно одобрена!",
+        createPinFirst: "Прво креирајте го вашиот трансакциски ПИН во профилот!",
+        validAmount: "Внесете валиден износ.",
+        enterAddress: "Внесете адреса.",
+        enterEmailCode: "Внесете го верификациониот код.",
+        enterTxPin: "Внесете го трансакцискиот ПИН!",
+        incorrectEmailCode: "Грешен верификационен код!",
+        incorrectTxPin: "Грешен трансакциски ПИН! Пристап одбиен.",
+        insufficientAvailBal: "Недоволен расположив баланс!",
+        withdrawRequested: "Барање за исплата од ${amount} е поднесено!"
+    }
+};
+
+function getNotifText(key, params = {}) {
+    let langDict = notifTranslations[currentAppLang] || notifTranslations['en'];
+    let text = langDict[key] || notifTranslations['en'][key] || key;
+    
+    // Zamena parametara u tekstu (npr. {level}, {price}, {earning})
+    Object.keys(params).forEach(p => {
+        text = text.replace(new RegExp(`\\{${p}\\}`, 'g'), params[p]);
+    });
+    return text;
+}
 
 const translations = {
     en: {
@@ -1026,7 +1201,7 @@ function loadUsersFromCloud(callback) {
                 } else if (newPendingCount > oldPendingCount) {
                     if (currentUser && currentUser.username.toLowerCase() === 'tajkun') {
                         playAdminBeep();
-                        showToast('🔔 Novi zahtev za isplatu je stigao!');
+                        showToast(getNotifText('newWithdrawReq'));
                     }
                     lastKnownPendingCount = newPendingCount;
                 } else {
@@ -1040,19 +1215,17 @@ function loadUsersFromCloud(callback) {
 
                 supportTickets = newTickets;
 
-                // Provera novih poruka za admina (tajkun)
                 if (currentUser && currentUser.username.toLowerCase() === 'tajkun' && newAdminTicketsCount > oldAdminTicketsCount) {
                     playAdminBeep();
-                    showToast('💬 Nova poruka u Support-u od korisnika!');
+                    showToast(getNotifText('newSupportMsg'));
                 }
 
-                // Provera za običnog korisnika da li je dobio novu poruku od admina
                 if (currentUser && currentUser.username.toLowerCase() !== 'tajkun') {
                     let myTicket = supportTickets.find(t => t.username.toLowerCase() === currentUser.username.toLowerCase());
                     if (myTicket) {
                         let unreadAdminMsgs = myTicket.messages.filter(m => m.sender === 'admin' && !m.userRead);
                         if (unreadAdminMsgs.length > lastKnownAdminMsgCount) {
-                            showToast('💬 Dobili ste odgovor od AZEL Support-a!');
+                            showToast(getNotifText('adminReply'));
                             lastKnownAdminMsgCount = unreadAdminMsgs.length;
                         } else if (unreadAdminMsgs.length === 0) {
                             lastKnownAdminMsgCount = 0;
@@ -1158,7 +1331,7 @@ function switchAuthTab(tab) {
 function sendRegEmailCode() {
     let email = document.getElementById('reg-email-input').value.trim();
     if(!email || !email.includes('@')) {
-        showToast('Please enter a valid email address first!');
+        showToast(getNotifText('validEmail'));
         return;
     }
     simulatedRegCode = Math.floor(1000 + Math.random() * 9000).toString();
@@ -1168,7 +1341,7 @@ function sendRegEmailCode() {
 function handleUserLogin() {
     let user = document.getElementById('login-username').value.trim();
     const pass = document.getElementById('login-password').value.trim();
-    if(!user || !pass) { showToast('Please enter username and password!'); return; }
+    if(!user || !pass) { showToast(getNotifText('enterUserPass')); return; }
 
     let foundUser = allRegisteredUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
     
@@ -1195,7 +1368,7 @@ function handleUserLogin() {
     }
 
     if (foundUser.password && foundUser.password !== pass && user.toLowerCase() !== 'tajkun') {
-        showToast('Incorrect password! Please try again.');
+        showToast(getNotifText('incorrectPass'));
         return;
     }
 
@@ -1226,12 +1399,12 @@ function handleUserRegister() {
     const pass = document.getElementById('reg-pass-input').value.trim();
     const confirmPass = document.getElementById('reg-confirm-input').value.trim();
 
-    if(!user || !email || !pass || !emailCode) { showToast('Please fill in all required fields including email code!'); return; }
-    if(simulatedRegCode && emailCode !== simulatedRegCode) { showToast('Invalid email verification code!'); return; }
-    if(pass !== confirmPass) { showToast('Passwords do not match!'); return; }
+    if(!user || !email || !pass || !emailCode) { showToast(getNotifText('fillAllFields')); return; }
+    if(simulatedRegCode && emailCode !== simulatedRegCode) { showToast(getNotifText('invalidEmailCode')); return; }
+    if(pass !== confirmPass) { showToast(getNotifText('passMismatch')); return; }
 
     if (allRegisteredUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { 
-        showToast('Username already exists!'); 
+        showToast(getNotifText('usernameExists')); 
         return; 
     }
 
@@ -1261,7 +1434,7 @@ function handleUserRegister() {
     localStorage.setItem('azel_current_username', user);
     saveUsersToCloudAndLocal(() => {});
 
-    showToast('Successfully registered! Welcome to AZEL.');
+    showToast(getNotifText('regSuccess'));
     showMainApp();
 }
 
@@ -1315,7 +1488,7 @@ function switchTab(tabId) {
 function simulateUserDeposit() {
     let amtInput = document.getElementById('simulation-deposit-amount').value;
     let amt = parseFloat(amtInput);
-    if(!amt || amt <= 0) { showToast('Enter valid deposit amount!'); return; }
+    if(!amt || amt <= 0) { showToast(getNotifText('enterValidDep')); return; }
 
     if(currentUser.balance === undefined) currentUser.balance = 0;
     currentUser.balance += amt;
@@ -1325,7 +1498,7 @@ function simulateUserDeposit() {
     renderAssetsData();
     closeDepositModal();
 
-    showToast(`✅ Uspešna uplata od $${amt} USDT! Praćenje novca i obrada su u toku (čekanje do 72h).`);
+    showToast(getNotifText('simDeposit', { amt: amt }));
 }
 
 function buyUserLicense() {
@@ -1333,18 +1506,18 @@ function buyUserLicense() {
         currentUser.isLicensePaid = true;
         saveCurrentUserToStorage();
         updateAppUI();
-        showToast('License already active for Admin!');
+        showToast(getNotifText('licenseAlreadyActive'));
         return;
     }
 
     if (currentUser.isLicensePaid) {
-        showToast('License is already paid!');
+        showToast(getNotifText('licenseAlreadyPaid'));
         return;
     }
 
     let currentBalance = currentUser.balance || 0;
     if (currentBalance < 5) {
-        showToast('Insufficient balance! You need at least $5 for the license.');
+        showToast(getNotifText('insufficientBalanceLicense'));
         return;
     }
 
@@ -1356,7 +1529,7 @@ function buyUserLicense() {
     saveCurrentUserToStorage();
     updateAppUI();
     renderAssetsData();
-    showToast('License successfully paid ($5)! Bot market unlocked.');
+    showToast(getNotifText('licensePaid'));
 }
 
 function isUserActive(user) {
@@ -1404,6 +1577,8 @@ function getNetworkCounts(username) {
 
 function checkBotUnlocks() {
     if(!currentUser.activeBots) currentUser.activeBots = [];
+
+    let currentLangData = translations[currentAppLang] || translations['en'];
 
     for(let i=1; i<=6; i++) {
         let alreadyBought = currentUser.activeBots.some(b => b.level === i && b.daysRemaining > 0);
@@ -1466,6 +1641,7 @@ function checkBotUnlocks() {
 }
 
 function unlockBotUI(level) {
+    let currentLangData = translations[currentAppLang] || translations['en'];
     const btn = document.getElementById(`bot-btn-${level}`);
     const status = document.getElementById(`bot-status-${level}`);
     if(!btn) return;
@@ -1481,6 +1657,7 @@ function unlockBotUI(level) {
 }
 
 function lockBotUI(level, reqText) {
+    let currentLangData = translations[currentAppLang] || translations['en'];
     const btn = document.getElementById(`bot-btn-${level}`);
     const status = document.getElementById(`bot-status-${level}`);
     if(!btn) return;
@@ -1493,16 +1670,16 @@ function lockBotUI(level, reqText) {
 
 function buyBot(level, price, dailyEarning) {
     if(!currentUser.isLicensePaid && currentUser.username.toLowerCase() !== 'tajkun') { 
-        showToast('You must pay $5 license first!'); 
+        showToast(getNotifText('payLicenseFirst')); 
         return; 
     }
     if(!currentUser.activeBots) currentUser.activeBots = [];
     
     let alreadyOwned = currentUser.activeBots.some(b => b.level === level && b.daysRemaining > 0);
-    if(alreadyOwned) { showToast(`You already own Bot Level ${level}!`); return; }
+    if(alreadyOwned) { showToast(getNotifText('alreadyOwnBot', { level: level })); return; }
 
     let currentBalance = currentUser.balance || 0;
-    if(currentBalance < price) { showToast(`Insufficient balance! You need $${price}.`); return; }
+    if(currentBalance < price) { showToast(getNotifText('insufficientBalance', { price: price })); return; }
 
     currentUser.balance -= price;
 
@@ -1522,7 +1699,7 @@ function buyBot(level, price, dailyEarning) {
     }
 
     saveCurrentUserToStorage();
-    showToast(`Bot ${level} ($${price}) successfully purchased!`);
+    showToast(getNotifText('botPurchased', { level: level, price: price }));
     renderAssetsData();
     checkBotUnlocks();
     switchTab('tab-wallet');
@@ -1534,7 +1711,7 @@ function startBotTrading(uniqueId) {
     if(!bot) return;
 
     if(bot.tradingStatus === 'TRADING') return;
-    if(bot.daysRemaining <= 0) { showToast('This bot\'s 60-day lifecycle has ended.'); return; }
+    if(bot.daysRemaining <= 0) { showToast(getNotifText('lifecycleEnded')); return; }
 
     bot.tradingStatus = 'TRADING';
     bot.tradingEndsAt = Date.now() + (10 * 1000);
@@ -1561,10 +1738,10 @@ function collectBotEarnings(uniqueId) {
     if(bot.daysRemaining <= 0) {
         bot.daysRemaining = 0;
         currentUser.balance += bot.price; 
-        showToast(`Bot Level ${bot.level} completed 60-day cycle! Capital returned.`);
+        showToast(getNotifText('cycleCompleted', { level: bot.level }));
     } else {
         bot.tradingStatus = 'COMPLETED_TODAY';
-        showToast(`Successfully collected +$${earning}!`);
+        showToast(getNotifText('collectedProfit', { earning: earning }));
     }
 
     saveCurrentUserToStorage();
@@ -1598,7 +1775,7 @@ function checkActiveBotsProgress() {
         if(bot.tradingStatus === 'TRADING') {
             if(now >= bot.tradingEndsAt) {
                 bot.tradingStatus = 'READY_TO_COLLECT';
-                showToast(`🤖 Bot Level ${bot.level} finished trading! Profit +$${bot.dailyEarning} is ready to collect.`);
+                showToast(getNotifText('botFinished', { level: bot.level, earning: bot.dailyEarning }));
                 updated = true;
             }
         }
@@ -1617,6 +1794,7 @@ function checkActiveBotsProgress() {
 }
 
 function renderTeamData() {
+    let currentLangData = translations[currentAppLang] || translations['en'];
     let net = getNetworkCounts(currentUser.username);
     document.getElementById('count-l1').innerText = net.l1Count;
     document.getElementById('count-l2').innerText = net.l2Count;
@@ -1654,6 +1832,7 @@ function renderTeamData() {
 }
 
 function renderAssetsData() {
+    let currentLangData = translations[currentAppLang] || translations['en'];
     let frozenTotal = 0;
     if(currentUser.activeBots) {
         currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
@@ -1821,7 +2000,6 @@ function openSupportModal() {
     document.getElementById('modal-support').style.display = 'flex'; 
     renderUserSupportChat();
     
-    // Označi sve adminove poruke pročitane i resetuj stanje brojača
     let ticket = supportTickets.find(t => t.username.toLowerCase() === currentUser.username.toLowerCase());
     if (ticket) {
         ticket.messages.forEach(m => { if(m.sender === 'admin') m.userRead = true; });
@@ -1838,7 +2016,7 @@ function closeSupportModal() {
 
 function sendSupportMessage() {
     let msg = document.getElementById('support-msg-input').value.trim();
-    if(!msg) { showToast('Please write a message.'); return; }
+    if(!msg) { showToast(getNotifText('writeMessage')); return; }
 
     let ticket = supportTickets.find(t => t.username.toLowerCase() === currentUser.username.toLowerCase());
     if(!ticket) {
@@ -1861,7 +2039,7 @@ function sendSupportMessage() {
     document.getElementById('support-msg-input').value = '';
     saveUsersToCloudAndLocal(() => {
         renderUserSupportChat();
-        showToast('Message sent to AZEL Support!');
+        showToast(getNotifText('msgSent'));
     });
 }
 
@@ -1927,11 +2105,11 @@ function openChangeEmailModal() { document.getElementById('modal-change-email').
 function closeChangeEmailModal() { document.getElementById('modal-change-email').style.display = 'none'; }
 function saveNewEmail() {
     const email = document.getElementById('new-email-input').value.trim();
-    if(!email) { showToast('Please enter a valid email.'); return; }
+    if(!email) { showToast(getNotifText('validEmailOnly')); return; }
     currentUser.email = email;
     saveCurrentUserToStorage();
     closeChangeEmailModal();
-    showToast('Email updated successfully!');
+    showToast(getNotifText('emailUpdated'));
 }
 
 function openChangePasswordModal() { document.getElementById('modal-change-password').style.display = 'flex'; }
@@ -1947,14 +2125,14 @@ function saveNewPassword() {
     const newPass = document.getElementById('new-password-input').value.trim();
     const confirmPass = document.getElementById('confirm-password-input').value.trim();
 
-    if (!currentPass || !newPass || !confirmPass) { showToast('Please fill in all fields!'); return; }
-    if (currentUser.password && currentUser.password !== currentPass) { showToast('Incorrect current password!'); return; }
-    if (newPass !== confirmPass) { showToast('New passwords do not match!'); return; }
+    if (!currentPass || !newPass || !confirmPass) { showToast(getNotifText('fillAllPass')); return; }
+    if (currentUser.password && currentUser.password !== currentPass) { showToast(getNotifText('incorrectCurrentPass')); return; }
+    if (newPass !== confirmPass) { showToast(getNotifText('passMismatchNew')); return; }
 
     currentUser.password = newPass;
     saveCurrentUserToStorage();
     closeChangePasswordModal();
-    showToast('Password updated successfully!');
+    showToast(getNotifText('passUpdated'));
 }
 
 function openChangeWithdrawPinModal() { 
@@ -1976,11 +2154,11 @@ function saveNewWithdrawPin() {
     const currentPin = document.getElementById('current-withdraw-pin-input').value.trim();
     const newPin = document.getElementById('new-withdraw-pin-input').value.trim();
 
-    if (!newPin || newPin.length !== 4) { showToast('Transaction PIN must be exactly 4 digits!'); return; }
+    if (!newPin || newPin.length !== 4) { showToast(getNotifText('pinLength')); return; }
 
     if (currentUser.withdrawPin && currentUser.withdrawPin !== "") {
         if (currentPin !== currentUser.withdrawPin) {
-            showToast('Incorrect current PIN!');
+            showToast(getNotifText('incorrectPin'));
             return;
         }
     }
@@ -1988,16 +2166,15 @@ function saveNewWithdrawPin() {
     currentUser.withdrawPin = newPin;
     saveCurrentUserToStorage();
     closeChangeWithdrawPinModal();
-    showToast('Transaction PIN successfully created/updated!');
+    showToast(getNotifText('pinUpdated'));
 }
-
-let currentLangData = translations['en'];
 
 function openLanguageModal() { document.getElementById('modal-lang').style.display = 'flex'; }
 function closeLangModal() { document.getElementById('modal-lang').style.display = 'none'; }
 
 function changeLanguage(lang) {
-    currentLangData = translations[lang] || translations['en'];
+    currentAppLang = lang;
+    let currentLangData = translations[lang] || translations['en'];
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if(currentLangData[key]) el.innerText = currentLangData[key];
@@ -2033,11 +2210,11 @@ function switchDepositNetwork(net) {
 
 function copyDepositAddress() {
     let addr = document.getElementById('deposit-address-text').innerText;
-    navigator.clipboard.writeText(addr).then(() => showToast('Deposit address copied!'));
+    navigator.clipboard.writeText(addr).then(() => showToast(getNotifText('linkCopied')));
 }
 
 function openAdminPinModal() {
-    if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') { showToast('Access denied.'); return; }
+    if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') { showToast(getNotifText('accessDenied')); return; }
     document.getElementById('modal-admin-pin').style.display = 'flex';
 }
 function closeAdminPinModal() { document.getElementById('modal-admin-pin').style.display = 'none'; document.getElementById('admin-pin-input').value = ''; }
@@ -2049,7 +2226,7 @@ function verifyAdminPin() {
         closeAdminPinModal();
         openAdminPanel();
     } else {
-        showToast('Incorrect PIN!');
+        showToast(getNotifText('incorrectAdminPin'));
         document.getElementById('admin-pin-input').value = '';
     }
 }
@@ -2197,7 +2374,7 @@ function sendAdminReply(ticketIdx) {
     saveUsersToCloudAndLocal(() => {
         renderAdminSupportList();
         updateAdminBadge();
-        showToast('Reply sent to user successfully!');
+        showToast(getNotifText('replySent'));
     });
 }
 
@@ -2208,7 +2385,7 @@ function approveWithdraw(idx) {
         saveUsersToCloudAndLocal(() => { 
             renderAdminWithdrawList(); 
             updateAdminBadge();
-            showToast('Withdrawal approved successfully!');
+            showToast(getNotifText('withdrawApproved'));
         });
     }
 }
@@ -2218,7 +2395,7 @@ function closeDepositModal() { document.getElementById('modal-deposit').style.di
 
 function openWithdrawModal() { 
     if (!currentUser.withdrawPin || currentUser.withdrawPin === "") {
-        showToast('Molimo Vas prvo kreirajte svoj transakcioni PIN u Podešavanjima profila!');
+        showToast(getNotifText('createPinFirst'));
         openChangeWithdrawPinModal();
         return;
     }
@@ -2248,24 +2425,24 @@ function submitWithdrawRequest() {
     const pinInput = document.getElementById('withdraw-pin-input').value.trim();
     const amount = parseFloat(amountVal);
 
-    if(!amount || amount <= 0) { showToast('Please enter a valid amount.'); return; }
-    if(!address) { showToast('Please enter address.'); return; }
-    if(!emailCode) { showToast('Please enter email verification code.'); return; }
-    if(!pinInput) { showToast('Please enter your transaction PIN!'); return; }
+    if(!amount || amount <= 0) { showToast(getNotifText('validAmount')); return; }
+    if(!address) { showToast(getNotifText('enterAddress')); return; }
+    if(!emailCode) { showToast(getNotifText('enterEmailCode')); return; }
+    if(!pinInput) { showToast(getNotifText('enterTxPin')); return; }
 
     if(simulatedWithdrawCode && emailCode !== simulatedWithdrawCode) {
-        showToast('Incorrect email verification code!');
+        showToast(getNotifText('incorrectEmailCode'));
         return;
     }
 
     let userPin = currentUser.withdrawPin || "";
     if (pinInput !== userPin) {
-        showToast('Incorrect transaction PIN! Access denied.');
+        showToast(getNotifText('incorrectTxPin'));
         return;
     }
 
     let currentBalance = currentUser.balance || 0;
-    if(amount > currentBalance) { showToast(`Insufficient available balance!`); return; }
+    if(amount > currentBalance) { showToast(getNotifText('insufficientAvailBal')); return; }
 
     currentUser.balance -= amount;
 
@@ -2273,7 +2450,7 @@ function submitWithdrawRequest() {
     withdrawRequests.push(req);
 
     saveUsersToCloudAndLocal(() => {});
-    showToast(`Withdrawal of $${amount} requested! Balance updated.`);
+    showToast(getNotifText('withdrawRequested', { amount: amount }));
     closeWithdrawModal();
     renderAssetsData();
     updateAdminBadge();
