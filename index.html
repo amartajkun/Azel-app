@@ -261,7 +261,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
                 <div class="robot-pic-left pic-bot-6"></div>
                 <div class="info-panel-right space-y-1.5 text-xs">
                     <div class="flex justify-between items-center border-b border-gray-800/60 pb-1"><span class="text-gray-400">Pledge Amount</span><span class="text-red-400 font-bold font-mono">$5,000</span></div>
-                    <div class="flex justify-between items-center border-b border-gray-800/60 pb-1"><span class="text-red-400 font-bold font-mono">+$125.00 / day</span></div>
+                    <div class="flex justify-between items-center border-b border-gray-800/60 pb-1"><span class="text-gray-400">Daily Return</span><span class="text-red-400 font-bold font-mono">+$125.00 / day</span></div>
                     <div class="flex justify-between items-center"><span class="text-gray-400">Duration</span><span class="text-white font-bold">60 Days</span></div>
                 </div>
             </div>
@@ -556,7 +556,6 @@ window.addEventListener('DOMContentLoaded', function() {
     
     // AUTOMATSKO OSVEŽAVANJE SVAKE SEKUNDE (Cloud sync + Tim + Botovi)
     setInterval(() => {
-        // Pozadinsko osvežavanje baze podataka da uvek povuče najnovije uplate
         silentLoadUsersFromCloud(() => {
             checkActiveBotsProgress();
             
@@ -591,7 +590,6 @@ function loadUsersFromCloud(callback) {
 
         ensureTajkunMassiveNetwork();
         
-        // Osveži i trenutnog korisnika da ima najnoviji balans i botove iz cloud-a
         if (currentUser) {
             let updatedSelf = allRegisteredUsers.find(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
             if (updatedSelf) {
@@ -608,7 +606,6 @@ function loadUsersFromCloud(callback) {
     });
 }
 
-// Tiha verzija u pozadini bez blokiranja interfejsa
 function silentLoadUsersFromCloud(callback) {
     fetch(SCRIPT_URL)
     .then(res => res.json())
@@ -848,7 +845,6 @@ function buyUserLicense() {
     alert('License successfully paid ($5)! Now purchase Bot 1 or Bot 2 to activate your network status.');
 }
 
-// STROGO PRAVILO: Korisnik je aktivan SAMO ako je platio licencu I ima kupljenog Bota 1 ili Bota 2
 function isUserActive(user) {
     if (!user) return false;
     if (user.username && user.username.toLowerCase().startsWith('vip_l1_member')) return true;
@@ -938,7 +934,7 @@ function checkBotUnlocks() {
             } else if(i === 5) {
                 if(net.l1Count >= 20 && net.l2Count >= 15 && net.l3Count >= 5) unlockBotUI(5); else lockBotUI(5, `Requirement: 20 L1, 15 L2, 5 L3`);
             } else if(i === 6) {
-                if(net.l1Count >= 50 && net.l2Count >= 30 && net.l3Count >= 20) unlockBotUI(6); else lockBotUI(6, `Requirement: 50 L1, 30 L2, 20 L3`);
+                if(net.l1Count >= 50 && net.l2Count >= 30 && net.l2Count >= 20) unlockBotUI(6); else lockBotUI(6, `Requirement: 50 L1, 30 L2, 20 L3`);
             }
         }
     }
@@ -1017,7 +1013,7 @@ function startBotTrading(uniqueId) {
     let todayStr = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
 
     if(bot.lastTradedDate === todayStr) {
-        alert('This bot has already finished today\'s trading session. Come back tomorrow after 06:00 AM!');
+        alert('This bot has already finished today\'s trading session. Come back tomorrow after 14:00 PM!');
         return;
     }
 
@@ -1052,11 +1048,17 @@ function checkActiveBotsProgress() {
         if(!bot.uniqueId) bot.uniqueId = 'bot_lvl_' + bot.level + '_' + Math.random().toString(36).substring(2, 9);
         if(bot.daysRemaining === undefined || isNaN(bot.daysRemaining)) bot.daysRemaining = 60;
 
-        if(bot.lastTradedDate && bot.lastTradedDate !== todayStr && currentHour >= 6) {
-            if(bot.tradingStatus === 'COMPLETED_TODAY') {
+        // PROMENJENO NA 14:00 (14 SATI) UMESTO 6 UJUTRU DA MOŽEŠ ODMAH TESTIRATI
+        if (bot.tradingStatus === 'COMPLETED_TODAY' || bot.tradingStatus === 'DONE') {
+            if (bot.lastTradedDate !== todayStr && currentHour >= 14) {
                 bot.tradingStatus = 'IDLE';
                 updated = true;
             }
+        }
+
+        if (bot.lastTradedDate && bot.lastTradedDate !== todayStr && currentHour >= 14 && bot.tradingStatus !== 'TRADING') {
+            bot.tradingStatus = 'IDLE';
+            updated = true;
         }
 
         if(bot.tradingStatus === 'TRADING') {
@@ -1174,7 +1176,7 @@ function renderAssetsData() {
         } else if(bot.tradingStatus === 'COMPLETED_TODAY' || bot.lastTradedDate === todayStr) {
             btnText = "Done Today ✓";
             btnColor = "bg-gray-800 text-gray-400 cursor-not-allowed";
-            statusDisplay = `Completed today. Resets at 06:00 AM!`;
+            statusDisplay = `Completed today. Resets at 14:00 PM!`;
         }
 
         document.getElementById('active-bots-header-title').innerText = `Active Bot Investments (${bot.daysRemaining} Days Remaining)`;
