@@ -224,7 +224,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         </div>
         <p class="text-[11px] text-gray-300">Explore our professional corporate office environments, IT control desks, and view our official accreditation certificate.</p>
         
-        <!-- Ozbiljnije kancelarijske slike -->
         <div class="grid grid-cols-2 gap-2">
             <div onclick="openCompanyPhotoModal('office')" class="relative h-28 rounded-xl overflow-hidden border border-emerald-500/30 cursor-pointer group">
                 <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=500&q=80" alt="Corporate Office" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
@@ -266,7 +265,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     <h2 class="text-lg font-bold text-emerald-400 mb-1" data-i18n="marketTitle">Bot Market & License</h2>
     <p class="text-xs text-gray-400 mb-3" data-i18n="marketSub">Pay $5 license once, then activate your bot packages (max 1 of each).</p>
 
-    <!-- LICENCA KARTICA -->
     <div id="license-card-box" class="emerald-card p-4 rounded-2xl flex justify-between items-center bg-emerald-950/20 border-emerald-500/40">
         <div>
             <h3 class="text-sm font-bold text-white" data-i18n="licenseTitle">Lifetime User License</h3>
@@ -455,7 +453,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 </div>
 
 <!-- MODALI -->
-<!-- MODAL ZA SERTIFIKAT FIRME -->
 <div id="modal-certificate" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50 overflow-y-auto">
     <div class="emerald-card p-5 rounded-3xl w-full max-w-sm space-y-4 bg-[#07090e] border border-emerald-500/50 relative my-auto">
         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
@@ -477,7 +474,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </div>
 </div>
 
-<!-- MODAL ZA KANCELARIJSKE SLIKE -->
 <div id="modal-company-photo" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
     <div class="emerald-card p-5 rounded-3xl w-full max-w-sm space-y-3 bg-[#07090e] border border-emerald-500/40 text-center">
         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
@@ -672,7 +668,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </div>
 </div>
 
-<!-- ADMIN PANEL SA NOVIM TABOM ZA SVE REGISTROVANE ČLANOVE -->
 <div id="modal-admin-panel" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
     <div class="emerald-card p-5 rounded-2xl w-full max-w-lg space-y-4 bg-[#07090e] border border-emerald-500/50 max-h-[85vh] flex flex-col">
         <div class="flex justify-between items-center border-b border-gray-800 pb-3 shrink-0">
@@ -694,7 +689,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             <div id="admin-list-support" class="space-y-3"><p class="text-gray-400 text-center py-4">No support tickets.</p></div>
         </div>
 
-        <!-- NOVI ADMIN PROZOR ZA PREGLED SVIH REGISTROVANIH ČLANOVA -->
         <div id="admin-section-users" class="space-y-2 overflow-y-auto pr-1 grow text-xs" style="display: none;">
             <div class="text-[11px] text-emerald-400 font-bold mb-1">Registered Members Database (<span id="admin-total-users-count">0</span>)</div>
             <div id="admin-list-users" class="space-y-2">
@@ -724,7 +718,6 @@ let supportTickets = [];
 const ADMIN_PIN = "3112";
 let lastKnownPendingCount = -1;
 let lastKnownSupportCount = -1;
-let lastKnownUsersCount = -1;
 let lastKnownAdminMsgCount = 0; 
 let simulatedRegCode = "";
 let simulatedWithdrawCode = "";
@@ -747,12 +740,10 @@ const MAIN_ADMIN_USER = {
     balance: 5000.00
 };
 
-// Sve glavne notifikacije na engleskom jeziku
 const notifTranslations = {
     en: {
         newWithdrawReq: "🔔 New withdrawal request has arrived!",
         newSupportMsg: "💬 New support message from user!",
-        newMemberRegistered: "👤 New member has registered on AZEL!",
         adminReply: "💬 You have received a reply from AZEL Support!",
         codeCopied: "Code copied!",
         linkCopied: "Link copied!",
@@ -1010,7 +1001,7 @@ function showToast(message) {
         <div class="flex-1 font-medium">${message}</div>
     `;
     container.appendChild(toast);
-    setTimeout(() => {
+    setTimeout => {
         toast.remove();
     }, 5000);
 }
@@ -1092,6 +1083,7 @@ function loadUsersFromCloud(callback) {
                 allRegisteredUsers = cloudUsers;
                 localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
 
+                // Ako je admin prijavljen i pojavio se novi korisnik
                 if (currentUser && currentUser.username.toLowerCase() === 'tajkun' && allRegisteredUsers.length > oldUsersCount) {
                     let newestUser = allRegisteredUsers[allRegisteredUsers.length - 1];
                     playAdminBeep();
@@ -1275,7 +1267,6 @@ function handleUserLogin() {
             };
             allRegisteredUsers.push(foundUser);
 
-            // Notifikacija adminu za novu registraciju
             playAdminBeep();
             sendNativePushNotification("AZEL Admin Registration Alert", `👤 New member registered: ${user} (ID: ${foundUser.id})`);
         }
@@ -1348,12 +1339,16 @@ function handleUserRegister() {
     localStorage.setItem('azel_current_username', user);
     saveUsersToCloudAndLocal(() => {});
 
-    // Obaveštenje za novu registraciju preko linka
-    if (refUser) {
-        sendNativePushNotification("AZEL Referral", `🎉 A new member registered via your link: ${user}!`);
+    // SAMO SPONZOR DOBIJA OBAVEŠTENJE DA SE ČLAN REGISTROVAO PREKO NJEGOVOG LINKA
+    if (refUser && refUser.username.toLowerCase() !== currentUser.username.toLowerCase()) {
+        // Ako je trenutno prijavljen taj sponzor na uređaju, prikaži mu odmah push, 
+        // a u suprotnom će dobiti pri sledećem ulogu / sinhronizaciji preko clouda.
+        if (currentUser && currentUser.username.toLowerCase() === refUser.username.toLowerCase()) {
+            sendNativePushNotification("AZEL Referral Alert", `🎉 A new member (${user}) just registered via your invite link!`);
+        }
     }
 
-    // Obaveštenje adminu (tajkun)
+    // Admin obaveštenje
     playAdminBeep();
     sendNativePushNotification("AZEL Admin Registration Alert", `👤 New member registered on app: ${user} (ID: ${randomId})`);
 
@@ -1453,11 +1448,12 @@ function buyUserLicense() {
     updateAppUI();
     renderAssetsData();
 
-    // Notifikacija članu i sponzoru da je postao aktivan
     sendNativePushNotification("AZEL License Activated", getNotifText('licensePaid'));
+    
+    // SAMO DIREKTNOM SPONZORU STIŽE OBAVEŠTENJE DA JE NJEGOV ČLAN POSTAO AKTIVAN
     if (currentUser.referrer) {
         let sponsor = allRegisteredUsers.find(u => u.username.toLowerCase() === currentUser.referrer.toLowerCase());
-        if (sponsor) {
+        if (sponsor && sponsor.username.toLowerCase() === currentUser.username.toLowerCase()) {
             sendNativePushNotification("AZEL Network Member Active", `🌟 Your direct referral ${currentUser.username} just became an active member!`);
         }
     }
@@ -2291,7 +2287,6 @@ function renderAdminSupportList() {
     listContainer.innerHTML = html;
 }
 
-// NOVI PROZOR ZA PREGLED SVIH REGISTROVANIh ČLANOVA
 function renderAdminUsersList() {
     const listContainer = document.getElementById('admin-list-users');
     document.getElementById('admin-total-users-count').innerText = allRegisteredUsers.length;
