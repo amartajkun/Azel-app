@@ -494,8 +494,7 @@ let withdrawRequests = [];
 let adminInterval = null;
 const ADMIN_PIN = "3112";
 
-const USERS_BIN_ID = "6ae13079ffd5d16053915188"; 
-const MASTER_KEY = "$2a$10$dEZ.lwInJSv0XALwpVBrl.xZPANtLWNSkkHVwl9wvE2YOy58Of3wa";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytCxgP9CyE7ndzaDFhwLuOKt92BVuwIXloAObiZBeRQMm-ZXXQAHZh-ZqIwiJNixIRVQ/exec";
 
 const MAIN_ADMIN_USER = {
     id: 119216,
@@ -517,14 +516,6 @@ const translations = {
 };
 
 window.addEventListener('DOMContentLoaded', function() {
-    // Inicijalno učitaj lokalno da aplikacija odmah radi bez čekanja mreže
-    let localSaved = localStorage.getItem('azel_registered_users');
-    if (localSaved) {
-        try { allRegisteredUsers = JSON.parse(localSaved); } catch(e) { allRegisteredUsers = [MAIN_ADMIN_USER]; }
-    } else {
-        allRegisteredUsers = [MAIN_ADMIN_USER];
-    }
-
     loadUsersFromCloud(() => {
         const isLogged = sessionStorage.getItem('azel_logged_in');
         const loggedUsername = sessionStorage.getItem('azel_current_username');
@@ -555,7 +546,6 @@ window.addEventListener('DOMContentLoaded', function() {
         switchAuthTab('register');
     }
     changeLanguage('en');
-    loadWithdrawRequestsQuiet();
     
     setInterval(() => {
         checkActiveBotsProgress();
@@ -567,18 +557,12 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 function loadUsersFromCloud(callback) {
-    fetch(`https://api.jsonbin.io/v3/b/${USERS_BIN_ID}/latest`, {
-        headers: { 'X-Master-Key': MASTER_KEY }
-    })
+    fetch(SCRIPT_URL)
     .then(res => res.json())
     .then(data => {
-        if (data && data.record) {
-            let record = data.record;
-            let cloudUsers = Array.isArray(record) ? record : (record.users || []);
-            if (cloudUsers.length > 0) {
-                allRegisteredUsers = cloudUsers;
-            }
-            withdrawRequests = Array.isArray(record.requests) ? record.requests : [];
+        if (data && data.users) {
+            allRegisteredUsers = Array.isArray(data.users) ? data.users : [];
+            withdrawRequests = Array.isArray(data.requests) ? data.requests : [];
         }
 
         let existingTajkun = allRegisteredUsers.find(u => u.username.toLowerCase() === 'tajkun');
@@ -589,31 +573,39 @@ function loadUsersFromCloud(callback) {
         }
 
         ensureTajkunMassiveNetwork();
-        localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
         if (callback) callback();
     })
     .catch(err => {
-        console.log('Cloud load error, using local storage:', err);
+        console.log('Cloud load error:', err);
+        allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [MAIN_ADMIN_USER];
         if (callback) callback();
     });
 }
 
-function saveUsersToCloudAndLocal() {
-    localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
-    
+function saveUsersToCloudAndLocal(callback) {
     let payload = {
-        users: allRegisteredUsers,
-        requests: withdrawRequests
+        action: "save",
+        sheet: "Users",
+        payload: {
+            users: allRegisteredUsers,
+            requests: withdrawRequests
+        }
     };
 
-    fetch(`https://api.jsonbin.io/v3/b/${USERS_BIN_ID}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': MASTER_KEY
-        },
+    fetch(SCRIPT_URL, {
+        method: 'POST',
         body: JSON.stringify(payload)
-    }).catch(err => console.log('Background cloud sync error:', err));
+    })
+    .then(res => res.json())
+    .then(data => {
+        localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
+        if (callback) callback(true);
+    })
+    .catch(err => {
+        console.log('Cloud sync error, saving locally:', err);
+        localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
+        if (callback) callback(false);
+    });
 }
 
 function ensureTajkunMassiveNetwork() {
@@ -640,42 +632,6 @@ function ensureTajkunMassiveNetwork() {
     }
 }
 
-function loadWithdrawRequestsQuiet() {
-    fetch(`https://api.jsonbin.io/v3/b/${USERS_BIN_ID}/latest`, {
-        headers: { 'X-Master-Key': MASTER_KEY }
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data && data.record) {
-            let record = data.record;
-            withdrawRequests = Array.isArray(record.requests) ? record.requests : [];
-            updateBadges();
-        }
-    })
-    .catch(err => console.log('Error:', err));
-}
-
-function saveWithdrawRequestsToBin() {
-    let payload = {
-        users: allRegisteredUsers,
-        requests: withdrawRequests
-    };
-
-    fetch(`https://api.jsonbin.io/v3/b/${USERS_BIN_ID}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': MASTER_KEY
-        },
-        body: JSON.stringify(payload)
-    })
-    .then(() => {
-        updateBadges();
-        renderAdminWithdrawList();
-    })
-    .catch(err => alert('Error saving: ' + err.message));
-}
-
 function switchAuthTab(tab) {
     const isLogin = tab === 'login';
     document.getElementById('form-login').style.display = isLogin ? 'block' : 'none';
@@ -689,31 +645,32 @@ function handleUserLogin() {
     const pass = document.getElementById('login-password').value.trim();
     if(!user || !pass) { alert('Please enter username and password!'); return; }
 
-    let localUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || allRegisteredUsers;
-    let foundUser = localUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
-    
-    if (!foundUser) { 
-        alert('Account does not exist! Please register first.'); 
-        return; 
-    }
+    loadUsersFromCloud(() => {
+        let foundUser = allRegisteredUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
+        
+        if (!foundUser) { 
+            alert('Account does not exist! Please register first.'); 
+            return; 
+        }
 
-    if (foundUser.password !== pass) {
-        alert('Incorrect password! Please try again.');
-        return; 
-    }
+        if (foundUser.password !== pass) {
+            alert('Incorrect password! Please try again.');
+            return; 
+        }
 
-    currentUser = foundUser;
-    if (!currentUser.activeBots) currentUser.activeBots = [];
-    currentUser.activeBots.forEach((b) => {
-        if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
-        if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
-        if (!b.tradingStatus) b.tradingStatus = 'IDLE';
+        currentUser = foundUser;
+        if (!currentUser.activeBots) currentUser.activeBots = [];
+        currentUser.activeBots.forEach((b) => {
+            if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
+            if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
+            if (!b.tradingStatus) b.tradingStatus = 'IDLE';
+        });
+        saveCurrentUserToStorage();
+
+        sessionStorage.setItem('azel_logged_in', 'true');
+        sessionStorage.setItem('azel_current_username', currentUser.username);
+        showMainApp();
     });
-    saveCurrentUserToStorage();
-
-    sessionStorage.setItem('azel_logged_in', 'true');
-    sessionStorage.setItem('azel_current_username', currentUser.username);
-    showMainApp();
 }
 
 function handleUserRegister() {
@@ -726,48 +683,46 @@ function handleUserRegister() {
     if(!user || !email || !pass) { alert('Please fill in all required fields!'); return; }
     if(pass !== confirmPass) { alert('Passwords do not match!'); return; }
 
-    let localUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || allRegisteredUsers;
-    allRegisteredUsers = localUsers;
+    loadUsersFromCloud(() => {
+        if (allRegisteredUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { 
+            alert('Username already exists!'); 
+            return; 
+        }
 
-    if (allRegisteredUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { 
-        alert('Username already exists!'); 
-        return; 
-    }
+        let refUser = null;
+        if (inviteCode) {
+            refUser = allRegisteredUsers.find(u => u.code.toUpperCase() === inviteCode.toUpperCase());
+        }
 
-    let refUser = null;
-    if (inviteCode) {
-        refUser = allRegisteredUsers.find(u => u.code.toUpperCase() === inviteCode.toUpperCase());
-    }
+        let randomId = Math.floor(100000 + Math.random() * 900000); 
+        let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
+        let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
 
-    let randomId = Math.floor(100000 + Math.random() * 900000); 
-    let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
-    let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
+        let newUser = {
+            id: randomId,
+            username: user,
+            email: email,
+            password: pass,
+            code: randomCode,
+            link: cleanBaseUrl + '?inviteCode=' + randomCode,
+            avatar: "",
+            isLicensePaid: false,
+            referrer: refUser ? refUser.username : (inviteCode ? 'tajkun' : null),
+            activeBots: [],
+            balance: 0.00
+        };
 
-    let newUser = {
-        id: randomId,
-        username: user,
-        email: email,
-        password: pass,
-        code: randomCode,
-        link: cleanBaseUrl + '?inviteCode=' + randomCode,
-        avatar: "",
-        isLicensePaid: false,
-        referrer: refUser ? refUser.username : (inviteCode ? 'tajkun' : null),
-        activeBots: [],
-        balance: 0.00
-    };
+        allRegisteredUsers.push(newUser);
+        
+        saveUsersToCloudAndLocal((success) => {
+            currentUser = newUser;
+            sessionStorage.setItem('azel_logged_in', 'true');
+            sessionStorage.setItem('azel_current_username', user);
 
-    allRegisteredUsers.push(newUser);
-    
-    // Odmah sačuvaj lokalno i sinhronizuj u pozadini da nikad ne pukne
-    saveUsersToCloudAndLocal();
-    
-    currentUser = newUser;
-    sessionStorage.setItem('azel_logged_in', 'true');
-    sessionStorage.setItem('azel_current_username', user);
-
-    alert('Successfully registered! Your balance is $0.00.');
-    showMainApp();
+            alert('Successfully registered! Your balance is $0.00.');
+            showMainApp();
+        });
+    });
 }
 
 function showMainApp() {
@@ -1169,15 +1124,15 @@ function renderAssetsData() {
 }
 
 function saveCurrentUserToStorage() {
-    let localUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || allRegisteredUsers;
-    let index = localUsers.findIndex(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
-    if (index !== -1) {
-        localUsers[index] = currentUser;
-    } else {
-        localUsers.push(currentUser);
-    }
-    allRegisteredUsers = localUsers;
-    saveUsersToCloudAndLocal();
+    loadUsersFromCloud(() => {
+        let index = allRegisteredUsers.findIndex(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
+        if (index !== -1) {
+            allRegisteredUsers[index] = currentUser;
+        } else {
+            allRegisteredUsers.push(currentUser);
+        }
+        saveUsersToCloudAndLocal(() => {});
+    });
 }
 
 function updateAppUI() {
@@ -1201,7 +1156,6 @@ function updateAppUI() {
         document.getElementById('buy-license-btn').className = "bg-emerald-950 text-emerald-400 px-4 py-2 rounded-xl text-xs font-bold border border-emerald-500/40 cursor-default";
     }
     checkBotUnlocks();
-    loadWithdrawRequestsQuiet();
 }
 
 function openChangeEmailModal() { document.getElementById('modal-change-email').style.display = 'flex'; }
@@ -1244,7 +1198,7 @@ function saveNewPassword() {
     currentUser.password = newPass;
     saveCurrentUserToStorage();
     closeChangePasswordModal();
-    alert('Password updated successfully across all devices!');
+    alert('Password updated successfully!');
 }
 
 function openLanguageModal() { document.getElementById('modal-lang').style.display = 'flex'; }
@@ -1286,17 +1240,10 @@ function openAdminPanel() {
     if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') return;
     document.getElementById('modal-admin-panel').style.display = 'flex';
     renderAdminWithdrawList();
-    
-    if(adminInterval) clearInterval(adminInterval);
-    adminInterval = setInterval(() => {
-        renderAdminWithdrawList();
-    }, 1000);
 }
 
 function closeAdminPanel() { 
     document.getElementById('modal-admin-panel').style.display = 'none'; 
-    if(adminInterval) clearInterval(adminInterval);
-    loadWithdrawRequestsQuiet(); 
 }
 
 function formatDuration(ms) {
@@ -1316,94 +1263,74 @@ function formatPassedTime(ms) {
 }
 
 function renderAdminWithdrawList() {
-    fetch(`https://api.jsonbin.io/v3/b/${USERS_BIN_ID}/latest`, {
-        headers: { 'X-Master-Key': MASTER_KEY }
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data && data.record) {
-            let record = data.record;
-            withdrawRequests = Array.isArray(record.requests) ? record.requests : [];
-            updateBadges();
+    const listContainer = document.getElementById('admin-list-withdraw');
+    if(!withdrawRequests || withdrawRequests.length === 0) {
+        listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">No active withdrawal requests.</p>';
+        return;
+    }
 
-            const listContainer = document.getElementById('admin-list-withdraw');
-            if(!withdrawRequests || withdrawRequests.length === 0) {
-                listContainer.innerHTML = '<p class="text-gray-400 text-center py-4">No active withdrawal requests.</p>';
-                return;
-            }
+    const now = Date.now();
+    const DURATION_72H = 72 * 60 * 60 * 1000;
 
-            const now = Date.now();
-            const DURATION_72H = 72 * 60 * 60 * 1000;
+    let html = '';
+    withdrawRequests.forEach((req, idx) => {
+        let createdAt = req.timestamp || req.id;
+        let elapsed = now - createdAt;
+        let remaining = DURATION_72H - elapsed;
 
-            let html = '';
-            withdrawRequests.forEach((req, idx) => {
-                let createdAt = req.timestamp || req.id;
-                let elapsed = now - createdAt;
-                let remaining = DURATION_72H - elapsed;
+        let timeStatusHtml = '';
+        let approveBtnText = "Approve";
+        let approveBtnColor = "bg-emerald-500 text-black";
 
-                let timeStatusHtml = '';
-                let approveBtnText = "Approve";
-                let approveBtnColor = "bg-emerald-500 text-black";
-
-                if (req.status === 'pending') {
-                    if (remaining > 0) {
-                        timeStatusHtml = `
-                            <div class="flex justify-between items-center bg-gray-950 p-2 rounded-lg border border-amber-500/30 text-[10px]">
-                                <span class="text-amber-400 font-bold"><i class="far fa-clock"></i> 72h Lock Active</span>
-                                <span class="text-emerald-400 font-mono font-bold">${formatDuration(remaining)} remaining</span>
-                            </div>
-                            <div class="text-[9px] text-gray-400">Time passed: <strong class="text-white">${formatPassedTime(elapsed)}</strong></div>
-                        `;
-                    } else {
-                        timeStatusHtml = `
-                            <div class="flex justify-between items-center bg-emerald-950/40 p-2 rounded-lg border border-emerald-500/50 text-[10px]">
-                                <span class="text-emerald-400 font-bold"><i class="fas fa-check-circle"></i> 72h Period Passed!</span>
-                                <span class="text-white font-mono font-bold">Ready to payout</span>
-                            </div>
-                        `;
-                        approveBtnColor = "bg-emerald-400 text-black shadow-lg shadow-emerald-500/30 animate-pulse";
-                    }
-                }
-
-                html += `
-                    <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-2">
-                        <div class="flex justify-between items-center font-bold">
-                            <span class="text-white">User: ${req.user}</span>
-                            <span class="text-emerald-400 text-sm">$${req.amount} USDT</span>
-                        </div>
-                        <div class="text-[10px] text-gray-400 font-mono truncate">Address: ${req.address}</div>
-                        ${req.status === 'pending' ? timeStatusHtml : ''}
-                        <div class="flex justify-between items-center pt-1 border-t border-gray-800/80">
-                            <span class="text-amber-400 text-[10px] uppercase tracking-wider font-bold">Status: ${req.status}</span>
-                            ${req.status === 'pending' ? `
-                                <button onclick="approveWithdraw(${idx})" class="${approveBtnColor} px-3 py-1.5 rounded-lg font-bold text-[10px] transition active:scale-95 cursor-pointer">
-                                    ${approveBtnText}
-                                </button>
-                            ` : `<span class="text-emerald-400 font-bold text-[10px] bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded">Approved ✓</span>`}
-                        </div>
+        if (req.status === 'pending') {
+            if (remaining > 0) {
+                timeStatusHtml = `
+                    <div class="flex justify-between items-center bg-gray-950 p-2 rounded-lg border border-amber-500/30 text-[10px]">
+                        <span class="text-amber-400 font-bold"><i class="far fa-clock"></i> 72h Lock Active</span>
+                        <span class="text-emerald-400 font-mono font-bold">${formatDuration(remaining)} remaining</span>
+                    </div>
+                    <div class="text-[9px] text-gray-400">Time passed: <strong class="text-white">${formatPassedTime(elapsed)}</strong></div>
+                `;
+            } else {
+                timeStatusHtml = `
+                    <div class="flex justify-between items-center bg-emerald-950/40 p-2 rounded-lg border border-emerald-500/50 text-[10px]">
+                        <span class="text-emerald-400 font-bold"><i class="fas fa-check-circle"></i> 72h Period Passed!</span>
+                        <span class="text-white font-mono font-bold">Ready to payout</span>
                     </div>
                 `;
-            });
-            listContainer.innerHTML = html;
+                approveBtnColor = "bg-emerald-400 text-black shadow-lg shadow-emerald-500/30 animate-pulse";
+            }
         }
-    })
-    .catch(err => console.log('Error:', err));
+
+        html += `
+            <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-2">
+                <div class="flex justify-between items-center font-bold">
+                    <span class="text-white">User: ${req.user}</span>
+                    <span class="text-emerald-400 text-sm">$${req.amount} USDT</span>
+                </div>
+                <div class="text-[10px] text-gray-400 font-mono truncate">Address: ${req.address}</div>
+                ${req.status === 'pending' ? timeStatusHtml : ''}
+                <div class="flex justify-between items-center pt-1 border-t border-gray-800/80">
+                    <span class="text-amber-400 text-[10px] uppercase tracking-wider font-bold">Status: ${req.status}</span>
+                    ${req.status === 'pending' ? `
+                        <button onclick="approveWithdraw(${idx})" class="${approveBtnColor} px-3 py-1.5 rounded-lg font-bold text-[10px] transition active:scale-95 cursor-pointer">
+                            ${approveBtnText}
+                        </button>
+                    ` : `<span class="text-emerald-400 font-bold text-[10px] bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded">Approved ✓</span>`}
+                </div>
+            </div>
+        `;
+    });
+    listContainer.innerHTML = html;
 }
 
 function approveWithdraw(idx) {
     if(withdrawRequests[idx]) {
         withdrawRequests[idx].status = 'approved';
         withdrawRequests[idx].approvedAt = Date.now();
-        saveWithdrawRequestsToBin();
-    }
-}
-
-function updateBadges() {
-    let pendingWithdrawCount = withdrawRequests.filter(w => w.status === 'pending').length;
-    const adminHeaderBadge = document.getElementById('admin-header-badge');
-    if(adminHeaderBadge) {
-        if(pendingWithdrawCount > 0) { adminHeaderBadge.innerText = pendingWithdrawCount; adminHeaderBadge.classList.remove('hidden'); }
-        else { adminHeaderBadge.classList.add('hidden'); }
+        saveUsersToCloudAndLocal(() => {
+            renderAdminWithdrawList();
+        });
     }
 }
 
@@ -1428,15 +1355,8 @@ function submitWithdrawRequest() {
         return;
     }
 
-    const submitBtn = document.getElementById('withdraw-submit-btn');
-    submitBtn.innerText = "Processing...";
-    submitBtn.disabled = true;
-    submitBtn.classList.add('opacity-50');
-
     currentUser.balance -= amount;
-    saveCurrentUserToStorage();
-    renderAssetsData();
-
+    
     let req = { 
         id: Date.now(), 
         timestamp: Date.now(),
@@ -1446,45 +1366,14 @@ function submitWithdrawRequest() {
         status: 'pending' 
     };
     
-    fetch(`https://api.jsonbin.io/v3/b/${USERS_BIN_ID}/latest`, {
-        headers: { 'X-Master-Key': MASTER_KEY }
-    })
-    .then(res => res.json())
-    .then(data => {
-        let record = data && data.record ? data.record : {};
-        let currentUsers = Array.isArray(record) ? allRegisteredUsers : (record.users || allRegisteredUsers);
-        let currentList = Array.isArray(record) ? [] : (record.requests || []);
-        currentList.push(req);
-        withdrawRequests = currentList;
+    withdrawRequests.push(req);
 
-        let payload = {
-            users: currentUsers,
-            requests: currentList
-        };
-
-        return fetch(`https://api.jsonbin.io/v3/b/${USERS_BIN_ID}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Master-Key': MASTER_KEY
-            },
-            body: JSON.stringify(payload)
-        });
-    })
-    .then(() => {
+    saveUsersToCloudAndLocal((success) => {
         alert('Withdrawal request submitted successfully! Amount deducted from balance. (72h processing window)');
         document.getElementById('withdraw-amount').value = '';
         document.getElementById('withdraw-address').value = '';
         closeWithdrawModal();
-        updateBadges();
-    })
-    .catch(err => {
-        alert('Error submitting request: ' + err.message);
-    })
-    .finally(() => {
-        submitBtn.innerText = "Confirm Withdrawal";
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('opacity-50');
+        renderAssetsData();
     });
 }
 </script>
