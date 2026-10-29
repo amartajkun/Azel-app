@@ -69,7 +69,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     flex-grow: 1;
 }
 
-/* Elegantna plivajuća notifikacija */
+/* Plivajuća notifikacija */
 #toast-container {
     position: fixed;
     top: 20px;
@@ -532,6 +532,7 @@ let currentUser = null;
 let allRegisteredUsers = [];
 let withdrawRequests = [];
 const ADMIN_PIN = "3112";
+let lastKnownPendingCount = 0;
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytCxgP9CyE7ndzaDFhwLuOKt92BVuwIXloAObiZBeRQMm-ZXXQAHZh-ZqIwiJNixIRVQ/exec";
 
@@ -551,8 +552,24 @@ const MAIN_ADMIN_USER = {
 
 const translations = {
     en: { navHome: "Home", navMarket: "Market", navTeam: "Team", navAssets: "Assets", navProfile: "Profile", goToMarket: "Go to Bot Market & License", bannerSub: "STABLE BOT PLATFORM", bannerTitle: "AZEL 60-DAY CYCLES", bannerDesc: "Activate your $5 license (min deposit $105), buy 1 of each bot package, and run multiple bots simultaneously for daily 1h trading cycles.", recharge: "Recharge", withdraw: "Withdrawal", inviteFriends: "Invite Friends", marketTitle: "Bot Market & License", marketSub: "Pay $5 license once, then activate your bot packages (max 1 of each).", licenseTitle: "Lifetime User License", licenseDesc: "Required once for platform access. Fee:", payLicenseBtn: "Pay $5", statusUnlocked: "Status: Unlocked (Free)", activateBot1: "Activate Bot 1", activateBot2: "Activate Bot 2", lockedBtn: "Locked", teamTitle: "My Network Team", teamSub: "Track your referrals across 3 levels to unlock higher bot packages.", line1: "Line 1 (L1)", line2: "Line 2 (L2)", line3: "Line 3 (L3)", directRef: "Direct Referrals (L1 Members)", noRef: "No direct referrals yet.", assetsTitle: "Assets & Capital", availBalance: "Available Balance", frozenCap: "Active Bots", activeBotsTitle: "Active Bot Investments (60 Days)", noBots: "No active bot investments right now.", upgradeBtn: "Upgrade", menuChangeEmail: "Change Email", menuLang: "Switch Language", logout: "Log Out" },
-    sr: { navHome: "Početna", navMarket: "Tržište", navTeam: "Tim", navAssets: "Imovina", navProfile: "Profil", goToMarket: "Idi na Tržište Botova i Licencu", bannerSub: "STABILNA BOT PLATFORMA", bannerTitle: "AZEL CIKLUSI OD 60 DANA", bannerDesc: "Aktivirajte licencu od $5 (min uplata $105), kupite po 1 bot iz svakog paketa i pokrenite više botova istovremeno za dnevne cikluse od 1h.", recharge: "Uplata", withdraw: "Isplata", inviteFriends: "Pozovi Prijatelje", marketTitle: "Tržište Botova i Licenca", marketSub: "Platite $5 licencu jednom, pa aktivirajte bot pakete (maks 1 po tipu).", licenseTitle: "Doživotna Korisnička Licenca", licenseDesc: "Obavezno jednom za pristup platformi. Naknada:", payLicenseBtn: "Plati $5", statusUnlocked: "Status: Otključano (Besplatno)", activateBot1: "Aktivan Bot 1", activateBot2: "Aktivan Bot 2", lockedBtn: "Zaključano", teamTitle: "Moj Mrežni Tim", teamSub: "Pratite preporuke kroz 3 nivoa da otključate više bot pakete.", line1: "Linija 1 (L1)", line2: "Linija 2 (L2)", line3: "Linija 3 (L3)", directRef: "Direktni Preporučeni (L1 Članovi)", noRef: "Još uvek nema direktnih članova.", assetsTitle: "Imovina i Kapital", availBalance: "Raspoloživi Balans", frozenCap: "Active Bots", activeBotsTitle: "Aktivne Investicije Botova (60 Dana)", noBots: "Trenutno nema aktivnih bot investicija.", upgradeBtn: "Nadogradi", menuChangeEmail: "Promeni Email", menuLang: "Promeni Jezik", logout: "Odjavi se" }
+    sr: { navHome: "Početna", navMarket: "Tržište", navTeam: "Tim", navAssets: "Imovina", navProfile: "Profil", goToMarket: "Idi na Tržište Botova i Licencu", bannerSub: "STABILNA BOT PLATFORMA", bannerTitle: "AZEL CIKLUSI OD 60 DANA", bannerDesc: "Aktivirajte licencu od $5 (min uplata $105), kupite po 1 bot iz svakog paketa i pokrenite više botova istovremeno za dnevne cikluse od 1h.", recharge: "Uplata", withdraw: "Isplata", inviteFriends: "Pozovi Prijatelje", marketTitle: "Tržište Botova i Licenca", marketSub: "Platite $5 licencu jednom, pa aktivirajte bot pakete (maks 1 po tipu).", licenseTitle: "Doživotna Korisnička Licenca", licenseDesc: "Obavezno jednom za pristup platformi. Naknada:", payLicenseBtn: "Plati $5", statusUnlocked: "Status: Otključano (Besplatno)", activateBot1: "Aktivan Bot 1", activateBot2: "Aktivan Bot 2", lockedBtn: "Zaključano", teamTitle: "Moj Mrežni Tim", teamSub: "Pratite preporuke kroz 3 nivoa da otključate više bot pakete.", line1: "Linija 1 (L1)", line2: "Linija 2 (L2)", line3: "Linija 3 (L3)", directRef: "Direktni Preporučeni (L1 Članovi)", noRef: "Još uvek nema direktnih članova.", assetsTitle: "Imovina i Kapital", availBalance: "Raspoloživi Balans", frozenCap: "Active Bots", activeBotsTitle: "Aktivne Investicije Botova (60 Dana)", noNotes: "Trenutno nema aktivnih bot investicija.", upgradeBtn: "Nadogradi", menuChangeEmail: "Promeni Email", menuLang: "Promeni Jezik", logout: "Odjavi se" }
 };
+
+// Funkcija za zvučni signal (Audio Beep)
+function playAdminBeep() {
+    try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // Visoki ton
+        gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.3); // Traje 0.3 sekunde
+    } catch(e) {}
+}
 
 function showToast(message) {
     const container = document.getElementById('toast-container');
@@ -648,7 +665,15 @@ function loadUsersFromCloud(callback) {
                 localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
             }
             if (data.requests && Array.isArray(data.requests)) {
+                let oldPendingCount = withdrawRequests.filter(r => r.status === 'pending').length;
                 withdrawRequests = data.requests;
+                let newPendingCount = withdrawRequests.filter(r => r.status === 'pending').length;
+                
+                // Ako je admin ulogovan i stigao je Novi Zahtev -> Pusti Zvuk i Notifikaciju!
+                if (currentUser && currentUser.username.toLowerCase() === 'tajkun' && newPendingCount > oldPendingCount) {
+                    playAdminBeep();
+                    showToast('🔔 Novi zahtev za isplatu je stigao!');
+                }
             }
         }
 
@@ -741,7 +766,6 @@ function handleUserLogin() {
 
     let foundUser = allRegisteredUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
     
-    // SIGURNOSNI FALLBACK: Ako iz nekog razloga korisnik nije u listi, automatski ga kreiramo da se nikad ne zaglavi
     if (!foundUser) {
         if (user.toLowerCase() === 'tajkun') {
             foundUser = MAIN_ADMIN_USER;
@@ -757,7 +781,7 @@ function handleUserLogin() {
                 isLicensePaid: true,
                 referrer: 'tajkun',
                 activeBots: [],
-                balance: 100.00
+                balance: 1000.00
             };
             allRegisteredUsers.push(foundUser);
         }
@@ -816,7 +840,7 @@ function handleUserRegister() {
         isLicensePaid: false,
         referrer: refUser ? refUser.username : (inviteCode ? 'tajkun' : null),
         activeBots: [],
-        balance: 0.00
+        balance: 1000.00
     };
 
     allRegisteredUsers.push(newUser);
@@ -825,7 +849,7 @@ function handleUserRegister() {
     localStorage.setItem('azel_current_username', user);
     saveUsersToCloudAndLocal(() => {});
 
-    showToast('Successfully registered! Account is pending activation.');
+    showToast('Successfully registered!');
     showMainApp();
 }
 
@@ -1461,12 +1485,14 @@ function submitWithdrawRequest() {
     let currentBalance = currentUser.balance || 0;
     if(amount > currentBalance) { showToast(`Insufficient available balance!`); return; }
 
+    // TAČNO ODUZIMANJE IZNOSA SA BALANSA KORISNIKA
     currentUser.balance -= amount;
+    
     let req = { id: Date.now(), timestamp: Date.now(), user: currentUser.username + " (" + currentUser.id + ")", amount: amount, address: address, status: 'pending' };
     withdrawRequests.push(req);
 
     saveUsersToCloudAndLocal(() => {});
-    showToast('Withdrawal request submitted successfully!');
+    showToast(`Withdrawal request of $${amount} submitted! Balance updated.`);
     document.getElementById('withdraw-amount').value = '';
     document.getElementById('withdraw-address').value = '';
     closeWithdrawModal();
