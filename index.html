@@ -189,7 +189,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
                 <i class="fas fa-robot text-emerald-300"></i>
             </div>
         </div>
-        <p class="text-[11px] text-gray-200 leading-relaxed" data-i18n="bannerDesc">Activate your $5 license (min deposit $105), buy 1 of each bot package, and run multiple bots simultaneously for daily 1h trading cycles.</p>
+        <p class="text-[11px] text-gray-200 leading-relaxed" data-i18n="bannerDesc">Activate your $5 license, buy bot packages, and run multiple bots simultaneously for daily 1h trading cycles.</p>
     </div>
     <div class="grid grid-cols-3 gap-2 text-center">
         <button onclick="openDepositModal()" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition cursor-pointer">
@@ -303,7 +303,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </div>
 </div>
 
-<!-- TEAM PAGE -->
+<!-- TEAM PAGE (L1, L2, L3 LINIJE) -->
 <div id="page-team" class="page-content p-4 space-y-4">
     <h2 class="text-lg font-bold text-emerald-400 mb-1" data-i18n="teamTitle">My Network Team</h2>
     <p class="text-xs text-gray-400 mb-3" data-i18n="teamSub">Track your referrals across 3 levels to unlock higher bot packages.</p>
@@ -552,11 +552,10 @@ const MAIN_ADMIN_USER = {
 };
 
 const translations = {
-    en: { navHome: "Home", navMarket: "Market", navTeam: "Team", navAssets: "Assets", navProfile: "Profile", goToMarket: "Go to Bot Market & License", bannerSub: "STABLE BOT PLATFORM", bannerTitle: "AZEL 60-DAY CYCLES", bannerDesc: "Activate your $5 license (min deposit $105), buy 1 of each bot package, and run multiple bots simultaneously for daily 1h trading cycles.", recharge: "Recharge", withdraw: "Withdrawal", inviteFriends: "Invite Friends", marketTitle: "Bot Market & License", marketSub: "Pay $5 license once, then activate your bot packages (max 1 of each).", licenseTitle: "Lifetime User License", licenseDesc: "Required once for platform access. Fee:", payLicenseBtn: "Pay $5", statusUnlocked: "Status: Unlocked (Free)", activateBot1: "Activate Bot 1", activateBot2: "Activate Bot 2", lockedBtn: "Locked", teamTitle: "My Network Team", teamSub: "Track your referrals across 3 levels to unlock higher bot packages.", line1: "Line 1 (L1)", line2: "Line 2 (L2)", line3: "Line 3 (L3)", directRef: "Direct Referrals (L1 Members)", noRef: "No direct referrals yet.", assetsTitle: "Assets & Capital", availBalance: "Available Balance", frozenCap: "Active Bots", activeBotsTitle: "Active Bot Investments (60 Days)", noBots: "No active bot investments right now.", upgradeBtn: "Upgrade", menuChangeEmail: "Change Email", menuLang: "Switch Language", logout: "Log Out" },
-    sr: { navHome: "Početna", navMarket: "Tržište", navTeam: "Tim", navAssets: "Imovina", navProfile: "Profil", goToMarket: "Idi na Tržište Botova i Licencu", bannerSub: "STABILNA BOT PLATFORMA", bannerTitle: "AZEL CIKLUSI OD 60 DANA", bannerDesc: "Aktivirajte licencu od $5 (min uplata $105), kupite po 1 bot iz svakog paketa i pokrenite više botova istovremeno za dnevne cikluse od 1h.", recharge: "Uplata", withdraw: "Isplata", inviteFriends: "Pozovi Prijatelje", marketTitle: "Tržište Botova i Licenca", marketSub: "Platite $5 licencu jednom, pa aktivirajte bot pakete (maks 1 po tipu).", licenseTitle: "Doživotna Korisnička Licenca", licenseDesc: "Obavezno jednom za pristup platformi. Naknada:", payLicenseBtn: "Plati $5", statusUnlocked: "Status: Otključano (Besplatno)", activateBot1: "Aktivan Bot 1", activateBot2: "Aktivan Bot 2", lockedBtn: "Zaključano", teamTitle: "Moj Mrežni Tim", teamSub: "Pratite preporuke kroz 3 nivoa da otključate više bot pakete.", line1: "Linija 1 (L1)", line2: "Linija 2 (L2)", line3: "Linija 3 (L3)", directRef: "Direktni Preporučeni (L1 Članovi)", noRef: "Još uvek nema direktnih članova.", assetsTitle: "Imovina i Kapital", availBalance: "Raspoloživi Balans", frozenCap: "Active Bots", activeBotsTitle: "Aktivne Investicije Botova (60 Dana)", noBots: "Trenutno nema aktivnih bot investicija.", upgradeBtn: "Nadogradi", menuChangeEmail: "Promeni Email", menuLang: "Promeni Jezik", logout: "Odjavi se" }
+    en: { navHome: "Home", navMarket: "Market", navTeam: "Team", navAssets: "Assets", navProfile: "Profile", goToMarket: "Go to Bot Market & License", bannerSub: "STABLE BOT PLATFORM", bannerTitle: "AZEL 60-DAY CYCLES", bannerDesc: "Activate your $5 license, buy bot packages, and run multiple bots simultaneously for daily 1h trading cycles.", recharge: "Recharge", withdraw: "Withdrawal", inviteFriends: "Invite Friends", marketTitle: "Bot Market & License", marketSub: "Pay $5 license once, then activate your bot packages (max 1 of each).", licenseTitle: "Lifetime User License", licenseDesc: "Required once for platform access. Fee:", payLicenseBtn: "Pay $5", statusUnlocked: "Status: Unlocked (Free)", activateBot1: "Activate Bot 1", activateBot2: "Activate Bot 2", lockedBtn: "Locked", teamTitle: "My Network Team", teamSub: "Track your referrals across 3 levels to unlock higher bot packages.", line1: "Line 1 (L1)", line2: "Line 2 (L2)", line3: "Line 3 (L3)", directRef: "Direct Referrals (L1 Members)", noRef: "No direct referrals yet.", assetsTitle: "Assets & Capital", availBalance: "Available Balance", frozenCap: "Active Bots", activeBotsTitle: "Active Bot Investments (60 Days)", noBots: "No active bot investments right now.", upgradeBtn: "Upgrade", menuChangeEmail: "Change Email", menuLang: "Switch Language", logout: "Log Out" },
+    sr: { navHome: "Početna", navMarket: "Tržište", navTeam: "Tim", navAssets: "Imovina", navProfile: "Profil", goToMarket: "Idi na Tržište Botova i Licencu", bannerSub: "STABILNA BOT PLATFORMA", bannerTitle: "AZEL CIKLUSI OD 60 DANA", bannerDesc: "Aktivirajte licencu od $5, kupite po 1 bot iz svakog paketa i pokrenite više botova istovremeno za dnevne cikluse od 1h.", recharge: "Uplata", withdraw: "Isplata", inviteFriends: "Pozovi Prijatelje", marketTitle: "Tržište Botova i Licenca", marketSub: "Platite $5 licencu jednom, pa aktivirajte bot pakete (maks 1 po tipu).", licenseTitle: "Doživotna Korisnička Licenca", licenseDesc: "Obavezno jednom za pristup platformi. Naknada:", payLicenseBtn: "Plati $5", statusUnlocked: "Status: Otključano (Besplatno)", activateBot1: "Aktivan Bot 1", activateBot2: "Aktivan Bot 2", lockedBtn: "Zaključano", teamTitle: "Moj Mrežni Tim", teamSub: "Pratite preporuke kroz 3 nivoa da otključate više bot pakete.", line1: "Linija 1 (L1)", line2: "Linija 2 (L2)", line3: "Linija 3 (L3)", directRef: "Direktni Preporučeni (L1 Članovi)", noRef: "Još uvek nema direktnih članova.", assetsTitle: "Imovina i Kapital", availBalance: "Raspoloživi Balans", frozenCap: "Active Bots", activeBotsTitle: "Aktivne Investicije Botova (60 Dana)", noBots: "Trenutno nema aktivnih bot investicija.", upgradeBtn: "Nadogradi", menuChangeEmail: "Promeni Email", menuLang: "Promeni Jezik", logout: "Odjavi se" }
 };
 
-// Zvučno obaveštenje preko AudioContext (100% stabilno)
 function playAdminBeep() {
     try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -804,6 +803,7 @@ function handleUserLogin() {
     }
 
     currentUser = foundUser;
+    if (currentUser.username.toLowerCase() === 'tajkun') currentUser.isLicensePaid = true;
     if (!currentUser.activeBots) currentUser.activeBots = [];
     currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
     currentUser.activeBots.forEach((b) => {
@@ -924,18 +924,30 @@ function simulateUserDeposit() {
     showToast(`Successfully deposited $${amt} USDT!`);
 }
 
-// FUNKCIJA ZA KUPOVINU LICENCE
+// 100% ISPRAVLJENA FUNKCIJA ZA PLAĆANJE LICENCE
 function buyUserLicense() {
-    if (currentUser.isLicensePaid) { showToast('License is already paid!'); return; }
+    if (currentUser.username.toLowerCase() === 'tajkun') {
+        currentUser.isLicensePaid = true;
+        saveCurrentUserToStorage();
+        updateAppUI();
+        showToast('License already active for Admin!');
+        return;
+    }
+
+    if (currentUser.isLicensePaid) {
+        showToast('License is already paid!');
+        return;
+    }
 
     let currentBalance = currentUser.balance || 0;
     if (currentBalance < 5) {
-        showToast('Insufficient balance to pay $5 license!');
+        showToast('Insufficient balance! You need at least $5 for the license.');
         return;
     }
 
     currentUser.balance -= 5;
     currentUser.isLicensePaid = true;
+    
     saveCurrentUserToStorage();
     updateAppUI();
     renderAssetsData();
@@ -995,7 +1007,7 @@ function checkBotUnlocks() {
         }
 
         // AKO LICENCA NIJE PLAĆENA -> BOTOVI SU ZAKLJUČANI
-        if (!currentUser.isLicensePaid) {
+        if (!currentUser.isLicensePaid && currentUser.username.toLowerCase() !== 'tajkun') {
             if(btn) {
                 btn.disabled = true;
                 btn.className = "bg-gray-800 text-gray-500 font-bold px-4 py-2 rounded-xl text-xs cursor-not-allowed";
@@ -1060,7 +1072,10 @@ function lockBotUI(level, reqText) {
 }
 
 function buyBot(level, price, dailyEarning) {
-    if(!currentUser.isLicensePaid) { showToast('You must pay $5 license first!'); return; }
+    if(!currentUser.isLicensePaid && currentUser.username.toLowerCase() !== 'tajkun') { 
+        showToast('You must pay $5 license first!'); 
+        return; 
+    }
     if(!currentUser.activeBots) currentUser.activeBots = [];
     
     let alreadyOwned = currentUser.activeBots.some(b => b.level === level && b.daysRemaining > 0);
@@ -1196,6 +1211,22 @@ function renderTeamData() {
         });
         l1List.innerHTML = html;
     }
+
+    const inactiveList = document.getElementById('team-inactive-list');
+    if (inactiveList) {
+        if(!net.inactiveL1Members || net.inactiveL1Members.length === 0) {
+            inactiveList.innerHTML = '<p class="text-gray-500 text-center py-2">No inactive members.</p>';
+        } else {
+            let inHtml = '';
+            net.inactiveL1Members.forEach(m => {
+                inHtml += `<div class="bg-gray-900 p-2.5 rounded-xl border border-amber-500/30 flex justify-between items-center">
+                    <span class="text-white font-bold">${m.username} <span class="text-[9px] text-amber-400 bg-amber-950 px-1.5 py-0.5 rounded ml-1">Inactive</span></span>
+                    <span class="text-amber-400 text-[10px]">ID: ${m.id}</span>
+                </div>`;
+            });
+            inactiveList.innerHTML = inHtml;
+        }
+    }
 }
 
 function renderAssetsData() {
@@ -1317,10 +1348,10 @@ function updateAppUI() {
         adminBtn.style.display = 'none';
     }
 
-    // AŽURIRANJE DUGMETA ZA LICENCU - PASTE ZELENO DUGME AKO JE PLAĆENO
+    // TRAJNO AŽURIRANJE DUGMETA ZA LICENCU (KADA SE JEDNOM KUPI, UVEK JE "Paid ✓")
     const licenseBtn = document.getElementById('buy-license-btn');
     if (licenseBtn) {
-        if (currentUser.isLicensePaid) {
+        if (currentUser.isLicensePaid || currentUser.username.toLowerCase() === 'tajkun') {
             licenseBtn.innerText = "Paid ✓";
             licenseBtn.className = "bg-emerald-950 text-emerald-400 px-4 py-2 rounded-xl text-xs font-bold border border-emerald-500/40 cursor-default";
             licenseBtn.onclick = null;
