@@ -519,7 +519,7 @@ const MAIN_ADMIN_USER = {
 
 const translations = {
     en: { navHome: "Home", navMarket: "Market", navTeam: "Team", navAssets: "Assets", navProfile: "Profile", goToMarket: "Go to Bot Market & License", bannerSub: "STABLE BOT PLATFORM", bannerTitle: "AZEL 60-DAY CYCLES", bannerDesc: "Activate your $5 license (min deposit $105), buy 1 of each bot package, and run multiple bots simultaneously for daily 1h trading cycles.", recharge: "Recharge", withdraw: "Withdrawal", inviteFriends: "Invite Friends", marketTitle: "Bot Market & License", marketSub: "Pay $5 license once, then activate your bot packages (max 1 of each).", licenseTitle: "Lifetime User License", licenseDesc: "Required once for platform access. Fee:", payLicenseBtn: "Pay $5", statusUnlocked: "Status: Unlocked (Free)", activateBot1: "Activate Bot 1", activateBot2: "Activate Bot 2", lockedBtn: "Locked", teamTitle: "My Network Team", teamSub: "Track your referrals across 3 levels to unlock higher bot packages.", line1: "Line 1 (L1)", line2: "Line 2 (L2)", line3: "Line 3 (L3)", directRef: "Direct Referrals (L1 Members)", noRef: "No direct referrals yet.", assetsTitle: "Assets & Capital", availBalance: "Available Balance", frozenCap: "Active Bots", activeBotsTitle: "Active Bot Investments (60 Days)", noBots: "No active bot investments right now.", upgradeBtn: "Upgrade", menuChangeEmail: "Change Email", menuLang: "Switch Language", logout: "Log Out" },
-    sr: { navHome: "Početna", navMarket: "Tržište", navTeam: "Tim", navAssets: "Imovina", navProfile: "Profil", goToMarket: "Idi na Tržište Botova i Licencu", bannerSub: "STABILNA BOT PLATFORMA", bannerTitle: "AZEL CIKLUSI OD 60 DANA", bannerDesc: "Aktivirajte licencu od $5 (min uplata $105), kupite po 1 bot iz svakog paketa i pokrenite više botova istovremeno za dnevne cikluse od 1h.", recharge: "Uplata", withdraw: "Isplata", inviteFriends: "Pozovi Prijatelje", marketTitle: "Tržište Botova i Licenca", marketSub: "Platite $5 licencu jednom, pa aktivirajte bot pakete (maks 1 po tipu).", licenseTitle: "Doživotna Korisnička Licenca", licenseDesc: "Obavezno jednom za pristup platformi. Naknada:", payLicenseBtn: "Plati $5", statusUnlocked: "Status: Otključano (Besplatno)", activateBot1: "Aktiviraj Bota 1", activateBot2: "Aktiviraj Bota 2", lockedBtn: "Zaključano", teamTitle: "Moj Mrežni Tim", teamSub: "Pratite preporuke kroz 3 nivoa da otključate više bot pakete.", line1: "Linija 1 (L1)", line2: "Linija 2 (L2)", line3: "Linija 3 (L3)", directRef: "Direktni Preporučeni (L1 Članovi)", noRef: "Još uvek nema direktnih članova.", assetsTitle: "Imovina i Kapital", availBalance: "Raspoloživi Balans", frozenCap: "Active Bots", activeBotsTitle: "Aktivne Investicije Botova (60 Dana)", noBots: "Trenutno nema aktivnih bot investicija.", upgradeBtn: "Nadogradi", menuChangeEmail: "Promeni Email", menuLang: "Promeni Jezik", logout: "Odjavi se" }
+    sr: { navHome: "Početna", navMarket: "Tržište", navTeam: "Tim", navAssets: "Imovina", navProfile: "Profil", goToMarket: "Idi na Tržište Botova i Licencu", bannerSub: "STABILNA BOT PLATFORMA", bannerTitle: "AZEL CIKLUSI OD 60 DANA", bannerDesc: "Aktivirajte licencu od $5 (min uplata $105), kupite po 1 bot iz svakog paketa i pokrenite više botova istovremeno za dnevne cikluse od 1h.", recharge: "Uplata", withdraw: "Isplata", inviteFriends: "Pozovi Prijatelje", marketTitle: "Tržište Botova i Licenca", marketSub: "Platite $5 licencu jednom, pa aktivirajte bot pakete (maks 1 po tipu).", licenseTitle: "Doživotna Korisnička Licenca", licenseDesc: "Obavezno jednom za pristup platformi. Naknada:", payLicenseBtn: "Plati $5", statusUnlocked: "Status: Otključano (Besplatno)", activateBot1: "Aktivan Bot 1", activateBot2: "Aktivan Bot 2", lockedBtn: "Zaključano", teamTitle: "Moj Mrežni Tim", teamSub: "Pratite preporuke kroz 3 nivoa da otključate više bot pakete.", line1: "Linija 1 (L1)", line2: "Linija 2 (L2)", line3: "Linija 3 (L3)", directRef: "Direktni Preporučeni (L1 Članovi)", noRef: "Još uvek nema direktnih članova.", assetsTitle: "Imovina i Kapital", availBalance: "Raspoloživi Balans", frozenCap: "Active Bots", activeBotsTitle: "Aktivne Investicije Botova (60 Dana)", noBots: "Trenutno nema aktivnih bot investicija.", upgradeBtn: "Nadogradi", menuChangeEmail: "Promeni Email", menuLang: "Promeni Jezik", logout: "Odjavi se" }
 };
 
 window.addEventListener('DOMContentLoaded', function() {
@@ -971,7 +971,6 @@ function startBotTrading(uniqueId) {
     renderAssetsData();
 }
 
-// AUTOMATSKI RESET BOTOVA U 01:00 UJUTRU / NAVEČER
 function checkActiveBotsProgress() {
     if(!currentUser || !currentUser.activeBots || currentUser.activeBots.length === 0) return;
 
@@ -980,19 +979,15 @@ function checkActiveBotsProgress() {
     let currentHour = nowDateObj.getHours();
     let currentMinute = nowDateObj.getMinutes();
     
-    // Format dana za praćenje poslednjeg tradinga (npr. "2026-10-29")
     let todayStr = nowDateObj.getFullYear() + '-' + (nowDateObj.getMonth() + 1) + '-' + nowDateObj.getDate();
-
     let updated = false;
 
-    // USLOV ZA RESET: Da li je prošlo 01:00 sat (1h ujutru/navečer)
     let isAfterResetTime = (currentHour > 1) || (currentHour === 1 && currentMinute >= 0);
 
     currentUser.activeBots.forEach(bot => {
         if(!bot.uniqueId) bot.uniqueId = 'bot_lvl_' + bot.level + '_' + Math.random().toString(36).substring(2, 9);
         if(bot.daysRemaining === undefined || isNaN(bot.daysRemaining)) bot.daysRemaining = 60;
 
-        // Ako je bot juče završio sesiju, a sada je posle 01:00 i novi je dan -> vraćamo u IDLE
         if (bot.tradingStatus === 'COMPLETED_TODAY' || bot.tradingStatus === 'DONE') {
             if (bot.lastTradedDate !== todayStr && isAfterResetTime) {
                 bot.tradingStatus = 'IDLE';
@@ -1008,7 +1003,7 @@ function checkActiveBotsProgress() {
         if(bot.tradingStatus === 'TRADING') {
             if(now >= bot.tradingEndsAt) {
                 bot.tradingStatus = 'COMPLETED_TODAY';
-                bot.lastTradedDate = todayStr; // Zapisujemo da je za danas odradio
+                bot.lastTradedDate = todayStr;
                 
                 bot.daysRemaining = Math.max(0, bot.daysRemaining - 1); 
                 
@@ -1027,7 +1022,6 @@ function checkActiveBotsProgress() {
         }
     });
 
-    // Uklanjanje botova kojima je istekao ciklus (daysRemaining <= 0)
     let initialCount = currentUser.activeBots.length;
     currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
     if(currentUser.activeBots.length !== initialCount) {
@@ -1098,6 +1092,22 @@ function renderAssetsData() {
     let html = '';
     let now = Date.now();
 
+    // Računanje vremena do sledećeg reseta (01:00 posle ponoći)
+    let nowDateObj = new Date();
+    let resetTime = new Date(nowDateObj);
+    resetTime.setHours(1, 0, 0, 0); // 01:00:00 danas
+    if (nowDateObj.getHours() >= 1) {
+        // Ako je već prošlo 1 sat posle ponoći, reset je sutra u 01:00
+        resetTime.setDate(resetTime.getDate() + 1);
+    }
+    let msUntilReset = resetTime.getTime() - now;
+    if (msUntilReset < 0) msUntilReset = 0;
+
+    let rHours = Math.floor(msUntilReset / (1000 * 60 * 60));
+    let rMins = Math.floor((msUntilReset % (1000 * 60 * 60)) / (1000 * 60));
+    let rSecs = Math.floor((msUntilReset % (1000 * 60)) / 1000);
+    let countdownStr = `${rHours}h ${rMins < 10 ? '0' : ''}${rMins}m ${rSecs < 10 ? '0' : ''}${rSecs}s`;
+
     currentUser.activeBots.forEach((bot) => {
         let picClass = botPicClasses[bot.level] || 'pic-bot-1';
         let themeClass = 'card-theme-' + bot.level;
@@ -1107,6 +1117,9 @@ function renderAssetsData() {
         let statusDisplay = `Days Remaining: ${bot.daysRemaining} / 60`;
         let btnColor = "bg-emerald-500 hover:bg-emerald-400 text-black";
 
+        let todayStr = nowDateObj.getFullYear() + '-' + (nowDateObj.getMonth() + 1) + '-' + nowDateObj.getDate();
+        let isCompletedToday = (bot.tradingStatus === 'COMPLETED_TODAY' || bot.tradingStatus === 'DONE') || (bot.lastTradedDate === todayStr);
+
         if(bot.tradingStatus === 'TRADING') {
             let timeLeft = bot.tradingEndsAt - now;
             if(timeLeft < 0) timeLeft = 0;
@@ -1114,11 +1127,11 @@ function renderAssetsData() {
             btnText = `Trading (${sLeft}s)`;
             btnColor = "bg-amber-500 text-black cursor-wait";
             statusDisplay = `Trading session active`;
-        } else if(bot.tradingStatus === 'COMPLETED_TODAY' || bot.tradingStatus === 'DONE') {
-            btnText = "Come back tomorrow";
-            btnColor = "bg-gray-800 text-gray-400 cursor-not-allowed";
+        } else if(isCompletedToday) {
+            btnText = `Ready in ${countdownStr}`;
+            btnColor = "bg-gray-800 text-gray-400 cursor-not-allowed text-[10px]";
             btnAction = "";
-            statusDisplay = `Completed for today. Reset at 01:00`;
+            statusDisplay = `Next reset in ${countdownStr}`;
         }
 
         document.getElementById('active-bots-header-title').innerText = `Active Bot Investments (${bot.daysRemaining} Days Remaining)`;
