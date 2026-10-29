@@ -523,7 +523,6 @@ const translations = {
 };
 
 window.addEventListener('DOMContentLoaded', function() {
-    // BRZO UČITAVANJE IZ LOKALNE MEMORIJE BEZ ČEKANJA NA DILEJ SERVERA
     let localSavedUsers = localStorage.getItem('azel_registered_users');
     if (localSavedUsers) {
         try { allRegisteredUsers = JSON.parse(localSavedUsers); } catch(e){}
@@ -550,7 +549,6 @@ window.addEventListener('DOMContentLoaded', function() {
         document.getElementById('main-app-wrapper').style.display = 'none';
     }
 
-    // U pozadini sinhronizuj sa cloud-om da uvek bude sve sveže
     loadUsersFromCloud(() => {});
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -561,7 +559,6 @@ window.addEventListener('DOMContentLoaded', function() {
     }
     changeLanguage('en');
     
-    // TIHA SINKRONIZACIJA U POZADINI SVAKE SEKUNDE
     setInterval(() => {
         silentLoadUsersFromCloud(() => {
             checkActiveBotsProgress();
@@ -695,7 +692,6 @@ function handleUserLogin() {
     const pass = document.getElementById('login-password').value.trim();
     if(!user || !pass) { alert('Please enter username and password!'); return; }
 
-    // TRENUTNI LOGIN BEZ ČEKANJA (KORISTI LOKALNU MEMORIJU)
     let foundUser = allRegisteredUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
     
     if (!foundUser) { 
@@ -762,7 +758,6 @@ function handleUserRegister() {
 
     allRegisteredUsers.push(newUser);
     
-    // TRENUTNI UPIS I ULAZ BEZ DILEJA
     currentUser = newUser;
     sessionStorage.setItem('azel_logged_in', 'true');
     sessionStorage.setItem('azel_current_username', user);
@@ -1017,7 +1012,7 @@ function startBotTrading(uniqueId) {
     let todayStr = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
 
     if(bot.lastTradedDate === todayStr) {
-        alert('This bot has already finished today\'s trading session. Come back tomorrow after 06:00 AM!');
+        alert('This bot has already finished today\'s trading session. Come back tomorrow after 14:15!');
         return;
     }
 
@@ -1045,6 +1040,7 @@ function checkActiveBotsProgress() {
     let nowDateObj = new Date();
     let todayStr = nowDateObj.getFullYear() + '-' + (nowDateObj.getMonth() + 1) + '-' + nowDateObj.getDate();
     let currentHour = nowDateObj.getHours();
+    let currentMinute = nowDateObj.getMinutes();
 
     let updated = false;
 
@@ -1052,14 +1048,17 @@ function checkActiveBotsProgress() {
         if(!bot.uniqueId) bot.uniqueId = 'bot_lvl_' + bot.level + '_' + Math.random().toString(36).substring(2, 9);
         if(bot.daysRemaining === undefined || isNaN(bot.daysRemaining)) bot.daysRemaining = 60;
 
+        // PRIVREMENI USLOV TESTIRANJA: Resetuje se posle 14:15 časova
+        let isAfterResetTime = (currentHour > 14) || (currentHour === 14 && currentMinute >= 15);
+
         if (bot.tradingStatus === 'COMPLETED_TODAY' || bot.tradingStatus === 'DONE') {
-            if (bot.lastTradedDate !== todayStr && currentHour >= 6) {
+            if (bot.lastTradedDate !== todayStr && isAfterResetTime) {
                 bot.tradingStatus = 'IDLE';
                 updated = true;
             }
         }
 
-        if (bot.lastTradedDate && bot.lastTradedDate !== todayStr && currentHour >= 6 && bot.tradingStatus !== 'TRADING') {
+        if (bot.lastTradedDate && bot.lastTradedDate !== todayStr && isAfterResetTime && bot.tradingStatus !== 'TRADING') {
             bot.tradingStatus = 'IDLE';
             updated = true;
         }
@@ -1179,7 +1178,7 @@ function renderAssetsData() {
         } else if(bot.tradingStatus === 'COMPLETED_TODAY' || bot.lastTradedDate === todayStr) {
             btnText = "Done Today ✓";
             btnColor = "bg-gray-800 text-gray-400 cursor-not-allowed";
-            statusDisplay = `Completed today. Resets at 06:00 AM!`;
+            statusDisplay = `Completed today. Resets at 14:15!`;
         }
 
         document.getElementById('active-bots-header-title').innerText = `Active Bot Investments (${bot.daysRemaining} Days Remaining)`;
@@ -1215,7 +1214,6 @@ function saveCurrentUserToStorage() {
     } else {
         allRegisteredUsers.push(currentUser);
     }
-    // TRENUTNI UPIS U POZADINI BEZ ČEKANJA
     saveUsersToCloudAndLocal(() => {});
 }
 
@@ -1452,7 +1450,6 @@ function submitWithdrawRequest() {
     
     withdrawRequests.push(req);
 
-    // TRENUTNA POTVRDA ISPLATE BEZ ČEKANJA SERVERA
     saveUsersToCloudAndLocal(() => {});
     alert('Withdrawal request submitted successfully! Amount deducted from balance. (72h processing window)');
     document.getElementById('withdraw-amount').value = '';
