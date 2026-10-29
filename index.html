@@ -164,7 +164,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <span class="text-xl font-bold tracking-wider text-emerald-400">AZEL</span>
 </div>
 <div class="flex space-x-3 text-gray-400 text-lg relative items-center">
-<button id="admin-header-btn" onclick="openAdminPinModal()" class="bg-amber-500/20 text-amber-400 border border-amber-500/40 px-2.5 py-1 rounded-lg text-[10px] font-bold items-center gap-1 relative cursor-pointer" style="display: none;">
+<button id="admin-header-btn" onclick="openAdminPinModal()" class="bg-amber-500/20 text-amber-400 border border-amber-500/40 px-2.5 py-1.5 rounded-lg text-[10px] font-bold items-center gap-1.5 relative cursor-pointer flex" style="display: none;">
     <i class="fas fa-shield-halved"></i> Admin
     <span id="admin-header-badge" class="bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.2 rounded-full hidden">0</span>
 </button>
@@ -563,7 +563,7 @@ function showToast(message) {
         <div class="flex-1 font-medium">${message}</div>
     `;
     container.appendChild(toast);
-    setTimeout(() => {
+    setTimeout => {
         toast.remove();
     }, 5000);
 }
@@ -581,15 +581,21 @@ window.addEventListener('DOMContentLoaded', function() {
         let existingUser = allRegisteredUsers.find(u => u.username.toLowerCase() === loggedUsername.toLowerCase());
         currentUser = existingUser || MAIN_ADMIN_USER;
         
-        if (currentUser && currentUser.activeBots) {
-            currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
-            currentUser.activeBots.forEach((b) => {
-                if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
-                if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
-                if (!b.tradingStatus) b.tradingStatus = 'IDLE';
-            });
-            checkActiveBotsProgress();
-            saveCurrentUserToStorage();
+        if (currentUser) {
+            // Osiguravamo da jednom plaćena licenca NIKADA više ne nestane
+            if (currentUser.isLicensePaid === undefined) {
+                currentUser.isLicensePaid = (currentUser.activeBots && currentUser.activeBots.length > 0) || currentUser.username.toLowerCase() === 'tajkun';
+            }
+            if (currentUser.activeBots) {
+                currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
+                currentUser.activeBots.forEach((b) => {
+                    if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
+                    if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
+                    if (!b.tradingStatus) b.tradingStatus = 'IDLE';
+                });
+                checkActiveBotsProgress();
+                saveCurrentUserToStorage();
+            }
         }
 
         showMainApp();
@@ -598,7 +604,7 @@ window.addEventListener('DOMContentLoaded', function() {
         document.getElementById('main-app-wrapper').style.display = 'none';
     }
 
-    // GLAVNA PETLJA: RADI TAČNO NA SVAKU 1 SEKUNDU I OSVEŽAVA I EKRAN I BOTOVE
+    // GLAVNA PETLJA NA SVAKU 1 SEKUNDU
     setInterval(() => {
         checkActiveBotsProgress();
         
@@ -610,9 +616,10 @@ window.addEventListener('DOMContentLoaded', function() {
         if (marketPage && marketPage.classList.contains('active')) {
             checkBotUnlocks();
         }
+        updateAdminBadge();
     }, 1000);
 
-    // POZADINSKA SINHRONIZACIJA SA CLOUDOM NA SVAKIH 5 SEKUNDI DA NE OPTEREĆUJEMO SERVER PREVIŠE
+    // POZADINSKA SINHRONIZACIJA SA CLOUDOM NA SVAKIH 5 SEKUNDI
     setInterval(() => {
         loadUsersFromCloud(() => {});
     }, 5000);
@@ -650,7 +657,7 @@ function loadUsersFromCloud(callback) {
             if (updatedSelf) {
                 currentUser.balance = updatedSelf.balance;
                 currentUser.activeBots = updatedSelf.activeBots;
-                currentUser.isLicensePaid = updatedSelf.isLicensePaid;
+                if (updatedSelf.isLicensePaid) currentUser.isLicensePaid = true;
             }
         }
 
@@ -729,6 +736,7 @@ function handleUserLogin() {
     if (foundUser.password !== pass) { showToast('Incorrect password! Please try again.'); return; }
 
     currentUser = foundUser;
+    if (currentUser.isLicensePaid === undefined) currentUser.isLicensePaid = false;
     if (!currentUser.activeBots) currentUser.activeBots = [];
     currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
     currentUser.activeBots.forEach((b) => {
@@ -795,6 +803,7 @@ function showMainApp() {
     const adminBtn = document.getElementById('admin-header-btn');
     if (currentUser && currentUser.username.toLowerCase() === 'tajkun') {
         adminBtn.style.display = 'flex';
+        updateAdminBadge();
     } else {
         adminBtn.style.display = 'none';
     }
@@ -1022,7 +1031,7 @@ function startBotTrading(uniqueId) {
     if(bot.daysRemaining <= 0) { showToast('This bot\'s 60-day lifecycle has ended.'); return; }
 
     bot.tradingStatus = 'TRADING';
-    bot.tradingEndsAt = Date.now() + (10 * 1000); // 10 sekundi testni period
+    bot.tradingEndsAt = Date.now() + (10 * 1000);
 
     saveCurrentUserToStorage();
     renderAssetsData();
@@ -1235,6 +1244,9 @@ function renderAssetsData() {
 }
 
 function saveCurrentUserToStorage() {
+    if (currentUser.username.toLowerCase() === 'tajkun' || (currentUser.activeBots && currentUser.activeBots.length > 0)) {
+        currentUser.isLicensePaid = true;
+    }
     let index = allRegisteredUsers.findIndex(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
     if (index !== -1) {
         allRegisteredUsers[index] = currentUser;
@@ -1256,11 +1268,13 @@ function updateAppUI() {
     const adminBtn = document.getElementById('admin-header-btn');
     if (currentUser && currentUser.username.toLowerCase() === 'tajkun') {
         adminBtn.style.display = 'flex';
+        updateAdminBadge();
     } else {
         adminBtn.style.display = 'none';
     }
 
-    if(currentUser.isLicensePaid) {
+    if(currentUser.isLicensePaid || (currentUser.activeBots && currentUser.activeBots.length > 0)) {
+        currentUser.isLicensePaid = true;
         document.getElementById('buy-license-btn').innerText = "Paid ✓";
         document.getElementById('buy-license-btn').className = "bg-emerald-950 text-emerald-400 px-4 py-2 rounded-xl text-xs font-bold border border-emerald-500/40 cursor-default";
     }
@@ -1339,13 +1353,18 @@ function openAdminPanel() {
 }
 function closeAdminPanel() { document.getElementById('modal-admin-panel').style.display = 'none'; }
 
-function formatDuration(ms) {
-    if(ms <= 0) return "00h 00m 00s";
-    let totalSec = Math.floor(ms / 1000);
-    let hours = Math.floor(totalSec / 3600);
-    let minutes = Math.floor((totalSec % 3600) / 60);
-    let seconds = totalSec % 60;
-    return `${hours}h ${minutes < 10 ? '0' : ''}${minutes}m ${seconds < 10 ? '0' : ''}${seconds}s`;
+function updateAdminBadge() {
+    if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') return;
+    let pendingCount = withdrawRequests.filter(r => r.status === 'pending').length;
+    let badge = document.getElementById('admin-header-badge');
+    if (badge) {
+        if (pendingCount > 0) {
+            badge.innerText = pendingCount;
+            badge.classList.remove('hidden');
+        } else {
+            badge.classList.add('hidden');
+        }
+    }
 }
 
 function renderAdminWithdrawList() {
@@ -1355,35 +1374,9 @@ function renderAdminWithdrawList() {
         return;
     }
 
-    const now = Date.now();
-    const DURATION_72H = 72 * 60 * 60 * 1000;
     let html = '';
-
     withdrawRequests.forEach((req, idx) => {
-        let createdAt = req.timestamp || req.id;
-        let elapsed = now - createdAt;
-        let remaining = DURATION_72H - elapsed;
-        let timeStatusHtml = '';
-        let approveBtnColor = "bg-emerald-500 text-black";
-
-        if (req.status === 'pending') {
-            if (remaining > 0) {
-                timeStatusHtml = `
-                    <div class="flex justify-between items-center bg-gray-950 p-2 rounded-lg border border-amber-500/30 text-[10px]">
-                        <span class="text-amber-400 font-bold"><i class="far fa-clock"></i> 72h Lock Active</span>
-                        <span class="text-emerald-400 font-mono font-bold">${formatDuration(remaining)} remaining</span>
-                    </div>
-                `;
-            } else {
-                timeStatusHtml = `
-                    <div class="flex justify-between items-center bg-emerald-950/40 p-2 rounded-lg border border-emerald-500/50 text-[10px]">
-                        <span class="text-emerald-400 font-bold"><i class="fas fa-check-circle"></i> 72h Period Passed!</span>
-                        <span class="text-white font-mono font-bold">Ready to payout</span>
-                    </div>
-                `;
-                approveBtnColor = "bg-emerald-400 text-black shadow-lg shadow-emerald-500/30 animate-pulse";
-            }
-        }
+        let approveBtnColor = req.status === 'pending' ? "bg-emerald-500 hover:bg-emerald-400 text-black shadow-lg shadow-emerald-500/30 animate-pulse" : "bg-gray-800 text-gray-500 cursor-not-allowed";
 
         html += `
             <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-2">
@@ -1392,7 +1385,6 @@ function renderAdminWithdrawList() {
                     <span class="text-emerald-400 text-sm">$${req.amount} USDT</span>
                 </div>
                 <div class="text-[10px] text-gray-400 font-mono truncate">Address: ${req.address}</div>
-                ${req.status === 'pending' ? timeStatusHtml : ''}
                 <div class="flex justify-between items-center pt-1 border-t border-gray-800/80">
                     <span class="text-amber-400 text-[10px] uppercase tracking-wider font-bold">Status: ${req.status}</span>
                     ${req.status === 'pending' ? `
@@ -1409,7 +1401,11 @@ function approveWithdraw(idx) {
     if(withdrawRequests[idx]) {
         withdrawRequests[idx].status = 'approved';
         withdrawRequests[idx].approvedAt = Date.now();
-        saveUsersToCloudAndLocal(() => { renderAdminWithdrawList(); });
+        saveUsersToCloudAndLocal(() => { 
+            renderAdminWithdrawList(); 
+            updateAdminBadge();
+            showToast('Withdrawal approved successfully!');
+        });
     }
 }
 
@@ -1436,11 +1432,12 @@ function submitWithdrawRequest() {
     withdrawRequests.push(req);
 
     saveUsersToCloudAndLocal(() => {});
-    alert('Withdrawal request submitted successfully!');
+    showToast('Withdrawal request submitted successfully!');
     document.getElementById('withdraw-amount').value = '';
     document.getElementById('withdraw-address').value = '';
     closeWithdrawModal();
     renderAssetsData();
+    updateAdminBadge();
 }
 </script>
 </body>
