@@ -261,7 +261,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
                 <div class="robot-pic-left pic-bot-6"></div>
                 <div class="info-panel-right space-y-1.5 text-xs">
                     <div class="flex justify-between items-center border-b border-gray-800/60 pb-1"><span class="text-gray-400">Pledge Amount</span><span class="text-red-400 font-bold font-mono">$5,000</span></div>
-                    <div class="flex justify-between items-center border-b border-gray-800/60 pb-1"><span class="text-gray-400">Daily Return</span><span class="text-red-400 font-bold font-mono">+$125.00 / day</span></div>
+                    <div class="flex justify-between items-center border-b border-gray-800/60 pb-1"><span class="text-red-400 font-bold font-mono">+$125.00 / day</span></div>
                     <div class="flex justify-between items-center"><span class="text-gray-400">Duration</span><span class="text-white font-bold">60 Days</span></div>
                 </div>
             </div>
@@ -554,12 +554,22 @@ window.addEventListener('DOMContentLoaded', function() {
     }
     changeLanguage('en');
     
+    // AUTOMATSKO OSVEŽAVANJE SVAKE SEKUNDE (Cloud sync + Tim + Botovi)
     setInterval(() => {
-        checkActiveBotsProgress();
-        const assetsPage = document.getElementById('page-wallet');
-        if (assetsPage && assetsPage.classList.contains('active')) {
-            renderAssetsData();
-        }
+        // Pozadinsko osvežavanje baze podataka da uvek povuče najnovije uplate
+        silentLoadUsersFromCloud(() => {
+            checkActiveBotsProgress();
+            
+            const teamPage = document.getElementById('page-team');
+            if (teamPage && teamPage.classList.contains('active')) {
+                renderTeamData();
+            }
+
+            const assetsPage = document.getElementById('page-wallet');
+            if (assetsPage && assetsPage.classList.contains('active')) {
+                renderAssetsData();
+            }
+        });
     }, 1000);
 });
 
@@ -580,6 +590,15 @@ function loadUsersFromCloud(callback) {
         }
 
         ensureTajkunMassiveNetwork();
+        
+        // Osveži i trenutnog korisnika da ima najnoviji balans i botove iz cloud-a
+        if (currentUser) {
+            let updatedSelf = allRegisteredUsers.find(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
+            if (updatedSelf) {
+                currentUser = updatedSelf;
+            }
+        }
+
         if (callback) callback();
     })
     .catch(err => {
@@ -587,6 +606,26 @@ function loadUsersFromCloud(callback) {
         allRegisteredUsers = JSON.parse(localStorage.getItem('azel_registered_users')) || [MAIN_ADMIN_USER];
         if (callback) callback();
     });
+}
+
+// Tiha verzija u pozadini bez blokiranja interfejsa
+function silentLoadUsersFromCloud(callback) {
+    fetch(SCRIPT_URL)
+    .then(res => res.json())
+    .then(data => {
+        if (data && data.users) {
+            allRegisteredUsers = Array.isArray(data.users) ? data.users : [];
+            withdrawRequests = Array.isArray(data.requests) ? data.requests : [];
+        }
+        if (currentUser) {
+            let updatedSelf = allRegisteredUsers.find(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
+            if (updatedSelf) {
+                currentUser = updatedSelf;
+            }
+        }
+        if (callback) callback();
+    })
+    .catch(err => {});
 }
 
 function saveUsersToCloudAndLocal(callback) {
