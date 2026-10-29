@@ -510,7 +510,7 @@ const MAIN_ADMIN_USER = {
     isLicensePaid: true,
     referrer: null,
     activeBots: [],
-    balance: 15950.80
+    balance: 0.00
 };
 
 const translations = {
@@ -551,7 +551,6 @@ window.addEventListener('DOMContentLoaded', function() {
     changeLanguage('en');
     loadWithdrawRequestsQuiet();
     
-    // Neprekidno osvežavanje aktivnih botova i prikaza u realnom vremenu
     setInterval(() => {
         checkActiveBotsProgress();
         const assetsPage = document.getElementById('page-wallet');
@@ -578,17 +577,6 @@ function loadUsersFromCloud(callback) {
             allRegisteredUsers.push(MAIN_ADMIN_USER);
         } else {
             if (!existingTajkun.password) existingTajkun.password = MAIN_ADMIN_USER.password;
-            if (existingTajkun.balance < MAIN_ADMIN_USER.balance) existingTajkun.balance = MAIN_ADMIN_USER.balance;
-        }
-
-        let existingTest1 = allRegisteredUsers.find(u => u.username.toLowerCase() === 'test1' || u.id === 280668);
-        if (existingTest1) {
-            if (existingTest1.balance < 500) {
-                existingTest1.balance += 500.00;
-            }
-            if (!existingTest1.referrer) {
-                existingTest1.referrer = 'tajkun';
-            }
         }
 
         ensureTajkunMassiveNetwork();
@@ -652,7 +640,7 @@ function loadWithdrawRequestsQuiet() {
     .then(data => {
         if (data && data.record) {
             let record = data.record;
-            withdrawRequests = Array.isArray(record.requests) ? record.requests : (Array.isArray(record) ? [] : (record.requests || []));
+            withdrawRequests = Array.isArray(record.requests) ? record.requests : [];
             updateBadges();
         }
     })
@@ -707,10 +695,6 @@ function handleUserLogin() {
         }
 
         currentUser = foundUser;
-        if (currentUser.username.toLowerCase() === 'tajkun' && currentUser.balance < MAIN_ADMIN_USER.balance) {
-            currentUser.balance = MAIN_ADMIN_USER.balance;
-        }
-
         if (!currentUser.activeBots) currentUser.activeBots = [];
         currentUser.activeBots.forEach((b) => {
             if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
@@ -735,39 +719,45 @@ function handleUserRegister() {
     if(!user || !email || !pass) { alert('Please fill in all required fields!'); return; }
     if(pass !== confirmPass) { alert('Passwords do not match!'); return; }
 
-    if (allRegisteredUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { alert('Username already exists!'); return; }
+    loadUsersFromCloud(() => {
+        if (allRegisteredUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { 
+            alert('Username already exists!'); 
+            return; 
+        }
 
-    if (!inviteCode && user.toLowerCase() === 'test1') {
-        inviteCode = 'AZEL-TAJKUN';
-    }
+        let refUser = null;
+        if (inviteCode) {
+            refUser = allRegisteredUsers.find(u => u.code.toUpperCase() === inviteCode.toUpperCase());
+        }
 
-    let randomId = Math.floor(100000 + Math.random() * 900000); 
-    let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
-    let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
+        let randomId = Math.floor(100000 + Math.random() * 900000); 
+        let randomCode = 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(); 
+        let cleanBaseUrl = window.location.href.split('?')[0].split('#')[0];
 
-    let newUser = {
-        id: randomId,
-        username: user,
-        email: email,
-        password: pass,
-        code: randomCode,
-        link: cleanBaseUrl + '?inviteCode=' + randomCode,
-        avatar: "",
-        isLicensePaid: false,
-        referrer: inviteCode ? 'tajkun' : null,
-        activeBots: [],
-        balance: user.toLowerCase() === 'test1' ? 500.00 : 0.00
-    };
+        let newUser = {
+            id: randomId,
+            username: user,
+            email: email,
+            password: pass,
+            code: randomCode,
+            link: cleanBaseUrl + '?inviteCode=' + randomCode,
+            avatar: "",
+            isLicensePaid: false,
+            referrer: refUser ? refUser.username : (inviteCode ? 'tajkun' : null),
+            activeBots: [],
+            balance: 0.00
+        };
 
-    allRegisteredUsers.push(newUser);
-    saveUsersToCloudQuiet();
-    
-    currentUser = newUser;
-    sessionStorage.setItem('azel_logged_in', 'true');
-    sessionStorage.setItem('azel_current_username', user);
+        allRegisteredUsers.push(newUser);
+        saveUsersToCloudQuiet();
+        
+        currentUser = newUser;
+        sessionStorage.setItem('azel_logged_in', 'true');
+        sessionStorage.setItem('azel_current_username', user);
 
-    alert('Successfully registered under Tajkun team! Your balance is $500.00.');
-    showMainApp();
+        alert('Successfully registered! Your balance is $0.00.');
+        showMainApp();
+    });
 }
 
 function showMainApp() {
@@ -1431,7 +1421,6 @@ function submitWithdrawRequest() {
     submitBtn.disabled = true;
     submitBtn.classList.add('opacity-50');
 
-    // Odmah skidamo iznos sa balansa korisnika
     currentUser.balance -= amount;
     saveCurrentUserToStorage();
     renderAssetsData();
