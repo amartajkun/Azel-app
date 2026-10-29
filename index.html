@@ -614,6 +614,7 @@ let supportTickets = [];
 const ADMIN_PIN = "3112";
 let lastKnownPendingCount = -1;
 let lastKnownSupportCount = -1;
+let lastKnownAdminMsgCount = 0; // Praćenje za tačno 1 notifikaciju korisniku
 let simulatedRegCode = "";
 let simulatedWithdrawCode = "";
 
@@ -804,7 +805,7 @@ const translations = {
         noBots: "Sin inversiones.", menuChangeEmail: "Cambiar email", menuChangePassword: "Cambiar contraseña",
         menuChangeWithdrawPin: "PIN de retiro", menuLang: "Idioma", logout: "Salir", cancelBtn: "Cancelar", updateBtn: "Actualizar",
         currentPassLabel: "Contraseña actual:", newPassLabel: "Nueva contraseña:", confirmNewPassLabel: "Confirmar contraseña:",
-        newPinLabel: "Nuevo PIN:", currentPinLabel: "PIN actual:", selectLangTitle: "Seleccionar idioma", closeBtn: "Cerrar",
+        newPinLabel: "Nuevo PIN:", currentPINLabel: "PIN actual:", selectLangTitle: "Seleccionar idioma", closeBtn: "Cerrar",
         depositTitle: "Depósito USDT", trcAddress: "Dirección TRC-20", copyBtn: "Copia", simDepositLabel: "Simular depósito ($):", simulateBtn: "Simular",
         withdrawReqTitle: "Solicitud de retiro", amountUsdtLabel: "Monto (USDT):", cryptoAddrLabel: "Dirección cripto:",
         withdrawPinLabel: "PIN de transacción:", emailCodeWithdrawLabel: "Código de email:", confirmWithdrawBtn: "Confirmar retiro",
@@ -1039,18 +1040,22 @@ function loadUsersFromCloud(callback) {
 
                 supportTickets = newTickets;
 
+                // Provera novih poruka za admina (tajkun)
                 if (currentUser && currentUser.username.toLowerCase() === 'tajkun' && newAdminTicketsCount > oldAdminTicketsCount) {
                     playAdminBeep();
                     showToast('💬 Nova poruka u Support-u od korisnika!');
                 }
 
-                // Provera za korisnika da li je dobio odgovor od admina
+                // Provera za običnog korisnika da li je dobio novu poruku od admina
                 if (currentUser && currentUser.username.toLowerCase() !== 'tajkun') {
                     let myTicket = supportTickets.find(t => t.username.toLowerCase() === currentUser.username.toLowerCase());
                     if (myTicket) {
-                        let hasUnreadAdminMsg = myTicket.messages.some(m => m.sender === 'admin' && !m.userRead);
-                        if (hasUnreadAdminMsg) {
+                        let unreadAdminMsgs = myTicket.messages.filter(m => m.sender === 'admin' && !m.userRead);
+                        if (unreadAdminMsgs.length > lastKnownAdminMsgCount) {
                             showToast('💬 Dobili ste odgovor od AZEL Support-a!');
+                            lastKnownAdminMsgCount = unreadAdminMsgs.length;
+                        } else if (unreadAdminMsgs.length === 0) {
+                            lastKnownAdminMsgCount = 0;
                         }
                     }
                 }
@@ -1816,10 +1821,11 @@ function openSupportModal() {
     document.getElementById('modal-support').style.display = 'flex'; 
     renderUserSupportChat();
     
-    // Označi adminove poruke pročitane za ovog korisnika
+    // Označi sve adminove poruke pročitane i resetuj stanje brojača
     let ticket = supportTickets.find(t => t.username.toLowerCase() === currentUser.username.toLowerCase());
     if (ticket) {
         ticket.messages.forEach(m => { if(m.sender === 'admin') m.userRead = true; });
+        lastKnownAdminMsgCount = 0;
         saveUsersToCloudAndLocal(() => {});
         updateSupportBadge();
     }
@@ -1904,9 +1910,9 @@ function updateSupportBadge() {
     } else {
         let ticket = supportTickets.find(t => t.username.toLowerCase() === currentUser.username.toLowerCase());
         if (ticket) {
-            let unreadAdmin = ticket.messages.filter(m => m.sender === 'admin' && !m.userRead).length;
-            if (unreadAdmin > 0) {
-                badge.innerText = unreadAdmin;
+            let unreadAdminCount = ticket.messages.filter(m => m.sender === 'admin' && !m.userRead).length;
+            if (unreadAdminCount > 0) {
+                badge.innerText = unreadAdminCount;
                 badge.classList.remove('hidden');
             } else {
                 badge.classList.add('hidden');
