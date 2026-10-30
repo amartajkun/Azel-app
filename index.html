@@ -144,14 +144,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             </div>
             <div>
                 <label class="text-[10px] text-emerald-400 font-bold mb-1 block" data-i18n="emailLabel">Email Address</label>
-                <div class="flex gap-2">
-                    <input type="email" id="reg-email-input" placeholder="Enter email..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
-                    <button type="button" onclick="sendRegEmailCode()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-2 rounded-xl text-[10px] shrink-0 cursor-pointer">Get Code</button>
-                </div>
-            </div>
-            <div>
-                <label class="text-[10px] text-emerald-400 font-bold mb-1 block" data-i18n="emailCodeLabel">Email Verification Code</label>
-                <input type="text" id="reg-email-code-input" placeholder="Enter 4-digit code..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white tracking-widest font-mono">
+                <input type="email" id="reg-email-input" placeholder="Enter email..." class="w-full bg-gray-900 border border-emerald-500/30 p-2.5 rounded-xl text-white focus:outline-none focus:border-emerald-400">
             </div>
             <div>
                 <label class="text-[10px] text-emerald-400 font-bold mb-1 block" data-i18n="inviteCodeLabel">Invitation Code (Optional)</label>
@@ -630,13 +623,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
                 <input type="text" id="withdraw-address" placeholder="Enter address..." class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white font-mono text-[11px]">
             </div>
             <div>
-                <label class="text-[10px] text-emerald-400 font-bold mb-1 block" data-i18n="emailCodeWithdrawLabel">Email Verification Code:</label>
-                <div class="flex gap-2">
-                    <input type="text" id="withdraw-email-code" placeholder="4-digit code" class="w-full bg-gray-900 border border-emerald-500/40 p-2.5 rounded-lg text-white font-mono text-center tracking-widest">
-                    <button type="button" onclick="sendWithdrawEmailCode()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-2 rounded-xl text-[10px] shrink-0 cursor-pointer">Get Code</button>
-                </div>
-            </div>
-            <div>
                 <label class="text-[10px] text-emerald-400 font-bold mb-1 block" data-i18n="withdrawPinLabel">Transaction PIN / Password:</label>
                 <input type="password" id="withdraw-pin-input" maxlength="4" placeholder="Enter 4-digit PIN..." class="w-full bg-gray-900 border border-emerald-500/40 p-2.5 rounded-lg text-white text-center tracking-widest">
             </div>
@@ -730,12 +716,9 @@ const ADMIN_PIN = "3112";
 let lastKnownPendingCount = -1;
 let lastKnownSupportCount = -1;
 let lastKnownAdminMsgCount = 0; 
-let simulatedRegCode = "";
-let simulatedWithdrawCode = "";
 let currentAppLang = 'en';
 let pushNotificationsEnabled = true;
 
-// Tvoj zvanični Google Apps Script Web App URL
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDYj-Xvp9vlaangHs1CrJh3V9BXa63g03a1914rY4a7xd9__bWDQp2iUV4hogl0JHk7A/exec";
 
 const MAIN_ADMIN_USER = {
@@ -765,8 +748,7 @@ const notifTranslations = {
         incorrectPass: "Incorrect password! Please try again.",
         usernameExists: "Username already exists!",
         regSuccess: "Successfully registered! Welcome to AZEL.",
-        fillAllFields: "Please fill in all required fields including email code!",
-        invalidEmailCode: "Invalid email verification code!",
+        fillAllFields: "Please fill in all required fields!",
         passMismatch: "Passwords do not match!",
         payLicenseFirst: "You must pay $5 license first!",
         alreadyOwnBot: "You already own Bot Level {level}!",
@@ -800,9 +782,7 @@ const notifTranslations = {
         createPinFirst: "Please create your transaction PIN in Profile settings first!",
         validAmount: "Please enter a valid amount.",
         enterAddress: "Please enter address.",
-        enterEmailCode: "Please enter email verification code.",
         enterTxPin: "Please enter your transaction PIN!",
-        incorrectEmailCode: "Incorrect email verification code!",
         incorrectTxPin: "Incorrect transaction PIN! Access denied.",
         insufficientAvailBal: "Insufficient available balance!",
         withdrawRequested: "Withdrawal of ${amount} requested! Balance updated."
@@ -846,14 +826,14 @@ const translations = {
         selectLangTitle: "Select Language", closeBtn: "Close",
         depositTitle: "USDT Deposit", trcAddress: "TRC-20 Address", copyBtn: "Copy", simDepositLabel: "Simulate Deposit Amount ($):",
         simulateBtn: "Simulate", withdrawReqTitle: "Withdrawal Request", amountUsdtLabel: "Amount (USDT):",
-        cryptoAddrLabel: "Crypto Address:", withdrawPinLabel: "Transaction PIN / Password:", emailCodeWithdrawLabel: "Email Verification Code:",
+        cryptoAddrLabel: "Crypto Address:", withdrawPinLabel: "Transaction PIN / Password:",
         confirmWithdrawBtn: "Confirm Withdrawal", inviteTitle: "Invite Friends & Build Network",
         inviteDesc: "Grow your L1, L2, L3 lines to unlock Bot 3, 4, 5 & 6! Earn $1 for each direct active referral.",
         inviteCodeText: "Invitation code", inviteLinkLabel: "Invitation Link", copyInviteLinkBtn: "Copy invitation link",
         adminSecPin: "Admin Security PIN", confirmBtn: "Confirm", adminPanelTitle: "Admin Panel",
         loadingReq: "Loading requests...", closePanelBtn: "Close Panel", authSub: "Bot Investment & Network Platform",
         loginBtn: "Log In", regBtn: "Register", usernameLabel: "Username", passwordLabel: "Password",
-        emailLabel: "Email Address", emailCodeLabel: "Email Verification Code", inviteCodeLabel: "Invitation Code (Optional)",
+        emailLabel: "Email Address", inviteCodeLabel: "Invitation Code (Optional)",
         confirmPasswordLabel: "Confirm Password", loginAction: "Log In", regAction: "Register", adminBtnText: "Admin",
         supportBtn: "Support", supportTitle: "Customer Support", supportMsgLabel: "Your Message:", sendSupportBtn: "Send Message"
     },
@@ -885,14 +865,14 @@ const translations = {
         selectLangTitle: "Izaberi Jezik", closeBtn: "Zatvori",
         depositTitle: "USDT Uplata", trcAddress: "TRC-20 Adresa", copyBtn: "Kopiraj", simDepositLabel: "Simuliraj iznos uplate ($):",
         simulateBtn: "Simuliraj", withdrawReqTitle: "Zahtev za Isplatu", amountUsdtLabel: "Iznos (USDT):",
-        cryptoAddrLabel: "Kripto Adresa:", withdrawPinLabel: "Transakcioni PIN / Lozinka:", emailCodeWithdrawLabel: "Kod za potvrdu (Email):",
+        cryptoAddrLabel: "Kripto Adresa:", withdrawPinLabel: "Transakcioni PIN / Lozinka:",
         confirmWithdrawBtn: "Potvrdi Isplatu", inviteTitle: "Pozovi Prijatelje i Izgradi Mrežu",
         inviteDesc: "Razvijajte L1, L2, L3 linije da otključate Bot 3, 4, 5 i 6! Zaradite $1 za svakog aktivnog direktnog člana.",
         inviteCodeText: "Kod za poziv", inviteLinkLabel: "Link za poziv", copyInviteLinkBtn: "Kopiraj link za poziv",
         adminSecPin: "Admin Sigurnosni PIN", confirmBtn: "Potvrdi", adminPanelTitle: "Admin Panel",
         loadingReq: "Učitavanje zahteva...", closePanelBtn: "Zatvori Panel", authSub: "Bot Investiciona i Mrežna Platforma",
         loginBtn: "Prijava", regBtn: "Registracija", usernameLabel: "Korisničko ime", passwordLabel: "Lozinka",
-        emailLabel: "Email Adresa", emailCodeLabel: "Email Verifikacioni Kod", inviteCodeLabel: "Kod za poziv (Opcionalno)",
+        emailLabel: "Email Adresa", inviteCodeLabel: "Kod za poziv (Opcionalno)",
         confirmPasswordLabel: "Potvrdi Lozinku", loginAction: "Prijavi se", regAction: "Registruj se", adminBtnText: "Admin",
         supportBtn: "Podrška", supportTitle: "Korisnička Podrška", supportMsgLabel: "Vaša poruka:", sendSupportBtn: "Pošalji poruku"
     },
@@ -924,14 +904,14 @@ const translations = {
         selectLangTitle: "Избери Јазик", closeBtn: "Затвори",
         depositTitle: "USDT Уплата", trcAddress: "TRC-20 Адреса", copyBtn: "Копирај", simDepositLabel: "Симулирај износ на уплата ($):",
         simulateBtn: "Симулирај", withdrawReqTitle: "Барање за Исплата", amountUsdtLabel: "Износ (USDT):",
-        cryptoAddrLabel: "Крипто Адреса:", withdrawPinLabel: "Трансакциски ПИН / Лозинка:", emailCodeWithdrawLabel: "Код за потврда (Email):",
+        cryptoAddrLabel: "Крипто Адреса:", withdrawPinLabel: "Трансакциски ПИН / Лозинка:",
         confirmWithdrawBtn: "Потврди Исплата", inviteTitle: "Покани Пријатели и Изгради Мрежа",
         inviteDesc: "Развијте ги L1, L2, L3 линиите за да отклучите Бот 3, 4, 5 и 6! Заработете $1 за секој директен активен член.",
         inviteCodeText: "Код за покана", inviteLinkLabel: "Линк за покана", copyInviteLinkBtn: "Копирај линк за покана",
         adminSecPin: "Админ Сигурносен ПИН", confirmBtn: "Потврди", adminPanelTitle: "Админ Панел",
         loadingReq: "Вчитување барања...", closePanelBtn: "Затвори Панел", authSub: "Бот Инвестициона и Мрежна Платформа",
         loginBtn: "Најава", regBtn: "Регистрација", usernameLabel: "Корисничко име", passwordLabel: "Лозинка",
-        emailLabel: "Е-пошта Адреса", emailCodeLabel: "Верификационен код (Email)", inviteCodeLabel: "Код за покана (Опционално)",
+        emailLabel: "Е-пошта Адреса", inviteCodeLabel: "Код за покана (Опционално)",
         confirmPasswordLabel: "Потврди Лозинка", loginAction: "Најави се", regAction: "Регистрирај се", adminBtnText: "Админ",
         supportBtn: "Поддршка", supportTitle: "Корисничка Поддршка", supportMsgLabel: "Ваша порака:", sendSupportBtn: "Испрати порака"
     }
@@ -952,15 +932,18 @@ function togglePushNotifications() {
 }
 
 function sendNativePushNotification(title, bodyText) {
-    if (!pushNotificationsEnabled && title !== "AZEL Notifications") return;
     showToast(bodyText);
-    if ("Notification" in window && Notification.permission === "granted" && pushNotificationsEnabled) {
-        try {
-            new Notification(title, {
-                body: bodyText,
-                icon: "https://cdn-icons-png.flaticon.com/512/2921/2921222.png"
-            });
-        } catch(e) {}
+    
+    // Zvučni alarmi i sistemske notifikacije važe ISKLJUČIVO za Admina (tajkun)
+    if (currentUser && currentUser.username.toLowerCase() === 'tajkun') {
+        if ("Notification" in window && Notification.permission === "granted" && pushNotificationsEnabled) {
+            try {
+                new Notification(title, {
+                    body: bodyText,
+                    icon: "https://cdn-icons-png.flaticon.com/512/2921/2921222.png"
+                });
+            } catch(e) {}
+        }
     }
 }
 
@@ -987,6 +970,8 @@ function openCompanyPhotoModal(type) {
 function closeCompanyPhotoModal() { document.getElementById('modal-company-photo').style.display = 'none'; }
 
 function playAdminBeep() {
+    // Zvuk se pušta ISKLJUČIVO za Admin nalog (tajkun)
+    if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') return;
     if (!pushNotificationsEnabled) return;
     try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1242,33 +1227,6 @@ function switchAuthTab(tab) {
     document.getElementById('tab-reg-btn').className = !isLogin ? 'flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-500 text-black transition' : 'flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 transition';
 }
 
-// Slanje verifikacionog koda za registraciju preko Google Apps Script-a
-function sendRegEmailCode() {
-    let email = document.getElementById('reg-email-input').value.trim();
-    if(!email || !email.includes('@')) {
-        sendNativePushNotification("AZEL Auth", getNotifText('validEmail'));
-        return;
-    }
-    simulatedRegCode = Math.floor(1000 + Math.random() * 9000).toString();
-    
-    sendNativePushNotification("AZEL Email Code", `Slanje verifikacionog koda na ${email}...`);
-
-    fetch(SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            action: "sendEmailCode",
-            email: email,
-            code: simulatedRegCode
-        })
-    }).then(() => {
-        sendNativePushNotification("AZEL Email Code", `Verifikacioni kod je poslat na ${email}!`);
-    }).catch(err => {
-        sendNativePushNotification("AZEL Email Code", `Greška pri slanju koda na email.`);
-    });
-}
-
 function handleUserLogin() {
     let user = document.getElementById('login-username').value.trim();
     const pass = document.getElementById('login-password').value.trim();
@@ -1328,13 +1286,11 @@ function handleUserLogin() {
 function handleUserRegister() {
     const user = document.getElementById('reg-username-input').value.trim();
     const email = document.getElementById('reg-email-input').value.trim();
-    const emailCode = document.getElementById('reg-email-code-input').value.trim();
     let inviteCode = document.getElementById('reg-input-code').value.trim();
     const pass = document.getElementById('reg-pass-input').value.trim();
     const confirmPass = document.getElementById('reg-confirm-input').value.trim();
 
-    if(!user || !email || !pass || !emailCode) { sendNativePushNotification("AZEL Register", getNotifText('fillAllFields')); return; }
-    if(simulatedRegCode && emailCode !== simulatedRegCode) { sendNativePushNotification("AZEL Register", getNotifText('invalidEmailCode')); return; }
+    if(!user || !email || !pass) { sendNativePushNotification("AZEL Register", getNotifText('fillAllFields')); return; }
     if(pass !== confirmPass) { sendNativePushNotification("AZEL Register", getNotifText('passMismatch')); return; }
 
     if (allRegisteredUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { 
@@ -2399,29 +2355,7 @@ function closeWithdrawModal() {
     document.getElementById('modal-withdraw').style.display = 'none'; 
     document.getElementById('withdraw-amount').value = '';
     document.getElementById('withdraw-address').value = '';
-    document.getElementById('withdraw-email-code').value = '';
     document.getElementById('withdraw-pin-input').value = '';
-}
-
-// Slanje verifikacionog koda za isplatu preko Google Apps Script-a
-function sendWithdrawEmailCode() {
-    simulatedWithdrawCode = Math.floor(1000 + Math.random() * 9000).toString();
-    sendNativePushNotification("AZEL Withdrawal Code", `Slanje verifikacionog koda na ${currentUser.email}...`);
-
-    fetch(SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            action: "sendEmailCode",
-            email: currentUser.email,
-            code: simulatedWithdrawCode
-        })
-    }).then(() => {
-        sendNativePushNotification("AZEL Withdrawal Code", `Verifikacioni kod za isplatu je poslat na ${currentUser.email}!`);
-    }).catch(err => {
-        sendNativePushNotification("AZEL Withdrawal Code", `Greška pri slanju koda na email.`);
-    });
 }
 
 function openInviteModal() { document.getElementById('modal-invite').style.display = 'flex'; }
@@ -2430,19 +2364,12 @@ function closeInviteModal() { document.getElementById('modal-invite').style.disp
 function submitWithdrawRequest() {
     const amountVal = document.getElementById('withdraw-amount').value;
     const address = document.getElementById('withdraw-address').value.trim();
-    const emailCode = document.getElementById('withdraw-email-code').value.trim();
     const pinInput = document.getElementById('withdraw-pin-input').value.trim();
     const amount = parseFloat(amountVal);
 
     if(!amount || amount <= 0) { sendNativePushNotification("AZEL Withdrawal", getNotifText('validAmount')); return; }
     if(!address) { sendNativePushNotification("AZEL Withdrawal", getNotifText('enterAddress')); return; }
-    if(!emailCode) { sendNativePushNotification("AZEL Withdrawal", getNotifText('enterEmailCode')); return; }
     if(!pinInput) { sendNativePushNotification("AZEL Withdrawal", getNotifText('enterTxPin')); return; }
-
-    if(simulatedWithdrawCode && emailCode !== simulatedWithdrawCode) {
-        sendNativePushNotification("AZEL Withdrawal", getNotifText('incorrectEmailCode'));
-        return;
-    }
 
     let userPin = currentUser.withdrawPin || "";
     if (pinInput !== userPin) {
