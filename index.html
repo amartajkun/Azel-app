@@ -178,9 +178,6 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <span class="text-xl font-bold tracking-wider text-emerald-400">AZEL</span>
 </div>
 <div class="flex space-x-3 text-gray-400 text-lg relative items-center">
-<button onclick="requestNotificationPermission()" class="bg-gray-800 text-emerald-400 border border-emerald-500/30 px-2.5 py-1.5 rounded-lg text-[10px] font-bold items-center gap-1.5 cursor-pointer flex" title="Enable Phone Notifications">
-    <i class="fas fa-bell"></i> Push On
-</button>
 <button onclick="openSupportModal()" class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 px-2.5 py-1.5 rounded-lg text-[10px] font-bold items-center gap-1.5 cursor-pointer flex relative">
     <i class="fas fa-headset"></i> <span data-i18n="supportBtn">Support</span>
     <span id="support-unread-badge" class="bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.2 rounded-full hidden">0</span>
@@ -222,19 +219,19 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             </h3>
             <span class="text-[9px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/30">Verified Corp</span>
         </div>
-        <p class="text-[11px] text-gray-300">Explore our professional corporate office environments, IT control desks, and view our official accreditation certificate.</p>
+        <p class="text-[11px] text-gray-300">Explore our large conference auditoriums, live presentation stages, and view our official accreditation certificate.</p>
         
         <div class="grid grid-cols-2 gap-2">
-            <div onclick="openCompanyPhotoModal('office')" class="relative h-28 rounded-xl overflow-hidden border border-emerald-500/30 cursor-pointer group">
-                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=500&q=80" alt="Corporate Office" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <div onclick="openCompanyPhotoModal('hall')" class="relative h-28 rounded-xl overflow-hidden border border-emerald-500/30 cursor-pointer group">
+                <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=500&q=80" alt="Large Hall" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent flex items-end p-2">
-                    <span class="text-[10px] font-bold text-white"><i class="fas fa-laptop-code text-emerald-400"></i> Executive Offices</span>
+                    <span class="text-[10px] font-bold text-white"><i class="fas fa-users text-emerald-400"></i> Corporate Hall</span>
                 </div>
             </div>
-            <div onclick="openCompanyPhotoModal('trading')" class="relative h-28 rounded-xl overflow-hidden border border-emerald-500/30 cursor-pointer group">
-                <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=500&q=80" alt="Trading Floor" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <div onclick="openCompanyPhotoModal('stage')" class="relative h-28 rounded-xl overflow-hidden border border-emerald-500/30 cursor-pointer group">
+                <img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=500&q=80" alt="Presentation Stage" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent flex items-end p-2">
-                    <span class="text-[10px] font-bold text-white"><i class="fas fa-chart-line text-emerald-400"></i> IT Control Desk</span>
+                    <span class="text-[10px] font-bold text-white"><i class="fas fa-presentation text-emerald-400"></i> AZEL Presentation Stage</span>
                 </div>
             </div>
         </div>
@@ -431,6 +428,20 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <i class="fas fa-star text-emerald-400 text-lg"></i>
     </div>
 
+    <!-- PUSH NOTIFICATIONS TOGGLE IN PROFILE -->
+    <div class="emerald-card p-4 rounded-2xl flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                <i class="fas fa-bell text-sm"></i>
+            </div>
+            <div>
+                <h3 class="text-xs font-bold text-white">Push Notifications</h3>
+                <p class="text-[10px] text-gray-400">Enable or disable app alerts</p>
+            </div>
+        </div>
+        <button id="profile-push-toggle-btn" onclick="togglePushNotifications()" class="bg-emerald-500 text-black px-3.5 py-1.5 rounded-xl text-xs font-bold shadow transition cursor-pointer">ON ✓</button>
+    </div>
+
     <div class="emerald-card rounded-2xl divide-y divide-gray-800/60 text-xs">
         <div onclick="openChangeEmailModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3"><i class="far fa-envelope text-emerald-400 text-sm w-4 text-center"></i><span class="text-white font-medium" data-i18n="menuChangeEmail">Change Email</span></div>
@@ -477,13 +488,13 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <div id="modal-company-photo" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
     <div class="emerald-card p-5 rounded-3xl w-full max-w-sm space-y-3 bg-[#07090e] border border-emerald-500/40 text-center">
         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
-            <h3 id="company-photo-title" class="text-sm font-bold text-emerald-400">AZEL Corporate Office</h3>
+            <h3 id="company-photo-title" class="text-sm font-bold text-emerald-400">AZEL Corporate Event</h3>
             <button onclick="closeCompanyPhotoModal()" class="text-gray-400 hover:text-white text-base cursor-pointer"><i class="fas fa-times"></i></button>
         </div>
         <div class="rounded-xl overflow-hidden border border-emerald-500/30 h-56">
-            <img id="company-photo-img" src="" alt="Office Photo" class="w-full h-full object-cover">
+            <img id="company-photo-img" src="" alt="Corporate Photo" class="w-full h-full object-cover">
         </div>
-        <p id="company-photo-desc" class="text-[11px] text-gray-300 leading-relaxed">Our executive headquarters and automated IT control center managing high-frequency trading bots.</p>
+        <p id="company-photo-desc" class="text-[11px] text-gray-300 leading-relaxed">Our live corporate presentation with members and leaders attending AZEL summit.</p>
         <button onclick="closeCompanyPhotoModal()" class="w-full bg-gray-800 text-gray-300 py-2 rounded-xl text-xs font-bold cursor-pointer">Close</button>
     </div>
 </div>
@@ -722,6 +733,7 @@ let lastKnownAdminMsgCount = 0;
 let simulatedRegCode = "";
 let simulatedWithdrawCode = "";
 let currentAppLang = 'en';
+let pushNotificationsEnabled = true;
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytCxgP9CyE7ndzaDFhwLuOKt92BVuwIXloAObiZBeRQMm-ZXXQAHZh-ZqIwiJNixIRVQ/exec";
 
@@ -924,27 +936,24 @@ const translations = {
     }
 };
 
-function requestNotificationPermission() {
-    if (!("Notification" in window)) {
-        showToast("This browser does not support notifications.");
-        return;
+function togglePushNotifications() {
+    pushNotificationsEnabled = !pushNotificationsEnabled;
+    const btn = document.getElementById('profile-push-toggle-btn');
+    if (pushNotificationsEnabled) {
+        btn.innerText = "ON ✓";
+        btn.className = "bg-emerald-500 text-black px-3.5 py-1.5 rounded-xl text-xs font-bold shadow transition cursor-pointer";
+        sendNativePushNotification("AZEL Notifications", "🔔 Push notifications enabled.");
+    } else {
+        btn.innerText = "OFF ✕";
+        btn.className = "bg-gray-800 text-gray-400 px-3.5 py-1.5 rounded-xl text-xs font-bold shadow transition cursor-pointer";
+        showToast("🔕 Push notifications disabled.");
     }
-    Notification.requestPermission().then(permission => {
-        if (permission === "granted") {
-            showToast("🔔 Push notifications enabled successfully!");
-            new Notification("AZEL App", {
-                body: "Notifications are active and running in background.",
-                icon: "https://cdn-icons-png.flaticon.com/512/2921/2921222.png"
-            });
-        } else {
-            showToast("Notification permission denied.");
-        }
-    });
 }
 
 function sendNativePushNotification(title, bodyText) {
+    if (!pushNotificationsEnabled && title !== "AZEL Notifications") return;
     showToast(bodyText);
-    if ("Notification" in window && Notification.permission === "granted") {
+    if ("Notification" in window && Notification.permission === "granted" && pushNotificationsEnabled) {
         try {
             new Notification(title, {
                 body: bodyText,
@@ -963,20 +972,21 @@ function openCompanyPhotoModal(type) {
     const img = document.getElementById('company-photo-img');
     const desc = document.getElementById('company-photo-desc');
 
-    if (type === 'office') {
-        title.innerText = "AZEL Executive Headquarters";
-        img.src = "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80";
-        desc.innerText = "Our main corporate offices where global strategy, partner relations, and network growth are managed.";
+    if (type === 'hall') {
+        title.innerText = "AZEL Corporate Conference Hall";
+        img.src = "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80";
+        desc.innerText = "A large conference auditorium filled with members and partners attending the AZEL global platform presentation.";
     } else {
-        title.innerText = "AZEL IT Control Desk & Trading Floor";
-        img.src = "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80";
-        desc.innerText = "High-performance servers and automated bot infrastructure executing 1h financial trading cycles 24/7.";
+        title.innerText = "AZEL Live Stage Presentation";
+        img.src = "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80";
+        desc.innerText = "Leaders on stage explaining the official AZEL app ecosystem, trading bots, and network growth features.";
     }
     modal.style.display = 'flex';
 }
 function closeCompanyPhotoModal() { document.getElementById('modal-company-photo').style.display = 'none'; }
 
 function playAdminBeep() {
+    if (!pushNotificationsEnabled) return;
     try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         if (audioCtx.state === 'suspended') { audioCtx.resume(); }
@@ -1340,7 +1350,6 @@ function handleUserRegister() {
     localStorage.setItem('azel_current_username', user);
     saveUsersToCloudAndLocal(() => {});
 
-    // SAMO SPONZORU (ako je prijavljen) stiže notifikacija da se član registrovao preko njegovog linka
     if (refUser && currentUser.username.toLowerCase() === refUser.username.toLowerCase()) {
         sendNativePushNotification("AZEL Referral Alert", `🎉 A new member (${user}) just registered via your invite link!`);
     }
@@ -1447,7 +1456,6 @@ function buyUserLicense() {
 
     sendNativePushNotification("AZEL License Activated", getNotifText('licensePaid'));
     
-    // SAMO DIREKTNOM SPONZORU STIŽE OBAVEŠTENJE DA JE NJEGOV ČLAN POSTAO AKTIVAN
     if (currentUser.referrer) {
         let sponsor = allRegisteredUsers.find(u => u.username.toLowerCase() === currentUser.referrer.toLowerCase());
         if (sponsor && currentUser.username.toLowerCase() === sponsor.username.toLowerCase()) {
