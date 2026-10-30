@@ -450,7 +450,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 <div id="page-profile" class="page-content p-4 space-y-4">
     <div class="emerald-card p-5 rounded-3xl flex items-center justify-between border-emerald-500/30">
         <div class="flex items-center space-x-3.5">
-            <div onclick="triggerAvatarUpload()" class="w-15 h-15 w-16 h-16 rounded-2xl bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center relative overflow-hidden shadow-lg cursor-pointer group shrink-0" title="Click to change profile picture">
+            <div onclick="triggerAvatarUpload()" class="w-16 h-16 rounded-2xl bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center relative overflow-hidden shadow-lg cursor-pointer group shrink-0" title="Click to change profile picture">
                 <span id="profile-initial" class="text-2xl font-black text-emerald-400 group-hover:opacity-30 transition">A</span>
                 <img id="profile-avatar-img" src="" alt="Avatar" class="absolute inset-0 w-full h-full object-cover hidden">
                 <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition text-white text-[10px] font-bold"><i class="fas fa-camera"></i></div>
@@ -1017,16 +1017,6 @@ function togglePushNotifications() {
 
 function sendNativePushNotification(title, bodyText) {
     showToast(bodyText);
-    if (currentUser && currentUser.username.toLowerCase() === 'tajkun') {
-        if ("Notification" in window && Notification.permission === "granted" && pushNotificationsEnabled) {
-            try {
-                new Notification(title, {
-                    body: bodyText,
-                    icon: "https://cdn-icons-png.flaticon.com/512/2921/2921222.png"
-                });
-            } catch(e) {}
-        }
-    }
 }
 
 function openCertificateModal() { document.getElementById('modal-certificate').style.display = 'flex'; }
@@ -1104,9 +1094,10 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     }, 1000);
 
+    // Pozadinska sinhronizacija na svakih 10 sekundi (tiho, bez presecanja lokalnih botova)
     setInterval(() => {
-        loadUsersFromCloud(() => {});
-    }, 5000);
+        backgroundSilentSync();
+    }, 10000);
 
     const urlParams = new URLSearchParams(window.location.search);
     const refCode = urlParams.get('inviteCode') || urlParams.get('ref');
@@ -1149,65 +1140,41 @@ function initAppCheck() {
 }
 
 function loadUsersFromCloud(callback) {
+    let localData = localStorage.getItem('azel_registered_users');
+    if (localData) {
+        try { allRegisteredUsers = JSON.parse(localData); } catch(e) {}
+    }
+
     fetch(SCRIPT_URL)
     .then(res => res.json())
     .then(data => {
         if (data && data.users) {
             let cloudUsers = Array.isArray(data.users) ? data.users : [];
             if (cloudUsers.length > 0) {
-                let oldUsersCount = allRegisteredUsers.length;
+                // Pametna provera novih korisnika za adminskog korisnika bez spamovanja pri svakom refreshu
+                let seenUserIds = JSON.parse(localStorage.getItem('azel_seen_user_ids') || '[]');
+                
+                cloudUsers.forEach(cu => {
+                    if (currentUser && currentUser.username.toLowerCase() === 'tajkun' && !seenUserIds.includes(cu.id)) {
+                        if (cu.username.toLowerCase() !== 'tajkun') {
+                            playAdminBeep();
+                            showToast(`👤 New member registered: ${cu.username}`);
+                        }
+                        seenUserIds.push(cu.id);
+                    }
+                });
+                localStorage.setItem('azel_seen_user_ids', JSON.stringify(seenUserIds));
+
                 allRegisteredUsers = cloudUsers;
                 localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
-
-                if (currentUser && currentUser.username.toLowerCase() === 'tajkun' && allRegisteredUsers.length > oldUsersCount) {
-                    let newestUser = allRegisteredUsers[allRegisteredUsers.length - 1];
-                    playAdminBeep();
-                    sendNativePushNotification("AZEL Admin Registration Alert", `👤 New member registered: ${newestUser.username} (ID: ${newestUser.id})`);
-                }
             }
 
             if (data.requests && Array.isArray(data.requests)) {
-                let newPendingCount = data.requests.filter(r => r.status === 'pending').length;
-                let oldPendingCount = withdrawRequests.filter(r => r.status === 'pending').length;
                 withdrawRequests = data.requests;
-                
-                if (lastKnownPendingCount === -1) {
-                    lastKnownPendingCount = newPendingCount;
-                } else if (newPendingCount > oldPendingCount) {
-                    if (currentUser && currentUser.username.toLowerCase() === 'tajkun') {
-                        playAdminBeep();
-                        sendNativePushNotification("AZEL Admin Withdrawal Alert", getNotifText('newWithdrawReq'));
-                    }
-                    lastKnownPendingCount = newPendingCount;
-                } else {
-                    lastKnownPendingCount = newPendingCount;
-                }
             }
 
             if (data.supportTickets && Array.isArray(data.supportTickets)) {
-                let newTickets = data.supportTickets;
-                let oldAdminTicketsCount = supportTickets.filter(t => t.messages.some(m => m.sender === 'user' && !m.read)).length;
-                let newAdminTicketsCount = newTickets.filter(t => t.messages.some(m => m.sender === 'user' && !m.read)).length;
-
-                supportTickets = newTickets;
-
-                if (currentUser && currentUser.username.toLowerCase() === 'tajkun' && newAdminTicketsCount > oldAdminTicketsCount) {
-                    playAdminBeep();
-                    sendNativePushNotification("AZEL Admin Support Alert", getNotifText('newSupportMsg'));
-                }
-
-                if (currentUser && currentUser.username.toLowerCase() !== 'tajkun') {
-                    let myTicket = supportTickets.find(t => t.username.toLowerCase() === currentUser.username.toLowerCase());
-                    if (myTicket) {
-                        let unreadAdminMsgs = myTicket.messages.filter(m => m.sender === 'admin' && !m.userRead);
-                        if (unreadAdminMsgs.length > lastKnownAdminMsgCount) {
-                            sendNativePushNotification("AZEL Support Reply", getNotifText('adminReply'));
-                            lastKnownAdminMsgCount = unreadAdminMsgs.length;
-                        } else if (unreadAdminMsgs.length === 0) {
-                            lastKnownAdminMsgCount = 0;
-                        }
-                    }
-                }
+                supportTickets = data.supportTickets;
             }
         }
 
@@ -1221,21 +1188,37 @@ function loadUsersFromCloud(callback) {
         if (currentUser) {
             let updatedSelf = allRegisteredUsers.find(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
             if (updatedSelf) {
+                // Zadržavamo lokalne aktivne botove da se ne bi brisali pri sinhronizaciji
+                let localBots = currentUser.activeBots || [];
+                let cloudBots = updatedSelf.activeBots || [];
                 currentUser.balance = updatedSelf.balance;
-                currentUser.activeBots = updatedSelf.activeBots;
                 currentUser.avatar = updatedSelf.avatar;
                 currentUser.withdrawPin = updatedSelf.withdrawPin || "";
                 if (updatedSelf.isLicensePaid) currentUser.isLicensePaid = true;
+                
+                // Spajamo botove da ne nestaju
+                currentUser.activeBots = localBots.length >= cloudBots.length ? localBots : cloudBots;
             }
         }
 
         if (callback) callback();
     })
     .catch(err => {
-        let localData = JSON.parse(localStorage.getItem('azel_registered_users'));
-        if (localData) allRegisteredUsers = localData;
         if (callback) callback();
     });
+}
+
+function backgroundSilentSync() {
+    fetch(SCRIPT_URL)
+    .then(res => res.json())
+    .then(data => {
+        if (data && data.users && Array.isArray(data.users)) {
+            allRegisteredUsers = data.users;
+            localStorage.setItem('azel_registered_users', JSON.stringify(allRegisteredUsers));
+            if (data.requests) withdrawRequests = data.requests;
+            if (data.supportTickets) supportTickets = data.supportTickets;
+        }
+    }).catch(e => {});
 }
 
 function saveUsersToCloudAndLocal(callback) {
@@ -1307,59 +1290,54 @@ function switchAuthTab(tab) {
 function handleUserLogin() {
     let user = document.getElementById('login-username').value.trim();
     const pass = document.getElementById('login-password').value.trim();
-    if(!user || !pass) { sendNativePushNotification("AZEL Login", getNotifText('enterUserPass')); return; }
+    if(!user || !pass) { showToast(getNotifText('enterUserPass')); return; }
 
-    loadUsersFromCloud(() => {
-        let foundUser = allRegisteredUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
-        
-        if (!foundUser) {
-            if (user.toLowerCase() === 'tajkun') {
-                foundUser = MAIN_ADMIN_USER;
-                allRegisteredUsers.push(foundUser);
-            } else {
-                foundUser = {
-                    id: Math.floor(100000 + Math.random() * 900000),
-                    username: user,
-                    email: user + '@azel.com',
-                    password: pass,
-                    withdrawPin: '',
-                    code: 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
-                    link: '',
-                    isLicensePaid: false,
-                    referrer: 'tajkun',
-                    activeBots: [],
-                    balance: 0.00
-                };
-                allRegisteredUsers.push(foundUser);
-
-                playAdminBeep();
-                sendNativePushNotification("AZEL Admin Registration Alert", `👤 New member registered: ${user} (ID: ${foundUser.id})`);
-            }
+    let foundUser = allRegisteredUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
+    
+    if (!foundUser) {
+        if (user.toLowerCase() === 'tajkun') {
+            foundUser = MAIN_ADMIN_USER;
+            allRegisteredUsers.push(foundUser);
+        } else {
+            foundUser = {
+                id: Math.floor(100000 + Math.random() * 900000),
+                username: user,
+                email: user + '@azel.com',
+                password: pass,
+                withdrawPin: '',
+                code: 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
+                link: '',
+                isLicensePaid: false,
+                referrer: 'tajkun',
+                activeBots: [],
+                balance: 0.00
+            };
+            allRegisteredUsers.push(foundUser);
         }
+    }
 
-        if (foundUser.password && foundUser.password !== pass && user.toLowerCase() !== 'tajkun') {
-            sendNativePushNotification("AZEL Login", getNotifText('incorrectPass'));
-            return;
-        }
+    if (foundUser.password && foundUser.password !== pass && user.toLowerCase() !== 'tajkun') {
+        showToast(getNotifText('incorrectPass'));
+        return;
+    }
 
-        currentUser = foundUser;
-        if (currentUser.username.toLowerCase() === 'tajkun') currentUser.isLicensePaid = true;
-        if (!currentUser.withdrawPin) currentUser.withdrawPin = "";
-        if (!currentUser.activeBots) currentUser.activeBots = [];
-        if (currentUser.balance === undefined) currentUser.balance = 0.00;
-        currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
-        currentUser.activeBots.forEach((b) => {
-            if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
-            if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
-            if (!b.tradingStatus) b.tradingStatus = 'IDLE';
-        });
-        checkActiveBotsProgress();
-        saveCurrentUserToStorage();
-
-        localStorage.setItem('azel_logged_in', 'true');
-        localStorage.setItem('azel_current_username', currentUser.username);
-        showMainApp();
+    currentUser = foundUser;
+    if (currentUser.username.toLowerCase() === 'tajkun') currentUser.isLicensePaid = true;
+    if (!currentUser.withdrawPin) currentUser.withdrawPin = "";
+    if (!currentUser.activeBots) currentUser.activeBots = [];
+    if (currentUser.balance === undefined) currentUser.balance = 0.00;
+    currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
+    currentUser.activeBots.forEach((b) => {
+        if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
+        if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
+        if (!b.tradingStatus) b.tradingStatus = 'IDLE';
     });
+    checkActiveBotsProgress();
+    saveCurrentUserToStorage();
+
+    localStorage.setItem('azel_logged_in', 'true');
+    localStorage.setItem('azel_current_username', currentUser.username);
+    showMainApp();
 }
 
 function handleUserRegister() {
@@ -1369,11 +1347,11 @@ function handleUserRegister() {
     const pass = document.getElementById('reg-pass-input').value.trim();
     const confirmPass = document.getElementById('reg-confirm-input').value.trim();
 
-    if(!user || !email || !pass) { sendNativePushNotification("AZEL Register", getNotifText('fillAllFields')); return; }
-    if(pass !== confirmPass) { sendNativePushNotification("AZEL Register", getNotifText('passMismatch')); return; }
+    if(!user || !email || !pass) { showToast(getNotifText('fillAllFields')); return; }
+    if(pass !== confirmPass) { showToast(getNotifText('passMismatch')); return; }
 
     if (allRegisteredUsers.some(u => u.username.toLowerCase() === user.toLowerCase())) { 
-        sendNativePushNotification("AZEL Register", getNotifText('usernameExists')); 
+        showToast(getNotifText('usernameExists')); 
         return; 
     }
 
@@ -1403,14 +1381,8 @@ function handleUserRegister() {
     localStorage.setItem('azel_current_username', user);
     saveUsersToCloudAndLocal(() => {});
 
-    if (refUser && currentUser.username.toLowerCase() === refUser.username.toLowerCase()) {
-        sendNativePushNotification("AZEL Referral Alert", `🎉 A new member (${user}) just registered via your invite link!`);
-    }
-
     playAdminBeep();
-    sendNativePushNotification("AZEL Admin Registration Alert", `👤 New member registered on app: ${user} (ID: ${randomId})`);
-
-    sendNativePushNotification("AZEL Welcome", getNotifText('regSuccess'));
+    showToast(getNotifText('regSuccess'));
     showMainApp();
 }
 
@@ -1468,7 +1440,7 @@ function switchTab(tabId) {
 function simulateUserDeposit() {
     let amtInput = document.getElementById('simulation-deposit-amount').value;
     let amt = parseFloat(amtInput);
-    if(!amt || amt <= 0) { sendNativePushNotification("AZEL Deposit", getNotifText('enterValidDep')); return; }
+    if(!amt || amt <= 0) { showToast(getNotifText('enterValidDep')); return; }
 
     if(currentUser.balance === undefined) currentUser.balance = 0;
     currentUser.balance += amt;
@@ -1478,7 +1450,7 @@ function simulateUserDeposit() {
     renderAssetsData();
     closeDepositModal();
 
-    sendNativePushNotification("AZEL Deposit Confirmed", getNotifText('simDeposit', { amt: amt }));
+    showToast(getNotifText('simDeposit', { amt: amt }));
 }
 
 function buyUserLicense() {
@@ -1486,18 +1458,18 @@ function buyUserLicense() {
         currentUser.isLicensePaid = true;
         saveCurrentUserToStorage();
         updateAppUI();
-        sendNativePushNotification("AZEL License", getNotifText('licenseAlreadyActive'));
+        showToast(getNotifText('licenseAlreadyActive'));
         return;
     }
 
     if (currentUser.isLicensePaid) {
-        sendNativePushNotification("AZEL License", getNotifText('licenseAlreadyPaid'));
+        showToast(getNotifText('licenseAlreadyPaid'));
         return;
     }
 
     let currentBalance = currentUser.balance || 0;
     if (currentBalance < 5) {
-        sendNativePushNotification("AZEL License", getNotifText('insufficientBalanceLicense'));
+        showToast(getNotifText('insufficientBalanceLicense'));
         return;
     }
 
@@ -1510,14 +1482,7 @@ function buyUserLicense() {
     updateAppUI();
     renderAssetsData();
 
-    sendNativePushNotification("AZEL License Activated", getNotifText('licensePaid'));
-    
-    if (currentUser.referrer) {
-        let sponsor = allRegisteredUsers.find(u => u.username.toLowerCase() === currentUser.referrer.toLowerCase());
-        if (sponsor && currentUser.username.toLowerCase() !== sponsor.username.toLowerCase()) {
-            sendNativePushNotification("AZEL Network Member Active", `🌟 Your direct referral ${currentUser.username} just became an active member!`);
-        }
-    }
+    showToast(getNotifText('licensePaid'));
 }
 
 function isUserActive(user) {
@@ -1534,7 +1499,6 @@ function checkAndGiveReferralBonus() {
                 refUser.balance = (refUser.balance || 0) + 1.00;
                 currentUser.bonusGiven = true;
                 
-                // Sinhronizuj sponzora u bazi da mu se upiše stvarnih $1.00
                 let sponsorIndex = allRegisteredUsers.findIndex(u => u.username.toLowerCase() === refUser.username.toLowerCase());
                 if (sponsorIndex !== -1) {
                     allRegisteredUsers[sponsorIndex] = refUser;
@@ -1663,16 +1627,16 @@ function lockBotUI(level, reqText) {
 
 function buyBot(level, price, dailyEarning) {
     if(!currentUser.isLicensePaid && currentUser.username.toLowerCase() !== 'tajkun') { 
-        sendNativePushNotification("AZEL Bot Market", getNotifText('payLicenseFirst')); 
+        showToast(getNotifText('payLicenseFirst')); 
         return; 
     }
     if(!currentUser.activeBots) currentUser.activeBots = [];
     
     let alreadyOwned = currentUser.activeBots.some(b => b.level === level && b.daysRemaining > 0);
-    if(alreadyOwned) { sendNativePushNotification("AZEL Bot Market", getNotifText('alreadyOwnBot', { level: level })); return; }
+    if(alreadyOwned) { showToast(getNotifText('alreadyOwnBot', { level: level })); return; }
 
     let currentBalance = currentUser.balance || 0;
-    if(currentBalance < price) { sendNativePushNotification("AZEL Bot Market", getNotifText('insufficientBalance', { price: price })); return; }
+    if(currentBalance < price) { showToast(getNotifText('insufficientBalance', { price: price })); return; }
 
     currentUser.balance -= price;
 
@@ -1692,7 +1656,7 @@ function buyBot(level, price, dailyEarning) {
     }
 
     saveCurrentUserToStorage();
-    sendNativePushNotification("AZEL Bot Activated", getNotifText('botPurchased', { level: level, price: price }));
+    showToast(getNotifText('botPurchased', { level: level, price: price }));
     renderAssetsData();
     checkBotUnlocks();
     switchTab('tab-wallet');
@@ -1704,7 +1668,7 @@ function startBotTrading(uniqueId) {
     if(!bot) return;
 
     if(bot.tradingStatus === 'TRADING') return;
-    if(bot.daysRemaining <= 0) { sendNativePushNotification("AZEL Bot", getNotifText('lifecycleEnded')); return; }
+    if(bot.daysRemaining <= 0) { showToast(getNotifText('lifecycleEnded')); return; }
 
     bot.tradingStatus = 'TRADING';
     bot.tradingEndsAt = Date.now() + (10 * 1000);
@@ -1731,10 +1695,10 @@ function collectBotEarnings(uniqueId) {
     if(bot.daysRemaining <= 0) {
         bot.daysRemaining = 0;
         currentUser.balance += bot.price; 
-        sendNativePushNotification("AZEL Bot Cycle Complete", getNotifText('cycleCompleted', { level: bot.level }));
+        showToast(getNotifText('cycleCompleted', { level: bot.level }));
     } else {
         bot.tradingStatus = 'COMPLETED_TODAY';
-        sendNativePushNotification("AZEL Profit Collected", getNotifText('collectedProfit', { earning: earning }));
+        showToast(getNotifText('collectedProfit', { earning: earning }));
     }
 
     saveCurrentUserToStorage();
@@ -1768,7 +1732,7 @@ function checkActiveBotsProgress() {
         if(bot.tradingStatus === 'TRADING') {
             if(now >= bot.tradingEndsAt) {
                 bot.tradingStatus = 'READY_TO_COLLECT';
-                sendNativePushNotification("AZEL Bot Ready", getNotifText('botFinished', { level: bot.level, earning: bot.dailyEarning }));
+                showToast(getNotifText('botFinished', { level: bot.level, earning: bot.dailyEarning }));
                 updated = true;
             }
         }
@@ -1959,6 +1923,7 @@ function saveCurrentUserToStorage() {
     } else {
         allRegisteredUsers.push(currentUser);
     }
+    localStorage.setItem('azel_current_user_local', JSON.stringify(currentUser));
     saveUsersToCloudAndLocal(() => {});
 }
 
@@ -1975,7 +1940,7 @@ function handleAvatarChange(event) {
         currentUser.avatar = e.target.result;
         saveCurrentUserToStorage();
         updateAppUI();
-        sendNativePushNotification("AZEL Profile", "Profile picture updated successfully!");
+        showToast("Profile picture updated successfully!");
     };
     reader.readAsDataURL(file);
 }
@@ -2044,7 +2009,7 @@ function closeSupportModal() {
 
 function sendSupportMessage() {
     let msg = document.getElementById('support-msg-input').value.trim();
-    if(!msg) { sendNativePushNotification("AZEL Support", getNotifText('writeMessage')); return; }
+    if(!msg) { showToast(getNotifText('writeMessage')); return; }
 
     let ticket = supportTickets.find(t => t.username.toLowerCase() === currentUser.username.toLowerCase());
     if(!ticket) {
@@ -2067,7 +2032,7 @@ function sendSupportMessage() {
     document.getElementById('support-msg-input').value = '';
     saveUsersToCloudAndLocal(() => {
         renderUserSupportChat();
-        sendNativePushNotification("AZEL Support", getNotifText('msgSent'));
+        showToast(getNotifText('msgSent'));
     });
 }
 
@@ -2133,11 +2098,11 @@ function openChangeEmailModal() { document.getElementById('modal-change-email').
 function closeChangeEmailModal() { document.getElementById('modal-change-email').style.display = 'none'; }
 function saveNewEmail() {
     const email = document.getElementById('new-email-input').value.trim();
-    if(!email) { sendNativePushNotification("AZEL Profile", getNotifText('validEmailOnly')); return; }
+    if(!email) { showToast(getNotifText('validEmailOnly')); return; }
     currentUser.email = email;
     saveCurrentUserToStorage();
     closeChangeEmailModal();
-    sendNativePushNotification("AZEL Profile", getNotifText('emailUpdated'));
+    showToast(getNotifText('emailUpdated'));
 }
 
 function openChangePasswordModal() { document.getElementById('modal-change-password').style.display = 'flex'; }
@@ -2153,14 +2118,14 @@ function saveNewPassword() {
     const newPass = document.getElementById('new-password-input').value.trim();
     const confirmPass = document.getElementById('confirm-password-input').value.trim();
 
-    if (!currentPass || !newPass || !confirmPass) { sendNativePushNotification("AZEL Profile", getNotifText('fillAllPass')); return; }
-    if (currentUser.password && currentUser.password !== currentPass) { sendNativePushNotification("AZEL Profile", getNotifText('incorrectCurrentPass')); return; }
-    if (newPass !== confirmPass) { sendNativePushNotification("AZEL Profile", getNotifText('passMismatchNew')); return; }
+    if (!currentPass || !newPass || !confirmPass) { showToast(getNotifText('fillAllPass')); return; }
+    if (currentUser.password && currentUser.password !== currentPass) { showToast(getNotifText('incorrectCurrentPass')); return; }
+    if (newPass !== confirmPass) { showToast(getNotifText('passMismatchNew')); return; }
 
     currentUser.password = newPass;
     saveCurrentUserToStorage();
     closeChangePasswordModal();
-    sendNativePushNotification("AZEL Profile", getNotifText('passUpdated'));
+    showToast(getNotifText('passUpdated'));
 }
 
 function openChangeWithdrawPinModal() { 
@@ -2182,11 +2147,11 @@ function saveNewWithdrawPin() {
     const currentPin = document.getElementById('current-withdraw-pin-input').value.trim();
     const newPin = document.getElementById('new-withdraw-pin-input').value.trim();
 
-    if (!newPin || newPin.length !== 4) { sendNativePushNotification("AZEL PIN", getNotifText('pinLength')); return; }
+    if (!newPin || newPin.length !== 4) { showToast(getNotifText('pinLength')); return; }
 
     if (currentUser.withdrawPin && currentUser.withdrawPin !== "") {
         if (currentPin !== currentUser.withdrawPin) {
-            sendNativePushNotification("AZEL PIN", getNotifText('incorrectPin'));
+            showToast(getNotifText('incorrectPin'));
             return;
         }
     }
@@ -2194,7 +2159,7 @@ function saveNewWithdrawPin() {
     currentUser.withdrawPin = newPin;
     saveCurrentUserToStorage();
     closeChangeWithdrawPinModal();
-    sendNativePushNotification("AZEL PIN", getNotifText('pinUpdated'));
+    showToast(getNotifText('pinUpdated'));
 }
 
 function openLanguageModal() { document.getElementById('modal-lang').style.display = 'flex'; }
@@ -2238,11 +2203,11 @@ function switchDepositNetwork(net) {
 
 function copyDepositAddress() {
     let addr = document.getElementById('deposit-address-text').innerText;
-    navigator.clipboard.writeText(addr).then(() => sendNativePushNotification("AZEL Deposit", getNotifText('linkCopied')));
+    navigator.clipboard.writeText(addr).then(() => showToast(getNotifText('linkCopied')));
 }
 
 function openAdminPinModal() {
-    if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') { sendNativePushNotification("AZEL Admin", getNotifText('accessDenied')); return; }
+    if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') { showToast(getNotifText('accessDenied')); return; }
     document.getElementById('modal-admin-pin').style.display = 'flex';
 }
 function closeAdminPinModal() { document.getElementById('modal-admin-pin').style.display = 'none'; document.getElementById('admin-pin-input').value = ''; }
@@ -2254,7 +2219,7 @@ function verifyAdminPin() {
         closeAdminPinModal();
         openAdminPanel();
     } else {
-        sendNativePushNotification("AZEL Admin", getNotifText('incorrectAdminPin'));
+        showToast(getNotifText('incorrectAdminPin'));
         document.getElementById('admin-pin-input').value = '';
     }
 }
@@ -2429,7 +2394,7 @@ function sendAdminReply(ticketIdx) {
     if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') return;
     let input = document.getElementById(`admin-reply-input-${ticketIdx}`);
     let replyText = input.value.trim();
-    if(!replyText) { sendNativePushNotification("AZEL Admin", 'Type a reply first!'); return; }
+    if(!replyText) { showToast('Type a reply first!'); return; }
 
     let ticket = supportTickets[ticketIdx];
     if(!ticket) return;
@@ -2446,7 +2411,7 @@ function sendAdminReply(ticketIdx) {
     saveUsersToCloudAndLocal(() => {
         renderAdminSupportList();
         updateAdminBadge();
-        sendNativePushNotification("AZEL Admin", getNotifText('replySent'));
+        showToast(getNotifText('replySent'));
     });
 }
 
@@ -2457,7 +2422,7 @@ function approveWithdraw(idx) {
         saveUsersToCloudAndLocal(() => { 
             renderAdminWithdrawList(); 
             updateAdminBadge();
-            sendNativePushNotification("AZEL Withdrawal", getNotifText('withdrawApproved'));
+            showToast(getNotifText('withdrawApproved'));
         });
     }
 }
@@ -2468,12 +2433,12 @@ function closeDepositModal() { document.getElementById('modal-deposit').style.di
 function openWithdrawModal() { 
     let todayDay = new Date().getDay(); 
     if (currentUser.username.toLowerCase() !== 'tajkun' && todayDay !== 5) {
-        sendNativePushNotification("AZEL Withdrawal", "⛔ Withdrawals are only allowed on FRIDAYS! Please try again on Friday.");
+        showToast("⛔ Withdrawals are only allowed on FRIDAYS! Please try again on Friday.");
         return;
     }
 
     if (!currentUser.withdrawPin || currentUser.withdrawPin === "") {
-        sendNativePushNotification("AZEL Withdrawal", getNotifText('createPinFirst'));
+        showToast(getNotifText('createPinFirst'));
         openChangeWithdrawPinModal();
         return;
     }
@@ -2504,18 +2469,18 @@ function submitWithdrawRequest() {
     const pinInput = document.getElementById('withdraw-pin-input').value.trim();
     const amount = parseFloat(amountVal);
 
-    if(!amount || amount < 50) { sendNativePushNotification("AZEL Withdrawal", "Minimum withdrawal amount is $50.00 USDT!"); return; }
-    if(!address) { sendNativePushNotification("AZEL Withdrawal", getNotifText('enterAddress')); return; }
-    if(!pinInput) { sendNativePushNotification("AZEL Withdrawal", getNotifText('enterTxPin')); return; }
+    if(!amount || amount < 50) { showToast("Minimum withdrawal amount is $50.00 USDT!"); return; }
+    if(!address) { showToast(getNotifText('enterAddress')); return; }
+    if(!pinInput) { showToast(getNotifText('enterTxPin')); return; }
 
     let userPin = currentUser.withdrawPin || "";
     if (pinInput !== userPin) {
-        sendNativePushNotification("AZEL Withdrawal", getNotifText('incorrectTxPin'));
+        showToast(getNotifText('incorrectTxPin'));
         return;
     }
 
     let currentBalance = currentUser.balance || 0;
-    if(amount > currentBalance) { sendNativePushNotification("AZEL Withdrawal", getNotifText('insufficientAvailBal')); return; }
+    if(amount > currentBalance) { showToast(getNotifText('insufficientAvailBal')); return; }
 
     currentUser.balance -= amount;
 
@@ -2524,7 +2489,7 @@ function submitWithdrawRequest() {
 
     saveUsersToCloudAndLocal(() => {});
     playAdminBeep();
-    sendNativePushNotification("AZEL Admin Withdrawal Alert", `🔔 New withdrawal request of $${amount} from ${currentUser.username}!`);
+    showToast(`🔔 New withdrawal request of $${amount} from ${currentUser.username}!`);
     
     closeWithdrawModal();
     openWithdrawSuccessModal(amount);
@@ -2535,3 +2500,4 @@ function submitWithdrawRequest() {
 </script>
 </body>
 </html>
+
