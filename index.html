@@ -17,11 +17,12 @@ body { background-color: #07090e; color: #e6edf3; font-family: -apple-system, sa
 .page-content { display: none; }
 .page-content.active { display: block; }
 .gradient-banner {
-background: linear-gradient(135deg, #10b981 0%, #043829 50%, #111622 100%);
-border: 1px solid rgba(16, 185, 129, 0.3);
+background: linear-gradient(135deg, #059669 0%, #064e3b 50%, #111622 100%);
+border: 1px solid rgba(16, 185, 129, 0.35);
+box-shadow: 0 10px 30px rgba(5, 150, 105, 0.15);
 }
 .invite-gradient-card {
-background: linear-gradient(135deg, #10b981 0%, #059669 50%, #043829 100%);
+background: linear-gradient(135deg, #059669 0%, #047857 50%, #064e3b 100%);
 border: 1px solid rgba(16, 185, 129, 0.4);
 box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 }
@@ -187,72 +188,81 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 
 <!-- HOME PAGE -->
 <div id="page-home" class="page-content active p-4 space-y-4">
-    <div class="flex justify-center mb-2">
-        <button onclick="switchTab('tab-market')" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl text-sm shadow-lg shadow-emerald-500/25 transition cursor-pointer" data-i18n="goToMarket">Go to Bot Market & License</button>
-    </div>
-    
-    <div class="gradient-banner p-4 rounded-2xl relative overflow-hidden space-y-2 text-white">
-        <div class="flex justify-between items-start">
-            <div class="space-y-1">
-                <h2 class="text-xs font-extrabold text-emerald-300 tracking-wider" data-i18n="bannerSub">STABLE BOT PLATFORM</h2>
-                <h3 class="text-sm font-bold text-white" data-i18n="bannerTitle">AZEL 60-DAY CYCLES</h3>
-            </div>
-            <div class="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center shrink-0 ml-2">
-                <i class="fas fa-robot text-emerald-300"></i>
-            </div>
-        </div>
-        <p class="text-[11px] text-gray-200 leading-relaxed" data-i18n="bannerDesc">Activate your $5 license, buy bot packages, and run multiple bots simultaneously for daily 1h trading cycles.</p>
-    </div>
-
-    <!-- KANCELARIJE - TIMOVI RADE NA PROJEKTU -->
-    <div class="emerald-card p-4 rounded-2xl space-y-3">
+    <!-- ELEGANTNI BANER SA STATISTIKOM -->
+    <div class="gradient-banner p-5 rounded-3xl relative overflow-hidden space-y-3 text-white">
         <div class="flex justify-between items-center">
-            <h3 class="text-xs font-extrabold text-emerald-400 tracking-wider flex items-center gap-1.5">
-                <i class="fas fa-laptop-code"></i> AZEL PROJECT DEVELOPMENT TEAMS
-            </h3>
-            <span class="text-[9px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/30">Active Workspace</span>
-        </div>
-        <p class="text-[11px] text-gray-300">Our engineers, developers, and trading strategists collaborating live in project offices worldwide.</p>
-        
-        <div class="grid grid-cols-2 gap-2">
-            <div onclick="openCompanyPhotoModal('team1')" class="relative h-28 rounded-xl overflow-hidden border border-emerald-500/30 cursor-pointer group">
-                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=500&q=80" alt="Team Working" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent flex items-end p-2">
-                    <span class="text-[10px] font-bold text-white"><i class="fas fa-users text-emerald-400"></i> Dev Team Collaboration</span>
-                </div>
+            <div class="space-y-0.5">
+                <span class="text-[10px] font-black uppercase tracking-widest text-emerald-300">AZEL GLOBAL ECOSYSTEM</span>
+                <h2 class="text-lg font-black text-white tracking-tight">AI Trading & Network Hub</h2>
             </div>
-            <div onclick="openCompanyPhotoModal('team2')" class="relative h-28 rounded-xl overflow-hidden border border-emerald-500/30 cursor-pointer group">
-                <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=500&q=80" alt="Project Meeting" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent flex items-end p-2">
-                    <span class="text-[10px] font-bold text-white"><i class="fas fa-chart-line text-emerald-400"></i> Strategy & Trading Desk</span>
-                </div>
+            <div class="w-11 h-11 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center shrink-0">
+                <i class="fas fa-chart-line text-emerald-300 text-lg"></i>
             </div>
         </div>
-
-        <button onclick="openCertificateModal()" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 cursor-pointer">
-            <i class="fas fa-certificate text-amber-300 text-sm"></i> View Official Corporate Certificate
+        <p class="text-[11px] text-emerald-100/90 leading-relaxed">
+            Activate your $5 corporate license, deploy 60-day high-performance AI bots, and scale your global referral network with instant rewards.
+        </p>
+        <button onclick="switchTab('tab-market')" class="w-full bg-white hover:bg-emerald-50 text-black font-extrabold py-3 rounded-2xl text-xs shadow-xl transition flex items-center justify-center gap-2 cursor-pointer">
+            <i class="fas fa-rocket text-emerald-600"></i> Open Bot Market & License
         </button>
     </div>
 
-    <div class="grid grid-cols-3 gap-2 text-center">
-        <button onclick="openDepositModal()" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition cursor-pointer">
-            <i class="fas fa-qrcode text-emerald-400 text-lg"></i>
-            <span class="text-[10px] text-gray-300" data-i18n="recharge">Recharge</span>
+    <!-- PRAVE KANCELARIJSKE SLIKE - PROFESIONALNI TIMOVI -->
+    <div class="emerald-card p-4 rounded-3xl space-y-3">
+        <div class="flex justify-between items-center">
+            <h3 class="text-xs font-black text-emerald-400 tracking-wider flex items-center gap-1.5 uppercase">
+                <i class="fas fa-building-user text-emerald-400"></i> Corporate Workspace & Teams
+            </h3>
+            <span class="text-[9px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30 font-bold">Live HQ</span>
+        </div>
+        <p class="text-[11px] text-gray-300">Our engineering, trading strategy, and support teams collaborating live in corporate offices.</p>
+        
+        <div class="grid grid-cols-2 gap-2.5">
+            <div onclick="openCompanyPhotoModal('office1')" class="relative h-32 rounded-2xl overflow-hidden border border-emerald-500/30 cursor-pointer group shadow-lg">
+                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80" alt="Executive Office" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 flex items-end p-2.5">
+                    <span class="text-[10px] font-bold text-white flex items-center gap-1.5"><i class="fas fa-desktop text-emerald-400"></i> Executive Dev Desk</span>
+                </div>
+            </div>
+            <div onclick="openCompanyPhotoModal('office2')" class="relative h-32 rounded-2xl overflow-hidden border border-emerald-500/30 cursor-pointer group shadow-lg">
+                <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=600&q=80" alt="Strategy Conference" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 flex items-end p-2.5">
+                    <span class="text-[10px] font-bold text-white flex items-center gap-1.5"><i class="fas fa-users-viewfinder text-emerald-400"></i> Global Strategy Room</span>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="openCertificateModal()" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black py-3 rounded-2xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 cursor-pointer">
+            <i class="fas fa-certificate text-amber-300 text-base"></i> View Official Corporate Certificate & Seal
         </button>
-        <button onclick="openWithdrawModal()" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition cursor-pointer">
-            <i class="fas fa-arrow-up-from-bracket text-emerald-400 text-lg"></i>
-            <span class="text-[10px] text-gray-300" data-i18n="withdraw">Withdrawal</span>
+    </div>
+
+    <!-- BRZE AKCIJE -->
+    <div class="grid grid-cols-3 gap-2.5 text-center">
+        <button onclick="openDepositModal()" class="emerald-card p-3.5 rounded-2xl flex flex-col items-center space-y-1.5 active:scale-95 transition cursor-pointer hover:border-emerald-500/50">
+            <div class="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                <i class="fas fa-qrcode text-base"></i>
+            </div>
+            <span class="text-[11px] font-bold text-gray-200" data-i18n="recharge">Recharge</span>
         </button>
-        <button onclick="openInviteModal()" class="emerald-card p-3 rounded-xl flex flex-col items-center space-y-1 active:scale-95 transition cursor-pointer">
-            <i class="fas fa-gift text-emerald-400 text-lg"></i>
-            <span class="text-[10px] text-gray-300" data-i18n="inviteFriends">Invite Friends</span>
+        <button onclick="openWithdrawModal()" class="emerald-card p-3.5 rounded-2xl flex flex-col items-center space-y-1.5 active:scale-95 transition cursor-pointer hover:border-emerald-500/50">
+            <div class="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                <i class="fas fa-arrow-up-from-bracket text-base"></i>
+            </div>
+            <span class="text-[11px] font-bold text-gray-200" data-i18n="withdraw">Withdrawal</span>
+        </button>
+        <button onclick="openInviteModal()" class="emerald-card p-3.5 rounded-2xl flex flex-col items-center space-y-1.5 active:scale-95 transition cursor-pointer hover:border-emerald-500/50">
+            <div class="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                <i class="fas fa-gift text-base"></i>
+            </div>
+            <span class="text-[11px] font-bold text-gray-200" data-i18n="inviteFriends">Invite Friends</span>
         </button>
     </div>
 </div>
 
 <!-- MARKET PAGE -->
 <div id="page-market" class="page-content p-4 space-y-4">
-    <h2 class="text-lg font-bold text-emerald-400 mb-1" data-i18n="marketTitle">Bot Market & License</h2>
+    <h2 class="text-lg font-black text-emerald-400 mb-1" data-i18n="marketTitle">Bot Market & License</h2>
     <p class="text-xs text-gray-400 mb-3" data-i18n="marketSub">Pay $5 license once, then activate your bot packages (max 1 of each).</p>
 
     <div id="license-card-box" class="emerald-card p-4 rounded-2xl flex justify-between items-center bg-emerald-950/20 border-emerald-500/40">
@@ -347,34 +357,45 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 
 <!-- TEAM PAGE -->
 <div id="page-team" class="page-content p-4 space-y-4">
-    <h2 class="text-lg font-bold text-emerald-400 mb-1" data-i18n="teamTitle">My Network Team</h2>
-    <p class="text-xs text-gray-400 mb-3" data-i18n="teamSub">Track your referrals across 3 levels to unlock higher bot packages.</p>
-    <div class="grid grid-cols-3 gap-2 text-center">
-        <div class="emerald-card p-3 rounded-xl"><div class="text-[10px] text-gray-400" data-i18n="line1">Line 1 (L1)</div><div id="count-l1" class="text-lg font-bold text-emerald-400">0</div></div>
-        <div class="emerald-card p-3 rounded-xl"><div class="text-[10px] text-gray-400" data-i18n="line2">Line 2 (L2)</div><div id="count-l2" class="text-lg font-bold text-emerald-400">0</div></div>
-        <div class="emerald-card p-3 rounded-xl"><div class="text-[10px] text-gray-400" data-i18n="line3">Line 3 (L3)</div><div id="count-l3" class="text-lg font-bold text-emerald-400">0</div></div>
-    </div>
-    
-    <div class="emerald-card p-4 rounded-2xl space-y-3">
-        <h3 class="text-xs font-bold text-white border-b border-gray-800 pb-2" data-i18n="activeDirectRef">Active Direct Referrals (L1 Active Members)</h3>
-        <div id="team-l1-active-list" class="space-y-2 text-xs max-h-48 overflow-y-auto"><p class="text-gray-500 text-center py-2" data-i18n="noDirectRef">No active direct referrals yet.</p></div>
+    <div class="space-y-1">
+        <h2 class="text-lg font-black text-emerald-400" data-i18n="teamTitle">My Network Team</h2>
+        <p class="text-xs text-gray-400" data-i18n="teamSub">Track your referrals across 3 levels to unlock higher bot packages.</p>
     </div>
 
-    <div class="emerald-card p-4 rounded-2xl space-y-3 border-amber-500/30">
-        <h3 class="text-xs font-bold text-amber-400 border-b border-gray-800 pb-2" data-i18n="inactiveMembers">Inactive / Pending Members (Not Counted in L1 yet)</h3>
-        <div id="team-inactive-list" class="space-y-2 text-xs max-h-48 overflow-y-auto"><p class="text-gray-500 text-center py-2" data-i18n="noInactive">No inactive members.</p></div>
+    <div class="grid grid-cols-3 gap-2.5 text-center">
+        <div class="emerald-card p-3 rounded-2xl border-emerald-500/20"><div class="text-[10px] font-bold text-gray-400 uppercase" data-i18n="line1">Line 1 (L1)</div><div id="count-l1" class="text-xl font-black text-emerald-400 mt-1">0</div></div>
+        <div class="emerald-card p-3 rounded-2xl border-blue-500/20"><div class="text-[10px] font-bold text-gray-400 uppercase" data-i18n="line2">Line 2 (L2)</div><div id="count-l2" class="text-xl font-black text-blue-400 mt-1">0</div></div>
+        <div class="emerald-card p-3 rounded-2xl border-purple-500/20"><div class="text-[10px] font-bold text-gray-400 uppercase" data-i18n="line3">Line 3 (L3)</div><div id="count-l3" class="text-xl font-black text-purple-400 mt-1">0</div></div>
+    </div>
+    
+    <div class="emerald-card p-4 rounded-3xl space-y-3">
+        <h3 class="text-xs font-black text-white border-b border-gray-800 pb-2 flex items-center justify-between">
+            <span data-i18n="activeDirectRef">Active Direct Referrals (L1 Active Members)</span>
+            <span class="text-[10px] text-emerald-400 font-bold">+$1 Bonus Earned</span>
+        </h3>
+        <div id="team-l1-active-list" class="space-y-2 text-xs max-h-48 overflow-y-auto"><p class="text-gray-500 text-center py-3" data-i18n="noDirectRef">No active direct referrals yet.</p></div>
+    </div>
+
+    <div class="emerald-card p-4 rounded-3xl space-y-3 border-amber-500/30">
+        <h3 class="text-xs font-black text-amber-400 border-b border-gray-800 pb-2 flex items-center justify-between">
+            <span data-i18n="inactiveMembers">Inactive / Pending Members (Not Counted in L1 yet)</span>
+            <span class="text-[10px] text-amber-400 font-bold">Waiting License/Bot</span>
+        </h3>
+        <div id="team-inactive-list" class="space-y-2 text-xs max-h-48 overflow-y-auto"><p class="text-gray-500 text-center py-3" data-i18n="noInactive">No inactive members.</p></div>
     </div>
 </div>
 
 <!-- WALLET PAGE -->
 <div id="page-wallet" class="page-content p-4 space-y-4">
-    <h2 class="text-lg font-bold text-emerald-400 mb-1" data-i18n="assetsTitle">Assets & Capital</h2>
-    <p class="text-xs text-gray-400 mb-2">Manage your liquid funds and running AI bot assets in real-time.</p>
+    <div class="space-y-1">
+        <h2 class="text-lg font-black text-emerald-400" data-i18n="assetsTitle">Assets & Capital</h2>
+        <p class="text-xs text-gray-400">Manage your liquid funds and running AI bot assets in real-time.</p>
+    </div>
 
     <!-- INFO O ISPLATAMA (PETAK, MIN 50$, 0-72H) -->
     <div class="bg-emerald-950/40 border border-emerald-500/40 p-3.5 rounded-2xl space-y-1.5 text-xs">
         <div class="flex items-center gap-2 text-emerald-400 font-bold">
-            <i class="fas fa-info-circle"></i> Withdrawal Rules & Schedule
+            <i class="fas fa-shield-halved"></i> Withdrawal Rules & Schedule
         </div>
         <p class="text-gray-300 text-[11px] leading-relaxed">
             • Minimum withdrawal amount: <strong class="text-emerald-400">$50.00</strong><br>
@@ -411,8 +432,8 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     </div>
 
     <!-- MOJI ZAHTEVI ZA ISPLATU (PENDING / APPROVED) -->
-    <div class="emerald-card p-4 rounded-2xl space-y-3">
-        <h3 class="text-xs font-bold text-white border-b border-gray-800 pb-2 flex justify-between items-center">
+    <div class="emerald-card p-4 rounded-3xl space-y-3">
+        <h3 class="text-xs font-black text-white border-b border-gray-800 pb-2 flex justify-between items-center">
             <span>My Withdrawal Requests</span>
             <span class="text-[10px] text-emerald-400 font-normal">Real-time Status</span>
         </h3>
@@ -427,27 +448,26 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 
 <!-- PROFILE PAGE -->
 <div id="page-profile" class="page-content p-4 space-y-4">
-    <div class="flex items-center justify-between">
-        <div class="flex items-center space-x-3">
-            <div onclick="triggerAvatarUpload()" class="w-14 h-14 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center relative overflow-hidden shadow-lg cursor-pointer group" title="Click to change profile picture">
-                <span id="profile-initial" class="text-2xl font-bold text-emerald-400 group-hover:opacity-30 transition">A</span>
+    <div class="emerald-card p-5 rounded-3xl flex items-center justify-between border-emerald-500/30">
+        <div class="flex items-center space-x-3.5">
+            <div onclick="triggerAvatarUpload()" class="w-15 h-15 w-16 h-16 rounded-2xl bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center relative overflow-hidden shadow-lg cursor-pointer group shrink-0" title="Click to change profile picture">
+                <span id="profile-initial" class="text-2xl font-black text-emerald-400 group-hover:opacity-30 transition">A</span>
                 <img id="profile-avatar-img" src="" alt="Avatar" class="absolute inset-0 w-full h-full object-cover hidden">
                 <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition text-white text-[10px] font-bold"><i class="fas fa-camera"></i></div>
             </div>
             <input type="file" id="avatar-file-input" accept="image/*" class="hidden" onchange="handleAvatarChange(event)">
-            <div>
-                <h2 id="profile-username-display" class="text-xl font-bold text-white flex items-center gap-1">User</h2>
-                <p class="text-xs text-gray-400">ID: <span id="profile-id-display">000000</span></p>
-                <div class="inline-flex items-center gap-1 bg-emerald-950/40 border border-emerald-500/20 rounded-full px-2 py-0.5 text-[10px] text-emerald-400 mt-1"><span id="profile-code-display">Invitation code: ...</span></div>
+            <div class="space-y-0.5">
+                <h2 id="profile-username-display" class="text-lg font-black text-white flex items-center gap-1">User</h2>
+                <p class="text-xs text-gray-400">ID: <span id="profile-id-display" class="font-mono text-emerald-400 font-bold">000000</span></p>
+                <div class="inline-flex items-center gap-1 bg-emerald-950/60 border border-emerald-500/30 rounded-lg px-2 py-0.5 text-[10px] text-emerald-300 font-mono mt-1"><span id="profile-code-display">Invitation code: ...</span></div>
             </div>
         </div>
-        <i class="fas fa-star text-emerald-400 text-lg"></i>
     </div>
 
     <!-- PUSH NOTIFICATIONS TOGGLE IN PROFILE -->
-    <div class="emerald-card p-4 rounded-2xl flex justify-between items-center">
+    <div class="emerald-card p-4 rounded-3xl flex justify-between items-center">
         <div class="flex items-center space-x-3">
-            <div class="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+            <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
                 <i class="fas fa-bell text-sm"></i>
             </div>
             <div>
@@ -455,28 +475,28 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
                 <p class="text-[10px] text-gray-400">Enable or disable app alerts</p>
             </div>
         </div>
-        <button id="profile-push-toggle-btn" onclick="togglePushNotifications()" class="bg-emerald-500 text-black px-3.5 py-1.5 rounded-xl text-xs font-bold shadow transition cursor-pointer">ON ✓</button>
+        <button id="profile-push-toggle-btn" onclick="togglePushNotifications()" class="bg-emerald-500 text-black px-4 py-2 rounded-xl text-xs font-bold shadow transition cursor-pointer">ON ✓</button>
     </div>
 
-    <div class="emerald-card rounded-2xl divide-y divide-gray-800/60 text-xs">
-        <div onclick="openChangeEmailModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+    <div class="emerald-card rounded-3xl divide-y divide-gray-800/60 text-xs overflow-hidden">
+        <div onclick="openChangeEmailModal()" class="p-4 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3"><i class="far fa-envelope text-emerald-400 text-sm w-4 text-center"></i><span class="text-white font-medium" data-i18n="menuChangeEmail">Change Email</span></div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
-        <div onclick="openChangePasswordModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+        <div onclick="openChangePasswordModal()" class="p-4 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3"><i class="fas fa-lock text-emerald-400 text-sm w-4 text-center"></i><span class="text-white font-medium" data-i18n="menuChangePassword">Change Password</span></div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
-        <div onclick="openChangeWithdrawPinModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+        <div onclick="openChangeWithdrawPinModal()" class="p-4 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3"><i class="fas fa-key text-emerald-400 text-sm w-4 text-center"></i><span class="text-white font-medium" data-i18n="menuChangeWithdrawPin">Withdrawal PIN / Password</span></div>
             <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
         </div>
-        <div onclick="openLanguageModal()" class="p-3.5 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
+        <div onclick="openLanguageModal()" class="p-4 flex justify-between items-center cursor-pointer hover:bg-emerald-950/20 transition">
             <div class="flex items-center space-x-3"><i class="fas fa-globe text-emerald-400 text-sm w-4 text-center"></i><span class="text-white font-medium" data-i18n="menuLang">Switch Language</span></div>
-            <div class="flex items-center gap-1"><span id="current-lang-text" class="text-[10px] text-gray-400">EN</span><i class="fas fa-chevron-right text-gray-500 text-[10px]"></i></div>
+            <div class="flex items-center gap-1"><span id="current-lang-text" class="text-[10px] text-gray-400 font-mono">EN</span><i class="fas fa-chevron-right text-gray-500 text-[10px]"></i></div>
         </div>
     </div>
-    <button onclick="handleUserLogout()" class="w-full emerald-card py-3 rounded-2xl text-center text-red-500 font-bold text-xs hover:bg-red-950/20 transition cursor-pointer"><span data-i18n="logout">Log Out</span></button>
+    <button onclick="handleUserLogout()" class="w-full emerald-card py-3.5 rounded-3xl text-center text-red-500 font-bold text-xs hover:bg-red-950/20 transition cursor-pointer border-red-500/20"><span data-i18n="logout">Log Out</span></button>
 </div>
 
 <!-- MODALI -->
@@ -811,7 +831,7 @@ const notifTranslations = {
         enterUserPass: "Please enter username and password!",
         incorrectPass: "Incorrect password! Please try again.",
         usernameExists: "Username already exists!",
-        regSuccess: "Successfully registered! Welcome to AZEL.",
+        regSuccess: "Successfully registered with $0 balance! Welcome to AZEL.",
         fillAllFields: "Please fill in all required fields!",
         passMismatch: "Passwords do not match!",
         payLicenseFirst: "You must pay $5 license first!",
@@ -986,11 +1006,11 @@ function togglePushNotifications() {
     const btn = document.getElementById('profile-push-toggle-btn');
     if (pushNotificationsEnabled) {
         btn.innerText = "ON ✓";
-        btn.className = "bg-emerald-500 text-black px-3.5 py-1.5 rounded-xl text-xs font-bold shadow transition cursor-pointer";
+        btn.className = "bg-emerald-500 text-black px-4 py-2 rounded-xl text-xs font-bold shadow transition cursor-pointer";
         sendNativePushNotification("AZEL Notifications", "🔔 Push notifications enabled.");
     } else {
         btn.innerText = "OFF ✕";
-        btn.className = "bg-gray-800 text-gray-400 px-3.5 py-1.5 rounded-xl text-xs font-bold shadow transition cursor-pointer";
+        btn.className = "bg-gray-800 text-gray-400 px-4 py-2 rounded-xl text-xs font-bold shadow transition cursor-pointer";
         showToast("🔕 Push notifications disabled.");
     }
 }
@@ -1018,14 +1038,14 @@ function openCompanyPhotoModal(type) {
     const img = document.getElementById('company-photo-img');
     const desc = document.getElementById('company-photo-desc');
 
-    if (type === 'team1') {
-        title.innerText = "AZEL Dev Team Collaboration";
-        img.src = "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80";
-        desc.innerText = "Our expert developers and software engineers collaborating live on platform architecture and automated trading tools.";
+    if (type === 'office1') {
+        title.innerText = "AZEL Executive Dev Desk";
+        img.src = "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80";
+        desc.innerText = "Modern open-plan office space where core software architects and AI bot developers build secure financial tools.";
     } else {
-        title.innerText = "AZEL Strategy & Trading Desk";
-        img.src = "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80";
-        desc.innerText = "Project managers and financial analysts reviewing daily bot performance metrics and network growth in the main office.";
+        title.innerText = "AZEL Global Strategy & Trading Room";
+        img.src = "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=800&q=80";
+        desc.innerText = "Senior traders and community directors reviewing market liquidity, security protocols, and network expansion.";
     }
     modal.style.display = 'flex';
 }
@@ -1494,7 +1514,7 @@ function buyUserLicense() {
     
     if (currentUser.referrer) {
         let sponsor = allRegisteredUsers.find(u => u.username.toLowerCase() === currentUser.referrer.toLowerCase());
-        if (sponsor && currentUser.username.toLowerCase() === sponsor.username.toLowerCase()) {
+        if (sponsor && currentUser.username.toLowerCase() !== sponsor.username.toLowerCase()) {
             sendNativePushNotification("AZEL Network Member Active", `🌟 Your direct referral ${currentUser.username} just became an active member!`);
         }
     }
@@ -1513,6 +1533,12 @@ function checkAndGiveReferralBonus() {
             if (!currentUser.bonusGiven) {
                 refUser.balance = (refUser.balance || 0) + 1.00;
                 currentUser.bonusGiven = true;
+                
+                // Sinhronizuj sponzora u bazi da mu se upiše stvarnih $1.00
+                let sponsorIndex = allRegisteredUsers.findIndex(u => u.username.toLowerCase() === refUser.username.toLowerCase());
+                if (sponsorIndex !== -1) {
+                    allRegisteredUsers[sponsorIndex] = refUser;
+                }
             }
         }
     }
@@ -1774,7 +1800,7 @@ function renderTeamData() {
         let html = '';
         net.l1Members.forEach(m => {
             html += `<div class="bg-gray-900 p-2.5 rounded-xl border border-emerald-500/30 flex justify-between items-center">
-                <span class="text-white font-bold">${m.username} <span class="text-[9px] text-emerald-400 bg-emerald-950 px-1.5 py-0.5 rounded ml-1">Active ($1 Bonus Earned)</span></span>
+                <span class="text-white font-bold">${m.username} <span class="text-[9px] text-emerald-400 bg-emerald-950 px-1.5 py-0.5 rounded ml-1">Active (+$1 Bonus)</span></span>
                 <span class="text-emerald-400 text-[10px]">ID: ${m.id}</span>
             </div>`;
         });
@@ -2440,8 +2466,7 @@ function openDepositModal() { document.getElementById('modal-deposit').style.dis
 function closeDepositModal() { document.getElementById('modal-deposit').style.display = 'none'; }
 
 function openWithdrawModal() { 
-    // PROVERA DA LI JE PETAK (Dan 5 u nedelji) - osim za Admina (tajkun)
-    let todayDay = new Date().getDay(); // 0 je nedelja, 5 je petak
+    let todayDay = new Date().getDay(); 
     if (currentUser.username.toLowerCase() !== 'tajkun' && todayDay !== 5) {
         sendNativePushNotification("AZEL Withdrawal", "⛔ Withdrawals are only allowed on FRIDAYS! Please try again on Friday.");
         return;
