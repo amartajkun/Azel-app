@@ -204,33 +204,33 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         <p class="text-[11px] text-gray-200 leading-relaxed" data-i18n="bannerDesc">Activate your $5 license, buy bot packages, and run multiple bots simultaneously for daily 1h trading cycles.</p>
     </div>
 
-    <!-- OZBILJNE KANCELARIJSKE SLIKE I SERTIFIKAT -->
+    <!-- KANCELARIJE - TIMOVI RADE NA PROJEKTU -->
     <div class="emerald-card p-4 rounded-2xl space-y-3">
         <div class="flex justify-between items-center">
             <h3 class="text-xs font-extrabold text-emerald-400 tracking-wider flex items-center gap-1.5">
-                <i class="fas fa-building"></i> AZEL CORPORATE HEADQUARTERS
+                <i class="fas fa-laptop-code"></i> AZEL PROJECT DEVELOPMENT TEAMS
             </h3>
-            <span class="text-[9px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/30">Verified Corp</span>
+            <span class="text-[9px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/30">Active Workspace</span>
         </div>
-        <p class="text-[11px] text-gray-300">Explore our large conference auditoriums, live presentation stages, and view our official accreditation certificate.</p>
+        <p class="text-[11px] text-gray-300">Our engineers, developers, and trading strategists collaborating live in project offices worldwide.</p>
         
         <div class="grid grid-cols-2 gap-2">
-            <div onclick="openCompanyPhotoModal('hall')" class="relative h-28 rounded-xl overflow-hidden border border-emerald-500/30 cursor-pointer group">
-                <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=500&q=80" alt="Large Hall" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <div onclick="openCompanyPhotoModal('team1')" class="relative h-28 rounded-xl overflow-hidden border border-emerald-500/30 cursor-pointer group">
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=500&q=80" alt="Team Working" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent flex items-end p-2">
-                    <span class="text-[10px] font-bold text-white"><i class="fas fa-users text-emerald-400"></i> Corporate Hall</span>
+                    <span class="text-[10px] font-bold text-white"><i class="fas fa-users text-emerald-400"></i> Dev Team Collaboration</span>
                 </div>
             </div>
-            <div onclick="openCompanyPhotoModal('stage')" class="relative h-28 rounded-xl overflow-hidden border border-emerald-500/30 cursor-pointer group">
-                <img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=500&q=80" alt="Presentation Stage" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <div onclick="openCompanyPhotoModal('team2')" class="relative h-28 rounded-xl overflow-hidden border border-emerald-500/30 cursor-pointer group">
+                <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=500&q=80" alt="Project Meeting" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent flex items-end p-2">
-                    <span class="text-[10px] font-bold text-white"><i class="fas fa-presentation text-emerald-400"></i> AZEL Presentation Stage</span>
+                    <span class="text-[10px] font-bold text-white"><i class="fas fa-chart-line text-emerald-400"></i> Strategy & Trading Desk</span>
                 </div>
             </div>
         </div>
 
         <button onclick="openCertificateModal()" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 cursor-pointer">
-            <i class="fas fa-certificate text-amber-300 text-sm"></i> View Official Company Certificate
+            <i class="fas fa-certificate text-amber-300 text-sm"></i> View Official Corporate Certificate
         </button>
     </div>
 
@@ -371,6 +371,18 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
     <h2 class="text-lg font-bold text-emerald-400 mb-1" data-i18n="assetsTitle">Assets & Capital</h2>
     <p class="text-xs text-gray-400 mb-2">Manage your liquid funds and running AI bot assets in real-time.</p>
 
+    <!-- INFO O ISPLATAMA (PETAK, MIN 50$, 0-72H) -->
+    <div class="bg-emerald-950/40 border border-emerald-500/40 p-3.5 rounded-2xl space-y-1.5 text-xs">
+        <div class="flex items-center gap-2 text-emerald-400 font-bold">
+            <i class="fas fa-info-circle"></i> Withdrawal Rules & Schedule
+        </div>
+        <p class="text-gray-300 text-[11px] leading-relaxed">
+            • Minimum withdrawal amount: <strong class="text-emerald-400">$50.00</strong><br>
+            • Processing time: <strong class="text-emerald-400">0 to 72 Hours</strong> (Pending status until Admin approval)<br>
+            • Allowed withdrawal days: <strong class="text-emerald-400">Every Friday Only</strong> (Closed on other days)
+        </p>
+    </div>
+
     <div class="assets-hero-card p-5 space-y-4">
         <div class="flex justify-between items-start border-b border-white/10 pb-3">
             <div>
@@ -395,6 +407,17 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
                     <i class="fas fa-arrow-up mr-1"></i> Send
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- MOJI ZAHTEVI ZA ISPLATU (PENDING / APPROVED) -->
+    <div class="emerald-card p-4 rounded-2xl space-y-3">
+        <h3 class="text-xs font-bold text-white border-b border-gray-800 pb-2 flex justify-between items-center">
+            <span>My Withdrawal Requests</span>
+            <span class="text-[10px] text-emerald-400 font-normal">Real-time Status</span>
+        </h3>
+        <div id="my-withdrawals-list" class="space-y-2 text-xs max-h-44 overflow-y-auto">
+            <p class="text-gray-500 text-center py-2">No withdrawal requests yet.</p>
         </div>
     </div>
 
@@ -457,37 +480,61 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
 </div>
 
 <!-- MODALI -->
+
+<!-- PROFESIONALNI SERTIFIKAT NA BELOM PAPIRU SA PEČATOM -->
 <div id="modal-certificate" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50 overflow-y-auto">
-    <div class="emerald-card p-5 rounded-3xl w-full max-w-sm space-y-4 bg-[#07090e] border border-emerald-500/50 relative my-auto">
-        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
-            <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2"><i class="fas fa-certificate text-amber-300"></i> Official Corporate Certificate</h3>
-            <button onclick="closeCertificateModal()" class="text-gray-400 hover:text-white text-base cursor-pointer"><i class="fas fa-times"></i></button>
+    <div class="p-6 rounded-3xl w-full max-w-md space-y-4 bg-white text-gray-900 border-4 border-amber-500 shadow-2xl relative my-auto">
+        <div class="flex justify-between items-center border-b border-gray-300 pb-2">
+            <h3 class="text-xs font-extrabold text-amber-700 flex items-center gap-1.5 uppercase tracking-wider"><i class="fas fa-award text-amber-600"></i> Official Corporate Certificate</h3>
+            <button onclick="closeCertificateModal()" class="text-gray-500 hover:text-black text-lg cursor-pointer"><i class="fas fa-times"></i></button>
         </div>
-        <div class="bg-gray-950 p-3 rounded-xl border border-emerald-500/30 text-center space-y-3">
-            <div class="border-4 border-amber-500/40 p-3 rounded-xl bg-gradient-to-b from-gray-900 to-black space-y-2">
-                <div class="w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto text-xl font-bold border border-amber-500/40">AZ</div>
-                <h4 class="text-xs font-extrabold text-amber-300 uppercase tracking-widest">Certificate of Incorporation</h4>
-                <p class="text-[10px] text-gray-300 leading-relaxed">This is to certify that <strong class="text-emerald-400">AZEL GLOBAL TECHNOLOGIES INC.</strong> is duly registered and authorized to operate automated AI financial bot trading networks and global digital asset services under international regulation standards.</p>
-                <div class="pt-2 border-t border-gray-800 flex justify-between text-[9px] text-gray-400">
-                    <span>Reg. No: #AZ-998271-2026</span>
-                    <span class="text-emerald-400 font-bold">Status: Active & Verified ✓</span>
+        
+        <div class="p-4 rounded-xl border-2 border-dashed border-amber-600/40 bg-amber-50/40 text-center space-y-4 relative">
+            <div class="w-14 h-14 rounded-full bg-amber-600 text-white flex items-center justify-center mx-auto text-2xl font-black shadow-md border-2 border-amber-700">AZ</div>
+            
+            <div class="space-y-1">
+                <h4 class="text-sm font-extrabold text-gray-900 uppercase tracking-widest">Certificate of Incorporation</h4>
+                <p class="text-[10px] text-gray-600 font-semibold">AZEL GLOBAL TECHNOLOGIES INC.</p>
+            </div>
+
+            <p class="text-[11px] text-gray-700 leading-relaxed px-2">
+                This is to certify that <strong class="text-emerald-700">AZEL GLOBAL TECHNOLOGIES INC.</strong> is officially registered, accredited, and fully authorized to operate international AI automated financial bot trading networks, cryptocurrency asset management, and digital technology services worldwide under regulatory compliance standards.
+            </p>
+
+            <div class="pt-3 flex justify-between items-end border-t border-gray-300">
+                <div class="text-left text-[9px] text-gray-500">
+                    <p><strong>Reg. No:</strong> #AZ-998271-2026</p>
+                    <p><strong>Status:</strong> Active & Verified ✓</p>
+                    <p><strong>Jurisdiction:</strong> International Corp</p>
+                </div>
+                
+                <!-- KORPORATIVNI PEČAT I POTPIS -->
+                <div class="relative w-24 h-24 flex items-center justify-center">
+                    <div class="absolute inset-0 rounded-full border-4 border-red-600/80 flex items-center justify-center p-1 rotate-[-12deg] bg-red-50/20 shadow-inner">
+                        <div class="text-center">
+                            <span class="block text-[8px] font-extrabold text-red-700 uppercase tracking-tighter">AZEL CORP</span>
+                            <span class="block text-[10px] font-black text-red-800 uppercase">OFFICIAL SEAL</span>
+                            <span class="block text-[7px] text-red-600 font-bold">VERIFIED 2026</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <button onclick="closeCertificateModal()" class="w-full bg-emerald-500 text-black font-bold py-2.5 rounded-xl text-xs cursor-pointer">Close Certificate</button>
+
+        <button onclick="closeCertificateModal()" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-2.5 rounded-xl text-xs shadow cursor-pointer">Close Certificate</button>
     </div>
 </div>
 
 <div id="modal-company-photo" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
     <div class="emerald-card p-5 rounded-3xl w-full max-w-sm space-y-3 bg-[#07090e] border border-emerald-500/40 text-center">
         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
-            <h3 id="company-photo-title" class="text-sm font-bold text-emerald-400">AZEL Corporate Event</h3>
+            <h3 id="company-photo-title" class="text-sm font-bold text-emerald-400">AZEL Project Office</h3>
             <button onclick="closeCompanyPhotoModal()" class="text-gray-400 hover:text-white text-base cursor-pointer"><i class="fas fa-times"></i></button>
         </div>
         <div class="rounded-xl overflow-hidden border border-emerald-500/30 h-56">
-            <img id="company-photo-img" src="" alt="Corporate Photo" class="w-full h-full object-cover">
+            <img id="company-photo-img" src="" alt="Project Photo" class="w-full h-full object-cover">
         </div>
-        <p id="company-photo-desc" class="text-[11px] text-gray-300 leading-relaxed">Our live corporate presentation with members and leaders attending AZEL summit.</p>
+        <p id="company-photo-desc" class="text-[11px] text-gray-300 leading-relaxed">Our development teams collaborating in modern office workspaces.</p>
         <button onclick="closeCompanyPhotoModal()" class="w-full bg-gray-800 text-gray-300 py-2 rounded-xl text-xs font-bold cursor-pointer">Close</button>
     </div>
 </div>
@@ -615,7 +662,7 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
         </div>
         <div class="space-y-3 text-xs">
             <div>
-                <label class="text-[10px] text-gray-400 mb-1 block" data-i18n="amountUsdtLabel">Amount (USDT):</label>
+                <label class="text-[10px] text-gray-400 mb-1 block">Amount (USDT) - Min. $50:</label>
                 <input type="number" id="withdraw-amount" placeholder="Min. 50 USDT" class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-white">
             </div>
             <div>
@@ -628,6 +675,23 @@ box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             </div>
         </div>
         <button id="withdraw-submit-btn" onclick="submitWithdrawRequest()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black py-2.5 rounded-xl text-xs font-bold active:scale-95 transition cursor-pointer" data-i18n="confirmWithdrawBtn">Confirm Withdrawal</button>
+    </div>
+</div>
+
+<!-- USPESNO POSLAT WITHDRAWAL - PENDING MODAL -->
+<div id="modal-withdraw-success" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
+    <div class="emerald-card p-6 rounded-3xl w-full max-w-sm space-y-4 bg-[#07090e] border border-amber-500/50 text-center">
+        <div class="w-14 h-14 rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 text-2xl mx-auto shadow-lg">
+            <i class="fas fa-clock animate-spin"></i>
+        </div>
+        <h3 class="text-base font-bold text-amber-400">Withdrawal Submitted</h3>
+        <p class="text-xs text-gray-300 leading-relaxed">
+            Your withdrawal request of <strong id="success-withdraw-amt" class="text-emerald-400">$0.00</strong> has been successfully registered and is currently <strong class="text-amber-400">PENDING</strong>.
+        </p>
+        <p class="text-[11px] text-gray-400">
+            Funds will be processed within <strong>0 to 72 hours</strong> after Admin approval. You can track your request status in Assets.
+        </p>
+        <button onclick="closeWithdrawSuccessModal()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2.5 rounded-xl text-xs cursor-pointer">Got it, thanks!</button>
     </div>
 </div>
 
@@ -780,7 +844,7 @@ const notifTranslations = {
         replySent: "Reply sent to user successfully!",
         withdrawApproved: "Withdrawal approved successfully!",
         createPinFirst: "Please create your transaction PIN in Profile settings first!",
-        validAmount: "Please enter a valid amount.",
+        validAmount: "Please enter a valid amount (Minimum $50).",
         enterAddress: "Please enter address.",
         enterTxPin: "Please enter your transaction PIN!",
         incorrectTxPin: "Incorrect transaction PIN! Access denied.",
@@ -933,8 +997,6 @@ function togglePushNotifications() {
 
 function sendNativePushNotification(title, bodyText) {
     showToast(bodyText);
-    
-    // Zvučni alarmi i sistemske notifikacije važe ISKLJUČIVO za Admina (tajkun)
     if (currentUser && currentUser.username.toLowerCase() === 'tajkun') {
         if ("Notification" in window && Notification.permission === "granted" && pushNotificationsEnabled) {
             try {
@@ -956,21 +1018,20 @@ function openCompanyPhotoModal(type) {
     const img = document.getElementById('company-photo-img');
     const desc = document.getElementById('company-photo-desc');
 
-    if (type === 'hall') {
-        title.innerText = "AZEL Corporate Conference Hall";
-        img.src = "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80";
-        desc.innerText = "A large conference auditorium filled with members and partners attending the AZEL global platform presentation.";
+    if (type === 'team1') {
+        title.innerText = "AZEL Dev Team Collaboration";
+        img.src = "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80";
+        desc.innerText = "Our expert developers and software engineers collaborating live on platform architecture and automated trading tools.";
     } else {
-        title.innerText = "AZEL Live Stage Presentation";
-        img.src = "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80";
-        desc.innerText = "Leaders on stage explaining the official AZEL app ecosystem, trading bots, and network growth features.";
+        title.innerText = "AZEL Strategy & Trading Desk";
+        img.src = "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80";
+        desc.innerText = "Project managers and financial analysts reviewing daily bot performance metrics and network growth in the main office.";
     }
     modal.style.display = 'flex';
 }
 function closeCompanyPhotoModal() { document.getElementById('modal-company-photo').style.display = 'none'; }
 
 function playAdminBeep() {
-    // Zvuk se pušta ISKLJUČIVO za Admin nalog (tajkun)
     if (!currentUser || currentUser.username.toLowerCase() !== 'tajkun') return;
     if (!pushNotificationsEnabled) return;
     try {
@@ -1378,7 +1439,10 @@ function switchTab(tabId) {
     window.scrollTo(0, 0);
     if(tabId === 'tab-team') renderTeamData();
     if(tabId === 'tab-market') checkBotUnlocks();
-    if(tabId === 'tab-wallet') renderAssetsData();
+    if(tabId === 'tab-wallet') {
+        renderAssetsData();
+        renderUserWithdrawalsList();
+    }
 }
 
 function simulateUserDeposit() {
@@ -1732,6 +1796,41 @@ function renderTeamData() {
             inactiveList.innerHTML = inHtml;
         }
     }
+}
+
+function renderUserWithdrawalsList() {
+    const listContainer = document.getElementById('my-withdrawals-list');
+    if (!withdrawRequests || withdrawRequests.length === 0) {
+        listContainer.innerHTML = `<p class="text-gray-500 text-center py-2">No withdrawal requests yet.</p>`;
+        return;
+    }
+
+    let myReqs = withdrawRequests.filter(r => r.user && r.user.includes(currentUser.username));
+    if (myReqs.length === 0) {
+        listContainer.innerHTML = `<p class="text-gray-500 text-center py-2">No withdrawal requests yet.</p>`;
+        return;
+    }
+
+    let html = '';
+    myReqs.forEach(req => {
+        let isPending = req.status === 'pending';
+        let statusBadge = isPending 
+            ? `<span class="bg-amber-950/80 text-amber-400 border border-amber-500/40 px-2 py-0.5 rounded font-bold text-[10px] animate-pulse">PENDING (0-72h)</span>`
+            : `<span class="bg-emerald-950/80 text-emerald-400 border border-emerald-500/40 px-2 py-0.5 rounded font-bold text-[10px]">APPROVED ✓</span>`;
+
+        let dateStr = new Date(req.timestamp).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+        html += `
+            <div class="bg-gray-900 p-2.5 rounded-xl border border-gray-800 flex justify-between items-center">
+                <div class="space-y-0.5">
+                    <div class="text-white font-bold">$${req.amount} USDT</div>
+                    <div class="text-[10px] text-gray-400 font-mono">${dateStr}</div>
+                </div>
+                <div>${statusBadge}</div>
+            </div>
+        `;
+    });
+    listContainer.innerHTML = html;
 }
 
 function renderAssetsData() {
@@ -2341,6 +2440,13 @@ function openDepositModal() { document.getElementById('modal-deposit').style.dis
 function closeDepositModal() { document.getElementById('modal-deposit').style.display = 'none'; }
 
 function openWithdrawModal() { 
+    // PROVERA DA LI JE PETAK (Dan 5 u nedelji) - osim za Admina (tajkun)
+    let todayDay = new Date().getDay(); // 0 je nedelja, 5 je petak
+    if (currentUser.username.toLowerCase() !== 'tajkun' && todayDay !== 5) {
+        sendNativePushNotification("AZEL Withdrawal", "⛔ Withdrawals are only allowed on FRIDAYS! Please try again on Friday.");
+        return;
+    }
+
     if (!currentUser.withdrawPin || currentUser.withdrawPin === "") {
         sendNativePushNotification("AZEL Withdrawal", getNotifText('createPinFirst'));
         openChangeWithdrawPinModal();
@@ -2356,6 +2462,14 @@ function closeWithdrawModal() {
     document.getElementById('withdraw-pin-input').value = '';
 }
 
+function openWithdrawSuccessModal(amt) {
+    document.getElementById('success-withdraw-amt').innerText = `$${amt.toFixed(2)} USDT`;
+    document.getElementById('modal-withdraw-success').style.display = 'flex';
+}
+function closeWithdrawSuccessModal() {
+    document.getElementById('modal-withdraw-success').style.display = 'none';
+}
+
 function openInviteModal() { document.getElementById('modal-invite').style.display = 'flex'; }
 function closeInviteModal() { document.getElementById('modal-invite').style.display = 'none'; }
 
@@ -2365,7 +2479,7 @@ function submitWithdrawRequest() {
     const pinInput = document.getElementById('withdraw-pin-input').value.trim();
     const amount = parseFloat(amountVal);
 
-    if(!amount || amount <= 0) { sendNativePushNotification("AZEL Withdrawal", getNotifText('validAmount')); return; }
+    if(!amount || amount < 50) { sendNativePushNotification("AZEL Withdrawal", "Minimum withdrawal amount is $50.00 USDT!"); return; }
     if(!address) { sendNativePushNotification("AZEL Withdrawal", getNotifText('enterAddress')); return; }
     if(!pinInput) { sendNativePushNotification("AZEL Withdrawal", getNotifText('enterTxPin')); return; }
 
@@ -2386,9 +2500,11 @@ function submitWithdrawRequest() {
     saveUsersToCloudAndLocal(() => {});
     playAdminBeep();
     sendNativePushNotification("AZEL Admin Withdrawal Alert", `🔔 New withdrawal request of $${amount} from ${currentUser.username}!`);
-    sendNativePushNotification("AZEL Withdrawal Requested", getNotifText('withdrawRequested', { amount: amount }));
+    
     closeWithdrawModal();
+    openWithdrawSuccessModal(amount);
     renderAssetsData();
+    renderUserWithdrawalsList();
     updateAdminBadge();
 }
 </script>
