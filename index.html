@@ -1003,44 +1003,9 @@ function showToast(message) {
 }
 
 window.addEventListener('DOMContentLoaded', function() {
-    let localSavedUsers = localStorage.getItem('azel_registered_users');
-    if (localSavedUsers) {
-        try { allRegisteredUsers = JSON.parse(localSavedUsers); } catch(e){}
-    }
-
-    if(!allRegisteredUsers.some(u => u.username.toLowerCase() === 'tajkun')) {
-        allRegisteredUsers.push(MAIN_ADMIN_USER);
-    }
-    ensureTajkunMassiveNetwork();
-
-    const isLogged = localStorage.getItem('azel_logged_in');
-    const loggedUsername = localStorage.getItem('azel_current_username');
-
-    if (isLogged === 'true' && loggedUsername) {
-        let existingUser = allRegisteredUsers.find(u => u.username.toLowerCase() === loggedUsername.toLowerCase());
-        currentUser = existingUser || (loggedUsername.toLowerCase() === 'tajkun' ? MAIN_ADMIN_USER : null);
-        
-        if (currentUser) {
-            if (currentUser.username.toLowerCase() === 'tajkun') currentUser.isLicensePaid = true;
-            if (!currentUser.activeBots) currentUser.activeBots = [];
-            currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
-            currentUser.activeBots.forEach((b) => {
-                if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
-                if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
-                if (!b.tradingStatus) b.tradingStatus = 'IDLE';
-            });
-            checkActiveBotsProgress();
-            showMainApp();
-        } else {
-            localStorage.removeItem('azel_logged_in');
-            localStorage.removeItem('azel_current_username');
-            document.getElementById('auth-screen').style.display = 'flex';
-            document.getElementById('main-app-wrapper').style.display = 'none';
-        }
-    } else {
-        document.getElementById('auth-screen').style.display = 'flex';
-        document.getElementById('main-app-wrapper').style.display = 'none';
-    }
+    loadUsersFromCloud(() => {
+        initAppCheck();
+    });
 
     setInterval(() => {
         if (currentUser) {
@@ -1070,6 +1035,37 @@ window.addEventListener('DOMContentLoaded', function() {
     }
     changeLanguage('en');
 });
+
+function initAppCheck() {
+    const isLogged = localStorage.getItem('azel_logged_in');
+    const loggedUsername = localStorage.getItem('azel_current_username');
+
+    if (isLogged === 'true' && loggedUsername) {
+        let existingUser = allRegisteredUsers.find(u => u.username.toLowerCase() === loggedUsername.toLowerCase());
+        currentUser = existingUser || (loggedUsername.toLowerCase() === 'tajkun' ? MAIN_ADMIN_USER : null);
+        
+        if (currentUser) {
+            if (currentUser.username.toLowerCase() === 'tajkun') currentUser.isLicensePaid = true;
+            if (!currentUser.activeBots) currentUser.activeBots = [];
+            currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
+            currentUser.activeBots.forEach((b) => {
+                if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
+                if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
+                if (!b.tradingStatus) b.tradingStatus = 'IDLE';
+            });
+            checkActiveBotsProgress();
+            showMainApp();
+        } else {
+            localStorage.removeItem('azel_logged_in');
+            localStorage.removeItem('azel_current_username');
+            document.getElementById('auth-screen').style.display = 'flex';
+            document.getElementById('main-app-wrapper').style.display = 'none';
+        }
+    } else {
+        document.getElementById('auth-screen').style.display = 'flex';
+        document.getElementById('main-app-wrapper').style.display = 'none';
+    }
+}
 
 function loadUsersFromCloud(callback) {
     fetch(SCRIPT_URL)
@@ -1232,55 +1228,57 @@ function handleUserLogin() {
     const pass = document.getElementById('login-password').value.trim();
     if(!user || !pass) { sendNativePushNotification("AZEL Login", getNotifText('enterUserPass')); return; }
 
-    let foundUser = allRegisteredUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
-    
-    if (!foundUser) {
-        if (user.toLowerCase() === 'tajkun') {
-            foundUser = MAIN_ADMIN_USER;
-            allRegisteredUsers.push(foundUser);
-        } else {
-            foundUser = {
-                id: Math.floor(100000 + Math.random() * 900000),
-                username: user,
-                email: user + '@azel.com',
-                password: pass,
-                withdrawPin: '',
-                code: 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
-                link: '',
-                isLicensePaid: false,
-                referrer: 'tajkun',
-                activeBots: [],
-                balance: 0.00
-            };
-            allRegisteredUsers.push(foundUser);
+    loadUsersFromCloud(() => {
+        let foundUser = allRegisteredUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
+        
+        if (!foundUser) {
+            if (user.toLowerCase() === 'tajkun') {
+                foundUser = MAIN_ADMIN_USER;
+                allRegisteredUsers.push(foundUser);
+            } else {
+                foundUser = {
+                    id: Math.floor(100000 + Math.random() * 900000),
+                    username: user,
+                    email: user + '@azel.com',
+                    password: pass,
+                    withdrawPin: '',
+                    code: 'AZEL-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
+                    link: '',
+                    isLicensePaid: false,
+                    referrer: 'tajkun',
+                    activeBots: [],
+                    balance: 0.00
+                };
+                allRegisteredUsers.push(foundUser);
 
-            playAdminBeep();
-            sendNativePushNotification("AZEL Admin Registration Alert", `👤 New member registered: ${user} (ID: ${foundUser.id})`);
+                playAdminBeep();
+                sendNativePushNotification("AZEL Admin Registration Alert", `👤 New member registered: ${user} (ID: ${foundUser.id})`);
+            }
         }
-    }
 
-    if (foundUser.password && foundUser.password !== pass && user.toLowerCase() !== 'tajkun') {
-        sendNativePushNotification("AZEL Login", getNotifText('incorrectPass'));
-        return;
-    }
+        if (foundUser.password && foundUser.password !== pass && user.toLowerCase() !== 'tajkun') {
+            sendNativePushNotification("AZEL Login", getNotifText('incorrectPass'));
+            return;
+        }
 
-    currentUser = foundUser;
-    if (currentUser.username.toLowerCase() === 'tajkun') currentUser.isLicensePaid = true;
-    if (!currentUser.withdrawPin) currentUser.withdrawPin = "";
-    if (!currentUser.activeBots) currentUser.activeBots = [];
-    if (currentUser.balance === undefined) currentUser.balance = 0.00;
-    currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
-    currentUser.activeBots.forEach((b) => {
-        if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
-        if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
-        if (!b.tradingStatus) b.tradingStatus = 'IDLE';
+        currentUser = foundUser;
+        if (currentUser.username.toLowerCase() === 'tajkun') currentUser.isLicensePaid = true;
+        if (!currentUser.withdrawPin) currentUser.withdrawPin = "";
+        if (!currentUser.activeBots) currentUser.activeBots = [];
+        if (currentUser.balance === undefined) currentUser.balance = 0.00;
+        currentUser.activeBots = currentUser.activeBots.filter(b => b.daysRemaining > 0);
+        currentUser.activeBots.forEach((b) => {
+            if (!b.uniqueId) b.uniqueId = 'bot_lvl_' + b.level + '_' + Math.random().toString(36).substring(2, 9);
+            if (b.daysRemaining === undefined || isNaN(b.daysRemaining)) b.daysRemaining = 60;
+            if (!b.tradingStatus) b.tradingStatus = 'IDLE';
+        });
+        checkActiveBotsProgress();
+        saveCurrentUserToStorage();
+
+        localStorage.setItem('azel_logged_in', 'true');
+        localStorage.setItem('azel_current_username', currentUser.username);
+        showMainApp();
     });
-    checkActiveBotsProgress();
-    saveCurrentUserToStorage();
-
-    localStorage.setItem('azel_logged_in', 'true');
-    localStorage.setItem('azel_current_username', currentUser.username);
-    showMainApp();
 }
 
 function handleUserRegister() {
