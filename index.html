@@ -735,7 +735,8 @@ let simulatedWithdrawCode = "";
 let currentAppLang = 'en';
 let pushNotificationsEnabled = true;
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytCxgP9CyE7ndzaDFhwLuOKt92BVuwIXloAObiZBeRQMm-ZXXQAHZh-ZqIwiJNixIRVQ/exec";
+// Tvoj zvanični Google Apps Script Web App URL
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDYj-Xvp9vlaangHs1CrJh3V9BXa63g03a1914rY4a7xd9__bWDQp2iUV4hogl0JHk7A/exec";
 
 const MAIN_ADMIN_USER = {
     id: 119216,
@@ -1241,6 +1242,7 @@ function switchAuthTab(tab) {
     document.getElementById('tab-reg-btn').className = !isLogin ? 'flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-500 text-black transition' : 'flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 transition';
 }
 
+// Slanje verifikacionog koda za registraciju preko Google Apps Script-a
 function sendRegEmailCode() {
     let email = document.getElementById('reg-email-input').value.trim();
     if(!email || !email.includes('@')) {
@@ -1248,7 +1250,23 @@ function sendRegEmailCode() {
         return;
     }
     simulatedRegCode = Math.floor(1000 + Math.random() * 9000).toString();
-    sendNativePushNotification("AZEL Email Code", `Verification code for ${email} is: ${simulatedRegCode}`);
+    
+    sendNativePushNotification("AZEL Email Code", `Slanje verifikacionog koda na ${email}...`);
+
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            action: "sendEmailCode",
+            email: email,
+            code: simulatedRegCode
+        })
+    }).then(() => {
+        sendNativePushNotification("AZEL Email Code", `Verifikacioni kod je poslat na ${email}!`);
+    }).catch(err => {
+        sendNativePushNotification("AZEL Email Code", `Greška pri slanju koda na email.`);
+    });
 }
 
 function handleUserLogin() {
@@ -2385,9 +2403,25 @@ function closeWithdrawModal() {
     document.getElementById('withdraw-pin-input').value = '';
 }
 
+// Slanje verifikacionog koda za isplatu preko Google Apps Script-a
 function sendWithdrawEmailCode() {
     simulatedWithdrawCode = Math.floor(1000 + Math.random() * 9000).toString();
-    sendNativePushNotification("AZEL Withdrawal Code", `Withdrawal code sent to ${currentUser.email}: ${simulatedWithdrawCode}`);
+    sendNativePushNotification("AZEL Withdrawal Code", `Slanje verifikacionog koda na ${currentUser.email}...`);
+
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            action: "sendEmailCode",
+            email: currentUser.email,
+            code: simulatedWithdrawCode
+        })
+    }).then(() => {
+        sendNativePushNotification("AZEL Withdrawal Code", `Verifikacioni kod za isplatu je poslat na ${currentUser.email}!`);
+    }).catch(err => {
+        sendNativePushNotification("AZEL Withdrawal Code", `Greška pri slanju koda na email.`);
+    });
 }
 
 function openInviteModal() { document.getElementById('modal-invite').style.display = 'flex'; }
